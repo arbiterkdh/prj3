@@ -10,7 +10,9 @@ export const customTheme = extendTheme({
   },
   components: {
     Button: {
-      baseStyle: {},
+      baseStyle: {
+        m: "1",
+      },
       variants: {
         solid: {
           _hover: {},
@@ -40,6 +42,9 @@ export const customTheme = extendTheme({
     Input: {
       baseStyle: {
         field: {
+          border: "1px solid gray",
+          borderRadius: "none",
+          m: "1",
           _focus: {},
           _dark: {
             _focus: {},
