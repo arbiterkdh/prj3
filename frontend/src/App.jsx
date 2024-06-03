@@ -6,6 +6,8 @@ import { Book } from "./page/book/Book.jsx";
 import { Theater } from "./page/theater/Theater.jsx";
 import { Store } from "./page/store/Store.jsx";
 import { Promo } from "./page/promotion/Promo.jsx";
+import { StoreAdd } from "./page/store/add/StoreAdd.jsx";
+import { StoreList } from "./StoreList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,20 @@ const router = createBrowserRouter([
       { path: "book", element: <Book /> },
       { path: "theater", element: <Theater /> },
       { path: "promotion", element: <Promo /> },
-      { path: "store", element: <Store /> },
+      {
+        path: "store",
+        element: <Store />,
+        children: [
+          {
+            index: true,
+            element: <StoreList />,
+          },
+          {
+            path: "add",
+            element: <StoreAdd />,
+          },
+        ],
+      },
     ],
   },
 ]);
