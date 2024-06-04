@@ -1,7 +1,7 @@
 import { Box, Center, Heading } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
-import { LoginModalComponent } from "./LoginModalComponent.jsx";
+import { LoginModalComponent } from "../member/token/LoginModalComponent.jsx";
 
 export function Navbar() {
   const navigate = useNavigate();

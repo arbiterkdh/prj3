@@ -12,14 +12,10 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import MarginBox from "../css/theme/component/box/MarginBox.jsx";
+import MarginBox from "../../css/theme/component/box/MarginBox.jsx";
 import axios from "axios";
 
 export function LoginModalComponent() {
-  const REST_API_KEY = "13afa02ce555d29b00657f48eda802c9";
-  const REDIRECT_URI = "http://localhost:5173/oauth/kakao/callback";
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   function handleLogin() {
