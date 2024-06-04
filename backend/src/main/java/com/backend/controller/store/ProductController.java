@@ -3,11 +3,10 @@ package com.backend.controller.store;
 import com.backend.domain.store.Product;
 import com.backend.service.store.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/store/product")
@@ -26,8 +25,11 @@ public class ProductController {
         }
 
         service.add(product, files);
-
-
     }
 
+    @GetMapping("/list")
+    public List<Product> list() {
+
+        return service.productList();
+    }
 }

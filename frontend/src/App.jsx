@@ -7,7 +7,7 @@ import { Theater } from "./page/theater/Theater.jsx";
 import { Store } from "./page/store/Store.jsx";
 import { Promo } from "./page/promotion/Promo.jsx";
 import { StoreAdd } from "./page/store/StoreAdd.jsx";
-import { StoreList } from "./StoreList.jsx";
+import { StoreList } from "./page/store/StoreList.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
 import { MovieAdd } from "./page/movie/MovieAdd.jsx";
 import { MovieList } from "./page/movie/MovieList.jsx";

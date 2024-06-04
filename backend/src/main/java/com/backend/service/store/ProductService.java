@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.util.List;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -19,6 +20,7 @@ public class ProductService {
     private final ImageMapper imageMapper;
 
     public void add(Product product, MultipartFile[] files) throws Exception {
+
 
         mapper.add(product);
 
@@ -31,7 +33,6 @@ public class ProductService {
                     dirFile.mkdirs();
                 }
 
-
                 String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{product.getId()}/\{file.getOriginalFilename()}";
                 File destination = new File(path);
                 file.transferTo(destination);
@@ -40,6 +41,18 @@ public class ProductService {
 
 
         }
+
+
+    }
+
+    public List<Product> productList() {
+
+        List<Product> productList = mapper.productList();
+
+//        productList.stream().map(name->STR."http://127.0.0.1:8888/2/lion-2521451_1280.png")
+
+
+        return mapper.productList();
 
 
     }
