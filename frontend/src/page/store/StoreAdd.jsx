@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function StoreAdd() {
   const [name, setName] = useState("");
@@ -32,6 +33,7 @@ export function StoreAdd() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   let disabled = true;
 
@@ -42,29 +44,31 @@ export function StoreAdd() {
   function handleProductAdd() {
     setIsLoading(true);
     axios
-      .post("/api/store/add", {
+      .postForm("/api/store/product/add", {
         name,
-        files,
         stock,
         price,
         content,
+        files,
       })
       .then((res) => {
         toast({
           status: "success",
-          description: "회원가입 완료",
+          description: "상품 등록 완료",
           position: "bottom",
         });
+        navigate("/store");
       })
       .catch(() => {
         toast({
           status: "error",
-          description: "가입 오류",
+          description: "상품 등록 오류",
           position: "bottom",
         });
       })
       .finally(() => {
         setIsLoading(false);
+        onClose();
       });
   }
 
@@ -98,7 +102,9 @@ export function StoreAdd() {
               </Heading>
               <Text pt="2" fontSize="sm">
                 <input
+                  multiple
                   type={"file"}
+                  accept="image/*"
                   placeholder={"이미지를 등록하세요"}
                   onChange={(e) => setFiles(e.target.files)}
                 />
