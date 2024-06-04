@@ -30,4 +30,5 @@ SELECT *
 FROM theater;
 
 DELETE
-FROM theater;
+FROM theater
+WHERE number = 124;
