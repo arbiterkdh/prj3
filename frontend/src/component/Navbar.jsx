@@ -1,4 +1,11 @@
-import { Box, Center, Flex, Heading, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../member/MemberLogin.jsx";
@@ -8,7 +15,7 @@ import { LoginContext } from "./LoginProvider.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
 

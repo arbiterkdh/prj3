@@ -14,6 +14,11 @@ public class TheaterController {
 
     private final TheaterService service;
 
+    @GetMapping("")
+    public List<String> getCities() {
+        return service.getCityList();
+    }
+
     @PostMapping("add")
     public void addTheater(@RequestBody Theater theater) {
         if (service.validate(theater)) {
