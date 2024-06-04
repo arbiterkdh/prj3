@@ -1,3 +1,3 @@
 export function MovieList() {
-  return null;
+  return;
 }
