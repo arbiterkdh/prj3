@@ -26,8 +26,8 @@ public class TheaterController {
         }
     }
 
-    @GetMapping("{city}")
-    public List<Theater> getCity(@PathVariable String city) {
+    @GetMapping("list")
+    public List<Theater> getCity(@RequestParam(defaultValue = "서울") String city) {
         return service.get(city);
     }
 }

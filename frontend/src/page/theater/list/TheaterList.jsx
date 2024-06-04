@@ -4,25 +4,50 @@ import axios from "axios";
 import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export function TheaterList({
+  cityName,
+  setCityName,
   cityList,
   setCityList,
   theaterList,
   setTheaterList,
   isModifying,
-  setIsModifying,
 }) {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!isModifying) {
+      axios
+        .get(`/api/theater`)
+        .then((res) => {
+          setCityList(res.data);
+        })
+        .catch()
+        .finally();
+      axios
+        .get(`/api/theater/list?city=${cityName}`)
+        .then((res) => {
+          setTheaterList(res.data);
+        })
+        .catch(() => {})
+        .finally(() => {
+          setCityName("");
+        });
+    }
+  }, [isModifying]);
+
   function handleClick(city) {
     axios
-      .get(`/api/theater/${city}`)
+      .get(`/api/theater/list?city=${city}`)
       .then((res) => {
         setTheaterList(res.data);
       })
       .catch(() => {})
-      .finally(() => {});
+      .finally(() => {
+        setCityName(city);
+      });
   }
 
   return (
