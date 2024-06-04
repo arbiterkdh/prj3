@@ -12,6 +12,8 @@ import { MemberSignup } from "./member/MemberSignup.jsx";
 import { MovieAdd } from "./page/movie/MovieAdd.jsx";
 import { MovieList } from "./page/movie/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
+import { PromoAdd } from "./page/promotion/PromoAdd.jsx";
+import { PromoList } from "./page/promotion/PromoList.jsx";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +38,17 @@ const router = createBrowserRouter([
       },
       { path: "book", element: <Book /> },
       { path: "theater", element: <Theater /> },
-      { path: "promotion", element: <Promo /> },
+      {
+        path: "promotion",
+        element: <Promo />,
+        children: [
+          { index: true, element: <PromoList /> },
+          {
+            path: "add",
+            element: <PromoAdd />,
+          },
+        ],
+      },
       {
         path: "store",
         element: <Store />,
