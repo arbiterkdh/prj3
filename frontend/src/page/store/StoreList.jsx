@@ -16,6 +16,13 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MarginBox from "../../css/theme/component/box/MarginBox.jsx";
+import StoreMenuText from "../../css/theme/component/text/StoreMenuText.jsx";
+import StoreMenuCursorBox from "../../css/theme/component/box/StoreMenuCursorBox.jsx";
+import {
+  faCartShopping,
+  faCreditCard,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -82,12 +89,14 @@ export function StoreList() {
             >
               <Box>
                 <Button variant="solid" colorScheme="blue">
-                  구매
+                  <FontAwesomeIcon icon={faCreditCard} />
+                  <Text textIndent={"10px"}>구매</Text>
                 </Button>
               </Box>
               <Box>
                 <Button variant="solid" colorScheme="red">
-                  카트
+                  <FontAwesomeIcon icon={faCartShopping} />
+                  <Text textIndent={"10px"}>카트</Text>
                 </Button>
               </Box>
             </Flex>
@@ -99,9 +108,49 @@ export function StoreList() {
 
   const navigate = useNavigate();
   return (
-    <Box>
-      <h1>상품 리스트</h1>
-      <Button onClick={() => navigate("/store/add")}>상품등록</Button>
+    <Box w={"100%"}>
+      <Flex>
+        <Box w={"50%"}>
+          <Heading>상품 리스트</Heading>
+        </Box>
+        <Box w={"50%"} textAlign={"right"}>
+          <Button onClick={() => navigate("/store/add")} colorScheme={"green"}>
+            상품등록
+          </Button>
+        </Box>
+      </Flex>
+
+      <Flex
+        w={"100%"}
+        style={{
+          textAlign: "center",
+        }}
+        p={7}
+      >
+        <StoreMenuCursorBox>
+          <StoreMenuText>전체</StoreMenuText>
+        </StoreMenuCursorBox>
+        <StoreMenuCursorBox>
+          <StoreMenuText>Best</StoreMenuText>
+        </StoreMenuCursorBox>
+        <StoreMenuCursorBox>
+          <StoreMenuText>세트</StoreMenuText>
+        </StoreMenuCursorBox>
+        <StoreMenuCursorBox>
+          <StoreMenuText>팝콘</StoreMenuText>
+        </StoreMenuCursorBox>
+        <StoreMenuCursorBox>
+          <StoreMenuText>드링크</StoreMenuText>
+        </StoreMenuCursorBox>
+        <StoreMenuCursorBox>
+          <StoreMenuText>간식</StoreMenuText>
+        </StoreMenuCursorBox>
+      </Flex>
+
+      <Box>
+        <hr />
+      </Box>
+
       <ProductList />
     </Box>
   );
