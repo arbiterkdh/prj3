@@ -4,6 +4,8 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Checkbox,
+  CheckboxGroup,
   FormControl,
   FormLabel,
   Input,
@@ -11,20 +13,79 @@ import {
   Textarea,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
-import ko from "date-fns/locale/ko";
 import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
+import DatePicker from "react-datepicker";
+import { ko } from "date-fns/locale";
 
 export function MovieAdd() {
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState(null);
-  const [description, setDescription] = useState("");
+  const [file, setFile] = useState([]);
+  const [content, setDescription] = useState("");
   const [genre, setGenre] = useState("");
   const [runningTime, setRunningTime] = useState(0);
+  const [movieType, setMovieType] = useState([]);
   const [rating, setRating] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [director, setDirector] = useState("");
   const [actors, setActors] = useState("");
+
+  function handleMovieSave() {
+    axios.postForm("/api/movie/add", {
+      title,
+      file,
+      content,
+      genre,
+      runningTime,
+      movieType,
+      rating,
+      startDate: startDate.toISOString().split("T")[0],
+      director,
+      actors,
+    });
+  }
+
+  let disableSaveButton = false;
+  if (title.trim().length === 0) {
+    disableSaveButton = true;
+  }
+  if (file.length === 0) {
+    disableSaveButton = true;
+  }
+  if (content.trim().length === 0) {
+    disableSaveButton = true;
+  }
+  if (genre.trim().length === 0) {
+    disableSaveButton = true;
+  }
+  if (runningTime === 0) {
+    disableSaveButton = true;
+  }
+  if (movieType.length === 0) {
+    disableSaveButton = true;
+  }
+  if (rating === 0) {
+    disableSaveButton = true;
+  }
+  if (startDate === null) {
+    disableSaveButton = true;
+  }
+  if (director.trim().length === 0) {
+    disableSaveButton = true;
+  }
+  if (actors.trim().length === 0) {
+    disableSaveButton = true;
+  }
+
+  function handleMovieType(value, checked) {
+    if (checked) {
+      setMovieType([...movieType, value]);
+    } else {
+      setMovieType(movieType.filter((item) => item !== value));
+    }
+  }
+
+  console.log(movieType);
 
   return (
     <Card>
@@ -44,7 +105,7 @@ export function MovieAdd() {
               <Input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setFile(e.target.value)}
+                onChange={(e) => setFile(e.target.files)}
               />
             </FormControl>
           </Box>
@@ -74,6 +135,29 @@ export function MovieAdd() {
             </FormControl>
           </Box>
           <Box>
+            <FormLabel>상영 타입</FormLabel>
+            <CheckboxGroup>
+              <Stack spacing={[1, 5]} direction={["column", "row"]}>
+                <Checkbox
+                  value="2D"
+                  onChange={(e) =>
+                    handleMovieType(e.target.value, e.target.checked)
+                  }
+                >
+                  2D
+                </Checkbox>
+                <Checkbox
+                  value="3D"
+                  onChange={(e) =>
+                    handleMovieType(e.target.value, e.target.checked)
+                  }
+                >
+                  3D
+                </Checkbox>
+              </Stack>
+            </CheckboxGroup>
+          </Box>
+          <Box>
             <FormControl>
               <FormLabel>관람등급</FormLabel>
               <Input
@@ -89,8 +173,8 @@ export function MovieAdd() {
               <DatePicker
                 locale={ko}
                 dateFormat="yyyy년 MM월 dd일"
-                minDate={new Date()}
                 selected={startDate}
+                minDate={new Date()}
                 onChange={(date) => setStartDate(date)}
               />
             </FormControl>
@@ -105,7 +189,13 @@ export function MovieAdd() {
           </Box>
           <Box>
             <Button>취소</Button>
-            <Button colorScheme={"blue"}>저장</Button>
+            <Button
+              isDisabled={disableSaveButton}
+              onClick={handleMovieSave}
+              colorScheme={"blue"}
+            >
+              저장
+            </Button>
           </Box>
         </Stack>
       </CardBody>
