@@ -4,4 +4,8 @@ import lombok.Data;
 
 @Data
 public class Theater {
+
+    private Integer number;
+    private String city;
+    private String location;
 }
