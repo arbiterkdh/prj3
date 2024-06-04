@@ -14,11 +14,13 @@ export function Promo() {
   return <Box>
     <Heading>EVENT</Heading>
     <Flex direction="column">
-      <Box>11</Box>
+      <Box>전체</Box>
       <Spacer />
-      <Box>22</Box>
+      <Box>영화</Box>
       <Spacer />
-      <Box>33</Box>
+      <Box>극장</Box>
+      <Spacer />
+      <Box>제휴/할인</Box>
     </Flex>
   </Box>
 
