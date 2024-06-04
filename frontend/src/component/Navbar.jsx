@@ -1,11 +1,26 @@
-import { Box, Center, Heading } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../member/MemberLogin.jsx";
-import { MemberSignup } from "../member/MemberSignup.jsx";
+import CursorBox from "../css/theme/component/box/CursorBox.jsx";
+import { useContext } from "react";
+import { LoginContext } from "./LoginProvider.jsx";
 
 export function Navbar() {
+  const account = useContext(LoginContext);
+
   const navigate = useNavigate();
+  const toast = useToast();
+
+  function handleLogout() {
+    account.logout();
+    navigate("/");
+    toast({
+      status: "info",
+      description: "로그아웃되었습니다.",
+      position: "bottom-right",
+    });
+  }
 
   return (
     <Box border={"1px solid black"}>
@@ -14,46 +29,42 @@ export function Navbar() {
         justifyContent={"space-between"}
         width={"100%"}
       >
-        <Box>고객센터</Box>
+        <CursorBox>고객센터</CursorBox>
         <GapFlex>
-          <Box>
-            <MemberLogin />
-          </Box>
-          <Box>
-            <MemberSignup />
-          </Box>
+          {account.isLoggedIn() && (
+            <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
+          )}
+          {account.isLoggedIn() || (
+            <Flex>
+              <CursorBox>
+                <MemberLogin />
+              </CursorBox>
+              <CursorBox onClick={() => navigate("/signup")}>
+                회원가입
+              </CursorBox>
+            </Flex>
+          )}
         </GapFlex>
       </GapFlex>
       <Heading mt={5}>
         <Center>
-          <Box
+          <CursorBox
             position={"absolute"}
             top={0}
             onClick={() => navigate("/")}
-            cursor={"pointer"}
           >
             CCV
-          </Box>
+          </CursorBox>
         </Center>
         <GapFlex justifyContent="space-between">
           <GapFlex>
-            <Box onClick={() => navigate("/movie")} cursor={"pointer"}>
-              영화
-            </Box>
-            <Box onClick={() => navigate("/theater")} cursor={"pointer"}>
-              극장
-            </Box>
-            <Box onClick={() => navigate("/book")} cursor={"pointer"}>
-              예매
-            </Box>
+            <CursorBox onClick={() => navigate("/movie")}>영화</CursorBox>
+            <CursorBox onClick={() => navigate("/theater")}>극장</CursorBox>
+            <CursorBox onClick={() => navigate("/book")}>예매</CursorBox>
           </GapFlex>
           <GapFlex>
-            <Box onClick={() => navigate("/store")} cursor={"pointer"}>
-              스토어
-            </Box>
-            <Box onClick={() => navigate("/promotion")} cursor={"pointer"}>
-              이벤트
-            </Box>
+            <CursorBox onClick={() => navigate("/store")}>스토어</CursorBox>
+            <CursorBox onClick={() => navigate("/promotion")}>이벤트</CursorBox>
           </GapFlex>
         </GapFlex>
       </Heading>

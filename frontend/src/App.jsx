@@ -9,6 +9,9 @@ import { Promo } from "./page/promotion/Promo.jsx";
 import { StoreAdd } from "./page/store/StoreAdd.jsx";
 import { StoreList } from "./StoreList.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
+import { MovieAdd } from "./page/movie/MovieAdd.jsx";
+import { MovieList } from "./page/movie/MovieList.jsx";
+import { LoginProvider } from "./component/LoginProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +20,20 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <MovieHome /> },
       { path: "signup", element: <MemberSignup /> },
-      { path: "movie", element: <Movie /> },
+      {
+        path: "movie",
+        element: <Movie />,
+        children: [
+          {
+            index: true,
+            element: <MovieList />,
+          },
+          {
+            path: "add",
+            element: <MovieAdd />,
+          },
+        ],
+      },
       { path: "book", element: <Book /> },
       { path: "theater", element: <Theater /> },
       { path: "promotion", element: <Promo /> },
@@ -42,7 +58,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <LoginProvider>
+        <RouterProvider router={router} />
+      </LoginProvider>
     </>
   );
 }
