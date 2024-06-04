@@ -23,51 +23,51 @@ export function Navbar() {
   }
 
   return (
-    <Box border={"1px solid black"}>
-      <GapFlex
-        position={"absolute"}
-        justifyContent={"space-between"}
-        width={"100%"}
-      >
-        <CursorBox>고객센터</CursorBox>
-        <GapFlex>
-          {account.isLoggedIn() && (
-            <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
-          )}
-          {account.isLoggedIn() || (
-            <Flex>
-              <CursorBox>
-                <MemberLogin />
-              </CursorBox>
-              <CursorBox onClick={() => navigate("/signup")}>
-                회원가입
-              </CursorBox>
-            </Flex>
-          )}
-        </GapFlex>
-      </GapFlex>
-      <Heading mt={5}>
-        <Center>
-          <CursorBox
-            position={"absolute"}
-            top={0}
-            onClick={() => navigate("/")}
-          >
-            CCV
-          </CursorBox>
-        </Center>
-        <GapFlex justifyContent="space-between">
+    <Center border={"1px solid black"}>
+      <Box w={"1000px"}>
+        <GapFlex justifyContent={"space-between"} width={"100%"}>
+          <CursorBox>고객센터</CursorBox>
           <GapFlex>
-            <CursorBox onClick={() => navigate("/movie")}>영화</CursorBox>
-            <CursorBox onClick={() => navigate("/theater")}>극장</CursorBox>
-            <CursorBox onClick={() => navigate("/book")}>예매</CursorBox>
-          </GapFlex>
-          <GapFlex>
-            <CursorBox onClick={() => navigate("/store")}>스토어</CursorBox>
-            <CursorBox onClick={() => navigate("/promotion")}>이벤트</CursorBox>
+            {account.isLoggedIn() && (
+              <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
+            )}
+            {account.isLoggedIn() || (
+              <Flex>
+                <CursorBox>
+                  <MemberLogin />
+                </CursorBox>
+                <CursorBox onClick={() => navigate("/signup")}>
+                  회원가입
+                </CursorBox>
+              </Flex>
+            )}
           </GapFlex>
         </GapFlex>
-      </Heading>
-    </Box>
+        <Heading mt={5}>
+          <Center>
+            <CursorBox
+              position={"absolute"}
+              top={0}
+              onClick={() => navigate("/")}
+            >
+              CCV
+            </CursorBox>
+          </Center>
+          <GapFlex justifyContent="space-between">
+            <GapFlex>
+              <CursorBox onClick={() => navigate("/movie")}>영화</CursorBox>
+              <CursorBox onClick={() => navigate("/theater")}>극장</CursorBox>
+              <CursorBox onClick={() => navigate("/book")}>예매</CursorBox>
+            </GapFlex>
+            <GapFlex>
+              <CursorBox onClick={() => navigate("/store")}>스토어</CursorBox>
+              <CursorBox onClick={() => navigate("/promotion")}>
+                이벤트
+              </CursorBox>
+            </GapFlex>
+          </GapFlex>
+        </Heading>
+      </Box>
+    </Center>
   );
 }
