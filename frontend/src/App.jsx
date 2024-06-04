@@ -11,6 +11,7 @@ import { StoreList } from "./StoreList.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
 import { MovieAdd } from "./page/movie/MovieAdd.jsx";
 import { MovieList } from "./page/movie/MovieList.jsx";
+import { LoginProvider } from "./component/LoginProvider.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,7 +58,9 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <LoginProvider>
+        <RouterProvider router={router} />
+      </LoginProvider>
     </>
   );
 }
