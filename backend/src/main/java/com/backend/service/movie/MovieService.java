@@ -21,7 +21,6 @@ public class MovieService {
         for (int i = 0; i < movieType.length; i++) {
             movieMapper.insertMovieType(movie.getId(), movieType[i]);
         }
-        if(files)
 
 
     }
