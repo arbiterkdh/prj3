@@ -1,11 +1,11 @@
-import { Box, Input } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export function MemberSignup() {
   return (
     <Box>
       <Box>
-        <Input />
-        <Input />
+        {/*<Input />*/}
+        {/*<Input />*/}
       </Box>
     </Box>
   );
