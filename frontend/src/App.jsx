@@ -8,6 +8,7 @@ import { Store } from "./page/store/Store.jsx";
 import { Promo } from "./page/promotion/Promo.jsx";
 import { StoreAdd } from "./page/store/StoreAdd.jsx";
 import { StoreList } from "./StoreList.jsx";
+import { MemberSignup } from "./member/MemberSignup.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,7 @@ const router = createBrowserRouter([
     element: <Home />,
     children: [
       { index: true, element: <MovieHome /> },
+      { path: "signup", element: <MemberSignup /> },
       { path: "movie", element: <Movie /> },
       { path: "book", element: <Book /> },
       { path: "theater", element: <Theater /> },
