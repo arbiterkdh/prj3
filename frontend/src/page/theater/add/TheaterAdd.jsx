@@ -1,4 +1,4 @@
-import { Box, Button, Input } from "@chakra-ui/react";
+import { Box, Button, Input, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
@@ -6,12 +6,23 @@ import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 export function TheaterAdd() {
   const [city, setCity] = useState("");
   const [location, setLocation] = useState("");
+
+  const toast = useToast();
+
   function handleClick() {
     axios
       .post("/api/theater/add", { city, location })
-      .then((res) => {})
+      .then((res) => {
+        toast({
+          status: "success",
+          description: "극장이 추가되었습니다.",
+          position: "bottom-right",
+        });
+      })
       .catch((err) => {})
-      .finally(() => {});
+      .finally(() => {
+        setLocation("");
+      });
   }
 
   return (

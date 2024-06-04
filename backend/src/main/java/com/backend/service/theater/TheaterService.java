@@ -19,4 +19,16 @@ public class TheaterService {
 
         return mapper.selectAllByCity(city);
     }
+
+    public boolean validate(Theater theater) {
+
+        if (mapper.selectTheaterByCityAndLocation(theater.getCity(), theater.getLocation()) == null) {
+            return true;
+        }
+        return false;
+    }
+
+    public void add(Theater theater) {
+        mapper.insert(theater);
+    }
 }

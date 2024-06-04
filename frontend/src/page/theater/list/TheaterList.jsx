@@ -1,12 +1,21 @@
 import { Box, Flex, Tooltip } from "@chakra-ui/react";
 import TheaterListBox from "../../../css/theme/component/box/TheaterListBox.jsx";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 
 export function TheaterList() {
   const [theaterList, setTheaterList] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/theater/list")
+      .then((res) => {})
+      .catch()
+      .finally();
+  }, []);
+
   function handleClick(city) {
     axios
       .get(`/api/theater/${city}`)
@@ -48,7 +57,7 @@ export function TheaterList() {
         </TheaterListBox>
       </Flex>
       <Box>
-        <GapFlex justifyContent={"space-between"} flexWrap={"wrap"}>
+        <GapFlex justifyContent={"left"} flexWrap={"wrap"}>
           {theaterList.map((theater) => (
             <CursorBox width={"20%"} key={theater.number}>
               <Tooltip hasArrow label={theater.location + " 상세보기"}>
