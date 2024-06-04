@@ -10,8 +10,10 @@ export function TheaterList() {
 
   useEffect(() => {
     axios
-      .get("/api/theater/list")
-      .then((res) => {})
+      .get("/api/theater/seoul")
+      .then((res) => {
+        setTheaterList(res.data);
+      })
       .catch()
       .finally();
   }, []);
