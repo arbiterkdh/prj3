@@ -11,7 +11,8 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
-import { TheaterList } from "./theaterlist/TheaterList.jsx";
+import { TheaterList } from "./list/TheaterList.jsx";
+import { TheaterAdd } from "./add/TheaterAdd.jsx";
 
 export function Theater() {
   return (
@@ -19,6 +20,7 @@ export function Theater() {
       <CenterBox>
         <Heading>전체극장</Heading>
         <TheaterList />
+        <TheaterAdd />
         <Box>
           <Heading>극장 이벤트</Heading>
           <Flex>
