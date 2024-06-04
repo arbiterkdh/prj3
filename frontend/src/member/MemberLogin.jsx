@@ -12,10 +12,10 @@ import {
   ModalOverlay,
   useDisclosure,
 } from "@chakra-ui/react";
-import MarginBox from "../../css/theme/component/box/MarginBox.jsx";
+import MarginBox from "../css/theme/component/box/MarginBox.jsx";
 import axios from "axios";
 
-export function LoginModalComponent() {
+export function MemberLogin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   function handleLogin() {

@@ -1,7 +1,8 @@
 import { Box, Center, Heading } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
-import { LoginModalComponent } from "../member/token/LoginModalComponent.jsx";
+import { MemberLogin } from "../member/MemberLogin.jsx";
+import { MemberSignup } from "../member/MemberSignup.jsx";
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -16,9 +17,11 @@ export function Navbar() {
         <Box>고객센터</Box>
         <GapFlex>
           <Box>
-            <LoginModalComponent />
+            <MemberLogin />
           </Box>
-          <Box>회원가입</Box>
+          <Box>
+            <MemberSignup />
+          </Box>
         </GapFlex>
       </GapFlex>
       <Heading mt={5}>
