@@ -28,7 +28,7 @@ export function PromoList() {
             <Text>2024.05.01~2024.05.20</Text>
           </CardBody>
           <CardFooter>
-            <Button>View here</Button>
+            <Button>자세히 보기</Button>
           </CardFooter>
         </Card>
         <Card>
@@ -40,7 +40,7 @@ export function PromoList() {
             <Text as="b">text2</Text>
           </CardBody>
           <CardFooter>
-            <Button>View here</Button>
+            <Button>자세히 보기</Button>
           </CardFooter>
         </Card>
         <Card>
@@ -49,7 +49,7 @@ export function PromoList() {
             <Text as="b">text3</Text>
           </CardBody>
           <CardFooter>
-            <Button>View here</Button>
+            <Button>자세히 보기</Button>
           </CardFooter>
         </Card>
         <Card>
@@ -61,7 +61,7 @@ export function PromoList() {
             <Text as="b">text4</Text>
           </CardBody>
           <CardFooter>
-            <Button>View here</Button>
+            <Button>자세히 보기</Button>
           </CardFooter>
         </Card>
         <Card>
@@ -73,7 +73,7 @@ export function PromoList() {
             <Text as="b">text5</Text>
           </CardBody>
           <CardFooter>
-            <Button>View here</Button>
+            <Button>자세히 보기</Button>
           </CardFooter>
         </Card>
       </SimpleGrid>
