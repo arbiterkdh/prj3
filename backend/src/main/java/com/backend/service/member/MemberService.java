@@ -43,7 +43,7 @@ public class MemberService {
                         .issuer("self")
                         .issuedAt(now)
                         .expiresAt(now.plusSeconds(60 * 60 * 24))
-                        .subject(db.getId().toString()).build();
+                        .subject(db.getNumber().toString()).build();
 
                 token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
 

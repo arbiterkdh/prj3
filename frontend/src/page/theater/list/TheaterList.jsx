@@ -1,7 +1,6 @@
 import { Box, Flex, Tooltip } from "@chakra-ui/react";
 import TheaterListBox from "../../../css/theme/component/box/TheaterListBox.jsx";
 import axios from "axios";
-import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -45,7 +44,7 @@ export function TheaterList({
 
   return (
     <Box w={"100%"} border={"1px solid black"}>
-      <Flex width={"100%"}>
+      <Flex width={"100%"} mb={4}>
         {cityList.map((city) => (
           <TheaterListBox key={city} onClick={() => handleClick(city)}>
             {city}
@@ -53,9 +52,15 @@ export function TheaterList({
         ))}
       </Flex>
       <Box>
-        <GapFlex justifyContent={"left"} flexWrap={"wrap"}>
+        <Flex justifyContent={"left"} flexWrap={"wrap"}>
           {theaterList.map((theater) => (
             <CursorBox
+              m={0}
+              pl={2}
+              h={8}
+              sx={{
+                borderLeft: "1px solid lightgray",
+              }}
               width={"20%"}
               key={theater.number}
               onClick={() => navigate("/theater/" + theater.number)}
@@ -65,7 +70,7 @@ export function TheaterList({
               </Tooltip>
             </CursorBox>
           ))}
-        </GapFlex>
+        </Flex>
       </Box>
     </Box>
   );

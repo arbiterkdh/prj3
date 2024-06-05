@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Select;
 public interface MemberMapper {
     @Insert("""
             INSERT INTO member
-            (email, password)
-            VALUES (#{email}, #{password})
+            (id, email, password, nick_name)
+            VALUES (#{id}, #{email}, #{password}, #{nickName})
             """)
     int insert(Member member);
 

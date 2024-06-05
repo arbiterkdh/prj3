@@ -25,11 +25,18 @@ import java.security.interfaces.RSAPublicKey;
 @EnableMethodSecurity
 public class AppConfiguration {
 
-    @Value("classpath:secret/app.pub")
+    @Value("${jwt.public.key}")
     RSAPublicKey key;
 
-    @Value("classpath:secret/app.key")
+    @Value("${jwt.private.key}")
     RSAPrivateKey priv;
+
+    @Value("${aws.access.key}")
+    String accessKey;
+
+    @Value("${aws.secret.key}")
+    String secretKey;
+
 
     @Bean
     public JwtDecoder jwtDecoder() {
