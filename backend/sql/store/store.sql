@@ -19,4 +19,6 @@ CREATE TABLE product_image
 );
 
 SELECT *
+FROM product;
+SELECT *
 FROM product_image;

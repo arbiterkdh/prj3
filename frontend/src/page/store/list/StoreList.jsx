@@ -8,7 +8,6 @@ import {
   Divider,
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
   Heading,
   Image,
@@ -24,6 +23,10 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
   Stack,
   Text,
   useDisclosure,
@@ -32,9 +35,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import MarginBox from "../../css/theme/component/box/MarginBox.jsx";
-import StoreMenuText from "../../css/theme/component/text/StoreMenuText.jsx";
-import StoreMenuCursorBox from "../../css/theme/component/box/StoreMenuCursorBox.jsx";
+import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
+import StoreMenuText from "../../../css/theme/component/text/StoreMenuText.jsx";
+import StoreMenuCursorBox from "../../../css/theme/component/box/StoreMenuCursorBox.jsx";
 import {
   faCartShopping,
   faCreditCard,
@@ -61,9 +64,12 @@ export function StoreList() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
+  const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
-  useEffect(() => {
+  const navigate = useNavigate();
+
+  const productListRefresh = () => {
     axios
       .get("/api/store/product/list")
       .then((res) => {
@@ -71,6 +77,10 @@ export function StoreList() {
       })
       .catch(() => {})
       .finally(() => {});
+  };
+
+  useEffect(() => {
+    productListRefresh();
   }, []);
 
   function handleProductDelete() {
@@ -214,21 +224,34 @@ export function StoreList() {
     );
   };
 
-  const navigate = useNavigate();
-
-  function handleProductModify(productId, fileName, name, price) {
-    setProductId(productId);
-    setFileName(fileName);
-    setName(name);
-    setPrice(price);
-    console.log(productId);
-    console.log(fileName);
-    console.log(name);
-    console.log(price);
-
-    // axios.put(`/api/store/product/modify`, {});
+  function handleProductModify(productId, fileName, name, price, file, stock) {
+    axios
+      .putForm(`/api/store/product/modify`, {
+        productId,
+        fileName,
+        name,
+        price,
+        file,
+        stock,
+      })
+      .then((res) => {
+        toast({
+          status: "success",
+          description: "수정 완료",
+          position: "bottom",
+        });
+        productListRefresh();
+      })
+      .catch(() => {})
+      .finally(() => {
+        onModifyClose();
+      });
   }
 
+  const handleNumberInputChange = (value) => {
+    const val = parseInt(value, 10);
+    setStock(isNaN(value) ? 0 : value);
+  };
   return (
     <Box w={"100%"}>
       <Flex>
@@ -310,7 +333,13 @@ export function StoreList() {
           <ModalBody>
             <FormControl mb={3}>
               <Image src={`http://127.0.0.1:8888/${productId}/${fileName}`} />
-              <Input type={"file"} />
+              <input
+                multiple
+                type={"file"}
+                accept="image/*"
+                placeholder={"이미지를 등록하세요"}
+                onChange={(e) => setFile(e.target.files)}
+              />
             </FormControl>
             <FormControl mb={3}>
               <FormLabel>상품명</FormLabel>
@@ -321,12 +350,45 @@ export function StoreList() {
               />
             </FormControl>
 
+            <Flex>
+              <NumberInput
+                clampValueOnBlur
+                maxW="100px"
+                mr="2rem"
+                min={1}
+                max={2000}
+                value={stock}
+                onChange={handleNumberInputChange}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              <Slider
+                flex="1"
+                focusThumbOnChange={false}
+                value={stock}
+                min={1}
+                max={2000}
+                onChange={(e) => setStock(e.target.value)}
+              >
+                <SliderTrack>
+                  <SliderFilledTrack />
+                </SliderTrack>
+                <SliderThumb fontSize="sm" boxSize="32px">
+                  {stock}
+                </SliderThumb>
+              </Slider>
+            </Flex>
+            {/*
             <FormControl>
               <FormLabel>수량설정</FormLabel>
               <NumberInput
                 max={2000}
                 min={1}
-                value={stock}
+                defaultValue={stock}
                 onChange={(e) => setStock(e.target.value)}
               >
                 <NumberInputField />
@@ -339,6 +401,7 @@ export function StoreList() {
                 최소 수량 1개 최대수량은 2000개로 설정가능합니다
               </FormHelperText>
             </FormControl>
+            */}
 
             <FormControl>
               <FormLabel>가격</FormLabel>
@@ -354,7 +417,14 @@ export function StoreList() {
               <Button
                 colorScheme={"green"}
                 onClick={() =>
-                  handleProductModify(productId, fileName, name, price)
+                  handleProductModify(
+                    productId,
+                    fileName,
+                    name,
+                    price,
+                    file,
+                    stock,
+                  )
                 }
                 isLoading={isLoading}
               >
