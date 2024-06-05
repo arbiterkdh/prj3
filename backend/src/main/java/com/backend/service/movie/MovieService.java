@@ -57,4 +57,8 @@ public class MovieService {
     public List<Movie> list() {
         return movieMapper.selectList();
     }
+
+    public Movie get(Integer movieId) {
+        return movieMapper.selectByMovieId(movieId);
+    }
 }

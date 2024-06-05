@@ -56,4 +56,27 @@ public class ProductService {
 
 
     }
+
+    public void deleteProduct(Integer id) {
+
+        String fileName = imageMapper.selectFileName(id);
+
+        String dir = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{id}/";
+
+        if (fileName != null) {
+
+            File file = new File(dir + fileName);
+            file.delete();
+
+            File dirFile = new File(dir);
+            if (dirFile.exists()) {
+                dirFile.delete();
+            }
+        }
+
+        imageMapper.deleteImage(id);
+
+        mapper.deleteProduct(id);
+
+    }
 }

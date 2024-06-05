@@ -14,6 +14,7 @@ import { MovieList } from "./page/movie/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
 import { PromoAdd } from "./page/promotion/PromoAdd.jsx";
 import { PromoList } from "./page/promotion/PromoList.jsx";
+import { MovieView } from "./page/movie/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/location/TheaterLocation.jsx";
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
           {
             path: "add",
             element: <MovieAdd />,
+          },
+          {
+            path: "view/:id",
+            element: <MovieView />,
           },
         ],
       },
