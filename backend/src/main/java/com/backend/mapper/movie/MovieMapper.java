@@ -35,4 +35,11 @@ public interface MovieMapper {
             ORDER BY id DESC
             """)
     List<Movie> selectList();
+
+    @Select("""
+            SELECT *
+            FROM movie
+            WHERE id = #{movieId}
+            """)
+    Movie selectByMovieId(Integer movieId);
 }

@@ -35,4 +35,13 @@ public class MovieController {
     public List<Movie> list() {
         return movieService.list();
     }
+
+    @GetMapping("view/{id}")
+    public Movie view(@PathVariable Integer id) {
+        Movie movie = movieService.get(id);
+
+        return movie;
+    }
+
+
 }
