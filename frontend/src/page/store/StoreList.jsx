@@ -9,8 +9,16 @@ import {
   Flex,
   Heading,
   Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -21,11 +29,16 @@ import StoreMenuCursorBox from "../../css/theme/component/box/StoreMenuCursorBox
 import {
   faCartShopping,
   faCreditCard,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [productId, setProductId] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
   useEffect(() => {
     axios
       .get("/api/store/product/list")
@@ -35,6 +48,28 @@ export function StoreList() {
       .catch(() => {})
       .finally(() => {});
   }, []);
+
+  function handleProductDelete() {
+    setIsLoading(true);
+
+    axios
+      .delete(`/api/store/product/delete/${productId}`)
+      .then((res) => {
+        toast({
+          status: "success",
+          description: "삭제 성공",
+          position: "top",
+        });
+        setProductList(
+          productList.filter((product) => product.id !== productId),
+        );
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+        onClose();
+      });
+  }
 
   const ProductList = () => {
     return (
@@ -99,6 +134,17 @@ export function StoreList() {
                   <Text textIndent={"10px"}>카트</Text>
                 </Button>
               </Box>
+
+              <Box>
+                <Button
+                  onClick={() => {
+                    onOpen();
+                    setProductId(product.id);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faX} />
+                </Button>
+              </Box>
             </Flex>
           </CardFooter>
         </Card>
@@ -111,7 +157,17 @@ export function StoreList() {
     <Box w={"100%"}>
       <Flex>
         <Box w={"50%"}>
-          <Heading>상품 리스트</Heading>
+          <Flex alignItems={"center"}>
+            <Heading>상품 리스트</Heading>
+            <Text color={"red"}>
+              {" "}
+              <FontAwesomeIcon
+                icon={faCartShopping}
+                fontSize={"1.2rem"}
+                cursor={"pointer"}
+              />
+            </Text>
+          </Flex>
         </Box>
         <Box w={"50%"} textAlign={"right"}>
           <Button onClick={() => navigate("/store/add")} colorScheme={"green"}>
@@ -152,6 +208,25 @@ export function StoreList() {
       </Box>
 
       <ProductList />
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>알림</ModalHeader>
+          <ModalBody>상품을 삭제하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Flex>
+              <Button
+                colorScheme={"green"}
+                onClick={handleProductDelete}
+                isLoading={isLoading}
+              >
+                확인
+              </Button>
+              <Button onClick={onClose}>취소</Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
