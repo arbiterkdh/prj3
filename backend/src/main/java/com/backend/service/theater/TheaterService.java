@@ -31,4 +31,8 @@ public class TheaterService {
     public void add(Theater theater) {
         mapper.insert(theater);
     }
+
+    public List<String> getCityList() {
+        return mapper.selectAllCity();
+    }
 }

@@ -33,4 +33,10 @@ public interface TheaterMapper {
             """)
     @Options(useGeneratedKeys = true, keyProperty = "number")
     int insert(Theater theater);
+
+    @Select("""
+            SELECT DISTINCT city
+            FROM theater
+            """)
+    List<String> selectAllCity();
 }

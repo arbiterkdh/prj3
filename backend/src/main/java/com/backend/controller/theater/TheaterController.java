@@ -14,6 +14,11 @@ public class TheaterController {
 
     private final TheaterService service;
 
+    @GetMapping("")
+    public List<String> getCities() {
+        return service.getCityList();
+    }
+
     @PostMapping("add")
     public void addTheater(@RequestBody Theater theater) {
         if (service.validate(theater)) {
@@ -21,8 +26,8 @@ public class TheaterController {
         }
     }
 
-    @GetMapping("{city}")
-    public List<Theater> getCity(@PathVariable String city) {
+    @GetMapping("list")
+    public List<Theater> getCity(@RequestParam(defaultValue = "서울") String city) {
         return service.get(city);
     }
 }

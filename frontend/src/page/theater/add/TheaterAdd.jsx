@@ -3,13 +3,14 @@ import axios from "axios";
 import { useState } from "react";
 import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 
-export function TheaterAdd() {
+export function TheaterAdd({ setCityName, setIsModifying }) {
   const [city, setCity] = useState("");
   const [location, setLocation] = useState("");
 
   const toast = useToast();
 
   function handleClick() {
+    setIsModifying(true);
     axios
       .post("/api/theater/add", { city, location })
       .then((res) => {
@@ -22,6 +23,8 @@ export function TheaterAdd() {
       .catch((err) => {})
       .finally(() => {
         setLocation("");
+        setIsModifying(false);
+        setCityName(city);
       });
   }
 

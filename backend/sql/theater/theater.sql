@@ -9,25 +9,26 @@ CREATE TABLE theater
 
 INSERT INTO theater
     (city, location)
-VALUES ('seoul', '강남'),
-       ('kyungki', '고양스타필드'),
-       ('incheon', '검단'),
-       ('daejeon|choongcheong|sejong', '공주'),
-       ('boosan|daegu|gyungsang', '경북도청'),
-       ('gwangjoo|jeonla', '광주상무'),
-       ('gangwon', '남춘천'),
-       ('jeju', '제주삼화');
+VALUES ('서울', '강남'),
+       ('경기', '고양스타필드'),
+       ('인천', '검단'),
+       ('대전,충청,세종', '공주'),
+       ('부산,대구,경상', '경북도청'),
+       ('광주,전라', '광주상무'),
+       ('강원', '남춘천'),
+       ('제주', '제주삼화');
 
 INSERT INTO theater
     (city, location)
-VALUES ('seoul', '강동'),
-       ('seoul', '군자'),
-       ('seoul', '더 부티크 목동현대백화점'),
-       ('seoul', '동대문')
+VALUES ('서울', '강동'),
+       ('서울', '군자'),
+       ('서울', '더 부티크 목동현대백화점'),
+       ('서울', '동대문')
 ;
 
 SELECT *
 FROM theater;
 
 DELETE
-FROM theater;
+FROM theater
+WHERE number = 124;
