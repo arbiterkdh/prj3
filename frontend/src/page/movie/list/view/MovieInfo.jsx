@@ -18,6 +18,19 @@ export function MovieInfo({ movie }) {
 
   let index = 0;
 
+  function ShowType(type, index) {
+    let str;
+    str = type;
+    if (index < movie.type.length - 1) {
+      str = str + ", ";
+    }
+    return (
+      <Text mr={1} key={index}>
+        {str}
+      </Text>
+    );
+  }
+
   return (
     <Center>
       <CenterBox>
@@ -30,18 +43,8 @@ export function MovieInfo({ movie }) {
           <Divider />
           <Box>
             <Flex>
-              <Text mr={1}>상영타입 :</Text>
-              {movie.type.map((type, index) => (
-                <Text mr={1} key={index}>
-                  {type}
-                  {index < movie.type.length - 1 ? ", " : ""}
-                </Text>
-              ))}
-              <Text>
-                상영타입 : {movie.type.map((type, index) => (
-
-              ))}
-              </Text>
+              <Text mr={2}>상영타입 : </Text>
+              {movie.type.map((type, index) => ShowType(type, index))}
             </Flex>
           </Box>
           <Box>
