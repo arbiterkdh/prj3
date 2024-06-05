@@ -1,11 +1,4 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Heading,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../../member/MemberLogin.jsx";
@@ -16,10 +9,10 @@ import { MovieDrawer } from "./drawer/MovieDrawer.jsx";
 import { BookDrawer } from "./drawer/BookDrawer.jsx";
 import { TheaterDrawer } from "./drawer/TheaterDrawer.jsx";
 import { PromoDrawer } from "./drawer/PromoDrawer.jsx";
+import NavBox from "../../css/theme/component/box/NavBox.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
   const [drawer, setDrawer] = useState(0);
@@ -36,7 +29,7 @@ export function Navbar() {
 
   return (
     <Box>
-      <Center>
+      <Center borderBottom={"1px solid black"}>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
             <CursorBox>고객센터</CursorBox>
@@ -58,58 +51,55 @@ export function Navbar() {
           </GapFlex>
           <Heading mt={5}>
             <Center>
-              <CursorBox
+              <NavBox
                 position={"absolute"}
                 top={0}
                 onClick={() => navigate("/")}
               >
                 CCV
-              </CursorBox>
+              </NavBox>
             </Center>
-            <GapFlex justifyContent="space-between">
+            <GapFlex mb={-3} justifyContent="space-between">
               <GapFlex>
-                <CursorBox
-                  h={"100%"}
+                <NavBox
                   onMouseEnter={() => setDrawer(1)}
                   onMouseLeave={() => setDrawer(0)}
                   onClick={() => navigate("/movie")}
                 >
                   영화
-                </CursorBox>
-                <CursorBox
-                  h={"100%"}
+                </NavBox>
+                <NavBox
                   onMouseEnter={() => setDrawer(2)}
                   onMouseLeave={() => setDrawer(0)}
                   onClick={() => navigate("/theater")}
                 >
                   극장
-                </CursorBox>
-                <CursorBox
-                  h={"100%"}
+                </NavBox>
+                <NavBox
                   onMouseEnter={() => setDrawer(3)}
                   onMouseLeave={() => setDrawer(0)}
                   onClick={() => navigate("/book")}
                 >
                   예매
-                </CursorBox>
+                </NavBox>
               </GapFlex>
               <GapFlex>
-                <CursorBox onClick={() => navigate("/store")}>스토어</CursorBox>
-                <CursorBox
-                  h={"100%"}
+                <NavBox onClick={() => navigate("/store")}>스토어</NavBox>
+                <NavBox
                   onMouseEnter={() => setDrawer(4)}
                   onMouseLeave={() => setDrawer(0)}
                   onClick={() => navigate("/promotion")}
                 >
                   이벤트
-                </CursorBox>
+                </NavBox>
               </GapFlex>
             </GapFlex>
           </Heading>
         </Box>
       </Center>
-      <Center border={"1px solid black"}>
-        <Box w={"1000px"}>
+      <Center>
+        <Box w={"100%"}>
+          {drawer === 0 && <Box h={"33px"} />}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
           {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}
           {drawer === 3 && <TheaterDrawer setDrawer={setDrawer} />}

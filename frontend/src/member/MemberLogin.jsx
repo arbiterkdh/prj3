@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   Input,
   Modal,
@@ -93,7 +94,7 @@ export function MemberLogin() {
               </ModalFooter>
               <ModalFooter display="flex" justifyContent="space-evenly">
                 <CursorBox>ID/PW 찾기</CursorBox>
-                <>|</>
+                <Divider orientation={"vertical"} />
                 <CursorBox
                   onClick={() => {
                     navigate("/signup");
@@ -102,7 +103,7 @@ export function MemberLogin() {
                 >
                   회원가입
                 </CursorBox>
-                <>|</>
+                <Divider orientation={"vertical"} />
                 <CursorBox>비회원 예매확인</CursorBox>
               </ModalFooter>
               <ModalFooter display="flex" justifyContent="space-evenly">
