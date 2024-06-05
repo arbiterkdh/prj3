@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -44,7 +44,7 @@ export function MovieList() {
       <CenterBox>
         <SimpleGrid spacing={4} templateColumns="repeat(4, 1fr)">
           {movieList.map((movie) => (
-            <Card maxW="sm">
+            <Card key={movie.id} maxW="sm">
               <CardBody>
                 <Image
                   cursor={"pointer"}

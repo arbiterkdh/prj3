@@ -3,6 +3,7 @@ package com.backend.domain.movie;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class Movie {
@@ -15,4 +16,5 @@ public class Movie {
     private LocalDate startDate;
     private String director;
     private String actors;
+    private List<String> Type;
 }

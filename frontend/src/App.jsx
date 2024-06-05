@@ -9,12 +9,12 @@ import { Promo } from "./page/promotion/Promo.jsx";
 import { StoreAdd } from "./page/store/StoreAdd.jsx";
 import { StoreList } from "./page/store/StoreList.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
-import { MovieAdd } from "./page/movie/MovieAdd.jsx";
-import { MovieList } from "./page/movie/MovieList.jsx";
+import { MovieAdd } from "./page/movie/add/MovieAdd.jsx";
+import { MovieList } from "./page/movie/list/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
 import { PromoAdd } from "./page/promotion/PromoAdd.jsx";
 import { PromoList } from "./page/promotion/PromoList.jsx";
-import { MovieView } from "./page/movie/MovieView.jsx";
+import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/location/TheaterLocation.jsx";
 
 const router = createBrowserRouter([

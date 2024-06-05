@@ -17,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 export function MovieAdd() {
   const [title, setTitle] = useState("");
@@ -30,19 +31,23 @@ export function MovieAdd() {
   const [director, setDirector] = useState("");
   const [actors, setActors] = useState("");
 
+  const navigate = useNavigate();
+
   function handleMovieSave() {
-    axios.postForm("/api/movie/add", {
-      title,
-      file,
-      content,
-      genre,
-      runningTime,
-      movieType,
-      rating,
-      startDate: startDate.toISOString().split("T")[0],
-      director,
-      actors,
-    });
+    axios
+      .postForm("/api/movie/add", {
+        title,
+        file,
+        content,
+        genre,
+        runningTime,
+        movieType,
+        rating,
+        startDate: startDate.toISOString().split("T")[0],
+        director,
+        actors,
+      })
+      .then(() => navigate("/movie"));
   }
 
   let disableSaveButton = false;
@@ -85,7 +90,9 @@ export function MovieAdd() {
     }
   }
 
-  console.log(movieType);
+  function handleMovieCancel() {
+    navigate("/movie");
+  }
 
   return (
     <Card>
@@ -188,7 +195,7 @@ export function MovieAdd() {
             <Input onChange={(e) => setActors(e.target.value)} />
           </Box>
           <Box>
-            <Button>취소</Button>
+            <Button onClick={handleMovieCancel}>취소</Button>
             <Button
               isDisabled={disableSaveButton}
               onClick={handleMovieSave}
