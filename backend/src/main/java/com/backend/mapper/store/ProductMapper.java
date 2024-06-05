@@ -1,10 +1,7 @@
 package com.backend.mapper.store;
 
 import com.backend.domain.store.Product;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -27,4 +24,11 @@ public interface ProductMapper {
             """)
     List<Product> productList();
 
+
+    @Delete("""
+            DELETE FROM
+            product
+            WHERE id = #{id}
+            """)
+    int deleteProduct(Integer id);
 }
