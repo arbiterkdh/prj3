@@ -1,9 +1,9 @@
-import { Box, Button, Input, useToast } from "@chakra-ui/react";
+import { Box, Button, Input, Select, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 
-export function TheaterAdd({ setCityName, setIsModifying }) {
+export function TheaterAdd({ setCityName, cityList, setIsModifying }) {
   const [city, setCity] = useState("");
   const [location, setLocation] = useState("");
 
@@ -31,8 +31,20 @@ export function TheaterAdd({ setCityName, setIsModifying }) {
   return (
     <Box>
       <GapFlex>
-        <Input onChange={(e) => setCity(e.target.value)} placeholder={"도시"} />
+        <Select
+          placeholder={"선택"}
+          border={"1px solid black"}
+          borderRadius={"none"}
+          onChange={(e) => setCity(e.target.value)}
+        >
+          {cityList.map((city) => (
+            <option key={city} value={city} style={{ borderRadius: "none" }}>
+              {city}
+            </option>
+          ))}
+        </Select>
         <Input
+          value={location}
           onChange={(e) => setLocation(e.target.value)}
           placeholder={"지역명"}
         />

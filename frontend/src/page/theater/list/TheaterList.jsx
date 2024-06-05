@@ -20,13 +20,6 @@ export function TheaterList({
   useEffect(() => {
     if (!isModifying) {
       axios
-        .get(`/api/theater`)
-        .then((res) => {
-          setCityList(res.data);
-        })
-        .catch()
-        .finally();
-      axios
         .get(`/api/theater/list?city=${cityName}`)
         .then((res) => {
           setTheaterList(res.data);

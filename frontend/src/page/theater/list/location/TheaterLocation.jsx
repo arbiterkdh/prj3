@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/react";
-import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 
 export function TheaterLocation() {
   return (

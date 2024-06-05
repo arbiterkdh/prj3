@@ -1,5 +1,5 @@
 import { Box, IconButton, useColorMode } from "@chakra-ui/react";
-import { Navbar } from "../component/Navbar.jsx";
+import { Navbar } from "../component/navbar/Navbar.jsx";
 import { Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

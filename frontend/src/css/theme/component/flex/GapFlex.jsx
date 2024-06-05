@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react"; // 기본 gap 값을 설정한 커스텀 Flex 컴포넌트
 
 // 기본 gap 값을 설정한 커스텀 Flex 컴포넌트
 const GapFlex = (props) => {
-  return <Flex gap="4" {...props} />;
+  return <Flex gap="4" alignItems={"center"} {...props} />;
 };
 
 export default GapFlex;

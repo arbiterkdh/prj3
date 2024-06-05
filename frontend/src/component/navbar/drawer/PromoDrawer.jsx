@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
-import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
-import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
+import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
+import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 
 export function PromoDrawer({ setDrawer }) {
   return (

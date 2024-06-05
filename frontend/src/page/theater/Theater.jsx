@@ -13,13 +13,24 @@ import {
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 import { TheaterList } from "./list/TheaterList.jsx";
 import { TheaterAdd } from "./add/TheaterAdd.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function Theater() {
   const [theaterList, setTheaterList] = useState([]);
   const [isModifying, setIsModifying] = useState(false);
   const [cityList, setCityList] = useState([]);
   const [cityName, setCityName] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`/api/theater`)
+      .then((res) => {
+        setCityList(res.data);
+      })
+      .catch()
+      .finally();
+  }, []);
 
   return (
     <Center>
@@ -34,7 +45,11 @@ export function Theater() {
           setTheaterList={setTheaterList}
           isModifying={isModifying}
         />
-        <TheaterAdd setCityName={setCityName} setIsModifying={setIsModifying} />
+        <TheaterAdd
+          setCityName={setCityName}
+          cityList={cityList}
+          setIsModifying={setIsModifying}
+        />
         <Box>
           <Heading>극장 이벤트</Heading>
           <Flex>

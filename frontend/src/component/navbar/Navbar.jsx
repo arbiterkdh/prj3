@@ -7,15 +7,15 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
-import { MemberLogin } from "../member/MemberLogin.jsx";
-import CursorBox from "../css/theme/component/box/CursorBox.jsx";
+import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
+import { MemberLogin } from "../../member/MemberLogin.jsx";
+import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
 import { useContext, useState } from "react";
-import { LoginContext } from "./LoginProvider.jsx";
-import { MovieDrawer } from "../page/movie/MovieDrawer.jsx";
-import { BookDrawer } from "../page/book/BookDrawer.jsx";
-import { TheaterDrawer } from "../page/theater/TheaterDrawer.jsx";
-import { PromoDrawer } from "../page/promotion/PromoDrawer.jsx";
+import { LoginContext } from "../LoginProvider.jsx";
+import { MovieDrawer } from "./drawer/MovieDrawer.jsx";
+import { BookDrawer } from "./drawer/BookDrawer.jsx";
+import { TheaterDrawer } from "./drawer/TheaterDrawer.jsx";
+import { PromoDrawer } from "./drawer/PromoDrawer.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);

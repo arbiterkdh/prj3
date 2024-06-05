@@ -15,7 +15,7 @@ import { LoginProvider } from "./component/LoginProvider.jsx";
 import { PromoAdd } from "./page/promotion/PromoAdd.jsx";
 import { PromoList } from "./page/promotion/PromoList.jsx";
 import { MovieView } from "./page/movie/MovieView.jsx";
-import { TheaterLocation } from "./page/theater/location/TheaterLocation.jsx";
+import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 
 const router = createBrowserRouter([
   {

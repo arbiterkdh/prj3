@@ -12,14 +12,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function MemberSignup() {
+  const [id, setId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState("");
+  const [nickName, setNickName] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
 
   function handleSignup() {
     axios
-      .post("/api/member/signup", { email, password })
+      .post("/api/member/signup", { id, email, nickName, password })
       .then(() => {
         toast({
           status: "success",
@@ -36,8 +39,11 @@ export function MemberSignup() {
         });
       })
       .finally(() => {
+        setId("");
         setEmail("");
         setPassword("");
+        setPasswordCheck("");
+        setNickName("");
       });
   }
 
@@ -47,17 +53,50 @@ export function MemberSignup() {
       <Box>
         <Box>
           <FormControl>
-            <FormLabel>EMAIL</FormLabel>
+            <FormLabel>아이디</FormLabel>
             <InputGroup>
-              <Input onChange={(e) => setEmail(e.target.value)} />
+              <Input value={id} onChange={(e) => setId(e.target.value)} />
             </InputGroup>
           </FormControl>
         </Box>
         <Box>
           <FormControl>
-            <FormLabel>PASSWORD</FormLabel>
+            <FormLabel>이메일</FormLabel>
             <InputGroup>
-              <Input onChange={(e) => setPassword(e.target.value)} />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            </InputGroup>
+          </FormControl>
+        </Box>
+        <Box>
+          <FormControl>
+            <FormLabel>패스워드</FormLabel>
+            <InputGroup>
+              <Input
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </InputGroup>
+          </FormControl>
+        </Box>
+        <Box>
+          <FormControl>
+            <FormLabel>패스워드 재확인</FormLabel>
+            <InputGroup>
+              <Input
+                value={passwordCheck}
+                onChange={(e) => setPasswordCheck(e.target.value)}
+              />
+            </InputGroup>
+          </FormControl>
+        </Box>
+        <Box>
+          <FormControl>
+            <FormLabel>닉네임</FormLabel>
+            <InputGroup>
+              <Input
+                value={nickName}
+                onChange={(e) => setNickName(e.target.value)}
+              />
             </InputGroup>
           </FormControl>
         </Box>

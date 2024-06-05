@@ -1,5 +1,5 @@
-import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
-import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
+import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
+import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 import { Box } from "@chakra-ui/react";
 
 export function TheaterDrawer({ setDrawer }) {
