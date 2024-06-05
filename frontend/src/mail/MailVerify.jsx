@@ -1,5 +1,6 @@
 import {
   Button,
+  Center,
   Heading,
   Input,
   InputGroup,
@@ -10,6 +11,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { VerifyNumber } from "./VerifyNumber.jsx";
+import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
@@ -41,17 +43,19 @@ export function MailVerify() {
   }
 
   return (
-    <>
-      <Heading>메일 발송</Heading>
-      <InputGroup>
-        <Input
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder={"이메일 주소"}
-        />
-        <Button onClick={handleClick}>인증번호 요청</Button>
-      </InputGroup>
-      <VerifyNumber isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
-    </>
+    <Center>
+      <CenterBox mb={48}>
+        <Heading>메일 발송</Heading>
+        <InputGroup>
+          <Input
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder={"이메일 주소"}
+          />
+          <Button onClick={handleClick}>인증번호 요청</Button>
+        </InputGroup>
+        <VerifyNumber isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      </CenterBox>
+    </Center>
   );
 }
