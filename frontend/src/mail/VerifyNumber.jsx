@@ -29,7 +29,7 @@ export function VerifyNumber({ isOpen, onOpen, onClose }) {
     seconds = "00";
   }
   useEffect(() => {
-    if (onOpen) {
+    if (isOpen) {
       const timer = setInterval(() => {
         setRemainTime((t) => t - 1000);
       }, 1000);
@@ -37,9 +37,6 @@ export function VerifyNumber({ isOpen, onOpen, onClose }) {
         clearInterval(timer);
       }
       return () => clearInterval(timer);
-    }
-    if (onClose) {
-      setRemainTime(3 * 60 * 1000);
     }
   }, [remainTime]);
 
