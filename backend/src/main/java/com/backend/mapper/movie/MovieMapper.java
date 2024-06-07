@@ -42,4 +42,11 @@ public interface MovieMapper {
             WHERE id = #{movieId}
             """)
     Movie selectByMovieId(Integer movieId);
+
+    @Select("""
+            SELECT name
+            FROM movie_type
+            WHERE movie_id = #{movieId}
+            """)
+    List<String> selectMovieTypeById(Integer movieId);
 }

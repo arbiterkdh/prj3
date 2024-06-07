@@ -6,16 +6,17 @@ import { Book } from "./page/book/Book.jsx";
 import { Theater } from "./page/theater/Theater.jsx";
 import { Store } from "./page/store/Store.jsx";
 import { Promo } from "./page/promotion/Promo.jsx";
-import { StoreAdd } from "./page/store/StoreAdd.jsx";
-import { StoreList } from "./page/store/StoreList.jsx";
+import { StoreAdd } from "./page/store/add/StoreAdd.jsx";
+import { StoreList } from "./page/store/list/StoreList.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
-import { MovieAdd } from "./page/movie/MovieAdd.jsx";
-import { MovieList } from "./page/movie/MovieList.jsx";
+import { MovieAdd } from "./page/movie/add/MovieAdd.jsx";
+import { MovieList } from "./page/movie/list/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
 import { PromoAdd } from "./page/promotion/PromoAdd.jsx";
 import { PromoList } from "./page/promotion/PromoList.jsx";
-import { MovieView } from "./page/movie/MovieView.jsx";
-import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
+import { MovieView } from "./page/movie/list/view/MovieView.jsx";
+import { TheaterLocation } from "./page/theater/location/TheaterLocation.jsx";
+import { StoreCart } from "./page/store/cart/StoreCart.jsx";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
           {
             path: "add",
             element: <StoreAdd />,
+          },
+          {
+            path: "cart",
+            element: <StoreCart />,
           },
         ],
       },

@@ -2,21 +2,32 @@ use prj3;
 
 CREATE TABLE product
 (
-    id       int primary key auto_increment,
-    name     varchar(100)  not null,
-    content  varchar(2000) not null,
-    price    int           not null,
-    stock    int           not null,
-    reg_date datetime default now()
+    id       INT PRIMARY KEY AUTO_INCREMENT,
+    name     VARCHAR(100)  NOT NULL,
+    content  VARCHAR(2000) NOT NULL,
+    price    INT           NOT NULL,
+    stock    INT           NOT NULL,
+    reg_date DATETIME DEFAULT NOW()
 );
 
 CREATE TABLE product_image
 (
-    id         int primary key auto_increment,
-    name       varchar(200) not null,
-    path       varchar(200) not null,
-    product_id int references product (id)
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(200) NOT NULL,
+    path       VARCHAR(200) NOT NULL,
+    product_id INT REFERENCES product (id)
 );
 
+CREATE TABLE product_cart
+(
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    name       VARCHAR(200),
+    
+    product_id INT REFERENCES product (id),
+    reg_date   DATETIME DEFAULT NOW()
+);
+
+SELECT *
+FROM product;
 SELECT *
 FROM product_image;

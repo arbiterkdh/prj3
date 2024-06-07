@@ -33,3 +33,4 @@ SELECT *
 FROM movie_type;
 
 
+

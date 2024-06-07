@@ -59,6 +59,8 @@ public class MovieService {
     }
 
     public Movie get(Integer movieId) {
-        return movieMapper.selectByMovieId(movieId);
+        Movie movie = movieMapper.selectByMovieId(movieId);
+        movie.setType(movieMapper.selectMovieTypeById(movieId));
+        return movie;
     }
 }
