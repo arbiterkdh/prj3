@@ -2,11 +2,11 @@ package com.backend.controller.mail;
 
 import com.backend.domain.mail.Mail;
 import com.backend.service.mail.MailService;
+import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/mail")
@@ -14,9 +14,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class MailController {
 
     private final MailService service;
+    private final MemberService memberService;
+
+    @PostMapping("check")
+    public ResponseEntity checkMail(Mail mail) {
+        if (!memberService.hasEmail(mail.getAddress())) {
+            return ResponseEntity.ok().build();
+        }
+        // CONFLICT 는 409 번, 이미 사용중인 이메일.
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
 
     @PostMapping("")
-    public Mail sendAndGetMail(@RequestBody Mail mail) {
+    public Mail sendMailAndGetVerifyNumber(@RequestBody Mail mail) {
         return service.mailSend(mail);
+    }
+
+    @DeleteMapping("delete/{verifyNumber}")
+    public ResponseEntity deleteMail(@PathVariable Integer verifyNumber) {
+        if (service.getMail(verifyNumber) != null) {
+            service.delete(verifyNumber);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }

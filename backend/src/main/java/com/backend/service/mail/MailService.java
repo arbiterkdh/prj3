@@ -44,4 +44,12 @@ public class MailService {
 
         return mapper.selectMailByVerifyNumber(verifyNumber);
     }
+
+    public void delete(Integer verifyNumber) {
+        mapper.deleteMailByVerifyNumber(verifyNumber);
+    }
+
+    public Mail getMail(Integer verifyNumber) {
+        return mapper.selectMailByVerifyNumber(verifyNumber);
+    }
 }

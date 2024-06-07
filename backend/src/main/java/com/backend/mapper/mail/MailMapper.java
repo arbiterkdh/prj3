@@ -1,9 +1,9 @@
 package com.backend.mapper.mail;
 
 import com.backend.domain.mail.Mail;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 @Mapper
@@ -15,7 +15,6 @@ public interface MailMapper {
             (address, verify_number)
             VALUES (#{address}, #{verifyNumber})
             """)
-    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertVerifyNumberTemporary(Mail mail);
 
     @Select("""
@@ -24,4 +23,10 @@ public interface MailMapper {
             WHERE verify_number = #{verifyNumber}
             """)
     Mail selectMailByVerifyNumber(Integer verifyNumber);
+
+    @Delete("""
+            DELETE FROM mail
+            WHERE verify_number = #{verifyNumber}
+            """)
+    int deleteMailByVerifyNumber(Integer verifyNumber);
 }

@@ -52,4 +52,8 @@ public class MemberService {
         }
         return result;
     }
+
+    public boolean hasEmail(String address) {
+        return mapper.selectByEmail(address) != null;
+    }
 }

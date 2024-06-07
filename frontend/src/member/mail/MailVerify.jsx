@@ -14,7 +14,6 @@ import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
-  const [id, setId] = useState(0);
   const [verifyNumber, setVerifyNumber] = useState(null);
   const [isSending, setIsSending] = useState(false);
 
@@ -24,9 +23,24 @@ export function MailVerify() {
   const toast = useToast();
 
   function handleClick() {
-    onOpen();
-    setIsSending(true);
-    setIsRunning(true);
+    axios
+      .post("/api/mail/check", { address })
+      .then((res) => {
+        onOpen();
+        setIsSending(true);
+        setIsRunning(true);
+      })
+      .catch((err) => {
+        if (err.response.status === 409) {
+          toast({
+            status: "warning",
+            description: "이미 사용중인 이메일입니다.",
+            position: "bottom-right",
+          });
+        }
+        return;
+      });
+
     axios
       .post("/api/mail", { address })
       .then((res) => {
@@ -35,7 +49,6 @@ export function MailVerify() {
           description: "전송되었습니다, 이메일을 확인해주세요.",
           position: "bottom-right",
         });
-        setId(res.data.id);
         setVerifyNumber(res.data.verifyNumber);
       })
       .catch()

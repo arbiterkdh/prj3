@@ -31,7 +31,7 @@ export function VerifyNumber({
 }) {
   const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
-  const [inputNumber, setInputNumber] = useState(0);
+  const [inputNumber, setInputNumber] = useState(null);
   const [count, setCount] = useState(5);
 
   const toast = useToast();
@@ -77,7 +77,7 @@ export function VerifyNumber({
       setCount(count - 1);
       toast({
         status: "warning",
-        description: `인증번호가 틀립니다. 남은 횟수 ${count}회`,
+        description: `인증번호가 틀립니다. 남은 횟수 ${count - 1}회`,
         position: "bottom-right",
       });
     }
@@ -88,7 +88,7 @@ export function VerifyNumber({
   }
   if (seconds < 10) {
     seconds = "0" + seconds;
-  } else if (seconds <= 0) {
+  } else if (seconds <= 0 || seconds === 60) {
     seconds = "00";
   }
   if (remainTime <= 0) {
@@ -103,6 +103,7 @@ export function VerifyNumber({
         setIsRunning(false);
         setRemainTime(3 * 60 * 1000);
         setCount(5);
+        setInputNumber(null);
       }}
       isCentered={true}
     >
