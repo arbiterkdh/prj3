@@ -16,5 +16,5 @@ public class Movie {
     private LocalDate startDate;
     private String director;
     private String actors;
-    private List<String> Type;
+    private List<String> type;
 }

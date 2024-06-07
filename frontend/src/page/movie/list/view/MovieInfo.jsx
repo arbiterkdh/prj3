@@ -4,17 +4,37 @@ import {
   Center,
   Divider,
   Flex,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function MovieInfo({ movie }) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const navigate = useNavigate();
+
   if (Object.entries(movie).length === 0) {
     return null;
   }
 
-  function handleRemoveClick() {}
+  function handleRemoveClick() {
+    axios
+      .delete(`/api/movie/delete/${movie.id}`)
+      .then(() => navigate("/movie"));
+  }
+
+  function handleModifyClick() {
+    navigate(`/movie/modify/${movie.id}`);
+  }
 
   let index = 0;
 
@@ -65,12 +85,28 @@ export function MovieInfo({ movie }) {
           </Box>
         </Stack>
         <Flex justifyContent={"flex-end"}>
-          <Button colorScheme={"blue"}>수정</Button>
-          <Button onClick={handleRemoveClick} colorScheme={"red"}>
+          <Button onClick={handleModifyClick} colorScheme={"blue"}>
+            수정
+          </Button>
+          <Button onClick={onOpen} colorScheme={"red"}>
             삭제
           </Button>
         </Flex>
       </CenterBox>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>삭제 확인</ModalHeader>
+          <ModalBody>삭제 하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>취소</Button>
+            <Button onClick={handleRemoveClick} colorScheme={"red"}>
+              삭제
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Center>
   );
 }

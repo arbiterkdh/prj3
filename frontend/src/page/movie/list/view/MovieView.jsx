@@ -22,7 +22,7 @@ export function MovieView() {
 
   useEffect(() => {
     axios
-      .get(`/api/movie/view/${id}`)
+      .get(`/api/movie/${id}`)
       .then((res) => setMovie(res.data))
       .catch(() => {})
       .finally(() => {});

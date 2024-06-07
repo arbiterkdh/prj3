@@ -63,4 +63,10 @@ public class MovieService {
         movie.setType(movieMapper.selectMovieTypeById(movieId));
         return movie;
     }
+
+
+    public void deleteMovie(Integer movieId) {
+        movieMapper.deleteMovieTypeByMovieId(movieId);
+        movieMapper.deleteMovieByMovieId(movieId);
+    }
 }

@@ -36,11 +36,16 @@ public class MovieController {
         return movieService.list();
     }
 
-    @GetMapping("view/{id}")
-    public Movie view(@PathVariable Integer id) {
+    @GetMapping("{id}")
+    public Movie get(@PathVariable Integer id) {
         Movie movie = movieService.get(id);
 
         return movie;
+    }
+
+    @DeleteMapping("delete/{id}")
+    public void delete(@PathVariable Integer id) {
+        movieService.deleteMovie(id);
     }
 
 

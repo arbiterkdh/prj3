@@ -17,6 +17,7 @@ import { PromoList } from "./page/promotion/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
+import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
           {
             path: "view/:id",
             element: <MovieView />,
+          },
+          {
+            path: "modify/:id",
+            element: <MovieModify />,
           },
         ],
       },

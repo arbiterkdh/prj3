@@ -8,90 +8,27 @@ import {
   FormLabel,
   Heading,
   Input,
+  Spinner,
   Stack,
   Textarea,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/locale";
-import { useNavigate } from "react-router-dom";
-import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
-export function MovieAdd() {
-  const [title, setTitle] = useState("");
-  const [file, setFile] = useState([]);
-  const [content, setDescription] = useState("");
-  const [genre, setGenre] = useState("");
-  const [runningTime, setRunningTime] = useState(0);
-  const [movieType, setMovieType] = useState([]);
-  const [rating, setRating] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
-  const [director, setDirector] = useState("");
-  const [actors, setActors] = useState("");
+export function MovieModify() {
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    axios.get(`/api/movie/${id}`).then((res) => setMovie(res.data));
+  }, []);
 
-  function handleMovieSave() {
-    axios
-      .postForm("/api/movie/add", {
-        title,
-        file,
-        content,
-        genre,
-        runningTime,
-        movieType,
-        rating,
-        startDate: startDate.toISOString().split("T")[0],
-        director,
-        actors,
-      })
-      .then(() => navigate("/movie"));
-  }
-
-  let disableSaveButton = false;
-  if (title.trim().length === 0) {
-    disableSaveButton = true;
-  }
-  if (file.length === 0) {
-    disableSaveButton = true;
-  }
-  if (content.trim().length === 0) {
-    disableSaveButton = true;
-  }
-  if (genre.trim().length === 0) {
-    disableSaveButton = true;
-  }
-  if (runningTime === 0) {
-    disableSaveButton = true;
-  }
-  if (movieType.length === 0) {
-    disableSaveButton = true;
-  }
-  if (rating === 0) {
-    disableSaveButton = true;
-  }
-  if (startDate === null) {
-    disableSaveButton = true;
-  }
-  if (director.trim().length === 0) {
-    disableSaveButton = true;
-  }
-  if (actors.trim().length === 0) {
-    disableSaveButton = true;
-  }
-
-  function handleMovieType(value, checked) {
-    if (checked) {
-      setMovieType([...movieType, value]);
-    } else {
-      setMovieType(movieType.filter((item) => item !== value));
-    }
-  }
-
-  function handleMovieCancel() {
-    navigate("/movie");
+  if (movie === null) {
+    return <Spinner />;
   }
 
   return (
