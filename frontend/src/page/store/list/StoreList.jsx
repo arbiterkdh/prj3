@@ -59,6 +59,12 @@ export function StoreList() {
     onOpen: onModifyOpen,
     onClose: onModifyClose,
   } = useDisclosure();
+
+  const {
+    isOpen: isCartOpen,
+    onOpen: onCartOpen,
+    onClose: onCartClose,
+  } = useDisclosure();
   const [productId, setProductId] = useState(0);
   const [fileName, setFileName] = useState("");
   const [name, setName] = useState("");
@@ -124,6 +130,15 @@ export function StoreList() {
     setPrice(price);
     setStock(stock);
     onModifyOpen();
+  }
+
+  function handleCartAdd() {
+    toast({
+      status: "success",
+      description: "장바구니 담기 완료",
+      position: "bottom",
+    });
+    onCartClose();
   }
 
   const ProductItem = ({ product }) => {
@@ -201,7 +216,7 @@ export function StoreList() {
                 </Button>
               </Box>
               <Box>
-                <Button variant="solid" colorScheme="red">
+                <Button variant="solid" colorScheme="red" onClick={onCartOpen}>
                   <FontAwesomeIcon icon={faCartShopping} />
                   <Text textIndent={"10px"}>카트</Text>
                 </Button>
@@ -252,13 +267,14 @@ export function StoreList() {
     const val = parseInt(value, 10);
     setStock(isNaN(value) ? 0 : value);
   };
+
   return (
     <Box w={"100%"}>
       <Flex>
         <Box w={"50%"}>
           <Flex alignItems={"center"}>
             <Heading>상품 리스트</Heading>
-            <Text color={"red"}>
+            <Text color={"red"} onClick={() => navigate("cart")}>
               {" "}
               <FontAwesomeIcon
                 icon={faCartShopping}
@@ -382,26 +398,6 @@ export function StoreList() {
                 </SliderThumb>
               </Slider>
             </Flex>
-            {/*
-            <FormControl>
-              <FormLabel>수량설정</FormLabel>
-              <NumberInput
-                max={2000}
-                min={1}
-                defaultValue={stock}
-                onChange={(e) => setStock(e.target.value)}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-              <FormHelperText>
-                최소 수량 1개 최대수량은 2000개로 설정가능합니다
-              </FormHelperText>
-            </FormControl>
-            */}
 
             <FormControl>
               <FormLabel>가격</FormLabel>
@@ -431,6 +427,22 @@ export function StoreList() {
                 확인
               </Button>
               <Button onClick={onModifyClose}>취소</Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal isOpen={isCartOpen} onClose={onCartClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>카트 담기</ModalHeader>
+          <ModalBody>{name}상품을 담으시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Flex>
+              <Button onClick={handleCartAdd} colorScheme={"green"}>
+                확인
+              </Button>
+              <Button onClick={onCartClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>
