@@ -58,4 +58,20 @@ public interface MovieMapper {
             WHERE id = #{movieId}
             """)
     int deleteMovieByMovieId(Integer movieId);
+
+    @Update("""
+            UPDATE movie
+            SET id = #{id},
+                title = #{title},
+                content = #{content},
+                genre = #{genre},
+                running_time = #{runningTime},
+                rating = #{rating},
+                start_Date = #{startDate},
+                director = #{director},
+                actors = #{actors}
+            WHERE id = #{id}
+            """)
+    int updateMovie(Movie movie);
+
 }

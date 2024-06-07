@@ -31,6 +31,8 @@ SELECT *
 FROM movie;
 SELECT *
 FROM movie_type;
+SELECT *
+FROM movie_file;
 
 
 

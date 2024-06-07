@@ -48,5 +48,10 @@ public class MovieController {
         movieService.deleteMovie(id);
     }
 
+    @PutMapping("edit")
+    public void edit(@RequestBody Movie movie) {
+        movieService.editMovie(movie);
+    }
+
 
 }

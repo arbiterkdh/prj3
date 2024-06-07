@@ -120,7 +120,10 @@ export function MovieAdd() {
             <Box>
               <FormControl>
                 <FormLabel>영화 설명</FormLabel>
-                <Textarea onChange={(e) => setDescription(e.target.value)} />
+                <Textarea
+                  placeholder={"영화 내용을 입력해주세요."}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </FormControl>
             </Box>
             <Box>
