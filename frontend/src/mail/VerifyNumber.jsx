@@ -11,9 +11,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function VerifyNumber({
   isOpen,
@@ -21,14 +23,24 @@ export function VerifyNumber({
   onClose,
   isRunning,
   setIsRunning,
+  id,
+  setId,
+  verifyNumber,
+  setVerifyNumber,
 }) {
+  const [email, setEmail] = useState("");
+  const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
-  const [verifyNumber, setVerifyNumber] = useState(null);
+  const [inputNumber, setInputNumber] = useState(0);
+  const [count, setCount] = useState(5);
+
+  const toast = useToast();
+  const navigate = useNavigate();
 
   let minutes = Math.floor(remainTime / 1000 / 60);
   let seconds = Math.floor((remainTime / 1000) % 60);
   let message = minutes + " : " + seconds + " 남음.";
-  let isExpired = minutes <= 0 && seconds <= 0;
+  let isExpired = (minutes <= 0 && seconds <= 0) || count === 0;
 
   useEffect(() => {
     if (isRunning) {
@@ -42,7 +54,24 @@ export function VerifyNumber({
     }
   }, [isRunning]);
 
-  function handleCheckVerifyNumber() {}
+  function handleCheckVerifyNumber() {
+    if (inputNumber == verifyNumber) {
+      toast({
+        status: "success",
+        description: "인증되었습니다.",
+        position: "bottom-right",
+      });
+      onClose();
+      navigate("/signup");
+    } else {
+      setCount(count - 1);
+      toast({
+        status: "warning",
+        description: `인증번호가 틀립니다. 남은 횟수 ${count}회`,
+        position: "bottom-right",
+      });
+    }
+  }
 
   if (minutes <= 0) {
     minutes = "0";
@@ -60,9 +89,10 @@ export function VerifyNumber({
     <Modal
       isOpen={isOpen}
       onClose={() => {
+        onClose();
         setIsRunning(false);
         setRemainTime(3 * 60 * 1000);
-        onClose();
+        setCount(5);
       }}
       isCentered={true}
     >
@@ -73,8 +103,12 @@ export function VerifyNumber({
         <ModalBody>
           <GapFlex>
             <InputGroup>
-              <Input placeholder={"인증번호 입력"} />
-              <InputRightElement mr={1}>
+              <Input
+                value={inputNumber}
+                placeholder={"인증번호 입력"}
+                onChange={(e) => setInputNumber(e.target.value)}
+              />
+              <InputRightElement mr={1} w={"50px"}>
                 {isExpired ? <Box>만료됨.</Box> : <Box>{message}</Box>}
               </InputRightElement>
             </InputGroup>

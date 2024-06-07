@@ -14,7 +14,8 @@ import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
-  const [id, setId] = useState("");
+  const [id, setId] = useState(0);
+  const [verifyNumber, setVerifyNumber] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isRunning, setIsRunning] = useState(false);
@@ -31,7 +32,10 @@ export function MailVerify() {
     setIsRunning(true);
     axios
       .post("/api/mail", { address })
-      .then((res) => {})
+      .then((res) => {
+        setId(res.data.id);
+        setVerifyNumber(res.data.verifyNumber);
+      })
       .catch()
       .finally(() => {
         setAddress("");
@@ -56,6 +60,10 @@ export function MailVerify() {
           onOpen={onOpen}
           isRunning={isRunning}
           setIsRunning={setIsRunning}
+          id={id}
+          setId={setId}
+          verifyNumber={verifyNumber}
+          setVerifyNumber={setVerifyNumber}
         />
       </CenterBox>
     </Center>
