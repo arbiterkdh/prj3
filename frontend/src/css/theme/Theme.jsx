@@ -50,6 +50,9 @@ export const customTheme = extendTheme({
             _focus: {},
           },
         },
+        element: {
+          m: "1",
+        },
       },
       variants: {},
       defaultProps: {

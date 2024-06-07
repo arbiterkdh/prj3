@@ -30,7 +30,6 @@ export function VerifyNumber({
   verifiedAddress,
   setVerifiedAddress,
 }) {
-  const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
   const [inputNumber, setInputNumber] = useState("");
   const [count, setCount] = useState(5);
