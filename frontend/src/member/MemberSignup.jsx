@@ -73,7 +73,11 @@ export function MemberSignup() {
           <FormControl>
             <FormLabel>이메일</FormLabel>
             <InputGroup>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                readOnly
+              />
             </InputGroup>
           </FormControl>
         </Box>
