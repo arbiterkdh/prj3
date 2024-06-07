@@ -9,36 +9,32 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { VerifyNumber } from "./VerifyNumber.jsx";
 import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
+  const [id, setId] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isRunning, setIsRunning] = useState(false);
 
   const toast = useToast();
-  const navigate = useNavigate();
 
   function handleClick() {
+    onOpen();
+    toast({
+      status: "success",
+      description: "전송되었습니다, 이메일을 확인해주세요.",
+      position: "bottom-right",
+    });
+    setIsRunning(true);
     axios
-      .post("/api/mail", { address, title, message })
-      .then(() => {
-        toast({
-          status: "success",
-          description: "전송되었습니다, 이메일을 확인해주세요.",
-          position: "bottom-right",
-        });
-        onOpen();
-      })
+      .post("/api/mail", { address })
+      .then((res) => {})
       .catch()
       .finally(() => {
         setAddress("");
-        setTitle("");
-        setMessage("");
       });
   }
 
@@ -54,7 +50,13 @@ export function MailVerify() {
           />
           <Button onClick={handleClick}>인증번호 요청</Button>
         </InputGroup>
-        <VerifyNumber isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+        <VerifyNumber
+          isOpen={isOpen}
+          onClose={onClose}
+          onOpen={onOpen}
+          isRunning={isRunning}
+          setIsRunning={setIsRunning}
+        />
       </CenterBox>
     </Center>
   );

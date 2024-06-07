@@ -20,8 +20,17 @@ public class MailService {
     @Value("${spring.mail.username}")
     String fromAddress;
 
-    public void mailSend(Mail mail) throws MailException {
+    public Mail mailSend(Mail mail) throws MailException {
         Integer verifyNumber = (int) (Math.random() * 1000000);
+        Mail dbMail = null;
+        do {
+            dbMail = mapper.selectMailByVerifyNumber(verifyNumber);
+        } while (dbMail != null);
+        {
+            verifyNumber = (int) (Math.random() * 1000000);
+            dbMail = mapper.selectMailByVerifyNumber(verifyNumber);
+        }
+
         mail.setVerifyNumber(verifyNumber);
         mapper.insertVerifyNumberTemporary(mail);
 
@@ -32,5 +41,7 @@ public class MailService {
         message.setText(STR."인증번호는 \{verifyNumber} 입니다.");
 
         mailSender.send(message);
+
+        return mapper.selectMailByVerifyNumber(verifyNumber);
     }
 }
