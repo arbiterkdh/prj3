@@ -11,11 +11,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
+import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export function VerifyNumber({
   isOpen,
@@ -23,10 +25,9 @@ export function VerifyNumber({
   onClose,
   isRunning,
   setIsRunning,
-  id,
-  setId,
   verifyNumber,
   setVerifyNumber,
+  isSending,
 }) {
   const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
@@ -63,13 +64,15 @@ export function VerifyNumber({
       onClose();
     }
     if (inputNumber == verifyNumber) {
-      toast({
-        status: "success",
-        description: "인증되었습니다.",
-        position: "bottom-right",
+      axios.delete(`/api/mail/delete/${verifyNumber}`).then(() => {
+        toast({
+          status: "success",
+          description: "인증되었습니다.",
+          position: "bottom-right",
+        });
+        onClose();
+        navigate("/signup");
       });
-      onClose();
-      navigate("/signup");
     } else {
       setCount(count - 1);
       toast({
@@ -107,23 +110,29 @@ export function VerifyNumber({
       <ModalContent>
         <ModalHeader>이메일 본인인증</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <GapFlex>
-            <InputGroup>
-              <Input
-                value={inputNumber}
-                placeholder={"인증번호 입력"}
-                onChange={(e) => setInputNumber(e.target.value)}
-              />
-              <InputRightElement mr={1} w={"50px"}>
-                {isExpired ? <Box>만료됨.</Box> : <Box>{message}</Box>}
-              </InputRightElement>
-            </InputGroup>
-            <Button onClick={handleCheckVerifyNumber} isDisabled={isExpired}>
-              입력
-            </Button>
-          </GapFlex>
-        </ModalBody>
+        {isSending ? (
+          <ModalBody>
+            <Spinner size={"xl"} />
+          </ModalBody>
+        ) : (
+          <ModalBody>
+            <GapFlex>
+              <InputGroup>
+                <Input
+                  value={inputNumber}
+                  placeholder={"인증번호 입력"}
+                  onChange={(e) => setInputNumber(e.target.value)}
+                />
+                <InputRightElement mr={1} w={"50px"}>
+                  {isExpired ? <Box>만료됨.</Box> : <Box>{message}</Box>}
+                </InputRightElement>
+              </InputGroup>
+              <Button onClick={handleCheckVerifyNumber} isDisabled={isExpired}>
+                입력
+              </Button>
+            </GapFlex>
+          </ModalBody>
+        )}
         <ModalFooter></ModalFooter>
       </ModalContent>
     </Modal>

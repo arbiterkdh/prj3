@@ -10,12 +10,13 @@ import {
 import axios from "axios";
 import { useState } from "react";
 import { VerifyNumber } from "./VerifyNumber.jsx";
-import CenterBox from "../css/theme/component/box/CenterBox.jsx";
+import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
   const [id, setId] = useState(0);
   const [verifyNumber, setVerifyNumber] = useState(null);
+  const [isSending, setIsSending] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isRunning, setIsRunning] = useState(false);
@@ -24,21 +25,23 @@ export function MailVerify() {
 
   function handleClick() {
     onOpen();
-    toast({
-      status: "success",
-      description: "전송되었습니다, 이메일을 확인해주세요.",
-      position: "bottom-right",
-    });
+    setIsSending(true);
     setIsRunning(true);
     axios
       .post("/api/mail", { address })
       .then((res) => {
+        toast({
+          status: "success",
+          description: "전송되었습니다, 이메일을 확인해주세요.",
+          position: "bottom-right",
+        });
         setId(res.data.id);
         setVerifyNumber(res.data.verifyNumber);
       })
       .catch()
       .finally(() => {
         setAddress("");
+        setIsSending(false);
       });
   }
 
@@ -60,10 +63,9 @@ export function MailVerify() {
           onOpen={onOpen}
           isRunning={isRunning}
           setIsRunning={setIsRunning}
-          id={id}
-          setId={setId}
           verifyNumber={verifyNumber}
           setVerifyNumber={setVerifyNumber}
+          isSending={isSending}
         />
       </CenterBox>
     </Center>
