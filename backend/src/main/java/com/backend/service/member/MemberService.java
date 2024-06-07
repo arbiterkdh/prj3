@@ -25,7 +25,6 @@ public class MemberService {
 
     public void add(Member member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        member.setEmail(member.getEmail());
         mapper.insert(member);
     }
 
@@ -55,5 +54,9 @@ public class MemberService {
 
     public boolean hasEmail(String address) {
         return mapper.selectByEmail(address) != null;
+    }
+
+    public Member get(String nickName) {
+        return mapper.selectByNickName(nickName);
     }
 }

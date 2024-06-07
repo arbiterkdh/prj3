@@ -25,7 +25,7 @@ public class MailService {
         Mail dbMail = null;
         do {
             dbMail = mapper.selectMailByVerifyNumber(verifyNumber);
-        } while (dbMail != null);
+        } while (dbMail != null || verifyNumber < 100000);
         {
             verifyNumber = (int) (Math.random() * 1000000);
             dbMail = mapper.selectMailByVerifyNumber(verifyNumber);

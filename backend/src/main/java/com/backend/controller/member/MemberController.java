@@ -5,10 +5,7 @@ import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -19,13 +16,18 @@ public class MemberController {
 
     private final MemberService service;
 
-    @PostMapping("signup")
-    public ResponseEntity signup(@RequestBody Member member) {
-        if (member != null) {
-            service.add(member);
+    @GetMapping("{nickName}")
+    public ResponseEntity checkNickName(@PathVariable String nickName) {
+        if (service.get(nickName) == null) {
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @PostMapping("signup")
+    public ResponseEntity signup(@RequestBody Member member) {
+        service.add(member);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("token")

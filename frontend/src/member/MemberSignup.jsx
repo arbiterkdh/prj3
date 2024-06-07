@@ -8,7 +8,14 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
@@ -36,11 +43,14 @@ export function MemberSignup() {
   const [canShow, setCanShow] = useState(false);
   const [eye, setEye] = useState(false);
   const [nickName, setNickName] = useState("");
+  const [isNickNameChecked, setIsNickNameChecked] = useState(false);
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
 
   let passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+  let nickNameRegex = /^[가-힣0-9]{2,10}$/;
 
   useEffect(() => {
     if (!verified) {
@@ -54,7 +64,7 @@ export function MemberSignup() {
       .then(() => {
         toast({
           status: "success",
-          description: "회원가입되었습니다.",
+          description: `회원이 되신걸 환영합니다, ${nickName}님.😄`,
           position: "bottom-right",
         });
         navigate("/");
@@ -71,8 +81,36 @@ export function MemberSignup() {
         setPassword("");
         setPasswordCheck("");
         setNickName("");
+        onClose();
       });
   }
+
+  function handleCheckNickName() {
+    axios
+      .get(`/api/member/${nickName}`)
+      .then(() => {
+        toast({
+          status: "success",
+          description: "사용 가능한 별명입니다.",
+          position: "bottom-right",
+        });
+        setIsNickNameChecked(true);
+      })
+      .catch((err) => {
+        if (err.value.status === 409) {
+          toast({
+            status: "warning",
+            description: "이미 사용중인 별명입니다.",
+            position: "bottom-right",
+          });
+        }
+      });
+  }
+
+  let isPasswordChecked =
+    password === passwordCheck && password.match(passwordRegex);
+  let allChecked =
+    isPasswordChecked && nickName.match(nickNameRegex) && isNickNameChecked;
 
   return (
     <Center>
@@ -83,7 +121,7 @@ export function MemberSignup() {
             <FormControl>
               <FormLabel>이메일</FormLabel>
               <InputGroup>
-                <Input value={email} readOnly />
+                <Input value={email} readOnly cursor={"default"} />
               </InputGroup>
             </FormControl>
           </MarginBox>
@@ -119,13 +157,13 @@ export function MemberSignup() {
                   )}
                 </InputRightElement>
               </InputGroup>
-              {password.match(passwordRegex) ? (
-                <Text h={"18px"}></Text>
-              ) : (
+              {password.length > 0 && !password.match(passwordRegex) ? (
                 <Text fontSize={"xs"} color={"red.600"}>
                   비밀번호는 영문, 숫자, 특수문자 조합으로 이루어진 8~15자
                   이어야 합니다.
                 </Text>
+              ) : (
+                <Text h={"18px"}></Text>
               )}
             </FormControl>
           </MarginBox>
@@ -136,32 +174,69 @@ export function MemberSignup() {
                 <Input
                   type={canShow ? "text" : "password"}
                   value={passwordCheck}
+                  isDisabled={!password.match(passwordRegex)}
                   onChange={(e) => setPasswordCheck(e.target.value)}
                 />
-                <InputRightElement w={"120px"}>
-                  <Button size={"sm"} onClick={handleCheckPassword}>
-                    비밀번호 확인
-                  </Button>
-                </InputRightElement>
               </InputGroup>
+              {passwordCheck.length > 0 && passwordCheck !== password ? (
+                <Text fontSize={"xs"} color={"red.600"}>
+                  비밀번호가 다릅니다.
+                </Text>
+              ) : (
+                <Text h={"18px"}></Text>
+              )}
             </FormControl>
           </MarginBox>
           <MarginBox>
             <FormControl>
-              <FormLabel>닉네임</FormLabel>
+              <FormLabel>닉네임 (별명)</FormLabel>
               <InputGroup>
                 <Input
                   value={nickName}
-                  onChange={(e) => setNickName(e.target.value)}
+                  isDisabled={!isPasswordChecked}
+                  onChange={(e) => {
+                    setNickName(e.target.value);
+                    setIsNickNameChecked(false);
+                  }}
                 />
+                <InputRightElement w={"80px"}>
+                  <Button
+                    size={"sm"}
+                    isDisabled={!nickName.match(nickNameRegex)}
+                    onClick={handleCheckNickName}
+                  >
+                    중복확인
+                  </Button>
+                </InputRightElement>
               </InputGroup>
+              {nickName.length > 0 && !nickName.match(nickNameRegex) ? (
+                <Text fontSize={"xs"} color={"red.600"}>
+                  닉네임은 한글조합, 숫자로 이루어진 2~10자 이어야 합니다.
+                </Text>
+              ) : (
+                <Text h={"18px"}></Text>
+              )}
             </FormControl>
           </MarginBox>
         </Box>
         <Box>
-          <Button onClick={handleSignup}>가입</Button>
+          <Button onClick={onOpen} isDisabled={!allChecked}>
+            가입
+          </Button>
         </Box>
       </CenterBox>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>가입 확인</ModalHeader>
+          <ModalBody>이대로 가입하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button onClick={handleSignup}>확인</Button>
+            <Button onClick={() => onClose()}>취소</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Center>
   );
 }
