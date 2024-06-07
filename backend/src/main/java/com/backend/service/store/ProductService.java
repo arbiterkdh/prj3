@@ -21,7 +21,6 @@ public class ProductService {
 
     public void add(Product product, MultipartFile[] files) throws Exception {
 
-
         mapper.add(product);
 
         if (files != null) {
@@ -38,23 +37,12 @@ public class ProductService {
                 file.transferTo(destination);
                 imageMapper.add(product.getId(), file.getOriginalFilename(), path);
             }
-
-
         }
-
-
     }
 
     public List<Product> productList() {
 
-        List<Product> productList = mapper.productList();
-
-//        productList.stream().map(name->STR."http://127.0.0.1:8888/2/lion-2521451_1280.png")
-
-
         return mapper.productList();
-
-
     }
 
     public void deleteProduct(Integer id) {
@@ -85,7 +73,6 @@ public class ProductService {
         if (file == null) {
             mapper.updateProduct(product, productId);
         }
-
         if (file != null) {
 
             for (MultipartFile newFile : file) {

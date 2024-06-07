@@ -19,19 +19,32 @@ public class CartService {
 
     public void addCart(Product product) {
 
-        Product productInfo = productMapper.info(product.getId());
 
-        ProductCart cart = new ProductCart();
+        ProductCart existCart = mapper.getExistItem(product.getId());
 
-        cart.setId(productInfo.getId());
-        cart.setName(productInfo.getName());
-        cart.setPrice(productInfo.getPrice());
-        String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productInfo.getId()}/\{product.getFileName()}";
-        cart.setPath(path);
-        cart.setFileName(product.getFileName());
-        cart.setQuantity(productInfo.getQuantity());
+        if (existCart != null) {
 
-        mapper.addCart(cart);
+            System.out.println("수량:" + existCart.getQuantity());
+
+            mapper.updateQuantity(existCart.getQuantity(), existCart.getProductId());
+        } else {
+            Product productInfo = productMapper.info(product.getId());
+
+            if (productInfo != null) {
+
+                ProductCart cart = new ProductCart();
+
+                cart.setId(product.getId());
+                cart.setName(product.getName());
+                cart.setPrice(product.getPrice());
+                String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{product.getId()}/\{product.getFileName()}";
+                cart.setPath(path);
+                cart.setFileName(product.getFileName());
+                cart.setQuantity(product.getQuantity());
+
+                mapper.addCart(cart);
+            }
+        }
     }
 
     public List<ProductCart> cartProductList() {

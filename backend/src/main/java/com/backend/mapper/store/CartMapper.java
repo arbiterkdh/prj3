@@ -5,6 +5,7 @@ import com.backend.domain.store.ProductCart;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -22,4 +23,19 @@ public interface CartMapper {
             FROM product_cart
             """)
     List<ProductCart> cartProductList();
+
+
+    @Update("""
+            UPDATE product_cart
+            SET quantity = #{quantity} +1
+            WHERE product_id = #{productId}
+            """)
+    int updateQuantity(Integer quantity, Integer productId);
+
+    @Select("""
+            SELECT *
+            FROM product_cart
+            WHERE product_id = #{productId}
+            """)
+    ProductCart getExistItem(Integer productId);
 }

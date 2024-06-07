@@ -21,12 +21,18 @@ import axios from "axios";
 import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.jsx";
 
 export function StoreCart() {
-  const [quantity, setQuantity] = useState(1);
   const [productCartList, setProductCartList] = useState([]);
+  const [quantity, setQuantity] = useState(null);
 
-  if (quantity < 1) {
-    setQuantity(1);
-  }
+  const updateQuantity = (productId, quantityItem) => {
+    setProductCartList((itemList) =>
+      itemList.map((item) =>
+        item.productId === productId
+          ? { ...item, quantity: quantityItem }
+          : item,
+      ),
+    );
+  };
 
   useEffect(() => {
     axios
@@ -53,14 +59,28 @@ export function StoreCart() {
           <CenterTd>{cartItem.name}</CenterTd>
           <CenterTd>
             <Flex alignItems={"center"} justifyContent={"center"}>
-              <Button onClick={() => setQuantity(quantity - 1)}>-</Button>
-              <Text>{quantity}</Text>
-              <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
+              <Button
+                onClick={() => {
+                  if (cartItem.quantity > 1) {
+                    updateQuantity(cartItem.productId, cartItem.quantity - 1);
+                  }
+                }}
+              >
+                -
+              </Button>
+              <Text>{cartItem.quantity}</Text>
+              <Button
+                onClick={() => {
+                  updateQuantity(cartItem.productId, cartItem.quantity + 1);
+                }}
+              >
+                +
+              </Button>
             </Flex>
           </CenterTd>
-          <CenterTd>{cartItem.price}</CenterTd>
+          <CenterTd>{cartItem.price * cartItem.quantity}</CenterTd>
           <CenterTd>
-            <Button>삭제</Button>
+            <Button colorScheme={"red"}>삭제</Button>
           </CenterTd>
           <CenterTd>{cartItem.regDate}</CenterTd>
         </Tr>

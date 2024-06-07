@@ -461,7 +461,9 @@ export function StoreList() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>카트 담기</ModalHeader>
-          <ModalBody>{name}상품을 담으시겠습니까?</ModalBody>
+          <ModalBody>
+            {name}상품을 담으시겠습니까?{quantity}
+          </ModalBody>
           <ModalFooter>
             <Flex>
               <Button
