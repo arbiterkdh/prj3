@@ -1,10 +1,7 @@
 package com.backend.mapper.store;
 
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface ImageMapper {
@@ -29,4 +26,11 @@ public interface ImageMapper {
             WHERE product_id = #{productId}
             """)
     int deleteImage(Integer productId);
+
+    @Update("""
+            UPDATE product_image
+            SET name = #{newFileName}, path = #{path}
+            WHERE product_id = #{productId}
+            """)
+    int update(String newFileName, String path, Integer productId);
 }

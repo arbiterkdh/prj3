@@ -31,4 +31,12 @@ public interface ProductMapper {
             WHERE id = #{id}
             """)
     int deleteProduct(Integer id);
+
+
+    @Update("""
+            UPDATE product
+            SET name = #{product.name}, stock = #{product.stock}, price= #{product.price}
+            WHERE id = #{productId}
+            """)
+    int updateProduct(Product product, Integer productId);
 }

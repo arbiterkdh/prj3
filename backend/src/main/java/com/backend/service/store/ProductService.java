@@ -79,4 +79,31 @@ public class ProductService {
         mapper.deleteProduct(id);
 
     }
+
+    public void updateProduct(Integer productId, Product product, String originalFileName, MultipartFile[] file) throws Exception {
+
+        if (file == null) {
+            mapper.updateProduct(product, productId);
+        }
+
+        if (file != null) {
+
+            for (MultipartFile newFile : file) {
+
+                String originalPath = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productId}/\{originalFileName}";
+                File originalFile = new File(originalPath);
+
+                if (originalFile.exists()) {
+                    originalFile.delete();
+                }
+                String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productId}/\{newFile.getOriginalFilename()}";
+                File modifyFile = new File(path);
+
+                newFile.transferTo(modifyFile);
+
+                mapper.updateProduct(product, productId);
+                imageMapper.update(newFile.getOriginalFilename(), path, productId);
+            }
+        }
+    }
 }

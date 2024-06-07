@@ -38,4 +38,11 @@ public class ProductController {
 
         service.deleteProduct(id);
     }
+
+    @PutMapping("/modify")
+    public void Modify(Product product, @RequestParam("productId") Integer productId, @RequestParam("fileName") String originalFileName, @RequestParam(value = "file[]", required = false) MultipartFile[] file) throws Exception {
+
+        service.updateProduct(productId, product, originalFileName, file);
+    }
+
 }
