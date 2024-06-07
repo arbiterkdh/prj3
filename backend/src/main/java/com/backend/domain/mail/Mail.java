@@ -8,6 +8,5 @@ public class Mail {
     private String address;
 
     // 인증번호 확인용
-    private Integer id;
     private Integer verifyNumber;
 }

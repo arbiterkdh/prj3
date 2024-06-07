@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Input,
   InputGroup,
@@ -28,6 +27,7 @@ export function VerifyNumber({
   verifyNumber,
   setVerifyNumber,
   isSending,
+  verifiedAddress,
 }) {
   const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
@@ -39,8 +39,16 @@ export function VerifyNumber({
 
   let minutes = Math.floor(remainTime / 1000 / 60);
   let seconds = Math.floor((remainTime / 1000) % 60);
-  let message = minutes + " : " + seconds + " 남음.";
   let isExpired = (minutes <= 0 && seconds <= 0) || count === 0;
+
+  function CustomOnClose() {
+    onClose();
+    setIsRunning(false);
+    setRemainTime(3 * 60 * 1000);
+    setCount(5);
+    setInputNumber(null);
+    axios.delete(`/api/mail/delete/${verifyNumber}`);
+  }
 
   useEffect(() => {
     if (isRunning) {
@@ -61,18 +69,16 @@ export function VerifyNumber({
         description: "인증시도 횟수가 초과되었습니다, 다시 인증해주세요.",
         position: "bottom-right",
       });
-      onClose();
+      CustomOnClose();
     }
     if (inputNumber == verifyNumber) {
-      axios.delete(`/api/mail/delete/${verifyNumber}`).then(() => {
-        toast({
-          status: "success",
-          description: "인증되었습니다.",
-          position: "bottom-right",
-        });
-        onClose();
-        navigate("/signup");
+      toast({
+        status: "success",
+        description: "인증되었습니다.",
+        position: "bottom-right",
       });
+      CustomOnClose();
+      navigate("/signup");
     } else {
       setCount(count - 1);
       toast({
@@ -83,30 +89,15 @@ export function VerifyNumber({
     }
   }
 
-  if (minutes <= 0) {
-    minutes = "0";
-  }
   if (seconds < 10) {
     seconds = "0" + seconds;
-  } else if (seconds <= 0 || seconds === 60) {
-    seconds = "00";
   }
-  if (remainTime <= 0) {
-    message = "만료됨.";
+  if (seconds <= 0 || seconds === 60) {
+    seconds = "00";
   }
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={() => {
-        onClose();
-        setIsRunning(false);
-        setRemainTime(3 * 60 * 1000);
-        setCount(5);
-        setInputNumber(null);
-      }}
-      isCentered={true}
-    >
+    <Modal isOpen={isOpen} onClose={CustomOnClose} isCentered={true}>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>이메일 본인인증</ModalHeader>
@@ -122,10 +113,10 @@ export function VerifyNumber({
                 <Input
                   value={inputNumber}
                   placeholder={"인증번호 입력"}
-                  onChange={(e) => setInputNumber(e.target.value)}
+                  onChange={(e) => setInputNumber(e.target.value.trim())}
                 />
-                <InputRightElement mr={1} w={"50px"}>
-                  {isExpired ? <Box>만료됨.</Box> : <Box>{message}</Box>}
+                <InputRightElement mr={1} w={"100px"}>
+                  {isExpired ? "만료됨." : minutes + " : " + seconds + " 남음."}
                 </InputRightElement>
               </InputGroup>
               <Button onClick={handleCheckVerifyNumber} isDisabled={isExpired}>

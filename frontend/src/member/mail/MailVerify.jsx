@@ -16,6 +16,7 @@ export function MailVerify() {
   const [address, setAddress] = useState("");
   const [verifyNumber, setVerifyNumber] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [verifiedAddress, setVerifiedAddress] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isRunning, setIsRunning] = useState(false);
@@ -50,6 +51,7 @@ export function MailVerify() {
           position: "bottom-right",
         });
         setVerifyNumber(res.data.verifyNumber);
+        setVerifiedAddress(address);
       })
       .catch()
       .finally(() => {
@@ -79,6 +81,7 @@ export function MailVerify() {
           verifyNumber={verifyNumber}
           setVerifyNumber={setVerifyNumber}
           isSending={isSending}
+          verifiedAddress={verifiedAddress}
         />
       </CenterBox>
     </Center>
