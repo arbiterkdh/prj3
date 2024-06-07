@@ -42,7 +42,7 @@ export function Navbar() {
                   <CursorBox>
                     <MemberLogin />
                   </CursorBox>
-                  <CursorBox onClick={() => navigate("/signup")}>
+                  <CursorBox onClick={() => navigate("/verify")}>
                     회원가입
                   </CursorBox>
                 </Flex>

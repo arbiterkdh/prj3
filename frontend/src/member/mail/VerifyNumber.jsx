@@ -28,10 +28,11 @@ export function VerifyNumber({
   setVerifyNumber,
   isSending,
   verifiedAddress,
+  setVerifiedAddress,
 }) {
   const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
-  const [inputNumber, setInputNumber] = useState(null);
+  const [inputNumber, setInputNumber] = useState("");
   const [count, setCount] = useState(5);
 
   const toast = useToast();
@@ -46,7 +47,7 @@ export function VerifyNumber({
     setIsRunning(false);
     setRemainTime(3 * 60 * 1000);
     setCount(5);
-    setInputNumber(null);
+    setInputNumber("");
     axios.delete(`/api/mail/delete/${verifyNumber}`);
   }
 
@@ -78,7 +79,10 @@ export function VerifyNumber({
         position: "bottom-right",
       });
       CustomOnClose();
-      navigate("/signup");
+      navigate("/signup", {
+        state: { email: verifiedAddress, verified: true },
+      });
+      setVerifiedAddress("");
     } else {
       setCount(count - 1);
       toast({

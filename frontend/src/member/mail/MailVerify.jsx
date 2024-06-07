@@ -16,10 +16,10 @@ export function MailVerify() {
   const [address, setAddress] = useState("");
   const [verifyNumber, setVerifyNumber] = useState(null);
   const [isSending, setIsSending] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [verifiedAddress, setVerifiedAddress] = useState("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isRunning, setIsRunning] = useState(false);
 
   const toast = useToast();
 
@@ -47,7 +47,8 @@ export function MailVerify() {
       .then((res) => {
         toast({
           status: "success",
-          description: "전송되었습니다, 이메일을 확인해주세요.",
+          description:
+            "이메일로 인증번호가 전송되었습니다, 이메일을 확인해주세요.",
           position: "bottom-right",
         });
         setVerifyNumber(res.data.verifyNumber);
@@ -63,7 +64,7 @@ export function MailVerify() {
   return (
     <Center>
       <CenterBox mb={48}>
-        <Heading>메일 발송</Heading>
+        <Heading>이메일 본인인증</Heading>
         <InputGroup>
           <Input
             value={address}
@@ -82,6 +83,7 @@ export function MailVerify() {
           setVerifyNumber={setVerifyNumber}
           isSending={isSending}
           verifiedAddress={verifiedAddress}
+          setVerifiedAddress={setVerifiedAddress}
         />
       </CenterBox>
     </Center>

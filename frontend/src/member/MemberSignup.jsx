@@ -8,17 +8,27 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function MemberSignup() {
+  const location = useLocation();
+
   const [id, setId] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(location.state?.email);
+  const [verified, setVerified] = useState(location.state?.verified);
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [nickName, setNickName] = useState("");
+
   const navigate = useNavigate();
   const toast = useToast();
+
+  useEffect(() => {
+    if (!verified) {
+      navigate("/verify");
+    }
+  }, []);
 
   function handleSignup() {
     axios

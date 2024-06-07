@@ -11,7 +11,6 @@ import {
   faSun as fullSun,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { MailVerify } from "../member/mail/MailVerify.jsx";
 
 export function Home() {
   const { toggleColorMode, colorMode } = useColorMode();
@@ -47,7 +46,6 @@ export function Home() {
           )
         }
       />
-      <MailVerify />
     </Box>
   );
 }
