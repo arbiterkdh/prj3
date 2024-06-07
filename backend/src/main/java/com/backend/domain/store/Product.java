@@ -12,5 +12,6 @@ public class Product {
     private Integer price;
     private Integer stock;
     private String fileName;
+    private Integer quantity;
     private LocalDateTime regDate;
 }

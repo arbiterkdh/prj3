@@ -71,6 +71,7 @@ export function StoreList() {
   const [price, setPrice] = useState(0);
   const [stock, setStock] = useState(0);
   const [file, setFile] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
@@ -132,13 +133,26 @@ export function StoreList() {
     onModifyOpen();
   }
 
-  function handleCartAdd() {
-    toast({
-      status: "success",
-      description: "장바구니 담기 완료",
-      position: "bottom",
-    });
-    onCartClose();
+  function handleCartAdd(productId) {
+    axios
+      .postForm(`/api/store/cart/add`, {
+        id: productId,
+        name,
+        fileName,
+        price,
+        quantity,
+      })
+      .then(() => {
+        toast({
+          status: "success",
+          description: "장바구니 담기 완료",
+          position: "bottom",
+        });
+      })
+      .catch(() => {})
+      .finally(() => {
+        onCartClose();
+      });
   }
 
   const ProductItem = ({ product }) => {
@@ -216,7 +230,18 @@ export function StoreList() {
                 </Button>
               </Box>
               <Box>
-                <Button variant="solid" colorScheme="red" onClick={onCartOpen}>
+                <Button
+                  variant="solid"
+                  colorScheme="red"
+                  onClick={() => {
+                    onCartOpen();
+                    setProductId(product.id);
+                    setName(product.name);
+                    setPrice(product.price);
+                    setFileName(product.fileName);
+                    setQuantity(product.quantity);
+                  }}
+                >
                   <FontAwesomeIcon icon={faCartShopping} />
                   <Text textIndent={"10px"}>카트</Text>
                 </Button>
@@ -439,7 +464,12 @@ export function StoreList() {
           <ModalBody>{name}상품을 담으시겠습니까?</ModalBody>
           <ModalFooter>
             <Flex>
-              <Button onClick={handleCartAdd} colorScheme={"green"}>
+              <Button
+                onClick={() => {
+                  handleCartAdd(productId, name, fileName, price, quantity);
+                }}
+                colorScheme={"green"}
+              >
                 확인
               </Button>
               <Button onClick={onCartClose}>취소</Button>

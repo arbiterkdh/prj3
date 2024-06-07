@@ -3,21 +3,81 @@ import {
   AlertDescription,
   AlertIcon,
   Box,
+  Button,
   Checkbox,
   Flex,
   Heading,
+  Image,
   Table,
   TableContainer,
   Tbody,
-  Td,
-  Tfoot,
-  Th,
+  Text,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CenterTh from "../../../css/theme/component/table/thead/tr/th/CenterTh.jsx";
+import axios from "axios";
+import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.jsx";
 
 export function StoreCart() {
+  const [quantity, setQuantity] = useState(1);
+  const [productCartList, setProductCartList] = useState([]);
+
+  if (quantity < 1) {
+    setQuantity(1);
+  }
+
+  useEffect(() => {
+    axios
+      .get(`/api/store/cart/list`)
+      .then((res) => {
+        setProductCartList(res.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
+
+  function CartItem({ cartItem }) {
+    return (
+      <>
+        <Tr>
+          <CenterTd>
+            <Checkbox defaultChecked></Checkbox>
+          </CenterTd>
+          <CenterTd>
+            <Image
+              src={`http://127.0.0.1:8888/${cartItem.productId}/${cartItem.fileName}`}
+            ></Image>
+          </CenterTd>
+          <CenterTd>{cartItem.name}</CenterTd>
+          <CenterTd>
+            <Flex alignItems={"center"} justifyContent={"center"}>
+              <Button onClick={() => setQuantity(quantity - 1)}>-</Button>
+              <Text>{quantity}</Text>
+              <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
+            </Flex>
+          </CenterTd>
+          <CenterTd>{cartItem.price}</CenterTd>
+          <CenterTd>
+            <Button>삭제</Button>
+          </CenterTd>
+          <CenterTd>{cartItem.regDate}</CenterTd>
+        </Tr>
+      </>
+    );
+  }
+
+  const ProductCartList = () => {
+    return (
+      <>
+        {productCartList.map((cartItem) => (
+          <CartItem key={cartItem.productId} cartItem={cartItem} />
+        ))}
+      </>
+    );
+  };
+
   return (
     <Box>
       <Box>
@@ -31,27 +91,20 @@ export function StoreCart() {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>
+              <CenterTh w={"10%"}>
                 <Checkbox defaultChecked></Checkbox>
-              </Th>
-              <Th>이미지</Th>
-              <Th>상품명</Th>
-              <Th>수량</Th>
-              <Th>가격</Th>
+              </CenterTh>
+              <CenterTh w={"20%"}>이미지</CenterTh>
+              <CenterTh w={"20%"}>상품명</CenterTh>
+              <CenterTh w={"10%"}>수량</CenterTh>
+              <CenterTh w={"10%"}>가격</CenterTh>
+              <CenterTh w={"10%"}>삭제</CenterTh>
+              <CenterTh w={"20"}>담은일</CenterTh>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Th>
-                <Checkbox defaultChecked></Checkbox>
-              </Th>
-              <Td>이미지 칸</Td>
-              <Td>팝콘</Td>
-              <Td>1</Td>
-              <Td>3000</Td>
-            </Tr>
+            <ProductCartList />
           </Tbody>
-          <Tfoot></Tfoot>
         </Table>
       </TableContainer>
       <Box>
@@ -62,13 +115,17 @@ export function StoreCart() {
           <Flex m={10} justifyContent={"flex-end"} w={"100%"}>
             <AlertIcon />
             <AlertDescription>
-              <Heading>
+              <Text fontSize={"1.3rem"}>
                 총 5개의 상품금액 1000000원 + 배송비 0원 = 합계 1000000원{" "}
-              </Heading>
+              </Text>
             </AlertDescription>
           </Flex>
         </Alert>
-        <Box>선택 상품 주문</Box>
+      </Box>
+      <Box>
+        <Button colorScheme={"green"} w={"100%"}>
+          상품 결제
+        </Button>
       </Box>
     </Box>
   );

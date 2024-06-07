@@ -106,4 +106,9 @@ public class ProductService {
             }
         }
     }
+
+    public Product info(Integer id) {
+
+        return mapper.info(id);
+    }
 }

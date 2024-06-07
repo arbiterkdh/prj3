@@ -39,4 +39,11 @@ public interface ProductMapper {
             WHERE id = #{productId}
             """)
     int updateProduct(Product product, Integer productId);
+
+    @Select("""
+            SELECT *
+            FROM product
+            WHERE id = #{id}
+            """)
+    Product info(Integer id);
 }
