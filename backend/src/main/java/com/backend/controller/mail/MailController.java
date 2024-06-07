@@ -1,4 +1,4 @@
-package com.backend.controller;
+package com.backend.controller.mail;
 
 import com.backend.domain.mail.Mail;
 import com.backend.service.mail.MailService;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/mail")
 @RequiredArgsConstructor
-public class ApiController {
+public class MailController {
 
     private final MailService mailService;
 
-    @PostMapping("mail")
+    @PostMapping("")
     public void sendMail(@RequestBody Mail mail) {
         mailService.mailSend(mail);
     }

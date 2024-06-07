@@ -1,6 +1,7 @@
 package com.backend.service.mail;
 
 import com.backend.domain.mail.Mail;
+import com.backend.mapper.mail.MailMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -14,12 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MailService {
     private final JavaMailSender mailSender;
+    private final MailMapper mapper;
 
     @Value("${spring.mail.username}")
     String fromAddress;
 
     public void mailSend(Mail mail) throws MailException {
-        String verifyNumber = String.valueOf((int) (Math.random() * 1000000));
+        Integer verifyNumber = (int) (Math.random() * 1000000);
+        mail.setVerifyNumber(verifyNumber);
+        mapper.insertVerifyNumberTemporary(mail);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getAddress());
