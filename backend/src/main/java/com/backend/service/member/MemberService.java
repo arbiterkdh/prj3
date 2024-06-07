@@ -25,7 +25,7 @@ public class MemberService {
 
     public void add(Member member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
-        member.setEmail(member.getEmail().trim());
+        member.setEmail(member.getEmail());
         mapper.insert(member);
     }
 

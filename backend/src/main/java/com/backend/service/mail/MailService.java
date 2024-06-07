@@ -38,7 +38,7 @@ public class MailService {
         message.setTo(mail.getAddress());
         message.setFrom(fromAddress);
         message.setSubject("생존코딩에서 인증번호를 보내드립니다.");
-        message.setText(STR."인증번호는 \{verifyNumber} 입니다.");
+        message.setText(STR."인증번호는 [  \{verifyNumber}  ] 입니다.");
 
         mailSender.send(message);
 

@@ -17,7 +17,12 @@ public class MailController {
     private final MemberService memberService;
 
     @PostMapping("check")
-    public ResponseEntity checkMail(Mail mail) {
+    public ResponseEntity checkMail(@RequestBody Mail mail) {
+        boolean isNormalForm = mail.getAddress().matches("^[a-zA-Z0-9\\-_]+@[a-zA-Z0-9-]+\\.[a-zA-Z]+$");
+        if (!isNormalForm) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         if (!memberService.hasEmail(mail.getAddress())) {
             return ResponseEntity.ok().build();
         }

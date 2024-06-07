@@ -5,10 +5,9 @@ DROP TABLE member;
 CREATE TABLE member
 (
     number    INT PRIMARY KEY AUTO_INCREMENT,
-    id        VARCHAR(30)  NOT NULL UNIQUE,
-    email     VARCHAR(100) NOT NULL UNIQUE,
-    password  VARCHAR(300) NOT NULL,
-    nick_name VARCHAR(100) NOT NULL UNIQUE,
+    email     VARCHAR(50)  NOT NULL UNIQUE,
+    password  VARCHAR(500) NOT NULL,
+    nick_name VARCHAR(20)  NOT NULL UNIQUE,
     inserted  DATETIME     NOT NULL DEFAULT NOW()
 );
 
@@ -17,3 +16,5 @@ FROM member;
 
 DELETE
 FROM member;
+
+DROP TABLE member;

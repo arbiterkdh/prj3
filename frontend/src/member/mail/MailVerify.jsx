@@ -1,37 +1,59 @@
 import {
+  Box,
   Button,
   Center,
   Heading,
   Input,
-  InputGroup,
+  Select,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { VerifyNumber } from "./VerifyNumber.jsx";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
+import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
+  const [selected, setSelected] = useState("");
+  const [domain, setDomain] = useState("");
   const [verifyNumber, setVerifyNumber] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [verifiedAddress, setVerifiedAddress] = useState("");
+  const [verifiedEmail, setVerifiedEmail] = useState("");
+  const [res, setRes] = useState(0);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const toast = useToast();
 
+  useEffect(() => {
+    if (selected !== "") {
+      setDomain(selected);
+    } else {
+      setDomain("");
+    }
+  }, [selected]);
+
   function handleClick() {
     axios
-      .post("/api/mail/check", { address })
+      .post("/api/mail/check", { address: address + "@" + domain })
       .then((res) => {
+        setRes(200);
         onOpen();
         setIsSending(true);
         setIsRunning(true);
       })
       .catch((err) => {
+        setRes(400);
+        if (err.response.status === 400) {
+          toast({
+            status: "warning",
+            description: "잘못된 이메일 양식입니다.",
+            position: "bottom-right",
+          });
+        }
         if (err.response.status === 409) {
           toast({
             status: "warning",
@@ -39,11 +61,12 @@ export function MailVerify() {
             position: "bottom-right",
           });
         }
-        return;
       });
 
+    if (res === 400) return;
+
     axios
-      .post("/api/mail", { address })
+      .post("/api/mail", { address: address + "@" + domain })
       .then((res) => {
         toast({
           status: "success",
@@ -52,12 +75,13 @@ export function MailVerify() {
           position: "bottom-right",
         });
         setVerifyNumber(res.data.verifyNumber);
-        setVerifiedAddress(address);
+        setVerifiedEmail(address + "@" + domain);
       })
       .catch()
       .finally(() => {
         setAddress("");
         setIsSending(false);
+        setRes(0);
       });
   }
 
@@ -65,14 +89,40 @@ export function MailVerify() {
     <Center>
       <CenterBox mb={48}>
         <Heading>이메일 본인인증</Heading>
-        <InputGroup>
+        <GapFlex alignItems={"center"}>
           <Input
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => setAddress(e.target.value.trim())}
             placeholder={"이메일 주소"}
           />
-          <Button onClick={handleClick}>인증번호 요청</Button>
-        </InputGroup>
+          <Box fontSize={"2xl"}>@</Box>
+          <Select
+            border={"1px solid black"}
+            onChange={(e) => {
+              setSelected(e.target.value);
+            }}
+          >
+            <option value="">직접 입력</option>
+            <option value="naver.com">naver.com</option>
+            <option value="daum.net">daum.net</option>
+            <option value="hanmail.net">hanmail.net</option>
+            <option value="gmail.com">gmail.com</option>
+            <option value="kakao.com">kakao.com</option>
+            <option value="nate.com">nate.com</option>
+            <option value="hotmail.com">hotmail.com</option>
+          </Select>
+          <Input
+            isDisabled={selected !== ""}
+            value={domain}
+            placeholder={"직접 입력"}
+            onChange={(e) => {
+              setDomain(e.target.value);
+            }}
+          />
+          <Button w={"40%"} onClick={handleClick}>
+            인증번호 요청
+          </Button>
+        </GapFlex>
         <VerifyNumber
           isOpen={isOpen}
           onClose={onClose}
@@ -82,8 +132,8 @@ export function MailVerify() {
           verifyNumber={verifyNumber}
           setVerifyNumber={setVerifyNumber}
           isSending={isSending}
-          verifiedAddress={verifiedAddress}
-          setVerifiedAddress={setVerifiedAddress}
+          verifiedAddress={verifiedEmail}
+          setVerifiedAddress={setVerifiedEmail}
         />
       </CenterBox>
     </Center>
