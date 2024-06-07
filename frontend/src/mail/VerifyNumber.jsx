@@ -28,7 +28,6 @@ export function VerifyNumber({
   verifyNumber,
   setVerifyNumber,
 }) {
-  const [email, setEmail] = useState("");
   const [canSignup, setCanSignup] = useState(false);
   const [remainTime, setRemainTime] = useState(3 * 60 * 1000);
   const [inputNumber, setInputNumber] = useState(0);
@@ -55,6 +54,14 @@ export function VerifyNumber({
   }, [isRunning]);
 
   function handleCheckVerifyNumber() {
+    if (count === 0) {
+      toast({
+        status: "error",
+        description: "인증시도 횟수가 초과되었습니다, 다시 인증해주세요.",
+        position: "bottom-right",
+      });
+      onClose();
+    }
     if (inputNumber == verifyNumber) {
       toast({
         status: "success",

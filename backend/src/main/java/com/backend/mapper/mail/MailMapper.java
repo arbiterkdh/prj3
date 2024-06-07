@@ -12,8 +12,8 @@ public interface MailMapper {
 
     @Insert("""
             INSERT INTO mail
-            (verify_number)
-            VALUES (#{verifyNumber})
+            (address, verify_number)
+            VALUES (#{address}, #{verifyNumber})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertVerifyNumberTemporary(Mail mail);
