@@ -18,6 +18,8 @@ import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.js
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
+import { Oauth } from "./page/oauth/Oauth.jsx";
+import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,11 @@ const router = createBrowserRouter([
       { index: true, element: <MovieHome /> },
       { path: "verify", element: <MailVerify /> },
       { path: "signup", element: <MemberSignup /> },
+      {
+        path: "oauth",
+        element: <Oauth />,
+        children: [{ path: "kakao/callback", element: <KakaoRedirect /> }],
+      },
       {
         path: "movie",
         element: <Movie />,

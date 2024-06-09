@@ -36,9 +36,6 @@ import {
 export function MemberLogin() {
   const account = useContext(LoginContext);
 
-  const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
-  const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [canShow, setCanShow] = useState(false);
@@ -162,7 +159,7 @@ export function MemberLogin() {
                   />
                 </a>
                 <a
-                  href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${kakaoKey}&redirect_uri=${kakaoUri}`}
+                  href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${account.kakaoKey}&redirect_uri=${account.kakaoUri}`}
                 >
                   <Image
                     src={
