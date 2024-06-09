@@ -17,6 +17,7 @@ public class PromotionController {
 
     @PostMapping("/add")
     public void addPromo(@RequestParam Promotion promotion) {
+        System.out.println("promotion = " + promotion);
 
         promotionService.addPromo(promotion);
     }

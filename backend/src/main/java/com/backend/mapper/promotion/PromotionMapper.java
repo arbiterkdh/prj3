@@ -9,8 +9,8 @@ public interface PromotionMapper {
 
     @Insert("""
             INSERT INTO promo
-            (id, title, content)
-            VALUES (#{id}, #{title}, #{content})
+            (id, title, eventType, eventStartDate, eventEndDate, content)
+            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content})
             """)
     int insertPromo(Promotion promotion);
 }
