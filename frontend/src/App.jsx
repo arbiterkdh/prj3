@@ -18,6 +18,7 @@ import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.js
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
+import { SocialLogin } from "./page/social-login/SocialLogin.jsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { index: true, element: <MovieHome /> },
       { path: "verify", element: <MailVerify /> },
       { path: "signup", element: <MemberSignup /> },
+      { path: "social-login", element: <SocialLogin /> },
       {
         path: "movie",
         element: <Movie />,

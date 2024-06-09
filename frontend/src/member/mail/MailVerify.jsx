@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import { VerifyNumber } from "./VerifyNumber.jsx";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
-import { useNavigate } from "react-router-dom";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
@@ -23,10 +22,8 @@ export function MailVerify() {
   const [isSending, setIsSending] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [verifiedEmail, setVerifiedEmail] = useState("");
-  const [res, setRes] = useState(0);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();
   const toast = useToast();
 
   useEffect(() => {
@@ -41,13 +38,10 @@ export function MailVerify() {
     axios
       .post("/api/mail/check", { address: address + "@" + domain })
       .then((res) => {
-        setRes(200);
         onOpen();
-        setIsSending(true);
-        setIsRunning(true);
+        sendVerifyNumber();
       })
       .catch((err) => {
-        setRes(400);
         if (err.response.status === 400) {
           toast({
             status: "warning",
@@ -62,9 +56,13 @@ export function MailVerify() {
             position: "bottom-right",
           });
         }
-        navigate("/verify");
-      });
+      })
+      .finally();
+  }
 
+  function sendVerifyNumber() {
+    setIsSending(true);
+    setIsRunning(true);
     axios
       .post("/api/mail", { address: address + "@" + domain })
       .then((res) => {
@@ -81,7 +79,6 @@ export function MailVerify() {
       .finally(() => {
         setAddress("");
         setIsSending(false);
-        setRes(0);
       });
   }
 

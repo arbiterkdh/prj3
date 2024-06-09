@@ -3,7 +3,10 @@ import {
   Button,
   Divider,
   Flex,
+  Image,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -20,12 +23,23 @@ import { useNavigate } from "react-router-dom";
 import CursorBox from "../css/theme/component/box/CursorBox.jsx";
 import { useContext, useState } from "react";
 import { LoginContext } from "../component/LoginProvider.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye as emptyEye,
+  faEyeSlash as emptyEyeSlash,
+} from "@fortawesome/free-regular-svg-icons";
+import {
+  faEye as fullEye,
+  faEyeSlash as fullEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 
 export function MemberLogin() {
   const account = useContext(LoginContext);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [canShow, setCanShow] = useState(false);
+  const [eye, setEye] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -62,10 +76,18 @@ export function MemberLogin() {
   return (
     <Box>
       <Box onClick={onOpen}>로그인</Box>
-      <Modal size={"4xl"} isOpen={isOpen} onClose={onClose} isCentered={true}>
+      <Modal
+        size={"4xl"}
+        isOpen={isOpen}
+        onClose={() => {
+          setCanShow(false);
+          onClose();
+        }}
+        isCentered={true}
+      >
         <ModalOverlay />
         <ModalContent h={"500px"}>
-          <ModalHeader bgColor={"purple"} h={12}>
+          <ModalHeader bgColor={"purple"} h={12} alignContent={"center"}>
             로그인
           </ModalHeader>
           <ModalCloseButton />
@@ -73,18 +95,40 @@ export function MemberLogin() {
             <MarginBox w={"50%"}>
               <ModalBody>
                 <MarginBox>
-                  <Box>
+                  <Input
+                    placeholder={"이메일"}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <InputGroup display={"inherit"}>
                     <Input
-                      placeholder={"이메일"}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                  </Box>
-                  <Box>
-                    <Input
+                      type={canShow ? "text" : "password"}
+                      value={password}
                       placeholder={"비밀번호"}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => {
+                        setPassword(e.target.value.trim());
+                      }}
                     />
-                  </Box>
+                    <InputRightElement
+                      onMouseEnter={() => setEye(true)}
+                      onMouseLeave={() => setEye(false)}
+                      onClick={() => {
+                        setCanShow(!canShow);
+                      }}
+                    >
+                      {canShow && (
+                        <Box>
+                          {eye || <FontAwesomeIcon icon={emptyEye} />}
+                          {eye && <FontAwesomeIcon icon={fullEye} />}
+                        </Box>
+                      )}
+                      {canShow || (
+                        <Box>
+                          {eye || <FontAwesomeIcon icon={emptyEyeSlash} />}
+                          {eye && <FontAwesomeIcon icon={fullEyeSlash} />}
+                        </Box>
+                      )}
+                    </InputRightElement>
+                  </InputGroup>
                 </MarginBox>
               </ModalBody>
               <ModalFooter>
@@ -107,9 +151,39 @@ export function MemberLogin() {
                 <CursorBox>비회원 예매확인</CursorBox>
               </ModalFooter>
               <ModalFooter display="flex" justifyContent="space-evenly">
-                <CursorBox>NAVER</CursorBox>
-                <CursorBox>KAKAO</CursorBox>
-                <CursorBox>PAYCO</CursorBox>
+                <CursorBox
+                  onClick={() =>
+                    navigate("/social-login", { state: { company: "naver" } })
+                  }
+                >
+                  <Image
+                    src={
+                      "https://megabox.co.kr/static/pc/images/member/ico-naver.png"
+                    }
+                  />
+                </CursorBox>
+                <CursorBox
+                  onClick={() =>
+                    navigate("/social-login", { state: { company: "kakao" } })
+                  }
+                >
+                  <Image
+                    src={
+                      "https://megabox.co.kr/static/pc/images/member/ico-kakao.png"
+                    }
+                  />
+                </CursorBox>
+                <CursorBox
+                  onClick={() =>
+                    navigate("/social-login", { state: { company: "payco" } })
+                  }
+                >
+                  <Image
+                    src={
+                      "https://megabox.co.kr/static/pc/images/member/ico-payco.png"
+                    }
+                  />
+                </CursorBox>
               </ModalFooter>
             </MarginBox>
             <MarginBox border={"1px solid black"} w={"50%"} h={"100%"}>
