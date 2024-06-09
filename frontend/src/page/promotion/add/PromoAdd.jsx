@@ -4,6 +4,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Select,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
@@ -13,8 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 export function PromoAdd() {
   const [title, setTitle] = useState("");
-  const [files, setFiles] = useState([]);
+  const [eventType, setEventType] = useState([]);
+  const [eventStartDate, setEventStartDate] = useState("");
+  const [eventEndDate, setEventEndDate] = useState("");
   const [content, setContent] = useState("");
+  const [files, setFiles] = useState([]);
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -55,6 +59,15 @@ export function PromoAdd() {
   if (content.trim().length === 0) {
     disableSaveButton = true;
   }
+  if (!eventType) {
+    disableSaveButton = true;
+  }
+  if (!eventStartDate) {
+    disableSaveButton = true;
+  }
+  if (!eventEndDate) {
+    disableSaveButton = true;
+  }
 
   const fileNameList = [];
   for (let i = 0; i < files.length; i++) {
@@ -69,6 +82,36 @@ export function PromoAdd() {
           <Input
             onChange={(e) => setTitle(e.target.value)}
             placeholder="제목을 입력하세요."
+          />
+        </FormControl>
+      </Box>
+      <Box>
+        <FormControl>
+          <FormLabel>이벤트 타입</FormLabel>
+          <Select
+            onChange={(e) => setEventType(e.target.value)}
+            placeholder="이벤트 타입을 선택하세요."
+          >
+            <option value="movie">영화</option>
+            <option value="theater">극장</option>
+            <option value="membership">멤버십</option>
+            <option value="discount">제휴/할인</option>
+          </Select>
+        </FormControl>
+      </Box>
+      <Box>
+        <FormControl>
+          <FormLabel>시작일</FormLabel>
+          <Input
+            type={"date"}
+            onChange={(e) => setEventStartDate(e.target.value)}
+          />
+        </FormControl>
+        <FormControl>
+          <FormLabel>종료일</FormLabel>
+          <Input
+            type={"date"}
+            onChange={(e) => setEventEndDate(e.target.value)}
           />
         </FormControl>
       </Box>
