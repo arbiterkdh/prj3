@@ -36,6 +36,9 @@ import {
 export function MemberLogin() {
   const account = useContext(LoginContext);
 
+  const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
+  const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [canShow, setCanShow] = useState(false);
@@ -151,39 +154,29 @@ export function MemberLogin() {
                 <CursorBox>비회원 예매확인</CursorBox>
               </ModalFooter>
               <ModalFooter display="flex" justifyContent="space-evenly">
-                <CursorBox
-                  onClick={() =>
-                    navigate("/social-login", { state: { company: "naver" } })
-                  }
-                >
+                <a href={""}>
                   <Image
                     src={
                       "https://megabox.co.kr/static/pc/images/member/ico-naver.png"
                     }
                   />
-                </CursorBox>
-                <CursorBox
-                  onClick={() =>
-                    navigate("/social-login", { state: { company: "kakao" } })
-                  }
+                </a>
+                <a
+                  href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${kakaoKey}&redirect_uri=${kakaoUri}`}
                 >
                   <Image
                     src={
                       "https://megabox.co.kr/static/pc/images/member/ico-kakao.png"
                     }
                   />
-                </CursorBox>
-                <CursorBox
-                  onClick={() =>
-                    navigate("/social-login", { state: { company: "payco" } })
-                  }
-                >
+                </a>
+                <a href={""}>
                   <Image
                     src={
                       "https://megabox.co.kr/static/pc/images/member/ico-payco.png"
                     }
                   />
-                </CursorBox>
+                </a>
               </ModalFooter>
             </MarginBox>
             <MarginBox border={"1px solid black"} w={"50%"} h={"100%"}>
