@@ -22,7 +22,7 @@ import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.js
 
 export function StoreCart() {
   const [productCartList, setProductCartList] = useState([]);
-  const [quantity, setQuantity] = useState(null);
+  const [checkItem, setCheckItem] = useState({});
 
   const updateQuantity = (productId, quantityItem) => {
     setProductCartList((itemList) =>
@@ -38,18 +38,33 @@ export function StoreCart() {
     axios
       .get(`/api/store/cart/list`)
       .then((res) => {
+        const initialAllCheck = res.data.reduce((itemArr, item) => {
+          itemArr[item.productId] = true;
+          return itemArr;
+        }, {});
         setProductCartList(res.data);
+        setCheckItem(initialAllCheck);
       })
       .catch(() => {})
       .finally(() => {});
   }, []);
+
+  const handleCheckBoxChange = (productId) => {
+    setCheckItem((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+  };
 
   function CartItem({ cartItem }) {
     return (
       <>
         <Tr>
           <CenterTd>
-            <Checkbox defaultChecked></Checkbox>
+            <Checkbox
+              isChecked={checkItem[cartItem.productId]}
+              onChange={() => handleCheckBoxChange(cartItem.productId)}
+            ></Checkbox>
           </CenterTd>
           <CenterTd>
             <Image
@@ -78,7 +93,7 @@ export function StoreCart() {
               </Button>
             </Flex>
           </CenterTd>
-          <CenterTd>{cartItem.price * cartItem.quantity}</CenterTd>
+          <CenterTd>{cartItem.price * cartItem.quantity}원</CenterTd>
           <CenterTd>
             <Button colorScheme={"red"}>삭제</Button>
           </CenterTd>
@@ -98,6 +113,17 @@ export function StoreCart() {
     );
   };
 
+  const totalSum = productCartList.reduce(
+    (sum, item) =>
+      checkItem[item.productId] ? sum + item.price * item.quantity : sum,
+    0,
+  );
+
+  const totalSelectItem = productCartList.reduce(
+    (count, item) => (checkItem[item.productId] ? count + 1 : count),
+    0,
+  );
+
   return (
     <Box>
       <Box>
@@ -112,14 +138,31 @@ export function StoreCart() {
           <Thead>
             <Tr>
               <CenterTh w={"10%"}>
-                <Checkbox defaultChecked></Checkbox>
+                <Checkbox
+                  isChecked={productCartList.every(
+                    (item) => checkItem[item.productId],
+                  )}
+                  onChange={() => {
+                    const allChecked = productCartList.every(
+                      (item) => checkItem[item.productId],
+                    );
+                    const newCheckItem = productCartList.reduce(
+                      (itemArr, item) => {
+                        itemArr[item.productId] = !allChecked;
+                        return itemArr;
+                      },
+                      {},
+                    );
+                    setCheckItem(newCheckItem);
+                  }}
+                ></Checkbox>
               </CenterTh>
               <CenterTh w={"20%"}>이미지</CenterTh>
               <CenterTh w={"20%"}>상품명</CenterTh>
               <CenterTh w={"10%"}>수량</CenterTh>
               <CenterTh w={"10%"}>가격</CenterTh>
               <CenterTh w={"10%"}>삭제</CenterTh>
-              <CenterTh w={"20"}>담은일</CenterTh>
+              <CenterTh w={"20%"}>날짜</CenterTh>
             </Tr>
           </Thead>
           <Tbody>
@@ -136,7 +179,7 @@ export function StoreCart() {
             <AlertIcon />
             <AlertDescription>
               <Text fontSize={"1.3rem"}>
-                총 5개의 상품금액 1000000원 + 배송비 0원 = 합계 1000000원{" "}
+                총 {totalSelectItem}개의 상품금액 = 합계 {totalSum}원
               </Text>
             </AlertDescription>
           </Flex>
