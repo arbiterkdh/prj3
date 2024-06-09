@@ -35,4 +35,8 @@ public class TheaterService {
     public List<String> getCityList() {
         return mapper.selectAllCity();
     }
+
+    public void delete(Integer number) {
+        mapper.deleteTheaterByNumber(number);
+    }
 }

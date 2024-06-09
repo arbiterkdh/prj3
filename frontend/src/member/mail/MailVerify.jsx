@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { VerifyNumber } from "./VerifyNumber.jsx";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function MailVerify() {
   const [address, setAddress] = useState("");
@@ -25,7 +26,7 @@ export function MailVerify() {
   const [res, setRes] = useState(0);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const navigate = useNavigate();
   const toast = useToast();
 
   useEffect(() => {
@@ -61,9 +62,8 @@ export function MailVerify() {
             position: "bottom-right",
           });
         }
+        navigate("/verify");
       });
-
-    if (res === 400) return;
 
     axios
       .post("/api/mail", { address: address + "@" + domain })

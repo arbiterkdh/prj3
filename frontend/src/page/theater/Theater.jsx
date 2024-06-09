@@ -19,6 +19,7 @@ import axios from "axios";
 export function Theater() {
   const [theaterList, setTheaterList] = useState([]);
   const [isModifying, setIsModifying] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [cityList, setCityList] = useState([]);
   const [cityName, setCityName] = useState("");
 
@@ -44,6 +45,8 @@ export function Theater() {
           theaterList={theaterList}
           setTheaterList={setTheaterList}
           isModifying={isModifying}
+          isRemoving={isRemoving}
+          setIsRemoving={setIsRemoving}
         />
         <TheaterAdd
           setCityName={setCityName}
