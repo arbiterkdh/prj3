@@ -50,3 +50,10 @@ CREATE TABLE movie_comment
     inserted  DATETIME     NOT NULL DEFAULT NOW()
 );
 
+DELETE
+FROM member
+WHERE number = 6;
+
+SELECT *
+FROM member;
+

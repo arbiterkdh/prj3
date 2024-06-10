@@ -52,7 +52,7 @@ export function MovieView() {
                   <MovieInfo movie={movie} />
                 </TabPanel>
                 <TabPanel>
-                  <MovieComment />
+                  <MovieComment movieId={movie.id} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
