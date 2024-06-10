@@ -15,6 +15,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { MovieInfo } from "./MovieInfo.jsx";
+import { MovieComment } from "./comment/MovieComment.jsx";
 
 export function MovieView() {
   const { id } = useParams();
@@ -22,7 +23,7 @@ export function MovieView() {
 
   useEffect(() => {
     axios
-      .get(`/api/movie/view/${id}`)
+      .get(`/api/movie/${id}`)
       .then((res) => setMovie(res.data))
       .catch(() => {})
       .finally(() => {});
@@ -51,7 +52,7 @@ export function MovieView() {
                   <MovieInfo movie={movie} />
                 </TabPanel>
                 <TabPanel>
-                  {/*<MovieComment /> todo: 영화 댓글기능 추가 필요 */}
+                  <MovieComment />
                 </TabPanel>
               </TabPanels>
             </Tabs>

@@ -19,6 +19,7 @@ import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.js
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
 import { ProductView } from "./page/store/view/ProductView.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
+import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
           {
             path: "view/:id",
             element: <MovieView />,
+          },
+          {
+            path: "modify/:id",
+            element: <MovieModify />,
           },
         ],
       },

@@ -63,4 +63,21 @@ public class MovieService {
         movie.setType(movieMapper.selectMovieTypeById(movieId));
         return movie;
     }
+
+
+    public void deleteMovie(Integer movieId) {
+        movieMapper.deleteMovieTypeByMovieId(movieId);
+        movieMapper.deleteMovieByMovieId(movieId);
+    }
+
+    public void editMovie(Movie movie) {
+        movieMapper.updateMovie(movie);
+
+        // movie_type 수정 로직, movie_type 삭제 이후 새로 생성...
+        movieMapper.deleteMovieTypeByMovieId(movie.getId());
+
+        for (int i = 0; i < movie.getType().size(); i++) {
+            movieMapper.insertMovieType(movie.getId(), movie.getType().get(i));
+        }
+    }
 }

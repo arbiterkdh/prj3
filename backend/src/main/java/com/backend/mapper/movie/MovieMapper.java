@@ -1,10 +1,7 @@
 package com.backend.mapper.movie;
 
 import com.backend.domain.movie.Movie;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -49,4 +46,33 @@ public interface MovieMapper {
             WHERE movie_id = #{movieId}
             """)
     List<String> selectMovieTypeById(Integer movieId);
+
+    @Delete("""
+            DELETE FROM movie_type
+            WHERE movie_id = #{movieId}
+            """)
+    int deleteMovieTypeByMovieId(Integer movieId);
+
+    @Delete("""
+            DELETE FROM movie
+            WHERE id = #{movieId}
+            """)
+    int deleteMovieByMovieId(Integer movieId);
+
+    @Update("""
+            UPDATE movie
+            SET id = #{id},
+                title = #{title},
+                content = #{content},
+                genre = #{genre},
+                running_time = #{runningTime},
+                rating = #{rating},
+                start_Date = #{startDate},
+                director = #{director},
+                actors = #{actors}
+            WHERE id = #{id}
+            """)
+    int updateMovie(Movie movie);
+
+
 }
