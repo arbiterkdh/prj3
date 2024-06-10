@@ -41,9 +41,11 @@ public interface ProductMapper {
     int updateProduct(Product product, Integer productId);
 
     @Select("""
-            SELECT *
-            FROM product
-            WHERE id = #{id}
+            SELECT p.id , p.name, p.content, p.stock, pi.name as fileName
+            FROM product p
+                     join product_image pi
+                          on p.id = pi.product_id
+            where p.id = #{id};
             """)
     Product info(Integer id);
 }
