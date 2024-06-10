@@ -5,10 +5,7 @@ import com.backend.domain.store.Product;
 import com.backend.domain.store.ProductCart;
 import com.backend.service.store.CartService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +26,12 @@ public class CartController {
     public List<ProductCart> cartList() {
 
         return service.cartProductList();
+    }
+
+    @DeleteMapping("/delete/{productId}")
+    public void deleteItem(@PathVariable Integer productId) {
+
+        service.deleteItem(productId);
+
     }
 }

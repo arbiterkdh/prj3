@@ -8,12 +8,20 @@ import {
   Flex,
   Heading,
   Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
   Text,
   Thead,
   Tr,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import CenterTh from "../../../css/theme/component/table/thead/tr/th/CenterTh.jsx";
@@ -22,7 +30,13 @@ import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.js
 
 export function StoreCart() {
   const [productCartList, setProductCartList] = useState([]);
+  const [productId, setProductId] = useState(null);
+  const [productName, setProductName] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [checkItem, setCheckItem] = useState({});
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const updateQuantity = (productId, quantityItem) => {
     setProductCartList((itemList) =>
@@ -55,6 +69,27 @@ export function StoreCart() {
       [productId]: !prev[productId],
     }));
   };
+
+  function handleItemDelete(productId) {
+    setIsLoading(true);
+    axios
+      .delete(`/api/store/cart/delete/${productId}`)
+      .then((res) => {
+        toast({
+          status: "success",
+          description: "삭제 완료",
+          position: "bottom",
+        });
+        setProductCartList((cartList) =>
+          cartList.filter((item) => item.productId !== productId),
+        );
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+        onClose();
+      });
+  }
 
   function CartItem({ cartItem }) {
     return (
@@ -95,7 +130,16 @@ export function StoreCart() {
           </CenterTd>
           <CenterTd>{cartItem.price * cartItem.quantity}원</CenterTd>
           <CenterTd>
-            <Button colorScheme={"red"}>삭제</Button>
+            <Button
+              colorScheme={"red"}
+              onClick={() => {
+                onOpen();
+                setProductId(cartItem.productId);
+                setProductName(cartItem.name);
+              }}
+            >
+              삭제
+            </Button>
           </CenterTd>
           <CenterTd>{cartItem.regDate}</CenterTd>
         </Tr>
@@ -190,6 +234,25 @@ export function StoreCart() {
           상품 결제
         </Button>
       </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>장바구니 알림</ModalHeader>
+          <ModalBody>{productName}을 삭제하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Flex>
+              <Button
+                onClick={() => handleItemDelete(productId)}
+                colorScheme={"red"}
+                isLoading={isLoading}
+              >
+                확인
+              </Button>
+              <Button onClick={onClose}>취소</Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

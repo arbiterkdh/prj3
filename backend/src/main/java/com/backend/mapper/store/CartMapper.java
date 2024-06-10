@@ -2,10 +2,7 @@ package com.backend.mapper.store;
 
 
 import com.backend.domain.store.ProductCart;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -38,4 +35,11 @@ public interface CartMapper {
             WHERE product_id = #{productId}
             """)
     ProductCart getExistItem(Integer productId);
+
+
+    @Delete("""
+            DELETE FROM product_cart
+            WHERE product_id = #{productId}
+            """)
+    int deleteItem(Integer productId);
 }

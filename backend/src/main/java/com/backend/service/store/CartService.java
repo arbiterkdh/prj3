@@ -51,4 +51,9 @@ public class CartService {
 
         return mapper.cartProductList();
     }
+
+    public void deleteItem(Integer productId) {
+
+        mapper.deleteItem(productId);
+    }
 }
