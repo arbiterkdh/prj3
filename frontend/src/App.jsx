@@ -17,6 +17,7 @@ import { PromoList } from "./page/promotion/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
+import { ProductView } from "./page/store/view/ProductView.jsx";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
           {
             path: "cart",
             element: <StoreCart />,
+          },
+          {
+            path: "productView/:productId",
+            element: <ProductView />,
           },
         ],
       },

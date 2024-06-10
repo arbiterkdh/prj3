@@ -173,6 +173,7 @@ export function StoreList() {
               }}
               src={`http://127.0.0.1:8888/${product.id}/${product.fileName}`}
               borderRadius="lg"
+              // onClick={handleProductView}
             />
             <Stack mt="6" spacing="3">
               <Center>
