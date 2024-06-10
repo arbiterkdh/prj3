@@ -56,11 +56,17 @@ SELECT *
 FROM product_cart;
 
 SELECT *
-FROM product_comment;
+FROM product_comment
+where product_id = 1;
 
 drop table product;
 drop table product_image;
 drop table product_cart;
+
+select *
+from member;
+
+
 
 
 

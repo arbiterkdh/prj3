@@ -3,10 +3,9 @@ package com.backend.controller.store;
 import com.backend.domain.store.ProductComment;
 import com.backend.service.store.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/store/product/comment")
 @RestController
@@ -18,7 +17,25 @@ public class CommentController {
     @PostMapping("/add")
     public void addComment(@RequestBody ProductComment productComment) {
 
+        service.addComment(productComment);
+    }
 
+    @GetMapping("/list/{productId}")
+    public List<ProductComment> list(@PathVariable Integer productId) {
+
+        return service.commentList(productId);
+    }
+
+    @PutMapping("/modify")
+    public void modifyComment(@RequestBody ProductComment productComment) {
+
+        service.modifyComment(productComment);
+    }
+
+    @DeleteMapping("/delete/{commentId}")
+    public void deleteComment(@PathVariable Integer commentId) {
+
+        service.deleteComment(commentId);
     }
 
 
