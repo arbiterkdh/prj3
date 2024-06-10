@@ -33,4 +33,8 @@ public class PromotionService {
     public Promotion get(Integer id) {
         return promotionMapper.selectById(id);
     }
+
+    public void remove(Integer id) {
+        promotionMapper.deleteById(id);
+    }
 }

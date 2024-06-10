@@ -29,4 +29,9 @@ public class PromotionController {
     public Promotion getPromotion(@PathVariable Integer id) {
         return promotionService.get(id);
     }
+
+    @DeleteMapping("{id}")
+    public void deletePromotion(@PathVariable Integer id) {
+        promotionService.remove(id);
+    }
 }

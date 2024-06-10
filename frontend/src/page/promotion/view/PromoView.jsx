@@ -1,11 +1,27 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Heading,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function PromoView() {
   const { promoId } = useParams();
   const [promo, setPromo] = useState("");
+  const toast = useToast();
+  const navigate = useNavigate();
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   useEffect(() => {
     axios
@@ -19,6 +35,29 @@ export function PromoView() {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+
+  function handleClickRemove() {
+    axios
+      .delete(`/api/promotion/${promoId}`)
+      .then(() => {
+        toast({
+          status: "success",
+          description: `${promoId}번 게시물이 삭제되었습니다.`,
+          position: "top",
+        });
+        navigate("/promotion");
+      })
+      .catch(() => {
+        toast({
+          status: "error",
+          description: `${promoId}번 게시물 삭제 중 오류가 발생하였습니다.`,
+          position: "top",
+        });
+      })
+      .finally(() => {
+        onClose();
+      });
+  }
 
   return (
     <Box>
@@ -40,6 +79,28 @@ export function PromoView() {
       <Box mt={4}>
         <Text>{promo.content}</Text>
       </Box>
+      <Button
+        colorScheme={"purple"}
+        onClick={() => navigate(`/edit/${promo.id}`)}
+      >
+        수정
+      </Button>
+      <Button colorScheme={"red"} onClick={onOpen}>
+        삭제
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader></ModalHeader>
+          <ModalBody>삭제하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>취소</Button>
+            <Button colorScheme={"red"} onClick={handleClickRemove}>
+              확인
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
