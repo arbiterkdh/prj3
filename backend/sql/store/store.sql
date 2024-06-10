@@ -31,6 +31,15 @@ CREATE TABLE product_cart
     reg_date   DATETIME DEFAULT NOW()
 );
 
+CREATE TABLE product_comment
+(
+    id         int primary key auto_increment,
+    writer     varchar(20),
+    content    varchar(200),
+    product_id int references product (id),
+    reg_date   datetime default now()
+);
+
 
 SELECT *
 FROM product;
@@ -38,7 +47,16 @@ SELECT *
 FROM product_image;
 
 SELECT *
+FROM product p
+         join product_image pi
+              on p.id = pi.product_id
+where p.id = 1;
+
+SELECT *
 FROM product_cart;
+
+SELECT *
+FROM product_comment;
 
 drop table product;
 drop table product_image;

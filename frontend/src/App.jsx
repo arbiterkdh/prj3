@@ -16,7 +16,7 @@ import { PromoList } from "./page/promotion/list/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
-import { ProductView } from "./page/store/view/ProductView.jsx";
+import { StoreProductView } from "./page/store/view/StoreProductView.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
 import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
@@ -103,7 +103,7 @@ const router = createBrowserRouter([
           },
           {
             path: "productView/:productId",
-            element: <ProductView />,
+            element: <StoreProductView />,
           },
         ],
       },

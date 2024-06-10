@@ -45,4 +45,11 @@ public class ProductController {
         service.updateProduct(productId, product, originalFileName, file);
     }
 
+    @GetMapping("/view/{productId}")
+    public Product view(@PathVariable Integer productId) {
+
+        return service.info(productId);
+
+    }
+
 }

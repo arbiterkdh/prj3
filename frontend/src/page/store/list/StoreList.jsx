@@ -155,6 +155,10 @@ export function StoreList() {
       });
   }
 
+  const handleProductView = (productId) => {
+    navigate(`productView/${productId}`);
+  };
+
   const ProductItem = ({ product }) => {
     return (
       <Box
@@ -173,7 +177,7 @@ export function StoreList() {
               }}
               src={`http://127.0.0.1:8888/${product.id}/${product.fileName}`}
               borderRadius="lg"
-              // onClick={handleProductView}
+              onClick={() => handleProductView(product.id)}
             />
             <Stack mt="6" spacing="3">
               <Center>
