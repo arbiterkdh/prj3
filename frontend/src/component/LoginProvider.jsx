@@ -9,8 +9,8 @@ export function LoginProvider({ children }) {
   const [nickName, setNickName] = useState("");
   const [picture, setPicture] = useState("");
   const [email, setEmail] = useState("");
-  const kakaoKey = import.meta.env.KAKAO_APP_KEY;
-  const kakaoUri = import.meta.env.KAKAO_REDIRECT_URI;
+  const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
+  const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -58,6 +58,8 @@ export function LoginProvider({ children }) {
         logout,
         hasAccess,
         isLoggedIn,
+        kakaoKey,
+        kakaoUri,
       }}
     >
       {children}
