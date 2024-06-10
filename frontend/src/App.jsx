@@ -22,6 +22,7 @@ import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
 import { Oauth } from "./page/oauth/Oauth.jsx";
 import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
+import { PromoView } from "./page/promotion/view/PromoView.jsx";
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
           {
             path: "add",
             element: <PromoAdd />,
+          },
+          {
+            path: "view/:promoId",
+            element: <PromoView />,
           },
         ],
       },

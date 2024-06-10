@@ -22,4 +22,8 @@ public class PromotionService {
     public List<Promotion> list() {
         return promotionMapper.selectList();
     }
+
+    public Promotion get(Integer id) {
+        return promotionMapper.selectById(id);
+    }
 }

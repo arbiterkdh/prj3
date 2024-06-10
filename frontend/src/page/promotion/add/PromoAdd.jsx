@@ -127,7 +127,7 @@ export function PromoAdd() {
             multiple
             type="file"
             accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => setFiles(e.target.files[0])}
           />
         </FormControl>
       </Box>

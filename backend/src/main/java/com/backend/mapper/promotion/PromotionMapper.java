@@ -23,4 +23,11 @@ public interface PromotionMapper {
             ORDER BY id DESC
             """)
     List<Promotion> selectList();
+
+    @Select("""
+            SELECT *
+            FROM promo
+            WHERE id = #{id}
+            """)
+    Promotion selectById(Integer id);
 }

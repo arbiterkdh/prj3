@@ -24,4 +24,9 @@ public class PromotionController {
     public List<Promotion> listPromotion() {
         return promotionService.list();
     }
+
+    @GetMapping("{id}")
+    public Promotion getPromotion(@PathVariable Integer id) {
+        return promotionService.get(id);
+    }
 }
