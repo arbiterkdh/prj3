@@ -8,9 +8,15 @@ import {
   Heading,
   Image,
   SimpleGrid,
+  Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toISOString().split("T")[0];
+};
 
 export function PromoList() {
   const [promoList, setPromoList] = useState([]);
@@ -27,7 +33,7 @@ export function PromoList() {
   }, []);
 
   function handleButtonClick(promoId) {
-    navigate(`/movie/view/${promoId}`);
+    navigate(`/promotion/view/${promoId}`);
   }
 
   return (
@@ -37,20 +43,27 @@ export function PromoList() {
         templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
       >
         {promoList.map((promo) => (
-          <Card key={promo.id}>
-            <CardBody>
+          <Card key={promo.id} height="100%">
+            <CardBody display="flex" flexDirection="column">
               <Image
                 boxSize="100%"
                 src="https://img.cgv.co.kr/WebApp/contents/eventV4/40714/17171440149400.jpg"
               />
-              <Heading as="b">{promo.title}</Heading>
-              {/*<Text>이벤트 시작/종료{promoStartDate}</Text>*/}
+              <Box flex={1}>
+                <Heading as="b" mb={2}>
+                  {promo.title}
+                </Heading>
+                <Text mb={2}>
+                  {formatDate(promo.eventStartDate)} ~{" "}
+                  {formatDate(promo.eventEndDate)}
+                </Text>
+              </Box>
+              <CardFooter>
+                <Button onClick={() => handleButtonClick(promo.id)}>
+                  자세히 보기
+                </Button>
+              </CardFooter>
             </CardBody>
-            <CardFooter>
-              <Button onClick={() => handleButtonClick(promo.id)}>
-                자세히 보기
-              </Button>
-            </CardFooter>
           </Card>
         ))}
       </SimpleGrid>

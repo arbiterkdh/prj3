@@ -32,6 +32,7 @@ export function PromoAdd() {
         eventType,
         eventStartDate,
         eventEndDate,
+        files,
       })
       .then((res) => {
         toast({
@@ -94,6 +95,7 @@ export function PromoAdd() {
           <Select
             onChange={(e) => setEventType(e.target.value)}
             placeholder="이벤트 타입을 선택하세요."
+            value={eventType}
           >
             <option value="movie">영화</option>
             <option value="theater">극장</option>
@@ -125,7 +127,7 @@ export function PromoAdd() {
             multiple
             type="file"
             accept="image/*"
-            onChange={(e) => setFiles(e.target.files)}
+            onChange={(e) => setFile(e.target.files[0])}
           />
         </FormControl>
       </Box>
