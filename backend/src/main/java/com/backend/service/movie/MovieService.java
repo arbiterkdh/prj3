@@ -51,6 +51,12 @@ public class MovieService {
             return false;
         }
 
+        if (movieType.length == 0) {
+            return false;
+        }
+
+        // file 있는지 없는지 검증 필요...
+
 
         return true;
     }
