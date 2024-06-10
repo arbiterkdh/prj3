@@ -29,8 +29,8 @@ axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    config.headers["Content-Type"] =
-      "application/x-www-form-urlencoded;charset=utf-8";
+    // config.headers["Content-Type"] =
+    //   "application/x-www-form-urlencoded;charset=utf-8";
   }
   console.log("Request Config:", config);
   return config;
