@@ -17,7 +17,7 @@ public interface ProductMapper {
     int add(Product product);
 
     @Select(""" 
-            SELECT p.id, p.name, p.price, pi.path as path, p.stock, pi.name fileName
+            SELECT p.id, p.name, p.price, pi.path as path, p.stock, pi.name fileName, p.quantity
             FROM product p
                      JOIN product_image pi
                           ON p.id = pi.product_id
@@ -39,4 +39,11 @@ public interface ProductMapper {
             WHERE id = #{productId}
             """)
     int updateProduct(Product product, Integer productId);
+
+    @Select("""
+            SELECT *
+            FROM product
+            WHERE id = #{id}
+            """)
+    Product info(Integer id);
 }

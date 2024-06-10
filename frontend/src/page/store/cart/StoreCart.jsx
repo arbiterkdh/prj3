@@ -3,21 +3,171 @@ import {
   AlertDescription,
   AlertIcon,
   Box,
+  Button,
   Checkbox,
   Flex,
   Heading,
+  Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
-  Td,
-  Tfoot,
-  Th,
+  Text,
   Thead,
   Tr,
+  useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CenterTh from "../../../css/theme/component/table/thead/tr/th/CenterTh.jsx";
+import axios from "axios";
+import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.jsx";
 
 export function StoreCart() {
+  const [productCartList, setProductCartList] = useState([]);
+  const [productId, setProductId] = useState(null);
+  const [productName, setProductName] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [checkItem, setCheckItem] = useState({});
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const updateQuantity = (productId, quantityItem) => {
+    setProductCartList((itemList) =>
+      itemList.map((item) =>
+        item.productId === productId
+          ? { ...item, quantity: quantityItem }
+          : item,
+      ),
+    );
+  };
+
+  useEffect(() => {
+    axios
+      .get(`/api/store/cart/list`)
+      .then((res) => {
+        const initialAllCheck = res.data.reduce((itemArr, item) => {
+          itemArr[item.productId] = true;
+          return itemArr;
+        }, {});
+        setProductCartList(res.data);
+        setCheckItem(initialAllCheck);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
+
+  const handleCheckBoxChange = (productId) => {
+    setCheckItem((prev) => ({
+      ...prev,
+      [productId]: !prev[productId],
+    }));
+  };
+
+  function handleItemDelete(productId) {
+    setIsLoading(true);
+    axios
+      .delete(`/api/store/cart/delete/${productId}`)
+      .then((res) => {
+        toast({
+          status: "success",
+          description: "삭제 완료",
+          position: "bottom",
+        });
+        setProductCartList((cartList) =>
+          cartList.filter((item) => item.productId !== productId),
+        );
+      })
+      .catch(() => {})
+      .finally(() => {
+        setIsLoading(false);
+        onClose();
+      });
+  }
+
+  function CartItem({ cartItem }) {
+    return (
+      <>
+        <Tr>
+          <CenterTd>
+            <Checkbox
+              isChecked={checkItem[cartItem.productId]}
+              onChange={() => handleCheckBoxChange(cartItem.productId)}
+            ></Checkbox>
+          </CenterTd>
+          <CenterTd>
+            <Image
+              src={`http://127.0.0.1:8888/${cartItem.productId}/${cartItem.fileName}`}
+            ></Image>
+          </CenterTd>
+          <CenterTd>{cartItem.name}</CenterTd>
+          <CenterTd>
+            <Flex alignItems={"center"} justifyContent={"center"}>
+              <Button
+                onClick={() => {
+                  if (cartItem.quantity > 1) {
+                    updateQuantity(cartItem.productId, cartItem.quantity - 1);
+                  }
+                }}
+              >
+                -
+              </Button>
+              <Text>{cartItem.quantity}</Text>
+              <Button
+                onClick={() => {
+                  updateQuantity(cartItem.productId, cartItem.quantity + 1);
+                }}
+              >
+                +
+              </Button>
+            </Flex>
+          </CenterTd>
+          <CenterTd>{cartItem.price * cartItem.quantity}원</CenterTd>
+          <CenterTd>
+            <Button
+              colorScheme={"red"}
+              onClick={() => {
+                onOpen();
+                setProductId(cartItem.productId);
+                setProductName(cartItem.name);
+              }}
+            >
+              삭제
+            </Button>
+          </CenterTd>
+          <CenterTd>{cartItem.regDate}</CenterTd>
+        </Tr>
+      </>
+    );
+  }
+
+  const ProductCartList = () => {
+    return (
+      <>
+        {productCartList.map((cartItem) => (
+          <CartItem key={cartItem.productId} cartItem={cartItem} />
+        ))}
+      </>
+    );
+  };
+
+  const totalSum = productCartList.reduce(
+    (sum, item) =>
+      checkItem[item.productId] ? sum + item.price * item.quantity : sum,
+    0,
+  );
+
+  const totalSelectItem = productCartList.reduce(
+    (count, item) => (checkItem[item.productId] ? count + 1 : count),
+    0,
+  );
+
   return (
     <Box>
       <Box>
@@ -31,27 +181,37 @@ export function StoreCart() {
         <Table variant="simple">
           <Thead>
             <Tr>
-              <Th>
-                <Checkbox defaultChecked></Checkbox>
-              </Th>
-              <Th>이미지</Th>
-              <Th>상품명</Th>
-              <Th>수량</Th>
-              <Th>가격</Th>
+              <CenterTh w={"10%"}>
+                <Checkbox
+                  isChecked={productCartList.every(
+                    (item) => checkItem[item.productId],
+                  )}
+                  onChange={() => {
+                    const allChecked = productCartList.every(
+                      (item) => checkItem[item.productId],
+                    );
+                    const newCheckItem = productCartList.reduce(
+                      (itemArr, item) => {
+                        itemArr[item.productId] = !allChecked;
+                        return itemArr;
+                      },
+                      {},
+                    );
+                    setCheckItem(newCheckItem);
+                  }}
+                ></Checkbox>
+              </CenterTh>
+              <CenterTh w={"20%"}>이미지</CenterTh>
+              <CenterTh w={"20%"}>상품명</CenterTh>
+              <CenterTh w={"10%"}>수량</CenterTh>
+              <CenterTh w={"10%"}>가격</CenterTh>
+              <CenterTh w={"10%"}>삭제</CenterTh>
+              <CenterTh w={"20%"}>날짜</CenterTh>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Th>
-                <Checkbox defaultChecked></Checkbox>
-              </Th>
-              <Td>이미지 칸</Td>
-              <Td>팝콘</Td>
-              <Td>1</Td>
-              <Td>3000</Td>
-            </Tr>
+            <ProductCartList />
           </Tbody>
-          <Tfoot></Tfoot>
         </Table>
       </TableContainer>
       <Box>
@@ -62,14 +222,37 @@ export function StoreCart() {
           <Flex m={10} justifyContent={"flex-end"} w={"100%"}>
             <AlertIcon />
             <AlertDescription>
-              <Heading>
-                총 5개의 상품금액 1000000원 + 배송비 0원 = 합계 1000000원{" "}
-              </Heading>
+              <Text fontSize={"1.3rem"}>
+                총 {totalSelectItem}개의 상품금액 = 합계 {totalSum}원
+              </Text>
             </AlertDescription>
           </Flex>
         </Alert>
-        <Box>선택 상품 주문</Box>
       </Box>
+      <Box>
+        <Button colorScheme={"green"} w={"100%"}>
+          상품 결제
+        </Button>
+      </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>장바구니 알림</ModalHeader>
+          <ModalBody>{productName}을 삭제하시겠습니까?</ModalBody>
+          <ModalFooter>
+            <Flex>
+              <Button
+                onClick={() => handleItemDelete(productId)}
+                colorScheme={"red"}
+                isLoading={isLoading}
+              >
+                확인
+              </Button>
+              <Button onClick={onClose}>취소</Button>
+            </Flex>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }
