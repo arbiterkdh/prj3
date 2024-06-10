@@ -62,7 +62,7 @@ export const customTheme = extendTheme({
     Select: {
       baseStyle: {
         field: {
-          _focus: {},
+          _focus: { border: "2px solid gray" },
           _dark: {},
         },
       },

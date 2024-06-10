@@ -9,3 +9,6 @@ DROP TABLE mail;
 
 SELECT *
 FROM mail;
+
+DELETE
+FROM mail;

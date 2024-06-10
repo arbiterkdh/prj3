@@ -35,7 +35,10 @@ export function Navbar() {
             <CursorBox>고객센터</CursorBox>
             <GapFlex>
               {account.isLoggedIn() && (
-                <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
+                <Flex>
+                  <CursorBox>{account.nickName}님</CursorBox>
+                  <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
+                </Flex>
               )}
               {account.isLoggedIn() || (
                 <Flex>

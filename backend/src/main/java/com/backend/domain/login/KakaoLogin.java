@@ -8,6 +8,7 @@ public class KakaoLogin {
     private String accessToken;
     private String idToken;
     private String refreshToken;
+    private String scope;
     private Integer expiresIn;
     private Integer refreshTokenExpiresIn;
 }

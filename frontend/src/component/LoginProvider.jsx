@@ -6,6 +6,7 @@ export const LoginContext = createContext(null);
 export function LoginProvider({ children }) {
   const [id, setId] = useState("");
   const [expired, setExpired] = useState(0);
+  const [nickName, setNickName] = useState("");
   const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
   const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
@@ -30,12 +31,14 @@ export function LoginProvider({ children }) {
     const payload = jwtDecode(token);
     setExpired(payload.exp);
     setId(payload.sub);
+    setNickName(payload.nickName);
   }
 
   function logout() {
     localStorage.removeItem("token");
     setId("");
     setExpired(0);
+    setNickName("");
   }
 
   function kakaoLogin(token) {
@@ -43,6 +46,7 @@ export function LoginProvider({ children }) {
     const payload = jwtDecode(token);
     setExpired(payload.exp);
     setId(payload.sub);
+    setNickName(payload.nickName);
   }
 
   return (
@@ -51,6 +55,7 @@ export function LoginProvider({ children }) {
         kakaoKey,
         kakaoUri,
         id,
+        nickName,
         login,
         logout,
         hasAccess,
