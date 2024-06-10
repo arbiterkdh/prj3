@@ -23,6 +23,7 @@ import { MemberSignup } from "./member/MemberSignup.jsx";
 import { Oauth } from "./page/oauth/Oauth.jsx";
 import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import { PromoView } from "./page/promotion/view/PromoView.jsx";
+import { PromoEdit } from "./page/promotion/modify/PromoEdit.jsx";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ const router = createBrowserRouter([
           {
             path: "view/:promoId",
             element: <PromoView />,
+          },
+          {
+            path: "modify/:promoId",
+            element: <PromoEdit />,
           },
         ],
       },
