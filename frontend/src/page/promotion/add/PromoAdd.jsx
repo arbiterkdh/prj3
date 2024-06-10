@@ -26,7 +26,7 @@ export function PromoAdd() {
   function handleAddEvent() {
     setLoading(true);
     axios
-      .post("/api/promotion/add", {
+      .postForm("/api/promotion/add", {
         title,
         content,
         eventType,
@@ -127,12 +127,9 @@ export function PromoAdd() {
             multiple
             type="file"
             accept="image/*"
-            onChange={(e) => setFiles(e.target.files[0])}
+            onChange={(e) => setFiles(e.target.files)}
           />
         </FormControl>
-      </Box>
-      <Box>
-        <ul>{fileNameList}</ul>
       </Box>
       <Box>
         <FormControl>
