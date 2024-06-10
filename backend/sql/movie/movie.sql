@@ -22,9 +22,9 @@ CREATE TABLE movie_file
 
 CREATE TABLE movie_type
 (
+    id       INT PRIMARY KEY AUTO_INCREMENT,
     movie_id INT         NOT NULL REFERENCES movie (id),
-    name     VARCHAR(20) NOT NULL,
-    PRIMARY KEY (movie_id, name)
+    name     VARCHAR(20) NOT NULL
 );
 
 SELECT *
@@ -34,5 +34,9 @@ FROM movie_type;
 SELECT *
 FROM movie_file;
 
+DESCRIBE movie_type;
+ALTER TABLE movie_type
+    DROP PRIMARY KEY;
 
+DROP TABLE movie_type;
 
