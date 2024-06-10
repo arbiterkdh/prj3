@@ -72,8 +72,8 @@ public class MovieService {
 
     public void editMovie(Movie movie) {
         movieMapper.updateMovie(movie);
-        // movie_type 수정 전에 삭제 로직 먼저 실행, 이후 movie_type 다시 생성
-        // movie_type 테이블의 PRIMARY KEY 해결을 위해서...
+
+        // movie_type 수정 로직, movie_type 삭제 이후 새로 생성...
         movieMapper.deleteMovieTypeByMovieId(movie.getId());
 
         for (int i = 0; i < movie.getType().size(); i++) {

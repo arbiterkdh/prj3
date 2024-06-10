@@ -40,3 +40,13 @@ ALTER TABLE movie_type
 
 DROP TABLE movie_type;
 
+# 댓글 테이블
+CREATE TABLE movie_comment
+(
+    id        INT PRIMARY KEY AUTO_INCREMENT,
+    movie_id  INT          NOT NULL REFERENCES movie (id),
+    member_id INT          NOT NULL REFERENCES member (number),
+    comment   VARCHAR(500) NOT NULL,
+    inserted  DATETIME     NOT NULL DEFAULT NOW()
+);
+
