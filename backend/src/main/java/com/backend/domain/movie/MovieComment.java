@@ -11,4 +11,5 @@ public class MovieComment {
     private Integer memberId;
     private String comment;
     private LocalDateTime inserted;
+    private String nickName;
 }

@@ -19,6 +19,7 @@ import { MovieComment } from "./comment/MovieComment.jsx";
 
 export function MovieView() {
   const { id } = useParams();
+  const [isProcessing, setIsProcessing] = useState(false);
   const [movie, setMovie] = useState({});
 
   useEffect(() => {
@@ -49,10 +50,18 @@ export function MovieView() {
               </TabList>
               <TabPanels>
                 <TabPanel>
-                  <MovieInfo movie={movie} />
+                  <MovieInfo
+                    movie={movie}
+                    isProcessing={isProcessing}
+                    setIsProcessing={setIsProcessing}
+                  />
                 </TabPanel>
                 <TabPanel>
-                  <MovieComment movieId={movie.id} />
+                  <MovieComment
+                    movieId={id}
+                    isProcessing={isProcessing}
+                    setIsProcessing={setIsProcessing}
+                  />
                 </TabPanel>
               </TabPanels>
             </Tabs>

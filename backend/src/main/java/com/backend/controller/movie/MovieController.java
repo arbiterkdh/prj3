@@ -28,7 +28,7 @@ public class MovieController {
             movieService.addMovie(movie, movieType, file);
             return ResponseEntity.ok().build();
         }
-        return null;
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("list")

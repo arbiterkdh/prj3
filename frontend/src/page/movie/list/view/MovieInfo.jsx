@@ -17,8 +17,9 @@ import {
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { MovieComment } from "./comment/MovieComment.jsx";
 
-export function MovieInfo({ movie }) {
+export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const navigate = useNavigate();
 
@@ -84,7 +85,7 @@ export function MovieInfo({ movie }) {
             <Text> 출연진 : {movie.actors}</Text>
           </Box>
         </Stack>
-        <Flex justifyContent={"flex-end"}>
+        <Flex justifyContent={"flex-end"} mb={"50px"}>
           <Button onClick={handleModifyClick} colorScheme={"blue"}>
             수정
           </Button>
@@ -92,6 +93,12 @@ export function MovieInfo({ movie }) {
             삭제
           </Button>
         </Flex>
+        <Divider />
+        <MovieComment
+          movieId={movie.id}
+          isProcessing={isProcessing}
+          setIsProcessing={setIsProcessing}
+        />
       </CenterBox>
 
       <Modal isOpen={isOpen} onClose={onClose}>

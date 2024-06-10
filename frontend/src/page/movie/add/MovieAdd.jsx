@@ -121,6 +121,8 @@ export function MovieAdd() {
               <FormControl>
                 <FormLabel>영화 설명</FormLabel>
                 <Textarea
+                  border={"1px solid black"}
+                  resize={"none"}
                   placeholder={"영화 내용을 입력해주세요."}
                   onChange={(e) => setDescription(e.target.value)}
                 />

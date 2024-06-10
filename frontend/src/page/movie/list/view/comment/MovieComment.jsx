@@ -3,16 +3,24 @@ import CenterBox from "../../../../../css/theme/component/box/CenterBox.jsx";
 import { MovieCommentWrite } from "./MovieCommentWrite.jsx";
 import { MovieCommentList } from "./MovieCommentList.jsx";
 
-export function MovieComment({ movieId }) {
+export function MovieComment({ movieId, isProcessing, setIsProcessing }) {
   return (
     <Center>
       <CenterBox>
         <Heading>댓글기능</Heading>
         <Box>
-          <MovieCommentWrite movieId={movieId} />
+          <MovieCommentWrite
+            isProcessing={isProcessing}
+            setIsProcessing={setIsProcessing}
+            movieId={movieId}
+          />
         </Box>
         <Box>
-          <MovieCommentList />
+          <MovieCommentList
+            isProcessing={isProcessing}
+            setIsProcessing={setIsProcessing}
+            movieId={movieId}
+          />
         </Box>
       </CenterBox>
     </Center>
