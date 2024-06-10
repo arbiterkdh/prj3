@@ -3,13 +3,13 @@ import CenterBox from "../../../../../css/theme/component/box/CenterBox.jsx";
 import { MovieCommentWrite } from "./MovieCommentWrite.jsx";
 import { MovieCommentList } from "./MovieCommentList.jsx";
 
-export function MovieComment() {
+export function MovieComment({ movieId }) {
   return (
     <Center>
       <CenterBox>
         <Heading>댓글기능</Heading>
         <Box>
-          <MovieCommentWrite />
+          <MovieCommentWrite movieId={movieId} />
         </Box>
         <Box>
           <MovieCommentList />
