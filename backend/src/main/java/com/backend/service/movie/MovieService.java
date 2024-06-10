@@ -51,9 +51,8 @@ public class MovieService {
             return false;
         }
 
-        if (movieType.length)
 
-            return true;
+        return true;
     }
 
     public List<Movie> list() {
