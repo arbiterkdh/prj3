@@ -11,4 +11,7 @@ public class Member {
     private String password;
     private String nickName;
     private LocalDateTime inserted;
+
+    // 카카오 용
+    private String picture;
 }
