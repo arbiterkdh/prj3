@@ -12,18 +12,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class MemberController {
 
     private final MemberService service;
-
-    @PostMapping("check")
-    public ResponseEntity checkMember(@RequestBody Member member) {
-        if (service.hasEmail(member.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-        return ResponseEntity.ok().build();
-    }
 
     @GetMapping("{nickName}")
     public ResponseEntity checkNickName(@PathVariable String nickName) {
