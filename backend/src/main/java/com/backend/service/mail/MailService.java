@@ -21,22 +21,19 @@ public class MailService {
     String fromAddress;
 
     public Mail mailSend(Mail mail) throws MailException {
-        Integer verifyNumber = (int) (Math.random() * 1000000);
+        Integer verifyNumber = null;
         Mail dbMail = null;
         do {
-            dbMail = mapper.selectMailByVerifyNumber(verifyNumber);
-        } while (dbMail != null || verifyNumber < 100000);
-        {
             verifyNumber = (int) (Math.random() * 1000000);
             dbMail = mapper.selectMailByVerifyNumber(verifyNumber);
-        }
+        } while (dbMail != null || verifyNumber < 100000);
 
         mail.setVerifyNumber(verifyNumber);
         mapper.insertVerifyNumberTemporary(mail);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getAddress());
-        message.setFrom(fromAddress);
+        message.setFrom("생존코딩" + " <" + fromAddress + ">");
         message.setSubject("생존코딩에서 인증번호를 보내드립니다.");
         message.setText(STR."인증번호는 [  \{verifyNumber}  ] 입니다.");
 

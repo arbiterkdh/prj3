@@ -31,4 +31,4 @@ FROM theater;
 
 DELETE
 FROM theater
-WHERE number = 133;
+WHERE number = 143;

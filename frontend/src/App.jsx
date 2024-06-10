@@ -8,7 +8,6 @@ import { Store } from "./page/store/Store.jsx";
 import { Promo } from "./page/promotion/Promo.jsx";
 import { StoreAdd } from "./page/store/add/StoreAdd.jsx";
 import { StoreList } from "./page/store/list/StoreList.jsx";
-import { MemberSignup } from "./member/MemberSignup.jsx";
 import { MovieAdd } from "./page/movie/add/MovieAdd.jsx";
 import { MovieList } from "./page/movie/list/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
@@ -20,6 +19,9 @@ import { StoreCart } from "./page/store/cart/StoreCart.jsx";
 import { ProductView } from "./page/store/view/ProductView.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
 import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
+import { MemberSignup } from "./member/MemberSignup.jsx";
+import { Oauth } from "./page/oauth/Oauth.jsx";
+import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,11 @@ const router = createBrowserRouter([
       { index: true, element: <MovieHome /> },
       { path: "verify", element: <MailVerify /> },
       { path: "signup", element: <MemberSignup /> },
+      {
+        path: "oauth",
+        element: <Oauth />,
+        children: [{ path: "kakao/callback", element: <KakaoRedirect /> }],
+      },
       {
         path: "movie",
         element: <Movie />,

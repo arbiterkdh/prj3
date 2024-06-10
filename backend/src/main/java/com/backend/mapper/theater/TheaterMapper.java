@@ -1,10 +1,7 @@
 package com.backend.mapper.theater;
 
 import com.backend.domain.theater.Theater;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -15,6 +12,7 @@ public interface TheaterMapper {
             SELECT *
             FROM theater
             WHERE city = #{city}
+            ORDER BY location
             """)
     List<Theater> selectAllByCity(String city);
 
@@ -39,4 +37,10 @@ public interface TheaterMapper {
             FROM theater
             """)
     List<String> selectAllCity();
+
+    @Delete("""
+            DELETE FROM theater
+            WHERE number = #{number}
+            """)
+    int deleteTheaterByNumber(Integer number);
 }
