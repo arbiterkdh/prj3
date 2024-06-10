@@ -29,6 +29,9 @@ export function PromoAdd() {
       .post("/api/promotion/add", {
         title,
         content,
+        eventType,
+        eventStartDate,
+        eventEndDate,
       })
       .then((res) => {
         toast({
