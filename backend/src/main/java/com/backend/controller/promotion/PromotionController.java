@@ -3,8 +3,8 @@ package com.backend.controller.promotion;
 import com.backend.domain.promotion.Promotion;
 import com.backend.service.promotion.PromotionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,8 +16,13 @@ public class PromotionController {
     private final PromotionService promotionService;
 
     @PostMapping("/add")
-    public void addPromo(@ModelAttribute Promotion promotion, @RequestParam("files") MultipartFile[] files) {
-        promotionService.addPromo(promotion, files);
+    public ResponseEntity addPromo(@RequestBody Promotion promotion) {
+        if (promotionService.validate(promotion)) {
+            promotionService.addPromo(promotion);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/list")
@@ -26,8 +31,13 @@ public class PromotionController {
     }
 
     @GetMapping("{id}")
-    public Promotion getPromotion(@PathVariable Integer id) {
-        return promotionService.get(id);
+    public ResponseEntity getPromotion(@PathVariable Integer id) {
+        Promotion promotion = promotionService.get(id);
+
+        if (promotion == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(promotion);
     }
 
     @DeleteMapping("{id}")

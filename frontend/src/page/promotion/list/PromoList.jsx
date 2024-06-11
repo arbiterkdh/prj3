@@ -13,14 +13,14 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const formatDate = (dateString) => {
-  const date = new Date(dateString);
-  return date.toISOString().split("T")[0];
-};
-
 export function PromoList() {
   const [promoList, setPromoList] = useState([]);
   const navigate = useNavigate();
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
 
   useEffect(() => {
     axios

@@ -8,6 +8,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Text,
   useDisclosure,
   useToast,
@@ -27,7 +28,16 @@ export function PromoView() {
     axios
       .get(`/api/promotion/${promoId}`)
       .then((res) => setPromo(res.data))
-      .catch(() => {})
+      .catch((err) => {
+        if (err.response.status === 404) {
+          toast({
+            status: "info",
+            description: "해당 게시물이 존재하지 않습니다.",
+            position: "top",
+          });
+          navigate("/promotion");
+        }
+      })
       .finally(() => {});
   }, []);
 
@@ -59,6 +69,10 @@ export function PromoView() {
       });
   }
 
+  if (promo === null) {
+    return <Spinner />;
+  }
+
   return (
     <Box>
       <Heading>{promo.title}</Heading>
@@ -81,13 +95,14 @@ export function PromoView() {
       </Box>
       <Button
         colorScheme={"purple"}
-        onClick={() => navigate(`/edit/${promo.id}`)}
+        onClick={() => navigate(`/promotion/modify/${promo.id}`)}
       >
         수정
       </Button>
       <Button colorScheme={"red"} onClick={onOpen}>
         삭제
       </Button>
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
