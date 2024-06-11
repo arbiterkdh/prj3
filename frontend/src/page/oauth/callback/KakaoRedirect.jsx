@@ -1,23 +1,47 @@
-import { useContext, useEffect } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import { Box } from "@chakra-ui/react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
 
 export function KakaoRedirect() {
   const account = useContext(LoginContext);
-
-  const code = new URL(window.location.href).searchParams.get("code");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [code, setCode] = useState(searchParams.get("code"));
 
   useEffect(() => {
     axios
       .post(
-        `https://kauth.kakao.com/oauth/token?client_id=${account.kakaoKey}&redirect_uri=${account.kakaoUri}&code=${code}&grant_type=authorization_code`,
+        "https://kauth.kakao.com/oauth/token",
+        new URLSearchParams({
+          grant_type: "authorization_code",
+          client_id: `${account.kakaoKey}`,
+          redirect_uri: `${account.kakaoUri}`,
+          code,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+          },
+        },
       )
       .then((res) => {
-        const ACCESS_TOKEN = res.data.access_token;
-        const REFRESH_TOKEN = res.data.refresh_token;
-        account.kakaoLogin(ACCESS_TOKEN);
+        const accessToken = `Bearer ${res.data.access_token}`;
+        account.kakaoLogin(res.data);
+        axios
+          .get("/api/oauth/user-info", {
+            headers: {
+              Authorization: accessToken,
+            },
+          })
+          .then((res) => {
+            console.log("data", res.data);
+          })
+          .catch((err) => {
+            console.error("err", err);
+          });
       });
-  }, []);
+  }, [code]);
 
-  return null;
+  return <Box></Box>;
 }

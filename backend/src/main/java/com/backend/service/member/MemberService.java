@@ -1,12 +1,10 @@
 package com.backend.service.member;
 
-import com.backend.domain.login.KakaoLogin;
 import com.backend.domain.member.Member;
 import com.backend.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,6 @@ import java.util.Map;
 public class MemberService {
 
     private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtDecoder jwtDecoder;
     private final JwtEncoder jwtEncoder;
     private final MemberMapper mapper;
 
@@ -63,18 +60,5 @@ public class MemberService {
 
     public Member get(String nickName) {
         return mapper.selectByNickName(nickName);
-    }
-
-    public Map<String, Object> getKakaoToken(KakaoLogin kakaoLogin) {
-//        Map<String, Object> kakaoInfo = null;
-//
-//        String idToken = jwtDecoder.decode(kakaoLogin.getIdToken()).getTokenValue();
-//
-//        JwtClaimsSet claims = JwtClaimsSet.builder()
-//                .issuer("self")
-//                .issuedAt()
-//
-//        return kakaoInfo;
-        return null;
     }
 }
