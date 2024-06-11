@@ -1,6 +1,7 @@
 package com.backend.domain.promotion;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -12,4 +13,6 @@ public class Promotion {
     private LocalDate eventStartDate;
     private LocalDate eventEndDate;
     private String content;
+
+    private MultipartFile[] files;
 }
