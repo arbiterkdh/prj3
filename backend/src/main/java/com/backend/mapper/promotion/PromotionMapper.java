@@ -30,15 +30,27 @@ public interface PromotionMapper {
             """)
     Promotion selectById(Integer id);
 
-    @Insert("""
-            INSERT INTO promo_file (promo_id, name)
-            VALUES (#{promoId}, #{name})
-            """)
-    int insertFileName(Integer promoId, String name);
 
     @Delete("""
             DELETE FROM promo
             WHERE id = #{id}
             """)
     int deleteById(Integer id);
+
+    @Update("""
+            UPDATE promo
+            SET title = #{title},
+                eventType = #{eventType},
+                eventStartDate = #{eventStartDate},
+                eventEndDate = #{eventEndDate},
+                content = #{content}
+            WHERE id = #{id}
+            """)
+    int update(Promotion promotion);
+
+    @Insert("""
+            INSERT INTO promo_file (promo_id, name)
+            VALUES (#{promoId}, #{name})
+            """)
+    int insertFileName(Integer promoId, String name);
 }

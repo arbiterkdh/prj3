@@ -14,15 +14,17 @@ import {
   Spinner,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
 export function PromoModify() {
   const { promoId } = useParams();
   const [promo, setPromo] = useState(null);
-
+  const toast = useToast();
+  const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   useEffect(() => {
@@ -33,8 +35,30 @@ export function PromoModify() {
       .finally(() => {});
   }, []);
 
-  function handleEditClick() {
-    axios.put("/api/promotion/modify", promo);
+  function handleModifyClick() {
+    axios
+      .put("/api/promotion/modify", promo)
+      .then(() => {
+        toast({
+          status: "success",
+          description: `${promo.id}번 게시물이 수정되었습니다.`,
+          position: "top",
+        });
+        navigate(`/promotion/view/${promo.id}`);
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          toast({
+            status: "error",
+            description:
+              "게시물이 수정되지 않았습니다. 작성한 내용을 확인해주세요.",
+            position: "top",
+          });
+        }
+      })
+      .finally(() => {
+        onClose();
+      });
   }
 
   if (promo === null) {
@@ -114,7 +138,7 @@ export function PromoModify() {
               placeholder="설명을 입력하세요."
             />
           </FormControl>
-          <Button colorScheme="teal" onClick={onClose}>
+          <Button colorScheme="teal" onClick={onOpen}>
             저장
           </Button>
         </Box>
@@ -127,7 +151,7 @@ export function PromoModify() {
               <Button mr={2} onClick={onClose}>
                 취소
               </Button>
-              <Button onClick={handleEditClick} colorScheme={"blue"}>
+              <Button onClick={handleModifyClick} colorScheme={"blue"}>
                 확인
               </Button>
             </ModalFooter>

@@ -19,14 +19,14 @@ export function PromoAdd() {
   const [eventEndDate, setEventEndDate] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
-  const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   function handleAddEvent() {
     setLoading(true);
     axios
-      .post("/api/promotion/add", {
+      .postForm("/api/promotion/add", {
         title,
         content,
         eventType,
@@ -130,6 +130,9 @@ export function PromoAdd() {
             onChange={(e) => setFiles(e.target.files)}
           />
         </FormControl>
+      </Box>
+      <Box>
+        <ul>{fileNameList}</ul>
       </Box>
       <Box>
         <FormControl>

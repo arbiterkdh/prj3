@@ -5,6 +5,7 @@ import com.backend.service.promotion.PromotionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,9 +17,10 @@ public class PromotionController {
     private final PromotionService promotionService;
 
     @PostMapping("/add")
-    public ResponseEntity addPromo(@RequestBody Promotion promotion) {
+    public ResponseEntity addPromo(Promotion promotion, @RequestParam(value = "files[]", required = false) MultipartFile[] files) {
+
         if (promotionService.validate(promotion)) {
-            promotionService.addPromo(promotion);
+            promotionService.addPromo(promotion, files);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
@@ -43,5 +45,15 @@ public class PromotionController {
     @DeleteMapping("{id}")
     public void deletePromotion(@PathVariable Integer id) {
         promotionService.remove(id);
+    }
+
+    @PutMapping("modify")
+    public ResponseEntity modifyPromotion(@RequestBody Promotion promotion) {
+        if (promotionService.validate(promotion)) {
+            promotionService.modify(promotion);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }
