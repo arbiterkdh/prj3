@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -32,8 +32,8 @@ public class MovieController {
     }
 
     @GetMapping("list")
-    public List<Movie> list() {
-        return movieService.list();
+    public Map<String, Object> list(@RequestParam Integer page) {
+        return movieService.list(page);
     }
 
     @GetMapping("{id}")

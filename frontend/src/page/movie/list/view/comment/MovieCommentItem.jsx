@@ -16,8 +16,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays, faUser } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { useState } from "react";
+import * as PropTypes from "prop-types";
+import { MovieCommentEdit } from "./MovieCommentEdit.jsx";
+
+MovieCommentEdit.propTypes = { setIsEditing: PropTypes.func };
 
 export function MovieCommentItem({ comment, isProcessing, setIsProcessing }) {
+  const [isEditing, setIsEditing] = useState(false);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleRemoveComment() {
@@ -50,20 +56,33 @@ export function MovieCommentItem({ comment, isProcessing, setIsProcessing }) {
           <Box>{comment.inserted}</Box>
         </Flex>
       </Flex>
-      <Flex ml={2} alignItems="center">
-        <p style={{ whiteSpace: "pre-wrap" }}>{comment.comment}</p>
-        <Spacer />
-        <Stack>
-          <Box>
-            <Button colorScheme={"blue"}>수정</Button>
-          </Box>
-          <Box marginTop={-4}>
-            <Button onClick={onOpen} colorScheme={"red"}>
-              삭제
-            </Button>
-          </Box>
-        </Stack>
-      </Flex>
+      {isEditing || (
+        <Flex ml={2} alignItems="center">
+          <p style={{ whiteSpace: "pre-wrap" }}>{comment.comment}</p>
+          <Spacer />
+          <Stack>
+            <Box>
+              <Button onClick={() => setIsEditing(true)} colorScheme={"blue"}>
+                수정
+              </Button>
+            </Box>
+            <Box marginTop={-4}>
+              <Button onClick={onOpen} colorScheme={"red"}>
+                삭제
+              </Button>
+            </Box>
+          </Stack>
+        </Flex>
+      )}
+      {isEditing && (
+        <MovieCommentEdit
+          comment={comment}
+          setIsEditing={setIsEditing}
+          isProcessing={isProcessing}
+          setIsProcessing={setIsProcessing}
+        />
+      )}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
