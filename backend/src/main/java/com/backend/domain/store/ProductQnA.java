@@ -3,7 +3,6 @@ package com.backend.domain.store;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 public class ProductQnA {
@@ -15,6 +14,7 @@ public class ProductQnA {
     private Integer productId;
     private LocalDateTime regDate;
 
+    /*
     public String getRegDate() {
         LocalDateTime beforeOneDay = LocalDateTime.now().minusDays(1);
 
@@ -27,4 +27,6 @@ public class ProductQnA {
             return regDate.format(formatter).toString();
         }
     }
+
+     */
 }

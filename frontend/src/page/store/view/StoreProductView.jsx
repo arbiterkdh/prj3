@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Flex,
-  FocusLock,
   FormControl,
   FormLabel,
   Image,
@@ -40,6 +39,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import FocusLock from "react-focus-lock";
 import axios from "axios";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 
@@ -60,7 +60,7 @@ const TextInput = React.forwardRef(({ itemQnATitle, onChange }, ref) => {
 const TextInputArea = React.forwardRef(({ itemQnAContent, onChange }, ref) => {
   return (
     <FormControl>
-      <FormLabel>제목</FormLabel>
+      <FormLabel>내용</FormLabel>
       <Textarea
         type={"text"}
         ref={ref}
@@ -232,10 +232,13 @@ export function StoreProductView() {
       .finally(() => {});
   }
 
-  function handleQnAModify({ id, titleQnA, contentQnA }) {
+  function handleQnAModify({ idQnA, titleQnA, contentQnA }) {
+    console.log("id:" + idQnA);
+    console.log("titleQnA:" + titleQnA);
+    console.log("contentQnA:" + contentQnA);
     axios
       .put("/api/store/product/qna/modify", {
-        id,
+        id: idQnA,
         title: titleQnA,
         content: contentQnA,
       })
@@ -318,7 +321,7 @@ export function StoreProductView() {
                         variant="outline"
                         colorScheme="green"
                         onClick={() => {
-                          handleQnAModify(itemQnA.id, titleQnA, contentQnA);
+                          handleQnAModify(idQnA, titleQnA, contentQnA);
                         }}
                       >
                         수정

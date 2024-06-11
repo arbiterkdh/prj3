@@ -37,6 +37,8 @@ public class ProductQnAController {
     @PutMapping("/modify")
     public void modifyQnA(@RequestBody ProductQnA productQnA) {
 
+        System.out.println("productQnA = " + productQnA);
+
         service.modifyQnA(productQnA);
     }
 
