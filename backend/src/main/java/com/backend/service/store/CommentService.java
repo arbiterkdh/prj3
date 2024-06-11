@@ -6,7 +6,9 @@ import com.backend.mapper.store.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +21,24 @@ public class CommentService {
         mapper.addComment(productComment);
     }
 
-    public List<ProductComment> commentList(Integer productId) {
+    public Map<String, Object> commentList(Integer productId, Integer page) {
 
-        return mapper.commentList(productId);
+        Map pageInfo = new HashMap();
+
+        Integer offset = (page - 1) * 10;
+        Integer totalCount = mapper.totalCommentCount();
+
+        Integer lastPageNumber = (totalCount - 1) / 10 + 1;
+
+        pageInfo.put("currentPage", page);
+        pageInfo.put("lastPageNumber", lastPageNumber);
+
+        List<ProductComment> commentList = mapper.commentList(productId, offset);
+
+
+        return Map.of("commentList", commentList,
+                "pageInfo", pageInfo);
+
 
     }
 

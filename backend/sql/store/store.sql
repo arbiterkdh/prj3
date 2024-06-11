@@ -78,7 +78,13 @@ CREATE TABLE product_qna
 );
 
 select *
-from product_qna;
+from product_qna
+where product_id = 2;
+
+SELECT *
+FROM product_comment
+WHERE product_id = 2;
+
 
 
 
