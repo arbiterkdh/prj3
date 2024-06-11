@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Heading,
+  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -87,9 +88,15 @@ export function PromoView() {
           <strong>이벤트 종료일:</strong> {formatDate(promo.eventEndDate)}
         </Text>
       </Box>
-      {/*<Box mt={4}>*/}
-      {/*  <Image src={promo.imageUrl} alt={promo.title} />*/}
-      {/*</Box>*/}
+      <Box mt={4}>
+        이미지파일
+        {promo.fileList &&
+          promo.fileList.map((file) => (
+            <Box key={file.name}>
+              <Image src={file.src} />
+            </Box>
+          ))}
+      </Box>
       <Box mt={4}>
         <Text>{promo.content}</Text>
       </Box>
