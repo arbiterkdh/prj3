@@ -39,10 +39,37 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 
+const TextInput = React.forwardRef(({ itemQnATitle, onChange }, ref) => {
+  return (
+    <FormControl>
+      <FormLabel>제목</FormLabel>
+      <Input
+        type={"text"}
+        ref={ref}
+        defaultValue={itemQnATitle}
+        onChange={onChange}
+      />
+    </FormControl>
+  );
+});
+
+const TextInputArea = React.forwardRef(({ itemQnAContent, onChange }, ref) => {
+  return (
+    <FormControl>
+      <FormLabel>제목</FormLabel>
+      <Textarea
+        type={"text"}
+        ref={ref}
+        defaultValue={itemQnAContent}
+        onChange={onChange}
+      />
+    </FormControl>
+  );
+});
 export function StoreProductView() {
   const { productId } = useParams();
   const [product, setProduct] = useState([]);
@@ -55,6 +82,7 @@ export function StoreProductView() {
   const [listQnA, setListQnA] = useState([]);
   const toast = useToast();
   const Login = useContext(LoginContext);
+  const ref = useRef(null);
 
   function listQnARefresh() {
     axios
@@ -259,7 +287,7 @@ export function StoreProductView() {
                 </PopoverContent>
               </Popover>
 
-              <Popover closeOnBlur={false}>
+              <Popover closeOnBlur={false} initialFocusRef={ref}>
                 <PopoverTrigger>
                   <Badge variant="outline" colorScheme="green">
                     수정
@@ -268,24 +296,21 @@ export function StoreProductView() {
                 <PopoverContent>
                   <FocusLock returnFocus persistentFocus={false}>
                     <PopoverHeader fontWeight="semibold">
-                      <FormControl>
-                        <FormLabel>제목</FormLabel>
-                        <Input
-                          type={"text"}
-                          defaultValue={itemQnA.title}
-                          onChange={(e) => setTitleQnA(e.target.value)}
-                        />
-                      </FormControl>
+                      <TextInput
+                        ref={ref}
+                        itemQnATitle={itemQnA.title}
+                        onChange={(e) => setTitleQnA(e.target.value)}
+                      />
                     </PopoverHeader>
                     <PopoverCloseButton />
                     <PopoverBody>
                       <FormControl>
                         <FormLabel>내용</FormLabel>
-                        <Textarea
+                        <TextInputArea
+                          ref={ref}
+                          itemQnAContent={itemQnA.content}
                           onChange={(e) => setContentQnA(e.target.value)}
-                        >
-                          {itemQnA.content}
-                        </Textarea>
+                        ></TextInputArea>
                       </FormControl>
                     </PopoverBody>
                     <PopoverFooter>
