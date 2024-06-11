@@ -41,6 +41,7 @@ CREATE TABLE product_comment
 );
 
 
+
 SELECT *
 FROM product;
 SELECT *
@@ -65,6 +66,21 @@ drop table product_cart;
 
 select *
 from member;
+
+CREATE TABLE product_qna
+(
+    id         int primary key auto_increment,
+    writer     varchar(20),
+    title      varchar(200),
+    content    varchar(200),
+    product_id int references product (id),
+    reg_date   datetime default now()
+);
+
+select *
+from product_qna;
+
+
 
 
 
