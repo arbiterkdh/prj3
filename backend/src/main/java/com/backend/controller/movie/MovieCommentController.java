@@ -9,7 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/movie/comment")
@@ -33,15 +33,25 @@ public class MovieCommentController {
     }
 
     @GetMapping("{movieId}")
-    public List<MovieComment> list(@PathVariable Integer movieId) {
+    public Map<String, Object> list(@PathVariable Integer movieId, @RequestParam Integer page) {
 //        System.out.println("movieId = " + movieId);
-        return commentService.list(movieId);
+        System.out.println("page = " + page);
+        return commentService.list(movieId, page);
     }
 
     @DeleteMapping("delete")
     public ResponseEntity delete(@RequestBody MovieComment comment, Authentication authentication) {
         if (commentService.hasAccess(comment, authentication)) {
             commentService.deleteComment(comment.getId());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @PutMapping("edit")
+    public ResponseEntity edit(@RequestBody MovieComment comment, Authentication authentication) {
+        if (commentService.hasAccess(comment, authentication)) {
+            commentService.editComment(comment);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

@@ -1,10 +1,7 @@
 package com.backend.mapper.movie;
 
 import com.backend.domain.movie.MovieComment;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -28,8 +25,9 @@ public interface MovieCommentMapper {
             FROM movie_comment mc JOIN member m ON mc.member_id = m.number
             WHERE movie_id = #{movieId}
             ORDER BY mc.id DESC
+            LIMIT #{offset}, 10;
             """)
-    List<MovieComment> selectCommentByMovieId(Integer movieId);
+    List<MovieComment> selectCommentByMovieId(Integer movieId, Integer offset);
 
     @Select("""
             SELECT *
@@ -44,4 +42,20 @@ public interface MovieCommentMapper {
             WHERE id = #{commentId}
             """)
     int deleteCommentByCommentId(Integer commentId);
+
+
+    @Update("""
+            UPDATE movie_comment
+            SET comment = #{comment}
+            WHERE id = #{id}
+            """)
+    int updateComment(MovieComment comment);
+
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM movie_comment
+            WHERE movie_id = #{movieId}
+            """)
+    Integer countCommentByMovieId(Integer movieId);
 }

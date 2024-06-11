@@ -62,3 +62,25 @@ FROM movie_comment;
 
 DESC movie_comment;
 
+INSERT INTO movie_comment
+    (movie_id, member_id, comment)
+SELECT movie_id, member_id, comment
+FROM movie_comment;
+
+SELECT *
+FROM movie_comment;
+
+INSERT INTO movie
+(title, content, genre, running_time, rating, start_date, director, actors)
+SELECT title,
+       content,
+       genre,
+       running_time,
+       rating,
+       start_Date,
+       director,
+       actors
+FROM movie;
+
+SELECT *
+FROM movie;
