@@ -55,6 +55,7 @@ export function StoreProductView() {
   const [listQnA, setListQnA] = useState([]);
   const toast = useToast();
   const Login = useContext(LoginContext);
+  const [page, setPage] = useState(1);
 
   function listQnARefresh() {
     axios
@@ -116,18 +117,14 @@ export function StoreProductView() {
       .finally(() => {});
   }, []);
 
-  // let page = 4;
   const commentListRefresh = () => {
+    console.log("page:" + page);
     axios
-      .get(
-        `/api/store/product/comment/list/${productId}`,
-        // ,
-        // {
-        // params: {
-        //   page,
-        // },
-        // })
-      )
+      .get(`/api/store/product/comment/list/${productId}`, {
+        params: {
+          page,
+        },
+      })
       .then((res) => {
         setCommentList(res.data.commentList);
       })
@@ -137,7 +134,7 @@ export function StoreProductView() {
 
   useEffect(() => {
     commentListRefresh();
-  }, []);
+  }, [page]);
 
   function handleCommentAdd(id, commentContent) {
     axios
@@ -354,6 +351,18 @@ export function StoreProductView() {
         {commentList.map((commentItem) => (
           <CommentItem key={commentItem.id} commentItem={commentItem} />
         ))}
+        <Box textAlign={"center"} mt={10}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((pageNumber) => (
+            <Button
+              onClick={() => {
+                setPage(pageNumber);
+              }}
+              key={pageNumber}
+            >
+              {pageNumber}
+            </Button>
+          ))}
+        </Box>
       </Box>
     );
   };
