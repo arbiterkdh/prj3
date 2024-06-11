@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class KakaoOauth {
-    private String tokenType;
-    private String accessToken;
-    private String refreshToken;
+    private String token_type;
+    private String access_token;
+    private String refresh_token;
     private String scope;
-    private Integer expiresIn;
-    private Integer refreshTokenExpiresIn;
+    private Integer expires_in;
+    private Integer refresh_token_expires_in;
 }
