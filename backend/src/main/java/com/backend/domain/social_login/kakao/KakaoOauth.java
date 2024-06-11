@@ -1,12 +1,11 @@
-package com.backend.domain.login;
+package com.backend.domain.social_login.kakao;
 
 import lombok.Data;
 
 @Data
-public class KakaoLogin {
+public class KakaoOauth {
     private String tokenType;
     private String accessToken;
-    private String idToken;
     private String refreshToken;
     private String scope;
     private Integer expiresIn;

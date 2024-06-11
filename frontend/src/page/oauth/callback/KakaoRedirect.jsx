@@ -10,21 +10,38 @@ export function KakaoRedirect() {
   const [code, setCode] = useState(searchParams.get("code"));
 
   useEffect(() => {
-    axios.post(
-      "https://kauth.kakao.com/oauth/token",
-      {
-        grant_type: "authorization_code",
-        client_id: `${account.kakaoKey}`,
-        redirect_uri: `${account.kakaoUri}`,
-        code,
-      },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+    axios
+      .post(
+        "https://kauth.kakao.com/oauth/token",
+        new URLSearchParams({
+          grant_type: "authorization_code",
+          client_id: `${account.kakaoKey}`,
+          redirect_uri: `${account.kakaoUri}`,
+          code,
+        }),
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+          },
         },
-      },
-    );
-  }, []);
+      )
+      .then((res) => {
+        const accessToken = `Bearer ${res.data.access_token}`;
+        account.kakaoLogin(res.data);
+        axios
+          .get("/api/oauth/user-info", {
+            headers: {
+              Authorization: accessToken,
+            },
+          })
+          .then((res) => {
+            console.log("data", res.data);
+          })
+          .catch((err) => {
+            console.error("err", err);
+          });
+      });
+  }, [code]);
 
   return <Box></Box>;
 }
