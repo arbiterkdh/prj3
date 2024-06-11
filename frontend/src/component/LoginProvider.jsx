@@ -18,8 +18,18 @@ export function LoginProvider({ children }) {
   const [isKakaoLoggedIn, setIsKakaoLoggedIn] = useState(false);
   function kakaoInfo(id_token) {
     const payload = jwtDecode(id_token);
+    // axios
+    //   .post("/api/member/kakao-signup", {
+    //     id: payload.id,
+    //     nickName: payload.nickname,
+    //     picture: payload.picture,
+    //     email: payload.email,
+    //   })
+    //   .then((res) => {});
     setPicture(payload.picture);
     setNickName(payload.nickname);
+    setEmail(payload.email);
+    setExpired(payload.exp);
   }
   // 카카오 기능들 모음 //
 
@@ -31,10 +41,6 @@ export function LoginProvider({ children }) {
   }, []);
 
   function isLoggedIn() {
-    const kakaoExpiresIn = localStorage.getItem("expires_in");
-    if (kakaoExpiresIn) {
-      return Date.now() < kakaoExpiresIn;
-    }
     return Date.now() < expired * 1000;
   }
 
@@ -60,7 +66,6 @@ export function LoginProvider({ children }) {
         )
         .then(() => {
           localStorage.removeItem("access_token");
-          localStorage.removeItem("expires_in");
           setIsKakaoLoggedIn(false);
         });
     }

@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 @Data
 public class Member {
     private Integer number;
-    private Integer id;
     private String email;
     private String password;
     private String nickName;
@@ -15,4 +14,5 @@ public class Member {
 
     // 카카오 용
     private String picture;
+    private Integer kakaoId;
 }

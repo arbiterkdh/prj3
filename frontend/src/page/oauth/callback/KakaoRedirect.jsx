@@ -30,10 +30,6 @@ export function KakaoRedirect() {
         )
         .then((res) => {
           localStorage.setItem("access_token", res.data.access_token);
-          localStorage.setItem(
-            "expires_in",
-            Date.now() + res.data.expires_in * 1000,
-          );
           account.kakaoInfo(res.data.id_token);
           setKakaoAuth(true);
           account.setIsKakaoLoggedIn(true);
