@@ -232,7 +232,7 @@ export function StoreProductView() {
       .finally(() => {});
   }
 
-  function handleQnAModify({ idQnA, titleQnA, contentQnA }) {
+  function handleQnAModify(idQnA, titleQnA, contentQnA) {
     console.log("id:" + idQnA);
     console.log("titleQnA:" + titleQnA);
     console.log("contentQnA:" + contentQnA);
@@ -321,7 +321,11 @@ export function StoreProductView() {
                         variant="outline"
                         colorScheme="green"
                         onClick={() => {
-                          handleQnAModify(idQnA, titleQnA, contentQnA);
+                          handleQnAModify(
+                            itemQnA.id,
+                            itemQnA.title,
+                            itemQnA.content,
+                          );
                         }}
                       >
                         수정
