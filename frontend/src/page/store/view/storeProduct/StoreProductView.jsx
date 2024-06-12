@@ -31,8 +31,8 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { LoginContext } from "../../../component/LoginProvider.jsx";
-import QnA from "../component/QnA.jsx";
+import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import QnA from "./qna/QnA.jsx";
 
 export function StoreProductView() {
   const { productId } = useParams();

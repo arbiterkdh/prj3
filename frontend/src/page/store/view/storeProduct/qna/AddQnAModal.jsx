@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import { LoginContext } from "../../../../../component/LoginProvider.jsx";
 
 function AddQnAModal({ isQnAOpen, onQnAClose, productId, listQnARefresh }) {
   const [titleQnA, setTitleQnA] = useState("");
