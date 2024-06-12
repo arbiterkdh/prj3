@@ -11,6 +11,7 @@ const PGridItem = (props) => {
       justifyContent="center"
       cursor={"pointer"}
       _hover={{ color: "red" }}
+      style={{ whiteSpace: "nowrap" }}
       {...props}
     />
   );

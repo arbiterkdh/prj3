@@ -53,4 +53,17 @@ public interface PromotionMapper {
             VALUES (#{promoId}, #{name})
             """)
     int insertFileName(Integer promoId, String name);
+
+    @Select("""
+            SELECT name
+            FROM promo_file
+            WHERE promo_id=#{promoId}
+            """)
+    List<String> selectFileNameByPromoId(Integer promoId);
+
+    @Delete("""
+            DELETE FROM promo_file
+            WHERE promo_id=#{promoId}
+            """)
+    int deleteFileByPromoId(Integer promoId);
 }

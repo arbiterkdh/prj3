@@ -118,17 +118,17 @@ export function PromoModify() {
             />
           </FormControl>
         </Box>
-        {/*<Box>*/}
-        {/*  <FormControl>*/}
-        {/*    <FormLabel>사진파일</FormLabel>*/}
-        {/*    <Input*/}
-        {/*      multiple*/}
-        {/*      type="file"*/}
-        {/*      accept="image/*"*/}
-        {/*      onChange={(e) => setPromo({ ...promo, files: e.target.files })}*/}
-        {/*    />*/}
-        {/*  </FormControl>*/}
-        {/*</Box>*/}
+        <Box>
+          <FormControl>
+            <FormLabel>사진파일</FormLabel>
+            <Input
+              multiple
+              type="file"
+              accept="image/*"
+              onChange={(e) => setPromo({ ...promo, files: e.target.files })}
+            />
+          </FormControl>
+        </Box>
         <Box>
           <FormControl>
             <FormLabel>이벤트 설명</FormLabel>

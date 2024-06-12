@@ -23,6 +23,11 @@ import { MemberSignup } from "./member/MemberSignup.jsx";
 import { Oauth } from "./page/oauth/Oauth.jsx";
 import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import axios from "axios";
+import { PromoResult } from "./page/promotion/view/PromoResult.jsx";
+import { PromoEnd } from "./page/promotion/view/PromoEnd.jsx";
+import { PromoUpcoming } from "./page/promotion/view/PromoUpcoming.jsx";
+import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
+import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -38,8 +43,6 @@ axios.interceptors.request.use((config) => {
   }
   return config;
 });
-import { PromoView } from "./page/promotion/view/PromoView.jsx";
-import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 
 const router = createBrowserRouter([
   {
@@ -92,14 +95,45 @@ const router = createBrowserRouter([
             element: <PromoAdd />,
           },
           {
-            path: "view/:promoId",
-            element: <PromoView />,
+            path: "view",
+            children: [
+              {
+                path: ":promoId",
+                element: <PromoView />,
+                children: [
+                  {
+                    path: "upcoming",
+                    element: <PromoEnd />,
+                  },
+                  {
+                    path: "end",
+                    element: <PromoEnd />,
+                  },
+                  {
+                    path: "eventResult",
+                    element: <PromoResult />,
+                  },
+                ],
+              },
+            ],
           },
           {
             path: "modify/:promoId",
             element: <PromoModify />,
           },
         ],
+      },
+      {
+        path: "promotion/eventUpcoming",
+        element: <PromoUpcoming />,
+      },
+      {
+        path: "promotion/eventEnd",
+        element: <PromoEnd />,
+      },
+      {
+        path: "promotion/eventResult",
+        element: <PromoResult />,
       },
       {
         path: "store",

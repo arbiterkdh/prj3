@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -16,11 +16,19 @@ import axios from "axios";
 export function PromoList() {
   const [promoList, setPromoList] = useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
+
+  const queryParams = new URLSearchParams(location.search);
+  const eventTypeFilter = queryParams.get("eventType");
+
+  const filteredPromoList = eventTypeFilter
+    ? promoList.filter((promo) => promo.eventType === eventTypeFilter)
+    : promoList;
 
   useEffect(() => {
     axios
@@ -42,13 +50,22 @@ export function PromoList() {
         spacing={3}
         templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
       >
-        {promoList.map((promo) => (
+        {filteredPromoList.map((promo) => (
           <Card key={promo.id} height="100%">
             <CardBody display="flex" flexDirection="column">
-              <Image
-                boxSize="100%"
-                src="https://img.cgv.co.kr/WebApp/contents/eventV4/40714/17171440149400.jpg"
-              />
+              <Box mt={4}>
+                이미지파일
+                {promo.fileList &&
+                  promo.fileList.map((file) => (
+                    <Box key={file.name}>
+                      <Image src={file.src} />
+                    </Box>
+                  ))}
+              </Box>
+              {/*<Image*/}
+              {/*  boxSize="100%"*/}
+              {/*  src="https://img.cgv.co.kr/WebApp/contents/eventV4/40714/17171440149400.jpg"*/}
+              {/*/>*/}
               <Box flex={1}>
                 <Heading as="b" mb={2}>
                   {promo.title}
