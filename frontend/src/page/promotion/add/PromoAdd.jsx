@@ -19,19 +19,20 @@ export function PromoAdd() {
   const [eventEndDate, setEventEndDate] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
-  const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
   const navigate = useNavigate();
 
   function handleAddEvent() {
     setLoading(true);
     axios
-      .post("/api/promotion/add", {
+      .postForm("/api/promotion/add", {
         title,
         content,
         eventType,
         eventStartDate,
         eventEndDate,
+        files,
       })
       .then((res) => {
         toast({
@@ -94,11 +95,12 @@ export function PromoAdd() {
           <Select
             onChange={(e) => setEventType(e.target.value)}
             placeholder="이벤트 타입을 선택하세요."
+            value={eventType}
           >
-            <option value="movie">영화</option>
-            <option value="theater">극장</option>
-            <option value="membership">멤버십</option>
-            <option value="discount">제휴/할인</option>
+            <option value="영화">영화</option>
+            <option value="극장">극장</option>
+            <option value="멤버십">멤버십</option>
+            <option value="제휴/할인">제휴/할인</option>
           </Select>
         </FormControl>
       </Box>

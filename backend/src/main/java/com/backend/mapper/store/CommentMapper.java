@@ -18,8 +18,10 @@ public interface CommentMapper {
             SELECT *
             FROM product_comment
             WHERE product_id = #{productId}
+            order by id desc
+            limit #{offset}, 10
             """)
-    List<ProductComment> commentList(Integer productId);
+    List<ProductComment> commentList(Integer productId, Integer offset);
 
     @Update("""
             UPDATE product_comment
@@ -33,4 +35,12 @@ public interface CommentMapper {
             WHERE id = #{commentId}
             """)
     int deleteComment(Integer commentId);
+
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM product_comment
+            """)
+    int totalCommentCount();
+
 }

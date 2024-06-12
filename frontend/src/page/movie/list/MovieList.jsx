@@ -16,20 +16,25 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
+  const [pageInfo, setPageInfo] = useState({});
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("/api/movie/list")
+      .get(`/api/movie/list?page=${page}`)
       .then((res) => {
-        setMovieList(res.data);
+        setMovieList(res.data.movieList);
+        setPageInfo(res.data.pageInfo);
       })
       .catch(() => {})
       .finally(() => {});
-  }, []);
+  }, [page]);
 
   function handleAddClick() {
     navigate("/movie/add");
@@ -39,12 +44,21 @@ export function MovieList() {
     navigate(`/movie/view/${movieId}`);
   }
 
+  function handlePageClick() {
+    setPage(page + 1);
+  }
+
   return (
     <Center>
-      <CenterBox>
+      <CenterBox mb={10}>
+        <Box mt={"-50px"} mb={10} ml={"930px"}>
+          <Button colorScheme={"blue"} onClick={handleAddClick}>
+            추가
+          </Button>
+        </Box>
         <SimpleGrid spacing={4} templateColumns="repeat(4, 1fr)">
           {movieList.map((movie) => (
-            <Card key={movie.id} maxW="sm">
+            <Card key={movie.id} maxW="sm" mb={"30px"}>
               <CardBody>
                 <Image
                   cursor={"pointer"}
@@ -70,12 +84,16 @@ export function MovieList() {
               </CardFooter>
             </Card>
           ))}
-          <Box>
-            <Button colorScheme={"blue"} onClick={handleAddClick}>
-              추가
-            </Button>
-          </Box>
         </SimpleGrid>
+        {page !== pageInfo.lastPageNumber && (
+          <Button
+            rightIcon={<FontAwesomeIcon icon={faAngleDown} />}
+            w={"100%"}
+            onClick={handlePageClick}
+          >
+            더보기
+          </Button>
+        )}
       </CenterBox>
     </Center>
   );

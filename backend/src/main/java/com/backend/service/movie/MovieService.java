@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -61,8 +62,23 @@ public class MovieService {
         return true;
     }
 
-    public List<Movie> list() {
-        return movieMapper.selectList();
+    public Map<String, Object> list(Integer page) {
+        Map<String, Object> pageInfo = new HashMap<>();
+
+        Integer numberOfMovie = movieMapper.countAllMovie();
+        Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
+        Integer endset = page * 20;
+
+        if (page == lastPageNumber) {
+            endset = numberOfMovie;
+        }
+
+        pageInfo.put("numberOfMovie", numberOfMovie);
+        pageInfo.put("lastPageNumber", lastPageNumber);
+
+
+        return Map.of("pageInfo", pageInfo,
+                "movieList", movieMapper.selectList(endset));
     }
 
     public Movie get(Integer movieId) {

@@ -8,7 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -37,8 +38,32 @@ public class MovieCommentService {
         commentMapper.insertMovieComment(comment);
     }
 
-    public List<MovieComment> list(Integer movieId) {
-        return commentMapper.selectCommentByMovieId(movieId);
+    public Map<String, Object> list(Integer movieId, Integer page) {
+        Map pageInfo = new HashMap();
+        Integer CountAll = commentMapper.countCommentByMovieId(movieId);
+
+        Integer offset = (page - 1) * 10;
+        Integer lastPageNumber = (CountAll - 1) / 10 + 1;
+        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
+        Integer rightPageNumber = leftPageNumber + 9;
+        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
+        Integer prevPageNumber = leftPageNumber - 10;
+        Integer nextPageNumber = leftPageNumber + 10;
+
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
+
+        pageInfo.put("leftPageNumber", leftPageNumber);
+        pageInfo.put("rightPageNumber", rightPageNumber);
+        pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("currentPageNumber", page);
+
+        return Map.of("pageInfo", pageInfo,
+                "commentList", commentMapper.selectCommentByMovieId(movieId, offset));
     }
 
     public void deleteComment(Integer commentId) {
@@ -54,5 +79,9 @@ public class MovieCommentService {
             return false;
         }
         return true;
+    }
+
+    public void editComment(MovieComment comment) {
+        commentMapper.updateComment(comment);
     }
 }

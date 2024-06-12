@@ -14,3 +14,13 @@ DESC promo;
 
 SELECT *
 FROM promo;
+
+CREATE TABLE promo_file
+(
+    promo_id INT          NOT NULL REFERENCES promo (id),
+    name     VARCHAR(500) NOT NULL,
+    PRIMARY KEY (promo_id, name)
+);
+
+SELECT *
+FROM promo_file;

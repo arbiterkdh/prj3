@@ -38,38 +38,11 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FocusLock from "react-focus-lock";
 import axios from "axios";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 
-const TextInput = React.forwardRef(({ itemQnATitle, onChange }, ref) => {
-  return (
-    <FormControl>
-      <FormLabel>제목</FormLabel>
-      <Input
-        type={"text"}
-        ref={ref}
-        defaultValue={itemQnATitle}
-        onChange={onChange}
-      />
-    </FormControl>
-  );
-});
-
-const TextInputArea = React.forwardRef(({ itemQnAContent, onChange }, ref) => {
-  return (
-    <FormControl>
-      <FormLabel>내용</FormLabel>
-      <Textarea
-        type={"text"}
-        ref={ref}
-        defaultValue={itemQnAContent}
-        onChange={onChange}
-      />
-    </FormControl>
-  );
-});
 export function StoreProductView() {
   const { productId } = useParams();
   const [product, setProduct] = useState([]);
@@ -82,7 +55,7 @@ export function StoreProductView() {
   const [listQnA, setListQnA] = useState([]);
   const toast = useToast();
   const Login = useContext(LoginContext);
-  const ref = useRef(null);
+  const [page, setPage] = useState(1);
 
   function listQnARefresh() {
     axios
@@ -145,10 +118,15 @@ export function StoreProductView() {
   }, []);
 
   const commentListRefresh = () => {
+    console.log("page:" + page);
     axios
-      .get(`/api/store/product/comment/list/${productId}`)
+      .get(`/api/store/product/comment/list/${productId}`, {
+        params: {
+          page,
+        },
+      })
       .then((res) => {
-        setCommentList(res.data);
+        setCommentList(res.data.commentList);
       })
       .catch(() => {})
       .finally(() => {});
@@ -156,7 +134,7 @@ export function StoreProductView() {
 
   useEffect(() => {
     commentListRefresh();
-  }, []);
+  }, [page]);
 
   function handleCommentAdd(id, commentContent) {
     axios
@@ -189,15 +167,15 @@ export function StoreProductView() {
 
             {commentItem.writer === Login.nickName && (
               <>
-                <Button
+                <Badge
                   onClick={() => {
                     setCommentId(commentItem.id);
                     onDeleteOpen();
                   }}
                 >
                   삭제
-                </Button>
-                <Button
+                </Badge>
+                <Badge
                   onClick={() => {
                     onModifyOpen();
                     setCommentContent(commentItem.content);
@@ -205,7 +183,7 @@ export function StoreProductView() {
                   }}
                 >
                   수정
-                </Button>
+                </Badge>
               </>
             )}
           </Box>
@@ -232,15 +210,12 @@ export function StoreProductView() {
       .finally(() => {});
   }
 
-  function handleQnAModify({ idQnA, titleQnA, contentQnA }) {
-    console.log("id:" + idQnA);
-    console.log("titleQnA:" + titleQnA);
-    console.log("contentQnA:" + contentQnA);
+  function handleQnAModify(id, title, content) {
     axios
       .put("/api/store/product/qna/modify", {
-        id: idQnA,
-        title: titleQnA,
-        content: contentQnA,
+        id: id,
+        title: title,
+        content: content,
       })
       .then((res) => {
         toast({
@@ -255,6 +230,18 @@ export function StoreProductView() {
   }
 
   const QnAItem = ({ itemQnA }) => {
+    const {
+      isOpen: isQnAModifyOpen,
+      onOpen: onQnAModifyOpen,
+      onClose: onQnAModifyClose,
+    } = useDisclosure();
+    const [currentTitle, setCurrentTitle] = useState(itemQnA.title);
+    const [currentContent, setCurrentContent] = useState(itemQnA.content);
+
+    useEffect(() => {
+      setCurrentTitle(itemQnA.title);
+      setCurrentContent(itemQnA.content);
+    }, [itemQnA]);
     return (
       <>
         <Td
@@ -290,30 +277,33 @@ export function StoreProductView() {
                 </PopoverContent>
               </Popover>
 
-              <Popover closeOnBlur={false} initialFocusRef={ref}>
+              <Popover
+                isOpen={isQnAModifyOpen}
+                onOpen={onQnAModifyOpen}
+                onClose={onQnAModifyClose}
+                closeOnBlur={false}
+              >
                 <PopoverTrigger>
                   <Badge variant="outline" colorScheme="green">
                     수정
                   </Badge>
                 </PopoverTrigger>
                 <PopoverContent>
-                  <FocusLock returnFocus persistentFocus={false}>
+                  <FocusLock returnFocus persistentFocus={true}>
                     <PopoverHeader fontWeight="semibold">
-                      <TextInput
-                        ref={ref}
-                        itemQnATitle={itemQnA.title}
-                        onChange={(e) => setTitleQnA(e.target.value)}
+                      <Input
+                        value={currentTitle}
+                        onChange={(e) => setCurrentTitle(e.target.value)}
                       />
                     </PopoverHeader>
                     <PopoverCloseButton />
                     <PopoverBody>
                       <FormControl>
                         <FormLabel>내용</FormLabel>
-                        <TextInputArea
-                          ref={ref}
-                          itemQnAContent={itemQnA.content}
-                          onChange={(e) => setContentQnA(e.target.value)}
-                        ></TextInputArea>
+                        <Textarea
+                          value={currentContent}
+                          onChange={(e) => setCurrentContent(e.target.value)}
+                        ></Textarea>
                       </FormControl>
                     </PopoverBody>
                     <PopoverFooter>
@@ -321,7 +311,12 @@ export function StoreProductView() {
                         variant="outline"
                         colorScheme="green"
                         onClick={() => {
-                          handleQnAModify(idQnA, titleQnA, contentQnA);
+                          handleQnAModify(
+                            itemQnA.id,
+                            currentTitle,
+                            currentContent,
+                          );
+                          onQnAModifyClose();
                         }}
                       >
                         수정
@@ -356,6 +351,18 @@ export function StoreProductView() {
         {commentList.map((commentItem) => (
           <CommentItem key={commentItem.id} commentItem={commentItem} />
         ))}
+        <Box textAlign={"center"} mt={10}>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((pageNumber) => (
+            <Button
+              onClick={() => {
+                setPage(pageNumber);
+              }}
+              key={pageNumber}
+            >
+              {pageNumber}
+            </Button>
+          ))}
+        </Box>
       </Box>
     );
   };
@@ -397,13 +404,13 @@ export function StoreProductView() {
       });
   }
 
-  function handleQnAAdd(productId, titleQnA, contentQnA) {
+  function handleQnAAdd(id, title, content) {
     axios
       .post("/api/store/product/qna/add", {
-        productId,
+        productId: id,
         writer: Login.nickName,
-        title: titleQnA,
-        content: contentQnA,
+        title: title,
+        content: content,
       })
       .then(() => {
         toast({

@@ -32,6 +32,8 @@ axios.interceptors.request.use((config) => {
   }
   return config;
 });
+import { PromoView } from "./page/promotion/view/PromoView.jsx";
+import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 
 const router = createBrowserRouter([
   {
@@ -87,6 +89,14 @@ const router = createBrowserRouter([
           {
             path: "add",
             element: <PromoAdd />,
+          },
+          {
+            path: "view/:promoId",
+            element: <PromoView />,
+          },
+          {
+            path: "modify/:promoId",
+            element: <PromoModify />,
           },
         ],
       },

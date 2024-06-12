@@ -27,11 +27,12 @@ public interface MovieMapper {
 
 
     @Select("""
-            SELECT * 
+            SELECT *
             FROM movie
             ORDER BY id DESC
+            LIMIT 0, #{endset}
             """)
-    List<Movie> selectList();
+    List<Movie> selectList(Integer endset);
 
     @Select("""
             SELECT *
@@ -75,4 +76,9 @@ public interface MovieMapper {
     int updateMovie(Movie movie);
 
 
+    @Select("""
+            SELECT COUNT(*)
+            FROM movie
+            """)
+    Integer countAllMovie();
 }
