@@ -7,10 +7,10 @@ export function BookTheaterList({
   cityList,
   theaterList,
   setTheaterList,
-  setMovieLocationAndMovieList,
+  checkedTheaterNumber,
+  setCheckedTheaterNumber,
 }) {
   const [isCityChecked, setIsCityChecked] = useState("서울");
-  const [isLocationChecked, setIsLocationChecked] = useState("");
 
   useEffect(() => {
     axios.get(`/api/theater/list`).then((res) => {
@@ -26,8 +26,6 @@ export function BookTheaterList({
       .catch(() => {})
       .finally(() => {});
   }
-
-  function handleClickTheaterLocation(number) {}
 
   return (
     <Flex h={"100%"}>
@@ -65,11 +63,10 @@ export function BookTheaterList({
               alignContent={"center"}
               fontSize={"sm"}
               bgColor={
-                isLocationChecked === theater.location ? "lightgray" : ""
+                checkedTheaterNumber === theater.number ? "lightgray" : ""
               }
               onClick={() => {
-                handleClickTheaterLocation(theater.number);
-                setIsLocationChecked(theater.location);
+                setCheckedTheaterNumber(theater.number);
               }}
             >
               {theater.location}
