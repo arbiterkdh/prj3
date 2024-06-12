@@ -1,12 +1,14 @@
 package com.backend.service.movie;
 
 import com.backend.domain.movie.Movie;
+import com.backend.mapper.movie.MovieCommentMapper;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,7 @@ import java.util.Map;
 public class MovieService {
 
     private final MovieMapper movieMapper;
+    private final MovieCommentMapper commentMapper;
 
     public void addMovie(Movie movie, String[] movieType, MultipartFile[] file) {
         movieMapper.insertMovie(movie);
@@ -62,23 +65,49 @@ public class MovieService {
         return true;
     }
 
-    public Map<String, Object> list(Integer page) {
+    public Map<String, Object> list(Integer page, Integer tab, String keyword) {
         Map<String, Object> pageInfo = new HashMap<>();
+        LocalDate today = LocalDate.now();
 
-        Integer numberOfMovie = movieMapper.countAllMovie();
-        Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
-        Integer endset = page * 20;
+        // 현재 상영작을 눌렀을때... db 조회
+        if (tab == 1) {
+            Integer numberOfMovie = movieMapper.countNowShowingMovie(today);
+            Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
+            Integer endset = page * 20;
 
-        if (page == lastPageNumber) {
-            endset = numberOfMovie;
+            if (page == lastPageNumber) {
+                endset = numberOfMovie;
+            }
+
+            pageInfo.put("numberOfMovie", numberOfMovie);
+            pageInfo.put("lastPageNumber", lastPageNumber);
+
+
+            return Map.of("pageInfo", pageInfo,
+                    "movieList", movieMapper.selectNowShowingMovieList(endset, today));
         }
 
-        pageInfo.put("numberOfMovie", numberOfMovie);
-        pageInfo.put("lastPageNumber", lastPageNumber);
+        // 상영예정작을 눌렀을때... db 조회
+        if (tab == 2) {
+
+            Integer numberOfMovie = movieMapper.countComingSoonMovie(today);
+            Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
+            Integer endset = page * 20;
+
+            if (page == lastPageNumber) {
+                endset = numberOfMovie;
+            }
+
+            pageInfo.put("numberOfMovie", numberOfMovie);
+            pageInfo.put("lastPageNumber", lastPageNumber);
 
 
-        return Map.of("pageInfo", pageInfo,
-                "movieList", movieMapper.selectList(endset));
+            return Map.of("pageInfo", pageInfo,
+                    "movieList", movieMapper.selectComingSoonMovietList(endset, today));
+        }
+
+        return null;
+
     }
 
     public Movie get(Integer movieId) {
@@ -89,7 +118,11 @@ public class MovieService {
 
 
     public void deleteMovie(Integer movieId) {
+        // 영화 타입 삭제
         movieMapper.deleteMovieTypeByMovieId(movieId);
+        // 영화 댓글 삭제
+        commentMapper.deleteCommentByMovieId(movieId);
+        // 영화 삭제
         movieMapper.deleteMovieByMovieId(movieId);
     }
 

@@ -21,21 +21,17 @@ public class MovieCommentController {
     @PostMapping("add")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity addComment(@RequestBody MovieComment comment, Authentication authentication) {
-//        System.out.println("comment = " + comment);
-//        System.out.println("authentication.getName() = " + authentication.getName());
 
         if (commentService.validate(comment)) {
             commentService.addComment(comment, authentication);
             return ResponseEntity.ok().build();
         }
-
+    
         return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("{movieId}")
     public Map<String, Object> list(@PathVariable Integer movieId, @RequestParam Integer page) {
-//        System.out.println("movieId = " + movieId);
-        System.out.println("page = " + page);
         return commentService.list(movieId, page);
     }
 

@@ -97,7 +97,7 @@ export function MovieAdd() {
   return (
     <Center>
       <CenterBox>
-        <Heading>영화 추가</Heading>
+        <Heading mb={10}>영화 추가</Heading>
 
         <Box>
           <Stack>
@@ -187,7 +187,6 @@ export function MovieAdd() {
                   locale={ko}
                   dateFormat="yyyy년 MM월 dd일"
                   selected={startDate}
-                  minDate={new Date()}
                   onChange={(date) => setStartDate(date)}
                 />
               </FormControl>

@@ -23,14 +23,14 @@ import { MemberSignup } from "./member/MemberSignup.jsx";
 import { Oauth } from "./page/oauth/Oauth.jsx";
 import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import axios from "axios";
+import { PromoView } from "./page/promotion/view/PromoView.jsx";
+import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    config.headers["Content-Type"] =
-      "application/x-www-form-urlencoded;charset=utf-8";
   }
   const access_token = localStorage.getItem("access_token");
   if (access_token) {
@@ -38,8 +38,6 @@ axios.interceptors.request.use((config) => {
   }
   return config;
 });
-import { PromoView } from "./page/promotion/view/PromoView.jsx";
-import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 
 const router = createBrowserRouter([
   {

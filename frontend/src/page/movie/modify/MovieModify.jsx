@@ -78,7 +78,7 @@ export function MovieModify() {
   return (
     <Center>
       <CenterBox>
-        <Heading>영화 추가</Heading>
+        <Heading mb={10}>영화 수정</Heading>
 
         <Box>
           <Stack>
@@ -107,6 +107,7 @@ export function MovieModify() {
               <FormControl>
                 <FormLabel>영화 설명</FormLabel>
                 <Textarea
+                  border={"1px solid black"}
                   defaultValue={movie.content}
                   placeholder={"영화 내용을 입력해주세요."}
                   onChange={(e) =>
