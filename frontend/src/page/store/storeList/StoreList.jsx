@@ -45,6 +45,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AddCartModal from "./cart/AddCartModal.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -131,28 +132,6 @@ export function StoreList() {
     setPrice(price);
     setStock(stock);
     onModifyOpen();
-  }
-
-  function handleCartAdd(productId) {
-    axios
-      .postForm(`/api/store/cart/add`, {
-        id: productId,
-        name,
-        fileName,
-        price,
-        quantity,
-      })
-      .then(() => {
-        toast({
-          status: "success",
-          description: "장바구니 담기 완료",
-          position: "bottom",
-        });
-      })
-      .catch(() => {})
-      .finally(() => {
-        onCartClose();
-      });
   }
 
   const handleProductView = (productId) => {
@@ -461,27 +440,14 @@ export function StoreList() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      <Modal isOpen={isCartOpen} onClose={onCartClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>카트 담기</ModalHeader>
-          <ModalBody>{name}상품을 담으시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                onClick={() => {
-                  handleCartAdd(productId, name, fileName, price, quantity);
-                }}
-                colorScheme={"green"}
-              >
-                확인
-              </Button>
-              <Button onClick={onCartClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <AddCartModal
+        isCartOpen={isCartOpen}
+        onCartClose={onCartClose}
+        productId={productId}
+        fileName={fileName}
+        price={price}
+        quantity={quantity}
+      />
     </Box>
   );
 }
