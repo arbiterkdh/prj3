@@ -15,7 +15,7 @@ public class CommentController {
     private final CommentService service;
 
     @PostMapping("/add")
-    public void addComment(ProductComment productComment) {
+    public void addComment(@RequestBody ProductComment productComment) {
 
         service.addComment(productComment);
     }
@@ -27,7 +27,7 @@ public class CommentController {
     }
 
     @PutMapping("/modify")
-    public void modifyComment(ProductComment productComment) {
+    public void modifyComment(@RequestBody ProductComment productComment) {
 
         service.modifyComment(productComment);
     }

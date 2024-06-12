@@ -17,7 +17,9 @@ public class ProductQnAController {
     private final ProductQnAService service;
 
     @PostMapping("/add")
-    public void addQnA(ProductQnA productQnA) {
+    public void addQnA(@RequestBody ProductQnA productQnA) {
+
+        System.out.println("productQnA = " + productQnA);
 
         service.addQnA(productQnA);
     }
@@ -35,7 +37,7 @@ public class ProductQnAController {
     }
 
     @PutMapping("/modify")
-    public void modifyQnA(ProductQnA productQnA) {
+    public void modifyQnA(@RequestBody ProductQnA productQnA) {
 
         System.out.println("productQnA = " + productQnA);
 
