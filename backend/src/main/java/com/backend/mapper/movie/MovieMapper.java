@@ -81,4 +81,10 @@ public interface MovieMapper {
             FROM movie
             """)
     Integer countAllMovie();
+
+    @Select("""
+            SELECT *
+            FROM movie
+            """)
+    List<Movie> selectAllMovie();
 }

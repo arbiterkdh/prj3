@@ -6,3 +6,9 @@ CREATE TABLE movie_location
     movie_id       INT REFERENCES movie (id),
     theater_number INT REFERENCES theater (number)
 );
+
+SELECT *
+FROM movie_location;
+
+SELECT id
+FROM movie;

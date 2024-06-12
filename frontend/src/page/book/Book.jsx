@@ -4,14 +4,32 @@ import BookStack from "../../css/theme/component/stack/BookStack.jsx";
 import BookBox from "../../css/theme/component/box/BookBox.jsx";
 import OuterBookBox from "../../css/theme/component/box/OuterBookBox.jsx";
 import OuterBookStack from "../../css/theme/component/stack/OuterBookStack.jsx";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BookMovieLocationAdd } from "./add/BookMovieLocationAdd.jsx";
+import { BookTheaterList } from "./list/BookTheaterList.jsx";
 
 export function Book() {
+  const [cityList, setCityList] = useState([]);
+  const [theaterList, setTheaterList] = useState([]);
+  const [cityName, setCityName] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`/api/theater`)
+      .then((res) => {
+        setCityList(res.data);
+      })
+      .catch()
+      .finally();
+  }, []);
+
   return (
     <Center>
       <CenterBox>
         <Heading>빠른예매</Heading>
         <Flex border={"1px solid black"}>
-          <BookStack h={"700px"}>
+          <BookStack h={"700px"} gap={0}>
             <OuterBookStack>
               <Box>01</Box>
               <Box>상영시간</Box>
@@ -34,14 +52,10 @@ export function Book() {
               <OuterBookBox>
                 <BookBox>영화지점명</BookBox>
                 <BookBox></BookBox>
-                <Flex h={"100%"}>
-                  <Box border={"1px solid black"} w={"100%"} h={"600px"}>
-                    도시명들 나열할 곳
-                  </Box>
-                  <Box border={"1px solid black"} w={"100%"} h={"600px"}>
-                    지점명들 나열할 곳
-                  </Box>
-                </Flex>
+                <BookTheaterList
+                  cityList={cityList}
+                  theaterList={theaterList}
+                />
               </OuterBookBox>
               <OuterBookBox>
                 <BookBox>영화 선택</BookBox>
@@ -53,7 +67,7 @@ export function Book() {
                   </Select>
                 </BookBox>
                 <Box h={"600px"} border={"1px solid black"}>
-                  영화들 쭉 나열할 곳
+                  영화들 쭉 나열할 곳<Box></Box>
                 </Box>
               </OuterBookBox>
               <OuterBookBox>
@@ -67,6 +81,7 @@ export function Book() {
             <Box></Box>
           </Stack>
         </Flex>
+        <BookMovieLocationAdd />
       </CenterBox>
     </Center>
   );
