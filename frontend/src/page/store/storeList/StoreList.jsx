@@ -9,12 +9,6 @@ import {
   Flex,
   Heading,
   Image,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   useDisclosure,
@@ -35,6 +29,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddCartModal from "./cart/AddCartModal.jsx";
 import ModifyProductModal from "./modify/ModifyProductModal.jsx";
+import DeleteProductModal from "./delete/DeleteProductModal.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -79,28 +74,6 @@ export function StoreList() {
   useEffect(() => {
     productListRefresh();
   }, []);
-
-  function handleProductDelete() {
-    setIsLoading(true);
-
-    axios
-      .delete(`/api/store/product/delete/${productId}`)
-      .then((res) => {
-        toast({
-          status: "success",
-          description: "삭제 성공",
-          position: "top",
-        });
-        setProductList(
-          productList.filter((product) => product.id !== productId),
-        );
-      })
-      .catch(() => {})
-      .finally(() => {
-        setIsLoading(false);
-        onDelClose();
-      });
-  }
 
   const ProductList = () => {
     return (
@@ -292,25 +265,16 @@ export function StoreList() {
       </Box>
 
       <ProductList />
-      <Modal isOpen={isDelOpen} onClose={onDelClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>알림</ModalHeader>
-          <ModalBody>상품을 삭제하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                colorScheme={"green"}
-                onClick={handleProductDelete}
-                isLoading={isLoading}
-              >
-                확인
-              </Button>
-              <Button onClick={onDelClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
+      <DeleteProductModal
+        isDelOpen={isDelOpen}
+        onDelClose={onDelClose}
+        isLoading={isLoading}
+        setIsLoading={setIsLoading}
+        productId={productId}
+        setProductList={setProductList}
+        productList={productList}
+      />
 
       <ModifyProductModal
         isModifyOpen={isModifyOpen}
