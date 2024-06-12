@@ -5,7 +5,6 @@ import {
   Button,
   Flex,
   FormControl,
-  FormLabel,
   Image,
   Input,
   Modal,
@@ -14,13 +13,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Popover,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverFooter,
-  PopoverHeader,
-  PopoverTrigger,
   Tab,
   Table,
   TableContainer,
@@ -29,7 +21,6 @@ import {
   TabPanels,
   Tabs,
   Tbody,
-  Td,
   Text,
   Textarea,
   Th,
@@ -39,9 +30,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
-import FocusLock from "react-focus-lock";
 import axios from "axios";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import QnA from "../component/QnA.jsx";
 
 export function StoreProductView() {
   const { productId } = useParams();
@@ -49,33 +40,10 @@ export function StoreProductView() {
   const [commentContent, setCommentContent] = useState("");
   const [commentList, setCommentList] = useState([]);
   const [commentId, setCommentId] = useState(null);
-  const [idQnA, setIdQnA] = useState(null);
-  const [titleQnA, setTitleQnA] = useState("");
-  const [contentQnA, setContentQnA] = useState("");
-  const [listQnA, setListQnA] = useState([]);
+  // const [idQnA, setIdQnA] = useState(null);
   const toast = useToast();
   const Login = useContext(LoginContext);
   const [page, setPage] = useState(1);
-
-  function listQnARefresh() {
-    axios
-      .get("/api/store/product/qna/list")
-      .then((res) => {
-        setListQnA(res.data);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }
-
-  useEffect(() => {
-    axios
-      .get("/api/store/product/qna/list")
-      .then((res) => {
-        setListQnA(res.data);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, []);
 
   const {
     isOpen: isAddOpen,
@@ -93,18 +61,6 @@ export function StoreProductView() {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isQnAOpen,
-    onOpen: onQnAOpen,
-    onClose: onQnAClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isQnAContentOpen,
-    onOpen: onQnAContentOpen,
-    onClose: onQnAContentClose,
   } = useDisclosure();
 
   useEffect(() => {
@@ -193,158 +149,6 @@ export function StoreProductView() {
     );
   };
 
-  const QnACommentAnswerList = () => {};
-
-  function handleQnADelete(id) {
-    axios
-      .delete(`/api/store/product/qna/delete/${id}`)
-      .then(() => {
-        toast({
-          status: "success",
-          description: "문의 글 삭제 성공",
-          position: "bottom",
-        });
-        listQnARefresh();
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }
-
-  function handleQnAModify(id, title, content) {
-    axios
-      .put("/api/store/product/qna/modify", {
-        id: id,
-        title: title,
-        content: content,
-      })
-      .then((res) => {
-        toast({
-          status: "success",
-          description: "문의글 수정 완료",
-          position: "bottom",
-        });
-        listQnARefresh();
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }
-
-  const QnAItem = ({ itemQnA }) => {
-    const {
-      isOpen: isQnAModifyOpen,
-      onOpen: onQnAModifyOpen,
-      onClose: onQnAModifyClose,
-    } = useDisclosure();
-    const [currentTitle, setCurrentTitle] = useState(itemQnA.title);
-    const [currentContent, setCurrentContent] = useState(itemQnA.content);
-
-    useEffect(() => {
-      setCurrentTitle(itemQnA.title);
-      setCurrentContent(itemQnA.content);
-    }, [itemQnA]);
-    return (
-      <>
-        <Td
-          w={"70%"}
-          onClick={() => {
-            onQnAContentOpen();
-            setIdQnA(itemQnA.id);
-            setContentQnA(itemQnA.content);
-            setTitleQnA(itemQnA.title);
-          }}
-        >
-          {itemQnA.title}
-        </Td>
-        <Td w={"20%"}>
-          {itemQnA.writer}
-
-          {itemQnA.writer === Login.nickName && (
-            <>
-              <Popover>
-                <PopoverTrigger>
-                  <Badge colorScheme={"red"}>삭제</Badge>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverHeader fontWeight="semibold">
-                    <Flex>
-                      <Text>삭제 하시겠습니까?</Text>
-                      <Badge onClick={() => handleQnADelete(itemQnA.id)}>
-                        확인
-                      </Badge>
-                    </Flex>
-                  </PopoverHeader>
-                  <PopoverCloseButton />
-                </PopoverContent>
-              </Popover>
-
-              <Popover
-                isOpen={isQnAModifyOpen}
-                onOpen={onQnAModifyOpen}
-                onClose={onQnAModifyClose}
-                closeOnBlur={false}
-              >
-                <PopoverTrigger>
-                  <Badge variant="outline" colorScheme="green">
-                    수정
-                  </Badge>
-                </PopoverTrigger>
-                <PopoverContent>
-                  <FocusLock returnFocus persistentFocus={true}>
-                    <PopoverHeader fontWeight="semibold">
-                      <Input
-                        value={currentTitle}
-                        onChange={(e) => setCurrentTitle(e.target.value)}
-                      />
-                    </PopoverHeader>
-                    <PopoverCloseButton />
-                    <PopoverBody>
-                      <FormControl>
-                        <FormLabel>내용</FormLabel>
-                        <Textarea
-                          value={currentContent}
-                          onChange={(e) => setCurrentContent(e.target.value)}
-                        ></Textarea>
-                      </FormControl>
-                    </PopoverBody>
-                    <PopoverFooter>
-                      <Badge
-                        variant="outline"
-                        colorScheme="green"
-                        onClick={() => {
-                          handleQnAModify(
-                            itemQnA.id,
-                            currentTitle,
-                            currentContent,
-                          );
-                          onQnAModifyClose();
-                        }}
-                      >
-                        수정
-                      </Badge>
-                    </PopoverFooter>
-                  </FocusLock>
-                </PopoverContent>
-              </Popover>
-            </>
-          )}
-        </Td>
-        <Td w={"10%"}>{itemQnA.regDate}</Td>
-      </>
-    );
-  };
-
-  const ListQnA = ({ listQnA }) => {
-    return (
-      <>
-        {listQnA.map((itemQnA) => (
-          <Tr key={itemQnA.id}>
-            <QnAItem itemQnA={itemQnA} />
-          </Tr>
-        ))}
-      </>
-    );
-  };
-
   const ProductCommentList = ({ commentList }) => {
     return (
       <Box>
@@ -401,28 +205,6 @@ export function StoreProductView() {
       .catch(() => {})
       .finally(() => {
         onDeleteClose();
-      });
-  }
-
-  function handleQnAAdd(id, title, content) {
-    axios
-      .post("/api/store/product/qna/add", {
-        productId: id,
-        writer: Login.nickName,
-        title: title,
-        content: content,
-      })
-      .then(() => {
-        toast({
-          status: "success",
-          description: "작성 완료",
-          position: "bottom",
-        });
-        listQnARefresh();
-      })
-      .catch(() => {})
-      .finally(() => {
-        onQnAClose();
       });
   }
 
@@ -527,13 +309,10 @@ export function StoreProductView() {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <ListQnA listQnA={listQnA} />
+                    <QnA productId={productId} Login={Login} />
                   </Tbody>
                 </Table>
               </TableContainer>
-              <Box w={"100%"} textAlign={"right"}>
-                <Button onClick={onQnAOpen}>문의글 작성</Button>
-              </Box>
             </TabPanel>
           </TabPanels>
         </Tabs>
@@ -595,69 +374,6 @@ export function StoreProductView() {
                 확인
               </Button>
               <Button onClick={onAddClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      <Modal isOpen={isQnAOpen} onClose={onQnAClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>문의글 작성</ModalHeader>
-          <ModalBody>
-            <FormControl mb={3}>
-              <FormLabel>제목</FormLabel>
-              <Input
-                type={"text"}
-                placeholder={"제목을 작성해주세요"}
-                onChange={(e) => setTitleQnA(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>내용</FormLabel>
-              <Textarea
-                resize={"none"}
-                placeholder={"내용을 작성해주세요"}
-                onChange={(e) => setContentQnA(e.target.value)}
-              ></Textarea>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                onClick={() => handleQnAAdd(productId, titleQnA, contentQnA)}
-              >
-                확인
-              </Button>
-              <Button onClick={onQnAClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      <Modal isOpen={isQnAContentOpen} onClose={onQnAContentOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{titleQnA}</ModalHeader>
-          <hr />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>내용</FormLabel>
-              <Textarea onResize={"none"} readOnly>
-                {contentQnA}
-              </Textarea>
-            </FormControl>
-            <hr />
-            <FormControl>
-              <FormLabel>답변목록</FormLabel>
-              <QnACommentAnswerList />
-            </FormControl>
-          </ModalBody>
-          <hr />
-          <ModalFooter>
-            <Flex>
-              <Button>확인</Button>
-              <Button onClick={onQnAContentClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

@@ -19,9 +19,9 @@ public class ProductQnAService {
         mapper.addQnA(productQnA);
     }
 
-    public List<ProductQnA> listQnA() {
+    public List<ProductQnA> listQnA(Integer productId) {
 
-        return mapper.listQnA();
+        return mapper.listQnA(productId);
 
     }
 

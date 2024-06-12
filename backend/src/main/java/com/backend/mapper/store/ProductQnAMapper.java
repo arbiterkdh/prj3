@@ -18,8 +18,9 @@ public interface ProductQnAMapper {
     @Select("""
             SELECT *
             FROM product_qna
+            WHERE product_id = #{productId}
             """)
-    List<ProductQnA> listQnA();
+    List<ProductQnA> listQnA(Integer productId);
 
     @Delete("""
             DELETE
