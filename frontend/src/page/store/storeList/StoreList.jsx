@@ -7,26 +7,14 @@ import {
   Center,
   Divider,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
   Image,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
   Stack,
   Text,
   useDisclosure,
@@ -46,6 +34,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddCartModal from "./cart/AddCartModal.jsx";
+import ModifyProductModal from "./modify/ModifyProductModal.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -248,35 +237,6 @@ export function StoreList() {
     );
   };
 
-  function handleProductModify(productId, fileName, name, price, file, stock) {
-    axios
-      .putForm(`/api/store/product/modify`, {
-        productId,
-        fileName,
-        name,
-        price,
-        file,
-        stock,
-      })
-      .then((res) => {
-        toast({
-          status: "success",
-          description: "수정 완료",
-          position: "bottom",
-        });
-        productListRefresh();
-      })
-      .catch(() => {})
-      .finally(() => {
-        onModifyClose();
-      });
-  }
-
-  const handleNumberInputChange = (value) => {
-    const val = parseInt(value, 10);
-    setStock(isNaN(value) ? 0 : value);
-  };
-
   return (
     <Box w={"100%"}>
       <Flex>
@@ -351,95 +311,25 @@ export function StoreList() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Modal isOpen={isModifyOpen} onClose={onModifyOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>상품 수정</ModalHeader>
-          <ModalBody>
-            <FormControl mb={3}>
-              <Image src={`http://127.0.0.1:8888/${productId}/${fileName}`} />
-              <input
-                multiple
-                type={"file"}
-                accept="image/*"
-                placeholder={"이미지를 등록하세요"}
-                onChange={(e) => setFile(e.target.files)}
-              />
-            </FormControl>
-            <FormControl mb={3}>
-              <FormLabel>상품명</FormLabel>
-              <Input
-                type={"text"}
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </FormControl>
 
-            <Flex>
-              <NumberInput
-                clampValueOnBlur
-                maxW="100px"
-                mr="2rem"
-                min={1}
-                max={2000}
-                value={stock}
-                onChange={handleNumberInputChange}
-              >
-                <NumberInputField />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-              <Slider
-                flex="1"
-                focusThumbOnChange={false}
-                value={stock}
-                min={1}
-                max={2000}
-                onChange={(e) => setStock(e.target.value)}
-              >
-                <SliderTrack>
-                  <SliderFilledTrack />
-                </SliderTrack>
-                <SliderThumb fontSize="sm" boxSize="32px">
-                  {stock}
-                </SliderThumb>
-              </Slider>
-            </Flex>
+      <ModifyProductModal
+        isModifyOpen={isModifyOpen}
+        onModifyOpen={onModifyOpen}
+        productId={productId}
+        fileName={fileName}
+        name={name}
+        setName={setName}
+        stock={stock}
+        setStock={setStock}
+        price={price}
+        setPrice={setPrice}
+        file={file}
+        setFile={setFile}
+        isLoading={isLoading}
+        onModifyClose={onModifyClose}
+        productListRefresh={productListRefresh}
+      />
 
-            <FormControl>
-              <FormLabel>가격</FormLabel>
-              <Input
-                type={"number"}
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-              />
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                colorScheme={"green"}
-                onClick={() =>
-                  handleProductModify(
-                    productId,
-                    fileName,
-                    name,
-                    price,
-                    file,
-                    stock,
-                  )
-                }
-                isLoading={isLoading}
-              >
-                확인
-              </Button>
-              <Button onClick={onModifyClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <AddCartModal
         isCartOpen={isCartOpen}
         onCartClose={onCartClose}
