@@ -79,7 +79,7 @@ CREATE TABLE product_qna
 
 select *
 from product_qna
-where product_id = 2;
+where product_id = 1;
 
 SELECT *
 FROM product_comment
@@ -88,11 +88,4 @@ WHERE product_id = 2;
 
 select count(*)
 from product_comment
-where product_id = 2;
-
-
-
-
-
-
-
+where product_id = 2

@@ -16,13 +16,15 @@ import { PromoList } from "./page/promotion/list/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
-import { StoreProductView } from "./page/store/view/StoreProductView.jsx";
+import { StoreProductView } from "./page/store/view/storeProduct/StoreProductView.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
 import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
 import { Oauth } from "./page/oauth/Oauth.jsx";
 import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import axios from "axios";
+import { PromoView } from "./page/promotion/view/PromoView.jsx";
+import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -32,8 +34,6 @@ axios.interceptors.request.use((config) => {
   }
   return config;
 });
-import { PromoView } from "./page/promotion/view/PromoView.jsx";
-import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 
 const router = createBrowserRouter([
   {
