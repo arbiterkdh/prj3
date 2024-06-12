@@ -159,7 +159,7 @@ export function MemberLogin() {
                   />
                 </a>
                 <a
-                  href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${account.kakaoKey}&redirect_uri=${account.kakaoUri}`}
+                  href={`https://kauth.kakao.com/oauth/authorize?client_id=${account.kakaoKey}&redirect_uri=${account.kakaoUri}&response_type=code`}
                 >
                   <Image
                     src={

@@ -16,7 +16,7 @@ import { PromoList } from "./page/promotion/list/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
-import { StoreProductView } from "./page/store/view/StoreProductView.jsx";
+import { StoreProductView } from "./page/store/view/storeProduct/StoreProductView.jsx";
 import { MailVerify } from "./member/mail/MailVerify.jsx";
 import { MovieModify } from "./page/movie/modify/MovieModify.jsx";
 import { MemberSignup } from "./member/MemberSignup.jsx";
@@ -34,12 +34,6 @@ axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-    config.headers["Content-Type"] =
-      "application/x-www-form-urlencoded;charset=utf-8";
-  }
-  const access_token = localStorage.getItem("access_token");
-  if (access_token) {
-    config.headers.Authorization = `Bearer ${access_token}`;
   }
   return config;
 });
@@ -55,7 +49,12 @@ const router = createBrowserRouter([
       {
         path: "oauth",
         element: <Oauth />,
-        children: [{ path: "kakao/callback", element: <KakaoRedirect /> }],
+        children: [
+          {
+            path: "kakao/callback",
+            element: <KakaoRedirect />,
+          },
+        ],
       },
       {
         path: "movie",

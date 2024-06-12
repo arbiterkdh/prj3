@@ -7,6 +7,8 @@ CREATE TABLE theater
     location VARCHAR(100) NOT NULL UNIQUE
 );
 
+DESC theater;
+
 INSERT INTO theater
     (city, location)
 VALUES ('서울', '강남'),

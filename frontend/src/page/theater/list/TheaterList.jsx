@@ -110,7 +110,10 @@ export function TheaterList({
               key={theater.number}
               justifyContent={"space-between"}
             >
-              <CursorBox onClick={() => navigate("/theater/" + theater.number)}>
+              <CursorBox
+                onClick={() => navigate("/theater/" + theater.number)}
+                fontSize={"sm"}
+              >
                 <Tooltip hasArrow label={theater.location + " 상세보기"}>
                   {theater.location}
                 </Tooltip>

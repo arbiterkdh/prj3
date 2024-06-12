@@ -22,10 +22,10 @@ public class ProductQnAController {
         service.addQnA(productQnA);
     }
 
-    @GetMapping("/list")
-    public List<ProductQnA> listQnA() {
+    @GetMapping("/list/{productId}")
+    public List<ProductQnA> listQnA(@PathVariable Integer productId) {
 
-        return service.listQnA();
+        return service.listQnA(productId);
     }
 
     @DeleteMapping("/delete/{id}")

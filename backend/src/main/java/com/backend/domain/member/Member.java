@@ -14,4 +14,5 @@ public class Member {
 
     // 카카오 용
     private String picture;
+    private Integer kakaoId;
 }

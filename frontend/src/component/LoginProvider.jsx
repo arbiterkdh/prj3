@@ -11,16 +11,33 @@ export function LoginProvider({ children }) {
   const [picture, setPicture] = useState("");
   const [email, setEmail] = useState("");
 
+  // 카카오 기능들 모음 //
   const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
   const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-  const [isKakaoLogined, setIsKakaoLogined] = useState(false);
+  const kakaoLogoutUri = "http://localhost:5173/oauth/kakao/logout";
+  const [isKakaoLoggedIn, setIsKakaoLoggedIn] = useState(false);
+  function kakaoInfo(id_token) {
+    const payload = jwtDecode(id_token);
+    // axios
+    //   .post("/api/member/kakao-signup", {
+    //     id: payload.id,
+    //     nickName: payload.nickname,
+    //     picture: payload.picture,
+    //     email: payload.email,
+    //   })
+    //   .then((res) => {});
+    setPicture(payload.picture);
+    setNickName(payload.nickname);
+    setEmail(payload.email);
+    setExpired(payload.exp);
+  }
+  // 카카오 기능들 모음 //
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token === null) {
-      return;
+    if (token) {
+      login(token);
     }
-    login(token);
   }, []);
 
   function isLoggedIn() {
@@ -41,23 +58,22 @@ export function LoginProvider({ children }) {
     setEmail(payload.email);
   }
 
-  function kakaoLogin(data) {
-    localStorage.setItem("access_token", data.access_token);
-    setExpired(Date.now() + data.expires_in * 1000);
-  }
-
   function logout() {
-    axios.post(
-      "https://kapi.kakao.com/v1/user/logout",
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      },
-    );
-    localStorage.removeItem("token");
-    localStorage.removeItem("access_token");
+    if (isKakaoLoggedIn) {
+      axios
+        .get(
+          `https://kauth.kakao.com/oauth/logout?client_id=${kakaoKey}&logout_redirect_uri=${kakaoLogoutUri}`,
+        )
+        .then(() => {
+          localStorage.removeItem("access_token");
+          setIsKakaoLoggedIn(false);
+        });
+    }
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      localStorage.removeItem("token");
+    }
     setId("");
     setExpired(0);
     setNickName("");
@@ -78,7 +94,9 @@ export function LoginProvider({ children }) {
         isLoggedIn,
         kakaoKey,
         kakaoUri,
-        kakaoLogin,
+        isKakaoLoggedIn,
+        setIsKakaoLoggedIn,
+        kakaoInfo,
       }}
     >
       {children}
