@@ -24,6 +24,8 @@ function AddQnAModal({ isQnAOpen, onQnAClose, productId, listQnARefresh }) {
   const Login = useContext(LoginContext);
 
   function handleQnAAdd() {
+    console.log(titleQnA);
+    console.log(contentQnA);
     axios
       .post("/api/store/product/qna/add", {
         productId,
