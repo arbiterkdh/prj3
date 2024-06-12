@@ -14,15 +14,15 @@ import DeleteCommentModal from "./DeleteCommentModal.jsx";
 import ModifyCommentModal from "./ModifyCommentModal.jsx";
 import axios from "axios";
 
-function Comment({ Login, productId }) {
+function Comment({ Login, productId, commentList, setCommentList }) {
   const [page, setPage] = useState(1);
+  const [pageInfo, setPageInfo] = useState({});
   const [commentContent, setCommentContent] = useState("");
   const [commentId, setCommentId] = useState(0);
-  const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
     commentListRefresh();
-  }, []);
+  }, [page]);
   const commentListRefresh = () => {
     console.log("page:" + page);
     axios
@@ -33,6 +33,7 @@ function Comment({ Login, productId }) {
       })
       .then((res) => {
         setCommentList(res.data.commentList);
+        setPageInfo(res.data.pageInfo);
       })
       .catch(() => {})
       .finally(() => {});
@@ -56,9 +57,10 @@ function Comment({ Login, productId }) {
     onClose: onDeleteClose,
   } = useDisclosure();
 
-  useEffect(() => {
-    commentListRefresh();
-  }, [page]);
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
 
   const ProductCommentList = ({ commentList }) => {
     return (
@@ -66,17 +68,30 @@ function Comment({ Login, productId }) {
         {commentList.map((commentItem) => (
           <CommentItem key={commentItem.id} commentItem={commentItem} />
         ))}
-        <Box textAlign={"center"} mt={10}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((pageNumber) => (
+
+        <Box>
+          {pageInfo.prevPageNumber && (
+            <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+              이전
+            </Button>
+          )}
+          {pageNumbers.map((pageNumber) => (
             <Button
-              onClick={() => {
-                setPage(pageNumber);
-              }}
+              onClick={() => setPage(pageNumber)}
               key={pageNumber}
+              colorScheme={
+                pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
+              }
             >
               {pageNumber}
             </Button>
           ))}
+
+          {pageInfo.nextPageNumber && (
+            <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+              다음
+            </Button>
+          )}
         </Box>
       </Box>
     );

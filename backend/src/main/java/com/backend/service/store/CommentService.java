@@ -26,12 +26,29 @@ public class CommentService {
         Map pageInfo = new HashMap();
 
         Integer offset = (page - 1) * 10;
-        Integer totalCount = mapper.totalCommentCount();
+        Integer totalCount = mapper.totalCommentCount(productId);
 
+        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
+        Integer rightPageNumber = leftPageNumber + 9;
         Integer lastPageNumber = (totalCount - 1) / 10 + 1;
 
-        pageInfo.put("currentPage", page);
+        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
+
+        Integer prevPageNumber = leftPageNumber - 1;
+        Integer nextPageNumber = rightPageNumber + 1;
+
+
+        pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("leftPageNumber", leftPageNumber);
+        pageInfo.put("rightPageNumber", rightPageNumber);
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
+
 
         List<ProductComment> commentList = mapper.commentList(productId, offset);
 

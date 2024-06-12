@@ -23,6 +23,9 @@ public class CommentController {
     @GetMapping("/list/{productId}")
     public Map<String, Object> list(@PathVariable Integer productId, @RequestParam(defaultValue = "1") Integer page) {
 
+        if (page == null || page < 1) {
+            page = 1;
+        }
         return service.commentList(productId, page);
     }
 
