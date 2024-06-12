@@ -1,10 +1,8 @@
 import { useParams } from "react-router-dom";
 import {
-  Badge,
   Box,
   Button,
   Flex,
-  FormControl,
   Image,
   Input,
   Modal,
@@ -33,11 +31,13 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
 import QnA from "./qna/QnA.jsx";
+import Comment from "./comment/Comment.jsx";
 
 export function StoreProductView() {
   const { productId } = useParams();
   const [product, setProduct] = useState([]);
   const [commentContent, setCommentContent] = useState("");
+
   const [commentList, setCommentList] = useState([]);
   const [commentId, setCommentId] = useState(null);
   // const [idQnA, setIdQnA] = useState(null);
@@ -88,89 +88,6 @@ export function StoreProductView() {
       .finally(() => {});
   };
 
-  useEffect(() => {
-    commentListRefresh();
-  }, [page]);
-
-  function handleCommentAdd(id, commentContent) {
-    axios
-      .post("/api/store/product/comment/add", {
-        productId: id,
-        content: commentContent,
-        writer: Login.nickName,
-      })
-      .then(() => {
-        toast({
-          status: "success",
-          description: "한줄평 작성 성공",
-          position: "bottom",
-        });
-        commentListRefresh();
-      })
-      .catch(() => {})
-      .finally(() => {
-        onAddClose();
-      });
-  }
-
-  const CommentItem = ({ commentItem }) => {
-    return (
-      <Box>
-        <Flex w={"100%"} textAlign={"center"}>
-          <Box w={"60%"}>{commentItem.content}</Box>
-          <Box w={"20%"}>
-            {commentItem.writer}
-
-            {commentItem.writer === Login.nickName && (
-              <>
-                <Badge
-                  onClick={() => {
-                    setCommentId(commentItem.id);
-                    onDeleteOpen();
-                  }}
-                >
-                  삭제
-                </Badge>
-                <Badge
-                  onClick={() => {
-                    onModifyOpen();
-                    setCommentContent(commentItem.content);
-                    setCommentId(commentItem.id);
-                  }}
-                >
-                  수정
-                </Badge>
-              </>
-            )}
-          </Box>
-          <Box w={"20%"}>{commentItem.regDate}</Box>
-        </Flex>
-      </Box>
-    );
-  };
-
-  const ProductCommentList = ({ commentList }) => {
-    return (
-      <Box>
-        {commentList.map((commentItem) => (
-          <CommentItem key={commentItem.id} commentItem={commentItem} />
-        ))}
-        <Box textAlign={"center"} mt={10}>
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((pageNumber) => (
-            <Button
-              onClick={() => {
-                setPage(pageNumber);
-              }}
-              key={pageNumber}
-            >
-              {pageNumber}
-            </Button>
-          ))}
-        </Box>
-      </Box>
-    );
-  };
-
   function handleCommentModify(commentId, commentContent) {
     axios
       .put("/api/store/product/comment/modify", {
@@ -188,23 +105,6 @@ export function StoreProductView() {
       .catch(() => {})
       .finally(() => {
         onModifyClose();
-      });
-  }
-
-  function handleCommentDelete(commentId) {
-    axios
-      .delete(`/api/store/product/comment/delete/${commentId}`)
-      .then(() => {
-        toast({
-          status: "success",
-          description: "코멘트 삭제 완료",
-          position: "bottom",
-        });
-        commentListRefresh();
-      })
-      .catch(() => {})
-      .finally(() => {
-        onDeleteClose();
       });
   }
 
@@ -257,46 +157,12 @@ export function StoreProductView() {
               ></Textarea>
             </TabPanel>
             <TabPanel>
-              <ProductCommentList commentList={commentList} />
-              <hr />
-              <Text fontSize={"lg"}>한줄평</Text>
-              <Flex w={"100%"}>
-                <Box w={"70%"} style={{}}>
-                  <Box w={"100%"}>
-                    <FormControl>
-                      <Input
-                        color="teal"
-                        placeholder="내용을 작성하세요"
-                        _placeholder={{ opacity: 1, color: "gray.500" }}
-                        onChange={(e) => {
-                          setCommentContent(e.target.value);
-                        }}
-                      />
-                    </FormControl>
-                  </Box>
-                </Box>
-                <Box
-                  w={"30%"}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    flexDirection: "column",
-                  }}
-                >
-                  <Box>
-                    <Button
-                      colorScheme={"red"}
-                      onClick={() => {
-                        setCommentContent(commentContent);
-                        onAddOpen();
-                      }}
-                    >
-                      확인
-                    </Button>
-                  </Box>
-                </Box>
-              </Flex>
+              <Comment
+                commentList={commentList}
+                Login={Login}
+                commentListRefresh={commentListRefresh}
+                productId={productId}
+              />
             </TabPanel>
             <TabPanel>
               <TableContainer>
@@ -317,23 +183,7 @@ export function StoreProductView() {
           </TabPanels>
         </Tabs>
       </Box>
-      <Modal isOpen={isAddOpen} onClose={onAddClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>등록알림</ModalHeader>
-          <ModalBody>코멘트를 작성하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                onClick={() => handleCommentAdd(productId, commentContent)}
-              >
-                확인
-              </Button>
-              <Button onClick={onAddClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/*<AddQnAModal />*/}
 
       <Modal isOpen={isModifyOpen} onClose={onModifyClose}>
         <ModalOverlay />
@@ -358,26 +208,7 @@ export function StoreProductView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-
-      <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>삭제 알림</ModalHeader>
-          <ModalBody>코멘트 삭제하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                onClick={() => {
-                  handleCommentDelete(commentId);
-                }}
-              >
-                확인
-              </Button>
-              <Button onClick={onAddClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {/*<DeleteCommentModal />*/}
     </Box>
   );
 }
