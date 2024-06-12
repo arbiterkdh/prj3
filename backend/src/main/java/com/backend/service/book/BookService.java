@@ -1,5 +1,6 @@
 package com.backend.service.book;
 
+import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
@@ -20,9 +21,13 @@ public class BookService {
         return movieMapper.selectAllMovie();
     }
 
-    public List<Movie> getMovieListByLocation(String location) {
-        return bookMapper.selectMovieIdByTheaterLocation(location);
+
+    public int add(MovieLocation movieLocation) {
+        return bookMapper.checkConflict(movieLocation) == 0 ?
+                bookMapper.insertMovieLocation(movieLocation) : 0;
     }
 
-
+    public List<MovieLocation> get() {
+        return bookMapper.selectAllMovieLocation();
+    }
 }
