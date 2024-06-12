@@ -1,12 +1,12 @@
 package com.backend.controller.book;
 
+import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.service.book.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,15 +17,24 @@ public class BookController {
 
     private final BookService bookService;
 
+    @GetMapping("on-movie-list")
+    public List<MovieLocation> getOnMovieList() {
+
+        return bookService.get();
+    }
+
+
     @GetMapping("movie/list")
     public List<Movie> getMovies() {
         return bookService.getMovieList();
     }
 
-
-    @GetMapping("movie-list?location={location}")
-    public List<Movie> getMovieList(@PathVariable(required = false) String location) {
-        return bookService.getMovieListByLocation(location);
+    @PostMapping("movie-location/add")
+    public ResponseEntity addMovieLocation(@RequestBody MovieLocation movieLocation) {
+        if (bookService.add(movieLocation) > 0) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
 }

@@ -8,11 +8,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BookMovieLocationAdd } from "./add/BookMovieLocationAdd.jsx";
 import { BookTheaterList } from "./list/BookTheaterList.jsx";
+import { BookMovieList } from "./list/BookMovieList.jsx";
 
 export function Book() {
   const [cityList, setCityList] = useState([]);
   const [theaterList, setTheaterList] = useState([]);
-  const [cityName, setCityName] = useState("");
+
+  const [movieList, setMovieList] = useState([]);
+  const [movieLocationAdd, setMovieLocationAdd] = useState([]);
+  const [movieLocationAndMovieList, setMovieLocationAndMovieList] = useState(
+    [],
+  );
 
   useEffect(() => {
     axios
@@ -22,7 +28,7 @@ export function Book() {
       })
       .catch()
       .finally();
-  }, []);
+  }, [theaterList, movieLocationAdd]);
 
   return (
     <Center>
@@ -55,6 +61,8 @@ export function Book() {
                 <BookTheaterList
                   cityList={cityList}
                   theaterList={theaterList}
+                  setTheaterList={setTheaterList}
+                  setMovieLocationAndMovieList={setMovieLocationAndMovieList}
                 />
               </OuterBookBox>
               <OuterBookBox>
@@ -67,21 +75,36 @@ export function Book() {
                   </Select>
                 </BookBox>
                 <Box h={"600px"} border={"1px solid black"}>
-                  영화들 쭉 나열할 곳<Box></Box>
+                  <BookMovieList
+                    movieList={movieList}
+                    setMovieList={setMovieList}
+                    movieLocationAndMovieList={movieLocationAndMovieList}
+                  />
+                  <Box>
+                    {movieLocationAdd &&
+                      movieLocationAdd.map((movie) => (
+                        <Box key={movie.movie_id}>{movie.movie_id}</Box>
+                      ))}
+                  </Box>
                 </Box>
               </OuterBookBox>
               <OuterBookBox>
                 <BookBox>날짜 나올 곳</BookBox>
                 <BookBox>날짜 페이징 할 곳</BookBox>
                 <Box h={"600px"} border={"1px solid black"}>
-                  해당되는 영화들 쭉 나열될 곳
+                  <BookMovieList />
                 </Box>
               </OuterBookBox>
             </Flex>
             <Box></Box>
           </Stack>
         </Flex>
-        <BookMovieLocationAdd />
+        <BookMovieLocationAdd
+          cityList={cityList}
+          setMovieLocationAdd={setMovieLocationAdd}
+          movieList={movieList}
+          setMovieList={setMovieList}
+        />
       </CenterBox>
     </Center>
   );
