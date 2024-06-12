@@ -112,11 +112,15 @@ function QnA({ productId, Login }) {
     <>
       <ListQnA listQnA={listQnA} />
 
-      <Box w={"100%"}>
-        <Button colorScheme={"blue"} onClick={onQnAOpen}>
-          문의글 작성
-        </Button>
-      </Box>
+      <Tr>
+        <Td>
+          <Box w={"100%"}>
+            <Button colorScheme={"blue"} onClick={onQnAOpen}>
+              문의글 작성
+            </Button>
+          </Box>
+        </Td>
+      </Tr>
 
       <ReadQnAContentModal
         isQnAContentOpen={isQnAContentOpen}
