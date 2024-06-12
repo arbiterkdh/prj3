@@ -11,16 +11,43 @@ import {
 } from "@chakra-ui/react";
 import AddCommentModal from "./AddCommentModal.jsx";
 import DeleteCommentModal from "./DeleteCommentModal.jsx";
+import ModifyCommentModal from "./ModifyCommentModal.jsx";
+import axios from "axios";
 
-function Comment({ commentList, Login, commentListRefresh, productId }) {
+function Comment({ Login, productId }) {
   const [page, setPage] = useState(1);
   const [commentContent, setCommentContent] = useState("");
   const [commentId, setCommentId] = useState(0);
+  const [commentList, setCommentList] = useState([]);
+
+  useEffect(() => {
+    commentListRefresh();
+  }, []);
+  const commentListRefresh = () => {
+    console.log("page:" + page);
+    axios
+      .get(`/api/store/product/comment/list/${productId}`, {
+        params: {
+          page,
+        },
+      })
+      .then((res) => {
+        setCommentList(res.data.commentList);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
 
   const {
     isOpen: isAddOpen,
     onOpen: onAddOpen,
     onClose: onAddClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isModifyOpen,
+    onOpen: onModifyOpen,
+    onClose: onModifyClose,
   } = useDisclosure();
 
   const {
@@ -145,6 +172,12 @@ function Comment({ commentList, Login, commentListRefresh, productId }) {
       <DeleteCommentModal
         isDeleteOpen={isDeleteOpen}
         onDeleteClose={onDeleteClose}
+        commentListRefresh={commentListRefresh}
+        commentId={commentId}
+      />
+      <ModifyCommentModal
+        isModifyOpen={isModifyOpen}
+        onModifyClose={onModifyClose}
         commentListRefresh={commentListRefresh}
         commentId={commentId}
       />

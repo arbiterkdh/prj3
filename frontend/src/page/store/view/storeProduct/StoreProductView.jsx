@@ -1,16 +1,8 @@
 import { useParams } from "react-router-dom";
 import {
   Box,
-  Button,
   Flex,
   Image,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Tab,
   Table,
   TableContainer,
@@ -24,8 +16,6 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -36,32 +26,8 @@ import Comment from "./comment/Comment.jsx";
 export function StoreProductView() {
   const { productId } = useParams();
   const [product, setProduct] = useState([]);
-  const [commentContent, setCommentContent] = useState("");
-
   const [commentList, setCommentList] = useState([]);
-  const [commentId, setCommentId] = useState(null);
-  // const [idQnA, setIdQnA] = useState(null);
-  const toast = useToast();
   const Login = useContext(LoginContext);
-  const [page, setPage] = useState(1);
-
-  const {
-    isOpen: isAddOpen,
-    onOpen: onAddOpen,
-    onClose: onAddClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isModifyOpen,
-    onOpen: onModifyOpen,
-    onClose: onModifyClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose,
-  } = useDisclosure();
 
   useEffect(() => {
     axios
@@ -72,41 +38,6 @@ export function StoreProductView() {
       .catch(() => {})
       .finally(() => {});
   }, []);
-
-  const commentListRefresh = () => {
-    console.log("page:" + page);
-    axios
-      .get(`/api/store/product/comment/list/${productId}`, {
-        params: {
-          page,
-        },
-      })
-      .then((res) => {
-        setCommentList(res.data.commentList);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  };
-
-  function handleCommentModify(commentId, commentContent) {
-    axios
-      .put("/api/store/product/comment/modify", {
-        id: commentId,
-        content: commentContent,
-      })
-      .then(() => {
-        toast({
-          status: "success",
-          description: "코멘트 수정 완료",
-          position: "bottom",
-        });
-        commentListRefresh();
-      })
-      .catch(() => {})
-      .finally(() => {
-        onModifyClose();
-      });
-  }
 
   return (
     <Box>
@@ -160,7 +91,6 @@ export function StoreProductView() {
               <Comment
                 commentList={commentList}
                 Login={Login}
-                commentListRefresh={commentListRefresh}
                 productId={productId}
               />
             </TabPanel>
@@ -183,32 +113,6 @@ export function StoreProductView() {
           </TabPanels>
         </Tabs>
       </Box>
-      {/*<AddQnAModal />*/}
-
-      <Modal isOpen={isModifyOpen} onClose={onModifyClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>코멘트를 수정하시겠습니까?</ModalHeader>
-          <ModalBody>
-            <Input
-              type={"text"}
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                onClick={() => handleCommentModify(commentId, commentContent)}
-              >
-                확인
-              </Button>
-              <Button onClick={onModifyClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-      {/*<DeleteCommentModal />*/}
     </Box>
   );
 }

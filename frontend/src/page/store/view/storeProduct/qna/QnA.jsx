@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Td, Tr, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import AddQnAModal from "./AddQnAModal.jsx";
 import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
@@ -11,7 +11,6 @@ function QnA({ productId, Login }) {
   const [idQnA, setIdQnA] = useState(0);
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
-  const toast = useToast();
   const {
     isOpen: isQnAOpen,
     onOpen: onQnAOpen,
