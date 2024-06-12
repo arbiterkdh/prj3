@@ -7,12 +7,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Popover,
   PopoverBody,
   PopoverCloseButton,
@@ -29,7 +23,8 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import FocusLock from "react-focus-lock";
-import AddQnAModal from "../modal/AddQnAModal.jsx";
+import AddQnAModal from "../modal/qna/AddQnAModal.jsx";
+import ReadQnAContentModal from "../modal/qna/ReadQnAContentModal.jsx";
 
 function QnA({ productId, Login }) {
   const [listQnA, setListQnA] = useState([]);
@@ -227,31 +222,13 @@ function QnA({ productId, Login }) {
           문의글 작성
         </Button>
       </Box>
-      <Modal isOpen={isQnAContentOpen} onClose={onQnAContentOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{titleQnA}</ModalHeader>
-          <hr />
-          <ModalBody>
-            <FormControl>
-              <FormLabel>내용</FormLabel>
-              <Textarea readOnly>{contentQnA}</Textarea>
-            </FormControl>
-            <hr />
-            <FormControl>
-              <FormLabel>답변목록</FormLabel>
-              {/*<QnACommentAnswerList />*/}
-            </FormControl>
-          </ModalBody>
-          <hr />
-          <ModalFooter>
-            <Flex>
-              <Button>확인</Button>
-              <Button onClick={onQnAContentClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+
+      <ReadQnAContentModal
+        isQnAContentOpen={isQnAContentOpen}
+        onQnAContentClose={onQnAContentClose}
+        titleQnA={titleQnA}
+        contentQnA={contentQnA}
+      />
 
       <AddQnAModal
         isQnAOpen={isQnAOpen}
