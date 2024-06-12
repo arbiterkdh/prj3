@@ -40,7 +40,21 @@ export function PromoView() {
         }
       })
       .finally(() => {});
-  }, []);
+  }, [promoId, navigate, toast]);
+
+  const getEventStatus = (startDate, endDate) => {
+    const now = new Date();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (now < start) {
+      return "예정된 이벤트";
+    } else if (now >= start && now <= end) {
+      return "진행 중인 이벤트";
+    } else {
+      return "종료된 이벤트";
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -74,6 +88,8 @@ export function PromoView() {
     return <Spinner />;
   }
 
+  const eventStatus = getEventStatus(promo.eventStartDate, promo.eventEndDate);
+
   return (
     <Box>
       <Heading>{promo.title}</Heading>
@@ -86,6 +102,9 @@ export function PromoView() {
         </Text>
         <Text>
           <strong>이벤트 종료일:</strong> {formatDate(promo.eventEndDate)}
+        </Text>
+        <Text>
+          <strong>이벤트 상태:</strong> {eventStatus}
         </Text>
       </Box>
       <Box mt={4}>

@@ -1,6 +1,7 @@
 package com.backend.service.promotion;
 
 import com.backend.domain.promotion.Promotion;
+import com.backend.domain.promotion.PromotionFile;
 import com.backend.mapper.promotion.PromotionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -62,20 +63,29 @@ public class PromotionService {
     }
 
     public Promotion get(Integer id) {
-        return promotionMapper.selectById(id);
+        Promotion promotion = promotionMapper.selectById(id);
+        List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
+
+        List<PromotionFile> files = fileNames.stream()
+                .map(name -> new PromotionFile(name, STR."http://172.30.1.3:8888/\{id}/\{name}"))
+                .toList();
+
+        promotion.setFileList(files);
+
+        return promotion;
     }
 
     public void remove(Integer id) {
-        List<String> fileNames = promotionMapper.selectFileNameByBoardId(id);
+        List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         String dir = STR."C:/Temp/prj3/\{id}";
         for (String fileName : fileNames) {
             File file = new File(dir, fileName);
             file.delete();
         }
-        File file = new File(dir);
-        if (file.exists()) {
-            file.delete();
+        File dirfile = new File(dir);
+        if (dirfile.exists()) {
+            dirfile.delete();
         }
         promotionMapper.deleteFileByPromoId(id);
         promotionMapper.deleteById(id);

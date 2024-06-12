@@ -59,7 +59,7 @@ public interface PromotionMapper {
             FROM promo_file
             WHERE promo_id=#{promoId}
             """)
-    List<String> selectFileNameByBoardId(Integer promoId);
+    List<String> selectFileNameByPromoId(Integer promoId);
 
     @Delete("""
             DELETE FROM promo_file
