@@ -8,7 +8,6 @@ import ModifyQnAModal from "./ModifyQnAModal.jsx";
 
 function QnA({ productId, Login, listQnA, setListQnA }) {
   const [pageInfo, setPageInfo] = useState({});
-  const [idQnA, setIdQnA] = useState(0);
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
   const [page, setPage] = useState(1);
@@ -26,10 +25,10 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
   } = useDisclosure();
 
   useEffect(() => {
-    QnAListRefresh();
+    listQnARefresh();
   }, [page]);
 
-  const QnAListRefresh = () => {
+  const listQnARefresh = () => {
     axios
       .get(`/api/store/product/qna/list/${productId}`, {
         params: { page },
@@ -83,7 +82,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
               <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
                 다음
               </Button>
-              <Button onClick={() => setPage(pageInfo.rightPageNumber)}>
+              <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
                 맨끝
               </Button>
             </>
@@ -106,7 +105,6 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
           w={"70%"}
           onClick={() => {
             onQnAContentOpen();
-            // setIdQnA(itemQnA.id);
             setContentQnA(itemQnA.content);
             setTitleQnA(itemQnA.title);
           }}
@@ -119,7 +117,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
             <>
               <DeleteQnAModal
                 itemQnAId={itemQnA.id}
-                listQnARefresh={QnAListRefresh}
+                listQnARefresh={listQnARefresh}
               />
               <ModifyQnAModal
                 isQnAModifyOpen={isQnAModifyOpen}
@@ -128,7 +126,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
                 itemQnATitle={itemQnA.title}
                 itemQnAContent={itemQnA.content}
                 itemQnAId={itemQnA.id}
-                listQnARefresh={QnAListRefresh}
+                listQnARefresh={listQnARefresh}
               />
             </>
           )}
@@ -165,7 +163,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
         onQnAClose={onQnAClose}
         productId={productId}
         Login={Login}
-        listQnARefresh={QnAListRefresh}
+        listQnARefresh={listQnARefresh}
       />
     </>
   );
