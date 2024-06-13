@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -13,18 +13,16 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function PromoList() {
+export function PromoList({ eventType }) {
   const [promoList, setPromoList] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
+  const { eventTypeParam } = useParams();
+  const eventTypeFilter = eventType || eventTypeParam;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
-
-  const queryParams = new URLSearchParams(location.search);
-  const eventTypeFilter = queryParams.get("eventType");
 
   const filteredPromoList = eventTypeFilter
     ? promoList.filter((promo) => promo.eventType === eventTypeFilter)
@@ -62,10 +60,6 @@ export function PromoList() {
                     </Box>
                   ))}
               </Box>
-              {/*<Image*/}
-              {/*  boxSize="100%"*/}
-              {/*  src="https://img.cgv.co.kr/WebApp/contents/eventV4/40714/17171440149400.jpg"*/}
-              {/*/>*/}
               <Box flex={1}>
                 <Heading as="b" mb={2}>
                   {promo.title}
