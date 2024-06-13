@@ -13,6 +13,13 @@ import AddCommentModal from "./AddCommentModal.jsx";
 import DeleteCommentModal from "./DeleteCommentModal.jsx";
 import ModifyCommentModal from "./ModifyCommentModal.jsx";
 import axios from "axios";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Comment({ Login, productId, commentList, setCommentList }) {
   const [page, setPage] = useState(1);
@@ -71,9 +78,14 @@ function Comment({ Login, productId, commentList, setCommentList }) {
 
         <Box>
           {pageInfo.prevPageNumber && (
-            <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
-              이전
-            </Button>
+            <>
+              <Button onClick={() => setPage(1)}>
+                <FontAwesomeIcon icon={faAnglesLeft} />
+              </Button>
+              <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </Button>
+            </>
           )}
           {pageNumbers.map((pageNumber) => (
             <Button
@@ -88,9 +100,14 @@ function Comment({ Login, productId, commentList, setCommentList }) {
           ))}
 
           {pageInfo.nextPageNumber && (
-            <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-              다음
-            </Button>
+            <>
+              <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                <FontAwesomeIcon icon={faAngleRight} />
+              </Button>
+              <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
+                <FontAwesomeIcon icon={faAnglesRight} />
+              </Button>
+            </>
           )}
         </Box>
       </Box>

@@ -77,6 +77,14 @@ CREATE TABLE product_qna
     reg_date   datetime default now()
 );
 
+create table product_type
+(
+
+    id         int auto_increment primary key,
+    name       varchar(10),
+    product_id int references product (id)
+);
+
 select *
 from product_qna
 where product_id = 1;
