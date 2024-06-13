@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,12 @@ public class BookService {
     }
 
     public List<Map<String, Object>> getOnMovieList() {
-        return bookMapper.selectAllOnMovieByDate();
+        List<Map<String, Object>> mapList = bookMapper.selectAllOnMovieByDate();
+        List<Map<String, Object>> onMovieList = new ArrayList<>();
+        for (Map<String, Object> map : mapList) {
+            map.put("theater_number", bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id")));
+            onMovieList.add(map);
+        }
+        return onMovieList;
     }
 }

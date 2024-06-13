@@ -17,6 +17,7 @@ export function Book() {
   const [theaterList, setTheaterList] = useState([]);
 
   const [movieList, setMovieList] = useState([]);
+  const [onMovieList, setOnMovieList] = useState([]);
   const [movieLocationAdd, setMovieLocationAdd] = useState([]);
 
   useEffect(() => {
@@ -27,6 +28,10 @@ export function Book() {
       })
       .catch()
       .finally();
+
+    axios.get("/api/book/onmovielist").then((res) => {
+      setOnMovieList(res.data);
+    });
   }, [theaterList, movieLocationAdd]);
 
   return (
@@ -76,8 +81,9 @@ export function Book() {
                 </BookBox>
                 <Box h={"600px"} border={"1px solid black"}>
                   <BookMovieList
-                    movieList={movieList}
                     checkedTheaterNumber={checkedTheaterNumber}
+                    movieLocationAdd={movieLocationAdd}
+                    onMovieList={onMovieList}
                   />
                   <Box>
                     {movieLocationAdd &&
@@ -101,6 +107,7 @@ export function Book() {
           setMovieLocationAdd={setMovieLocationAdd}
           movieList={movieList}
           setMovieList={setMovieList}
+          onMovieList={onMovieList}
         />
       </CenterBox>
     </Center>
