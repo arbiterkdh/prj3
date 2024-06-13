@@ -6,7 +6,6 @@ import {
   Heading,
   Text,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
@@ -32,7 +31,6 @@ export function StoreList() {
   const [file, setFile] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
   const navigate = useNavigate();
 
   const {
