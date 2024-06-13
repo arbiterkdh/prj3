@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/book")
@@ -17,10 +18,15 @@ public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("on-movie-list")
-    public List<MovieLocation> getOnMovieList() {
+    @GetMapping("onmovielist")
+    public List<Map<String, Object>> getOnMovieList() {
 
-        return bookService.get();
+        return bookService.getOnMovieList();
+    }
+
+    @GetMapping("list")
+    public List<Integer> getMovieListByTheaterNumber(@RequestParam("theaternumber") Integer number) {
+        return bookService.getMovieIdByTheaterNumber(number);
     }
 
 
@@ -29,7 +35,7 @@ public class BookController {
         return bookService.getMovieList();
     }
 
-    @PostMapping("movie-location/add")
+    @PostMapping("movielocation/add")
     public ResponseEntity addMovieLocation(@RequestBody MovieLocation movieLocation) {
         if (bookService.add(movieLocation) > 0) {
             return ResponseEntity.ok().build();

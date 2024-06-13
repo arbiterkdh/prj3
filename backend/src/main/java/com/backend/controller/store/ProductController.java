@@ -18,7 +18,6 @@ public class ProductController {
     @PostMapping("/add")
     public void add(Product product, @RequestParam(value = "files[]", required = true) MultipartFile[] files) throws Exception {
 
-        System.out.println("product = " + product);
 
         for (int i = 0; i < files.length; i++) {
             System.out.println(files[i].getOriginalFilename());

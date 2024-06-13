@@ -40,7 +40,8 @@ public interface CommentMapper {
     @Select("""
             SELECT COUNT(*)
             FROM product_comment
+            WHERE product_id = #{productId}
             """)
-    int totalCommentCount();
+    int totalCommentCount(Integer productId);
 
 }

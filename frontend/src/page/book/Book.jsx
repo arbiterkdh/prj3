@@ -11,14 +11,13 @@ import { BookTheaterList } from "./list/BookTheaterList.jsx";
 import { BookMovieList } from "./list/BookMovieList.jsx";
 
 export function Book() {
+  const [checkedTheaterNumber, setCheckedTheaterNumber] = useState(0);
+
   const [cityList, setCityList] = useState([]);
   const [theaterList, setTheaterList] = useState([]);
 
   const [movieList, setMovieList] = useState([]);
   const [movieLocationAdd, setMovieLocationAdd] = useState([]);
-  const [movieLocationAndMovieList, setMovieLocationAndMovieList] = useState(
-    [],
-  );
 
   useEffect(() => {
     axios
@@ -62,7 +61,8 @@ export function Book() {
                   cityList={cityList}
                   theaterList={theaterList}
                   setTheaterList={setTheaterList}
-                  setMovieLocationAndMovieList={setMovieLocationAndMovieList}
+                  checkedTheaterNumber={checkedTheaterNumber}
+                  setCheckedTheaterNumber={setCheckedTheaterNumber}
                 />
               </OuterBookBox>
               <OuterBookBox>
@@ -77,8 +77,7 @@ export function Book() {
                 <Box h={"600px"} border={"1px solid black"}>
                   <BookMovieList
                     movieList={movieList}
-                    setMovieList={setMovieList}
-                    movieLocationAndMovieList={movieLocationAndMovieList}
+                    checkedTheaterNumber={checkedTheaterNumber}
                   />
                   <Box>
                     {movieLocationAdd &&
@@ -91,9 +90,7 @@ export function Book() {
               <OuterBookBox>
                 <BookBox>날짜 나올 곳</BookBox>
                 <BookBox>날짜 페이징 할 곳</BookBox>
-                <Box h={"600px"} border={"1px solid black"}>
-                  <BookMovieList />
-                </Box>
+                <Box h={"600px"} border={"1px solid black"}></Box>
               </OuterBookBox>
             </Flex>
             <Box></Box>

@@ -15,7 +15,7 @@ public class CommentController {
     private final CommentService service;
 
     @PostMapping("/add")
-    public void addComment(ProductComment productComment) {
+    public void addComment(@RequestBody ProductComment productComment) {
 
         service.addComment(productComment);
     }
@@ -23,11 +23,14 @@ public class CommentController {
     @GetMapping("/list/{productId}")
     public Map<String, Object> list(@PathVariable Integer productId, @RequestParam(defaultValue = "1") Integer page) {
 
+        if (page == null || page < 1) {
+            page = 1;
+        }
         return service.commentList(productId, page);
     }
 
     @PutMapping("/modify")
-    public void modifyComment(ProductComment productComment) {
+    public void modifyComment(@RequestBody ProductComment productComment) {
 
         service.modifyComment(productComment);
     }

@@ -25,7 +25,7 @@ export function BookMovieLocationAdd({
   }, []);
   function handleClickMovieLocationAdd() {
     axios
-      .post(`/api/book/movie-location/add`, {
+      .post(`/api/book/movielocation/add`, {
         movie_id: movieId,
         theater_number: theaterNumber,
       })

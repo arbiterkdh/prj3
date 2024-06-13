@@ -90,6 +90,7 @@ export function StoreProductView() {
             <TabPanel>
               <Comment
                 commentList={commentList}
+                setCommentList={setCommentList}
                 Login={Login}
                 productId={productId}
               />

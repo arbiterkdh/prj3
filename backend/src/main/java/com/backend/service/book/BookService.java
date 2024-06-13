@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -29,5 +30,14 @@ public class BookService {
 
     public List<MovieLocation> get() {
         return bookMapper.selectAllMovieLocation();
+    }
+
+    public List<Integer> getMovieIdByTheaterNumber(Integer number) {
+
+        return bookMapper.selectMovieIdByTheaterNumber(number);
+    }
+
+    public List<Map<String, Object>> getOnMovieList() {
+        return bookMapper.selectAllOnMovieByDate();
     }
 }
