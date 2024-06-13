@@ -1,6 +1,7 @@
 package com.backend.service.store;
 
 import com.backend.domain.store.Product;
+import com.backend.domain.store.ProductType;
 import com.backend.mapper.store.ImageMapper;
 import com.backend.mapper.store.ProductMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,9 +41,10 @@ public class ProductService {
         }
     }
 
-    public List<Product> productList() {
 
-        return mapper.productList();
+    public List<Product> productList(String menuTypeSelect) {
+
+        return mapper.productList(menuTypeSelect);
     }
 
     public void deleteProduct(Integer id) {
@@ -97,5 +99,10 @@ public class ProductService {
     public Product info(Integer id) {
 
         return mapper.info(id);
+    }
+
+    public List<ProductType> typeList() {
+
+        return mapper.typeList();
     }
 }

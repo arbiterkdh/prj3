@@ -1,6 +1,7 @@
 package com.backend.controller.store;
 
 import com.backend.domain.store.Product;
+import com.backend.domain.store.ProductType;
 import com.backend.service.store.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ public class ProductController {
     @PostMapping("/add")
     public void add(Product product, @RequestParam(value = "files[]", required = true) MultipartFile[] files) throws Exception {
 
+        System.out.println("product = " + product);
 
         for (int i = 0; i < files.length; i++) {
             System.out.println(files[i].getOriginalFilename());
@@ -26,10 +28,16 @@ public class ProductController {
         service.add(product, files);
     }
 
-    @GetMapping("/list")
-    public List<Product> list() {
+    @GetMapping("/list/{menuTypeSelect}")
+    public List<Product> list(@PathVariable(required = false) String menuTypeSelect) {
 
-        return service.productList();
+        return service.productList(menuTypeSelect);
+    }
+
+    @GetMapping("/type")
+    public List<ProductType> typeList() {
+
+        return service.typeList();
     }
 
     @DeleteMapping("/delete/{id}")

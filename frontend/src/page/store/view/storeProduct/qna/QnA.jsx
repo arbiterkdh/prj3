@@ -6,11 +6,12 @@ import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
 import DeleteQnAModal from "./DeleteQnAModal.jsx";
 import ModifyQnAModal from "./ModifyQnAModal.jsx";
 
-function QnA({ productId, Login }) {
-  const [listQnA, setListQnA] = useState([]);
-  const [idQnA, setIdQnA] = useState(0);
+function QnA({ productId, Login, listQnA, setListQnA }) {
+  const [pageInfo, setPageInfo] = useState({});
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
+  const [page, setPage] = useState(1);
+
   const {
     isOpen: isQnAOpen,
     onOpen: onQnAOpen,
@@ -24,34 +25,70 @@ function QnA({ productId, Login }) {
   } = useDisclosure();
 
   useEffect(() => {
-    axios
-      .get(`/api/store/product/qna/list/${productId}`)
-      .then((res) => {
-        setListQnA(res.data);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, []);
+    listQnARefresh();
+  }, [page]);
 
-  function listQnARefresh() {
+  const listQnARefresh = () => {
     axios
-      .get(`/api/store/product/qna/list/${productId}`)
-      .then((res) => {
-        setListQnA(res.data);
+      .get(`/api/store/product/qna/list/${productId}`, {
+        params: { page },
       })
-      .catch(() => {})
-      .finally(() => {});
+      .then((res) => {
+        setListQnA(res.data.listQnA);
+        setPageInfo(res.data.pageInfo);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch QnA list:", err);
+      });
+  };
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
   }
 
   const ListQnA = ({ listQnA }) => {
     return (
-      <>
-        {listQnA.map((itemQnA) => (
-          <Tr key={itemQnA.id}>
-            <QnAItem itemQnA={itemQnA} />
+      <Box>
+        <>
+          {listQnA.map((itemQnA) => (
+            <QnAItem itemQnA={itemQnA} key={itemQnA.id} />
+          ))}
+          <Tr>
+            <Td>
+              {pageInfo.prevPageNumber > 0 && (
+                <>
+                  <Button onClick={() => setPage(1)}>처음</Button>
+                  <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                    이전
+                  </Button>
+                </>
+              )}
+            </Td>
           </Tr>
-        ))}
-      </>
+          {pageNumbers.map((pageNumber) => (
+            <Button
+              onClick={() => setPage(pageNumber)}
+              key={pageNumber}
+              colorScheme={
+                pageNumber === pageInfo.currentPage ? "blue" : "gray"
+              }
+            >
+              {pageNumber}
+            </Button>
+          ))}
+          {pageInfo.nextPageNumber && (
+            <>
+              <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                다음
+              </Button>
+              <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
+                맨끝
+              </Button>
+            </>
+          )}
+        </>
+      </Box>
     );
   };
 
@@ -61,20 +98,13 @@ function QnA({ productId, Login }) {
       onOpen: onQnAModifyOpen,
       onClose: onQnAModifyClose,
     } = useDisclosure();
-    const [currentTitle, setCurrentTitle] = useState(itemQnA.title);
-    const [currentContent, setCurrentContent] = useState(itemQnA.content);
 
-    useEffect(() => {
-      setCurrentTitle(itemQnA.title);
-      setCurrentContent(itemQnA.content);
-    }, [itemQnA]);
     return (
-      <>
+      <Tr>
         <Td
           w={"70%"}
           onClick={() => {
             onQnAContentOpen();
-            setIdQnA(itemQnA.id);
             setContentQnA(itemQnA.content);
             setTitleQnA(itemQnA.title);
           }}
@@ -83,14 +113,12 @@ function QnA({ productId, Login }) {
         </Td>
         <Td w={"20%"}>
           {itemQnA.writer}
-
           {itemQnA.writer === Login.nickName && (
             <>
               <DeleteQnAModal
                 itemQnAId={itemQnA.id}
                 listQnARefresh={listQnARefresh}
               />
-
               <ModifyQnAModal
                 isQnAModifyOpen={isQnAModifyOpen}
                 onQnAModifyOpen={onQnAModifyOpen}
@@ -104,16 +132,19 @@ function QnA({ productId, Login }) {
           )}
         </Td>
         <Td w={"10%"}>{itemQnA.regDate}</Td>
-      </>
+      </Tr>
     );
   };
 
   return (
     <>
-      <ListQnA listQnA={listQnA} />
-
       <Tr>
-        <Td>
+        <Td colSpan={3}>
+          <ListQnA listQnA={listQnA} />
+        </Td>
+      </Tr>
+      <Tr>
+        <Td colSpan={3}>
           <Box w={"100%"}>
             <Button colorScheme={"blue"} onClick={onQnAOpen}>
               문의글 작성
@@ -121,18 +152,17 @@ function QnA({ productId, Login }) {
           </Box>
         </Td>
       </Tr>
-
       <ReadQnAContentModal
         isQnAContentOpen={isQnAContentOpen}
         onQnAContentClose={onQnAContentClose}
         titleQnA={titleQnA}
         contentQnA={contentQnA}
       />
-
       <AddQnAModal
         isQnAOpen={isQnAOpen}
         onQnAClose={onQnAClose}
         productId={productId}
+        Login={Login}
         listQnARefresh={listQnARefresh}
       />
     </>
