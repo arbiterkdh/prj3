@@ -38,13 +38,22 @@ public class BookService {
         return bookMapper.selectMovieIdByTheaterNumber(number);
     }
 
-    public List<Map<String, Object>> getOnMovieList() {
-        List<Map<String, Object>> mapList = bookMapper.selectAllOnMovieByDate();
-        List<Map<String, Object>> onMovieList = new ArrayList<>();
+    public List<Map<String, Object>> getOnScreenList() {
+        List<Map<String, Object>> mapList = bookMapper.selectAllOnScreenByDate();
+        return getMaps(mapList);
+    }
+
+    public List<Map<String, Object>> getWillScreenList() {
+        List<Map<String, Object>> mapList = bookMapper.selectAllWillScreenByDate();
+        return getMaps(mapList);
+    }
+
+    private List<Map<String, Object>> getMaps(List<Map<String, Object>> mapList) {
+        List<Map<String, Object>> screenList = new ArrayList<>();
         for (Map<String, Object> map : mapList) {
             map.put("theater_number", bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id")));
-            onMovieList.add(map);
+            screenList.add(map);
         }
-        return onMovieList;
+        return screenList;
     }
 }

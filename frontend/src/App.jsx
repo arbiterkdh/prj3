@@ -26,6 +26,7 @@ import axios from "axios";
 import { PromoView } from "./page/promotion/view/PromoView.jsx";
 import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
+import { BookHome } from "./page/book/BookHome.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -76,8 +77,15 @@ const router = createBrowserRouter([
           },
         ],
       },
-      { path: "book", element: <Book /> },
-      { path: "book/theaterseat", element: <TheaterSeatList /> },
+      {
+        path: "book",
+        element: <BookHome />,
+        children: [
+          { index: true, element: <Book /> },
+          { path: "theaterseat", element: <TheaterSeatList /> },
+        ],
+      },
+
       {
         path: "theater",
         element: <Theater />,

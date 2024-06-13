@@ -34,3 +34,11 @@ FROM theater;
 DELETE
 FROM theater
 WHERE number = 143;
+
+CREATE TABLE theater_box
+(
+    theater_number INT REFERENCES theater (number),
+    box_number     INT NOT NULL,
+    box_capacity   INT NOT NULL,
+    CONSTRAINT box_capacity CHECK ( box_capacity % 2 = 0 )
+);
