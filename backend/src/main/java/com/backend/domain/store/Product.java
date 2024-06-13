@@ -14,4 +14,5 @@ public class Product {
     private String fileName;
     private Integer quantity;
     private LocalDateTime regDate;
+    private Integer type;
 }

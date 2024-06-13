@@ -21,6 +21,18 @@ import ProductItemList from "./list/ProductItemList.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
+  const [menuTypeSelect, setMenuTypeSelect] = useState("all");
+  const [productId, setProductId] = useState(0);
+  const [fileName, setFileName] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [stock, setStock] = useState(0);
+  const [file, setFile] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+  const navigate = useNavigate();
+
   const {
     isOpen: isDelOpen,
     onOpen: onDelOpen,
@@ -38,20 +50,10 @@ export function StoreList() {
     onOpen: onCartOpen,
     onClose: onCartClose,
   } = useDisclosure();
-  const [productId, setProductId] = useState(0);
-  const [fileName, setFileName] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(0);
-  const [stock, setStock] = useState(0);
-  const [file, setFile] = useState(null);
-  const [quantity, setQuantity] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const toast = useToast();
-  const navigate = useNavigate();
 
   const productListRefresh = () => {
     axios
-      .get("/api/store/product/list")
+      .get(`/api/store/product/list/${menuTypeSelect}`)
       .then((res) => {
         setProductList(res.data);
       })
@@ -61,7 +63,7 @@ export function StoreList() {
 
   useEffect(() => {
     productListRefresh();
-  }, []);
+  }, [menuTypeSelect]);
 
   return (
     <Box w={"100%"}>
@@ -94,22 +96,30 @@ export function StoreList() {
         p={7}
       >
         <StoreMenuCursorBox>
-          <StoreMenuText>전체</StoreMenuText>
+          <StoreMenuText onClick={() => setMenuTypeSelect("all")}>
+            전체
+          </StoreMenuText>
         </StoreMenuCursorBox>
         <StoreMenuCursorBox>
           <StoreMenuText>Best</StoreMenuText>
         </StoreMenuCursorBox>
-        <StoreMenuCursorBox>
+        <StoreMenuCursorBox onClick={() => setMenuTypeSelect(1)}>
           <StoreMenuText>세트</StoreMenuText>
         </StoreMenuCursorBox>
         <StoreMenuCursorBox>
-          <StoreMenuText>팝콘</StoreMenuText>
+          <StoreMenuText onClick={() => setMenuTypeSelect(2)}>
+            팝콘
+          </StoreMenuText>
         </StoreMenuCursorBox>
         <StoreMenuCursorBox>
-          <StoreMenuText>드링크</StoreMenuText>
+          <StoreMenuText onClick={() => setMenuTypeSelect(3)}>
+            간식
+          </StoreMenuText>
         </StoreMenuCursorBox>
         <StoreMenuCursorBox>
-          <StoreMenuText>간식</StoreMenuText>
+          <StoreMenuText onClick={() => setMenuTypeSelect(4)}>
+            드링크
+          </StoreMenuText>
         </StoreMenuCursorBox>
       </Flex>
 

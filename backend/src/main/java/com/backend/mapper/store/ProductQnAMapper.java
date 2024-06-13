@@ -19,7 +19,7 @@ public interface ProductQnAMapper {
             SELECT *
             FROM product_qna
             WHERE product_id = #{productId}
-            ORDER BY product_id desc
+            ORDER BY id desc
             LIMIT #{offset}, 10
             """)
     List<ProductQnA> listQnA(Integer productId, Integer offset);

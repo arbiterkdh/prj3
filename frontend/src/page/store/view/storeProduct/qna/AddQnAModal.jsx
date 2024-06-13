@@ -13,25 +13,27 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { LoginContext } from "../../../../../component/LoginProvider.jsx";
 
-function AddQnAModal({ isQnAOpen, onQnAClose, productId, listQnARefresh }) {
+function AddQnAModal({
+  isQnAOpen,
+  onQnAClose,
+  productId,
+  listQnARefresh,
+  Login,
+}) {
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
   const toast = useToast();
-  const Login = useContext(LoginContext);
 
-  function handleQnAAdd() {
-    console.log(titleQnA);
-    console.log(contentQnA);
+  function handleQnAAdd(title, content) {
     axios
       .post("/api/store/product/qna/add", {
         productId,
         writer: Login.nickName,
-        title: titleQnA,
-        content: contentQnA,
+        title: title,
+        content: content,
       })
       .then(() => {
         toast({
@@ -41,11 +43,12 @@ function AddQnAModal({ isQnAOpen, onQnAClose, productId, listQnARefresh }) {
         });
         setTitleQnA("");
         setContentQnA("");
-        listQnARefresh();
         onQnAClose();
+        listQnARefresh();
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch((err) => {
+        console.error("Failed to add QnA:", err);
+      });
   }
 
   return (
@@ -74,7 +77,9 @@ function AddQnAModal({ isQnAOpen, onQnAClose, productId, listQnARefresh }) {
           </ModalBody>
           <ModalFooter>
             <Flex>
-              <Button onClick={handleQnAAdd}>확인</Button>
+              <Button onClick={() => handleQnAAdd(titleQnA, contentQnA)}>
+                확인
+              </Button>
               <Button onClick={onQnAClose}>취소</Button>
             </Flex>
           </ModalFooter>
@@ -83,4 +88,5 @@ function AddQnAModal({ isQnAOpen, onQnAClose, productId, listQnARefresh }) {
     </>
   );
 }
+
 export default AddQnAModal;

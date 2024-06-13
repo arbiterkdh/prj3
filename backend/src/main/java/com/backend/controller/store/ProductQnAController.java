@@ -30,6 +30,7 @@ public class ProductQnAController {
         return service.listQnA(productId, page);
     }
 
+
     @DeleteMapping("/delete/{id}")
     public void deleteQnA(@PathVariable Integer id) {
 

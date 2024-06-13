@@ -1,6 +1,7 @@
 package com.backend.mapper.store;
 
 import com.backend.domain.store.Product;
+import com.backend.domain.store.ProductType;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -10,19 +11,27 @@ public interface ProductMapper {
 
 
     @Insert("""
-            INSERT INTO product(name, content, price, stock)
-            VALUES (#{name}, #{content}, #{price}, #{stock})
+            INSERT INTO product(name, content, price, stock, type)
+            VALUES (#{name}, #{content}, #{price}, #{stock}, #{type})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int add(Product product);
 
     @Select(""" 
+            <script>
             SELECT p.id, p.name, p.price, pi.path as path, p.stock, pi.name fileName, p.quantity
             FROM product p
                      JOIN product_image pi
                           ON p.id = pi.product_id
+            <if test="menuTypeSelect != 'all'">
+                     JOIN product_type pt
+                          ON pt.id = p.type
+            WHERE pt.id = #{menuTypeSelect}
+            </if>
+            ORDER BY p.id DESC
+            </script>
             """)
-    List<Product> productList();
+    List<Product> productList(String menuTypeSelect);
 
 
     @Delete("""
@@ -48,4 +57,11 @@ public interface ProductMapper {
             where p.id = #{id};
             """)
     Product info(Integer id);
+
+    @Select("""
+            SELECT *
+            FROM product_type
+            """)
+    List<ProductType> typeList();
+
 }
