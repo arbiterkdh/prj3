@@ -28,6 +28,7 @@ export function BookMovieLocationAdd({
       setMovieList(res.data);
     });
   }, []);
+
   function handleClickMovieLocationAdd() {
     axios
       .post(`/api/book/movielocation/add`, {

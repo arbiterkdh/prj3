@@ -18,6 +18,7 @@ export function BookMovieList({
         {onMovieList.map((movie) => (
           <Box key={movie.id}>
             <Input
+              w={"95%"}
               cursor={"pointer"}
               border={"none"}
               value={movie.title}

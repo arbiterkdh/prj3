@@ -1,4 +1,12 @@
-import { Box, Center, Flex, Heading, Select, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Select,
+  Stack,
+} from "@chakra-ui/react";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 import BookStack from "../../css/theme/component/stack/BookStack.jsx";
 import BookBox from "../../css/theme/component/box/BookBox.jsx";
@@ -9,12 +17,16 @@ import axios from "axios";
 import { BookMovieLocationAdd } from "./add/BookMovieLocationAdd.jsx";
 import { BookTheaterList } from "./list/BookTheaterList.jsx";
 import { BookMovieList } from "./list/BookMovieList.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function Book() {
+  const navigate = useNavigate();
+
+  const [isCityChecked, setIsCityChecked] = useState("서울");
   const [checkedTheaterNumber, setCheckedTheaterNumber] = useState(0);
 
   const [cityList, setCityList] = useState([]);
-  const [theaterList, setTheaterList] = useState([]);
+  const [theaterNumberList, setTheaterNumberList] = useState([]);
 
   const [movieList, setMovieList] = useState([]);
   const [onMovieList, setOnMovieList] = useState([]);
@@ -32,7 +44,7 @@ export function Book() {
     axios.get("/api/book/onmovielist").then((res) => {
       setOnMovieList(res.data);
     });
-  }, [theaterList, movieLocationAdd]);
+  }, [theaterNumberList, movieLocationAdd]);
 
   return (
     <Center>
@@ -64,8 +76,10 @@ export function Book() {
                 <BookBox></BookBox>
                 <BookTheaterList
                   cityList={cityList}
-                  theaterList={theaterList}
-                  setTheaterList={setTheaterList}
+                  theaterNumberList={theaterNumberList}
+                  setTheaterNumberList={setTheaterNumberList}
+                  isCityChecked={isCityChecked}
+                  setIsCityChecked={setIsCityChecked}
                   checkedTheaterNumber={checkedTheaterNumber}
                   setCheckedTheaterNumber={setCheckedTheaterNumber}
                 />
@@ -96,7 +110,9 @@ export function Book() {
               <OuterBookBox>
                 <BookBox>날짜 나올 곳</BookBox>
                 <BookBox>날짜 페이징 할 곳</BookBox>
-                <Box h={"600px"} border={"1px solid black"}></Box>
+                <Box h={"600px"} border={"1px solid black"}>
+                  선택한 지점의 영화 상영 테이블 나올 곳
+                </Box>
               </OuterBookBox>
             </Flex>
             <Box></Box>
@@ -109,6 +125,7 @@ export function Book() {
           setMovieList={setMovieList}
           onMovieList={onMovieList}
         />
+        <Button onClick={() => navigate("/book/theaterseat")}>예매</Button>
       </CenterBox>
     </Center>
   );

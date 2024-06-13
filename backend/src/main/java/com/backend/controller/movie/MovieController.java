@@ -48,10 +48,10 @@ public class MovieController {
     }
 
     @GetMapping("{id}")
-    public Movie get(@PathVariable Integer id) {
-        Movie movie = movieService.get(id);
+    public Map<String, Object> get(@PathVariable Integer id) {
+        Map<String, Object> movieMap = movieService.get(id);
 
-        return movie;
+        return movieMap;
     }
 
     @DeleteMapping("delete/{id}")

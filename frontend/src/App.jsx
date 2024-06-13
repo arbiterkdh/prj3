@@ -25,6 +25,7 @@ import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import axios from "axios";
 import { PromoView } from "./page/promotion/view/PromoView.jsx";
 import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
+import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -76,6 +77,7 @@ const router = createBrowserRouter([
         ],
       },
       { path: "book", element: <Book /> },
+      { path: "book/theaterseat", element: <TheaterSeatList /> },
       {
         path: "theater",
         element: <Theater />,
