@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Flex,
   Heading,
   Text,
@@ -18,6 +19,7 @@ import AddCartModal from "./cart/AddCartModal.jsx";
 import ModifyProductModal from "./modify/ModifyProductModal.jsx";
 import DeleteProductModal from "./delete/DeleteProductModal.jsx";
 import ProductItemList from "./list/ProductItemList.jsx";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -66,105 +68,122 @@ export function StoreList() {
   }, [menuTypeSelect]);
 
   return (
-    <Box w={"100%"}>
-      <Flex>
-        <Box w={"50%"}>
-          <Flex alignItems={"center"}>
-            <Heading>상품 리스트</Heading>
-            <Text color={"red"} onClick={() => navigate("cart")}>
-              {" "}
-              <FontAwesomeIcon
-                icon={faCartShopping}
-                fontSize={"1.2rem"}
-                cursor={"pointer"}
-              />
-            </Text>
-          </Flex>
+    <Center>
+      <CenterBox mb={10}>
+        <Flex>
+          <Box w={"50%"}>
+            <Flex alignItems={"center"}>
+              <Heading>상품 리스트</Heading>
+              <Text color={"red"} onClick={() => navigate("cart")}>
+                {" "}
+                <FontAwesomeIcon
+                  icon={faCartShopping}
+                  fontSize={"1.2rem"}
+                  cursor={"pointer"}
+                />
+              </Text>
+            </Flex>
+          </Box>
+          <Box w={"50%"} textAlign={"right"}>
+            <Button
+              onClick={() => navigate("/store/add")}
+              colorScheme={"green"}
+            >
+              상품등록
+            </Button>
+          </Box>
+        </Flex>
+
+        <Flex
+          w={"100%"}
+          style={{
+            textAlign: "center",
+          }}
+          p={7}
+        >
+          <StoreMenuCursorBox>
+            <StoreMenuText onClick={() => setMenuTypeSelect("all")}>
+              전체
+            </StoreMenuText>
+          </StoreMenuCursorBox>
+          <StoreMenuCursorBox>
+            <StoreMenuText>Best</StoreMenuText>
+          </StoreMenuCursorBox>
+          <StoreMenuCursorBox onClick={() => setMenuTypeSelect(1)}>
+            <StoreMenuText>세트</StoreMenuText>
+          </StoreMenuCursorBox>
+          <StoreMenuCursorBox>
+            <StoreMenuText onClick={() => setMenuTypeSelect(2)}>
+              팝콘
+            </StoreMenuText>
+          </StoreMenuCursorBox>
+          <StoreMenuCursorBox>
+            <StoreMenuText onClick={() => setMenuTypeSelect(3)}>
+              간식
+            </StoreMenuText>
+          </StoreMenuCursorBox>
+          <StoreMenuCursorBox>
+            <StoreMenuText onClick={() => setMenuTypeSelect(4)}>
+              드링크
+            </StoreMenuText>
+          </StoreMenuCursorBox>
+        </Flex>
+
+        <Box>
+          <hr />
         </Box>
-        <Box w={"50%"} textAlign={"right"}>
-          <Button onClick={() => navigate("/store/add")} colorScheme={"green"}>
-            상품등록
-          </Button>
-        </Box>
-      </Flex>
 
-      <Flex
-        w={"100%"}
-        style={{
-          textAlign: "center",
-        }}
-        p={7}
-      >
-        <StoreMenuCursorBox>
-          <StoreMenuText onClick={() => setMenuTypeSelect("all")}>
-            전체
-          </StoreMenuText>
-        </StoreMenuCursorBox>
-        <StoreMenuCursorBox>
-          <StoreMenuText>Best</StoreMenuText>
-        </StoreMenuCursorBox>
-        <StoreMenuCursorBox onClick={() => setMenuTypeSelect(1)}>
-          <StoreMenuText>세트</StoreMenuText>
-        </StoreMenuCursorBox>
-        <StoreMenuCursorBox>
-          <StoreMenuText onClick={() => setMenuTypeSelect(2)}>
-            팝콘
-          </StoreMenuText>
-        </StoreMenuCursorBox>
-        <StoreMenuCursorBox>
-          <StoreMenuText onClick={() => setMenuTypeSelect(3)}>
-            간식
-          </StoreMenuText>
-        </StoreMenuCursorBox>
-        <StoreMenuCursorBox>
-          <StoreMenuText onClick={() => setMenuTypeSelect(4)}>
-            드링크
-          </StoreMenuText>
-        </StoreMenuCursorBox>
-      </Flex>
+        <ProductItemList
+          productList={productList}
+          onCartOpen={onCartOpen}
+          setProductId={setProductId}
+          setFileName={setFileName}
+          setName={setName}
+          setPrice={setPrice}
+          setStock={setStock}
+          setQuantity={setQuantity}
+          onDelOpen={onDelOpen}
+          onModifyOpen={onModifyOpen}
+        />
 
-      <Box>
-        <hr />
-      </Box>
+        <DeleteProductModal
+          isDelOpen={isDelOpen}
+          onDelClose={onDelClose}
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          productId={productId}
+          setProductList={setProductList}
+          productList={productList}
+        />
 
-      <ProductItemList productList={productList} />
+        <ModifyProductModal
+          isModifyOpen={isModifyOpen}
+          onModifyOpen={onModifyOpen}
+          productId={productId}
+          fileName={fileName}
+          name={name}
+          setName={setName}
+          stock={stock}
+          setStock={setStock}
+          price={price}
+          setPrice={setPrice}
+          file={file}
+          setFile={setFile}
+          isLoading={isLoading}
+          onModifyClose={onModifyClose}
+          productListRefresh={productListRefresh}
+        />
 
-      <DeleteProductModal
-        isDelOpen={isDelOpen}
-        onDelClose={onDelClose}
-        isLoading={isLoading}
-        setIsLoading={setIsLoading}
-        productId={productId}
-        setProductList={setProductList}
-        productList={productList}
-      />
-
-      <ModifyProductModal
-        isModifyOpen={isModifyOpen}
-        onModifyOpen={onModifyOpen}
-        productId={productId}
-        fileName={fileName}
-        name={name}
-        setName={setName}
-        stock={stock}
-        setStock={setStock}
-        price={price}
-        setPrice={setPrice}
-        file={file}
-        setFile={setFile}
-        isLoading={isLoading}
-        onModifyClose={onModifyClose}
-        productListRefresh={productListRefresh}
-      />
-
-      <AddCartModal
-        isCartOpen={isCartOpen}
-        onCartClose={onCartClose}
-        productId={productId}
-        fileName={fileName}
-        price={price}
-        quantity={quantity}
-      />
-    </Box>
+        <AddCartModal
+          isCartOpen={isCartOpen}
+          onCartClose={onCartClose}
+          productId={productId}
+          fileName={fileName}
+          price={price}
+          quantity={quantity}
+          name={name}
+        />
+      </CenterBox>
+    </Center>
   );
 }

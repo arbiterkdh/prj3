@@ -19,6 +19,7 @@ function AddCartModal({
   fileName,
   price,
   quantity,
+  name,
 }) {
   const toast = useToast();
   function handleCartAdd(productId) {
