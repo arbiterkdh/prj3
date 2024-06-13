@@ -6,7 +6,8 @@ import com.backend.mapper.store.ProductQnAMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -19,10 +20,37 @@ public class ProductQnAService {
         mapper.addQnA(productQnA);
     }
 
-    public List<ProductQnA> listQnA(Integer productId) {
+    public Map<String, Object> listQnA(Integer productId, Integer page) {
 
-        return mapper.listQnA(productId);
+        if (page == null || page < 1) {
+            page = 1;
+        }
 
+        Map pageInfo = new HashMap();
+
+        Integer offset = (page - 1) * 10 + 1;
+
+        Integer totalCount = mapper.totalCount(productId);
+
+        Integer lastPageNumber = (totalCount - 1) / 10 + 1;
+        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
+        Integer rightPageNumber = leftPageNumber + 9;
+
+        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
+
+        Integer prevPageNumber = leftPageNumber - 1;
+        Integer nextPageNumber = rightPageNumber + 1;
+
+        pageInfo.put("leftPageNumber", leftPageNumber);
+        pageInfo.put("currentPage", page);
+        pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("rightPageNumber", rightPageNumber);
+        pageInfo.put("prevPageNumber", prevPageNumber);
+        pageInfo.put("nextPageNumber", nextPageNumber);
+
+
+        return Map.of("listQnA", mapper.listQnA(productId, offset),
+                "pageInfo", pageInfo);
     }
 
     public void deleteQnA(Integer id) {

@@ -19,8 +19,10 @@ public interface ProductQnAMapper {
             SELECT *
             FROM product_qna
             WHERE product_id = #{productId}
+            ORDER BY product_id desc
+            LIMIT #{offset}, 10
             """)
-    List<ProductQnA> listQnA(Integer productId);
+    List<ProductQnA> listQnA(Integer productId, Integer offset);
 
     @Delete("""
             DELETE
@@ -36,4 +38,11 @@ public interface ProductQnAMapper {
             WHERE id = #{id}
             """)
     int modifyQnA(ProductQnA productQnA);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM product_qna
+            WHERE product_id = #{productId}
+            """)
+    Integer totalCount(Integer productId);
 }

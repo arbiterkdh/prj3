@@ -96,4 +96,7 @@ WHERE product_id = 2;
 
 select count(*)
 from product_comment
-where product_id = 2
+where product_id = 2;
+
+insert into product_qna(writer, title, content, product_id)
+    (select writer, title, content, product_id from product_qna where product_id = 2);
