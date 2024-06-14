@@ -97,6 +97,21 @@ export const customTheme = extendTheme({
         },
       },
     },
+    Tabs: {
+      baseStyle: {
+        tablist: {
+          mt: "20px",
+          mb: "0px",
+          button: {
+            borderTopLeftRadius: "none",
+            borderTopRightRadius: "none",
+          },
+        },
+        tabpanels: {
+          tabpanel: {},
+        },
+      },
+    },
     Textarea: {
       baseStyle: {
         _focus: {},

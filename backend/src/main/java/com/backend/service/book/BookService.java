@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,5 +56,23 @@ public class BookService {
             screenList.add(map);
         }
         return screenList;
+    }
+
+    public String getDayOfWeek() {
+        Integer dayOfWeekNumber = bookMapper.selectDayOfWeek();
+        return switch (dayOfWeekNumber) {
+            case 1 -> "일";
+            case 2 -> "월";
+            case 3 -> "화";
+            case 4 -> "수";
+            case 5 -> "목";
+            case 6 -> "금";
+            case 7 -> "토";
+            default -> "";
+        };
+    }
+
+    public LocalDate getEndOfMonthByOneWeekAgo(LocalDate oneWeekAgo) {
+        return bookMapper.selectEndOfMonthByOneWeekAgo(oneWeekAgo);
     }
 }

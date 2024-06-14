@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -64,4 +65,14 @@ public interface BookMapper {
             WHERE movie_id = #{movie_id};
             """)
     List<Integer> selectAllTheaterNumberByMovieId(Integer movie_id);
+
+    @Select("""
+            SELECT DAYOFWEEK(NOW())
+            """)
+    Integer selectDayOfWeek();
+
+    @Select("""
+            SELECT LAST_DAY(#{oneWeekAgo})
+            """)
+    LocalDate selectEndOfMonthByOneWeekAgo(LocalDate oneWeekAgo);
 }

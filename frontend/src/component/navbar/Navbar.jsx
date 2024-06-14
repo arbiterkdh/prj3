@@ -60,7 +60,11 @@ export function Navbar() {
                 top={0}
                 onClick={() => navigate("/")}
               >
-                CCV
+                <Image
+                  src={
+                    "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccv.jpg"
+                  }
+                />
               </NavBox>
             </Center>
             <GapFlex mb={-3} justifyContent="space-between">
@@ -102,7 +106,7 @@ export function Navbar() {
         </Box>
       </Center>
       <Center>
-        <Box w={"100%"}>
+        <Box w={"100%"} zIndex={1}>
           {drawer === 0 && <Box h={"33px"} />}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
           {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}
