@@ -30,7 +30,9 @@ export const customTheme = extendTheme({
       baseStyle: {},
     },
     Heading: {
-      baseStyle: {},
+      baseStyle: {
+        mb: "20px",
+      },
       sizes: {
         xs: {},
         sm: {},

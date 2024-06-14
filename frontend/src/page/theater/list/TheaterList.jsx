@@ -111,7 +111,14 @@ export function TheaterList({
               justifyContent={"space-between"}
             >
               <CursorBox
-                onClick={() => navigate("/theater/" + theater.number)}
+                onClick={() =>
+                  navigate("/theater/" + theater.number, {
+                    state: {
+                      theaterNumber: theater.number,
+                      theaterLocation: theater.location,
+                    },
+                  })
+                }
                 fontSize={"sm"}
               >
                 <Tooltip hasArrow label={theater.location + " 상세보기"}>
@@ -121,7 +128,14 @@ export function TheaterList({
               <Flex>
                 <CursorBox
                   color={"gray"}
-                  onClick={() => navigate("/theater/modify/" + theater.number)}
+                  onClick={() =>
+                    navigate("/theater/modify/" + theater.number, {
+                      state: {
+                        theaterNumber: theater.number,
+                        theaterLocation: theater.location,
+                      },
+                    })
+                  }
                   onMouseEnter={() => setModifyButton(theater.number)}
                   onMouseLeave={() => setModifyButton(0)}
                 >

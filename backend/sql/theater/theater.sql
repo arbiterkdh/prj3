@@ -42,3 +42,6 @@ CREATE TABLE theater_box
     box_capacity   INT NOT NULL,
     CONSTRAINT box_capacity CHECK ( box_capacity % 2 = 0 )
 );
+
+SELECT *
+FROM theater_box;
