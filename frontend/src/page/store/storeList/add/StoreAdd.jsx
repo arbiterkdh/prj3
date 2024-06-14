@@ -142,7 +142,6 @@ export function StoreAdd() {
                       </option>
                     ))}
                   </Select>
-                  {/*<p>{selectType}</p>*/}
                 </Box>
               </Flex>
               <Box>

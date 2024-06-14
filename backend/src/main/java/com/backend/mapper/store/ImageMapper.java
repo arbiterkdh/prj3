@@ -17,7 +17,7 @@ public interface ImageMapper {
     @Select("""
             SELECT name
             FROM product_image
-            WHERE id = #{productId}
+            WHERE product_id = #{productId}
             """)
     String selectFileName(Integer productId);
 

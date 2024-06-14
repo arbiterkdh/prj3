@@ -1,6 +1,7 @@
 package com.backend.service.store;
 
 import com.backend.domain.store.Product;
+import com.backend.domain.store.ProductImage;
 import com.backend.domain.store.ProductType;
 import com.backend.mapper.store.ImageMapper;
 import com.backend.mapper.store.ProductMapper;
@@ -43,7 +44,7 @@ public class ProductService {
             for (MultipartFile file : files) {
                 imageMapper.add(product.getId(), file.getOriginalFilename());
 
-                String key = STR."prj3/\{product.getId()}/\{file.getOriginalFilename()}";
+                String key = STR."prj3/store/\{product.getId()}/\{file.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -139,7 +140,14 @@ public class ProductService {
 
     public Product info(Integer id) {
 
-        return mapper.info(id);
+        Product product = mapper.info(id);
+        String fileName = imageMapper.selectFileName(id);
+
+        ProductImage imageFile = new ProductImage(fileName, STR."\{srcPrefix}/store/\{id}/\{fileName}");
+
+        product.setImage(imageFile);
+
+        return product;
     }
 
     public List<ProductType> typeList() {

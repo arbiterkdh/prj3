@@ -19,7 +19,7 @@ public interface ProductMapper {
 
     @Select(""" 
             <script>
-            SELECT p.id, p.name, p.price, pi.path as path, p.stock, pi.name fileName, p.quantity
+            SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
             FROM product p
                      JOIN product_image pi
                           ON p.id = pi.product_id

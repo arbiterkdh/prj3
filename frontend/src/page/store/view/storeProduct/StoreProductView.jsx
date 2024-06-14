@@ -50,9 +50,7 @@ export function StoreProductView() {
         </Box>
         <Flex w={"100%"}>
           <Box w={"50%"} p={20}>
-            <Image
-              src={`http://127.0.0.1:8888/${product.id}/${product.fileName}`}
-            />
+            <Image src={product.image.src} />
           </Box>
           <Flex
             w={"50%"}
