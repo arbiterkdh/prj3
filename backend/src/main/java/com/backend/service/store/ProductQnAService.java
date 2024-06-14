@@ -22,13 +22,10 @@ public class ProductQnAService {
 
     public Map<String, Object> listQnA(Integer productId, Integer page) {
 
-        if (page == null || page < 1) {
-            page = 1;
-        }
 
         Map pageInfo = new HashMap();
 
-        Integer offset = (page - 1) * 10 + 1;
+        Integer offset = (page - 1) * 10;
 
         Integer totalCount = mapper.totalCount(productId);
 
@@ -45,8 +42,13 @@ public class ProductQnAService {
         pageInfo.put("currentPage", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
-        pageInfo.put("prevPageNumber", prevPageNumber);
-        pageInfo.put("nextPageNumber", nextPageNumber);
+
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
 
 
         return Map.of("listQnA", mapper.listQnA(productId, offset),

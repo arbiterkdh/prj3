@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
   Heading,
   Input,
@@ -24,6 +25,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 
 export function StoreAdd() {
   const [name, setName] = useState("");
@@ -87,135 +89,137 @@ export function StoreAdd() {
   };
 
   return (
-    <Box>
-      <Card>
-        <CardHeader>
-          <Heading>상품 등록</Heading>
-        </CardHeader>
-        <Box>
-          <hr />
-        </Box>
+    <Center>
+      <CenterBox>
+        <Card>
+          <CardHeader>
+            <Heading>상품 등록</Heading>
+          </CardHeader>
+          <Box>
+            <hr />
+          </Box>
 
-        <CardBody>
-          <Stack divider={<StackDivider />} spacing="4">
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                상품명
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                <Input
-                  type={"text"}
-                  placeholder={"상품명을 작성해주세요"}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Text>
-            </Box>
-            <Flex>
+          <CardBody>
+            <Stack divider={<StackDivider />} spacing="4">
               <Box>
                 <Heading size="xs" textTransform="uppercase">
-                  상품이미지
+                  상품명
                 </Heading>
                 <Text pt="2" fontSize="sm">
-                  <input
-                    multiple
-                    type={"file"}
-                    accept="image/*"
-                    placeholder={"이미지를 등록하세요"}
-                    onChange={(e) => setFiles(e.target.files)}
+                  <Input
+                    type={"text"}
+                    placeholder={"상품명을 작성해주세요"}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </Text>
+              </Box>
+              <Flex>
+                <Box>
+                  <Heading size="xs" textTransform="uppercase">
+                    상품이미지
+                  </Heading>
+                  <Text pt="2" fontSize="sm">
+                    <input
+                      multiple
+                      type={"file"}
+                      accept="image/*"
+                      placeholder={"이미지를 등록하세요"}
+                      onChange={(e) => setFiles(e.target.files)}
+                    />
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Select
+                    placeholder="분류선택"
+                    onFocus={typeOptions}
+                    onChange={(e) => {
+                      setSelectType(e.target.value);
+                    }}
+                  >
+                    {typeOption.map((typeItem) => (
+                      <option key={typeItem.id} value={typeItem.id}>
+                        {typeItem.name}
+                      </option>
+                    ))}
+                  </Select>
+                  {/*<p>{selectType}</p>*/}
+                </Box>
+              </Flex>
+              <Box>
+                <Heading size="xs" textTransform="uppercase">
+                  재고수량
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  <Input
+                    type={"number"}
+                    onChange={(e) => setStock(e.target.value)}
                   />
                 </Text>
               </Box>
 
               <Box>
-                <Select
-                  placeholder="분류선택"
-                  onFocus={typeOptions}
-                  onChange={(e) => {
-                    setSelectType(e.target.value);
-                  }}
-                >
-                  {typeOption.map((typeItem) => (
-                    <option key={typeItem.id} value={typeItem.id}>
-                      {typeItem.name}
-                    </option>
-                  ))}
-                </Select>
-                {/*<p>{selectType}</p>*/}
+                <Heading size="xs" textTransform="uppercase">
+                  가격
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  <Input
+                    type={"number"}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
+                </Text>
               </Box>
-            </Flex>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                재고수량
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                <Input
-                  type={"number"}
-                  onChange={(e) => setStock(e.target.value)}
-                />
-              </Text>
-            </Box>
-
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                가격
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                <Input
-                  type={"number"}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </Text>
-            </Box>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                상세내용
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                <Textarea
-                  placeholder={"상세내용을 작성하세요"}
-                  resize={"none"}
-                  onChange={(e) => setContent(e.target.value)}
-                ></Textarea>
-              </Text>
-            </Box>
-          </Stack>
-        </CardBody>
-        <Flex w={"100%"} gap={3} justifyContent={"center"}>
-          <Box w={"50%"}>
-            <Button
-              colorScheme={"green"}
-              w={"100%"}
-              p={10}
-              onClick={onOpen}
-              isDisabled={disabled}
-              isLoading={isLoading}
-            >
-              등록
-            </Button>
-          </Box>
-          <Box w={"50%"}>
-            <Button colorScheme={"gray"} w={"100%"} p={10}>
-              목록
-            </Button>
-          </Box>
-        </Flex>
-      </Card>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>등록안내</ModalHeader>
-          <ModalBody>상품을 등록하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Flex gap={3}>
-              <Button colorScheme={"green"} onClick={handleProductAdd}>
-                확인
+              <Box>
+                <Heading size="xs" textTransform="uppercase">
+                  상세내용
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  <Textarea
+                    placeholder={"상세내용을 작성하세요"}
+                    resize={"none"}
+                    onChange={(e) => setContent(e.target.value)}
+                  ></Textarea>
+                </Text>
+              </Box>
+            </Stack>
+          </CardBody>
+          <Flex w={"100%"} gap={3} justifyContent={"center"}>
+            <Box w={"50%"}>
+              <Button
+                colorScheme={"green"}
+                w={"100%"}
+                p={10}
+                onClick={onOpen}
+                isDisabled={disabled}
+                isLoading={isLoading}
+              >
+                등록
               </Button>
-              <Button onClick={onClose}>취소</Button>
-            </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Box>
+            </Box>
+            <Box w={"50%"}>
+              <Button colorScheme={"gray"} w={"100%"} p={10}>
+                목록
+              </Button>
+            </Box>
+          </Flex>
+        </Card>
+
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>등록안내</ModalHeader>
+            <ModalBody>상품을 등록하시겠습니까?</ModalBody>
+            <ModalFooter>
+              <Flex gap={3}>
+                <Button colorScheme={"green"} onClick={handleProductAdd}>
+                  확인
+                </Button>
+                <Button onClick={onClose}>취소</Button>
+              </Flex>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </CenterBox>
+    </Center>
   );
 }

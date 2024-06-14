@@ -23,7 +23,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-function ProductItemList({ productList }) {
+function ProductItemList({
+  productList,
+  onCartOpen,
+  setProductId,
+  setFileName,
+  setName,
+  setPrice,
+  setStock,
+  setQuantity,
+  onDelOpen,
+  onModifyOpen,
+}) {
   const navigate = useNavigate();
 
   function handleModifyModal(id, fileName, name, price, stock) {
