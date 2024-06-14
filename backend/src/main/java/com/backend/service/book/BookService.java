@@ -72,7 +72,7 @@ public class BookService {
         };
     }
 
-    public List<LocalDate> getBookPeriodList(Integer date) {
-        return bookMapper.selectAllBookPeriodListByDate(date);
+    public List<LocalDate> getBookPeriodList() {
+        return bookMapper.selectAllBookPeriodListByDate();
     }
 }

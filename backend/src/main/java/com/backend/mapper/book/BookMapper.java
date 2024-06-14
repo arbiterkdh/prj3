@@ -78,14 +78,14 @@ public interface BookMapper {
 
     @Select("""
             WITH RECURSIVE DateRange AS (
-                SELECT DATE_SUB(NOW(), INTERVAL 7 DAY) AS Date
+                SELECT DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AS Date
                 UNION ALL
                 SELECT DATE_ADD(Date, INTERVAL 1 DAY)
                 FROM DateRange
-                WHERE Date < DATE_ADD(NOW(), INTERVAL 14 DAY )
+                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 14 DAY )
             )
             SELECT Date
             FROM DateRange;
             """)
-    List<LocalDate> selectAllBookPeriodListByDate(Integer date);
+    List<LocalDate> selectAllBookPeriodListByDate();
 }

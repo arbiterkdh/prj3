@@ -51,15 +51,16 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @GetMapping("date/{date}")
-    public Map<String, Object> getDate(@PathVariable Integer date) {
+    @GetMapping("date")
+    public Map<String, Object> getDate() {
         LocalDate today = LocalDate.now();
         String dayOfWeek = bookService.getDayOfWeek();
-        List<LocalDate> bookPeriodList = bookService.getBookPeriodList(date);
+        List<LocalDate> bookPeriodList = bookService.getBookPeriodList();
 
         Map<String, Object> map = new HashMap<>();
         map.put("today", today);
         map.put("dayOfWeek", dayOfWeek);
+        map.put("bookPeriodList", bookPeriodList);
 
         return map;
     }
