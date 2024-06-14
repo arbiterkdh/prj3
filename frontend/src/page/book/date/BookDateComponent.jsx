@@ -83,7 +83,7 @@ export function BookDateComponent() {
         borderLeft={"1px solid black"}
         borderRight={"1px solid black"}
       >
-        <ArrowLeftIcon onClick={handleClickLeft} />
+        <ArrowLeftIcon onClick={handleClickLeft} cursor={"pointer"} />
         <Box
           w={"320px"}
           h={"100px"}
@@ -112,7 +112,7 @@ export function BookDateComponent() {
             ))}
           </Flex>
         </Box>
-        <ArrowRightIcon onClick={handleClickRight} />
+        <ArrowRightIcon onClick={handleClickRight} cursor={"pointer"} />
       </Flex>
     </Box>
   );
