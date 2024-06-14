@@ -29,9 +29,10 @@ public interface ProductMapper {
             WHERE pt.id = #{menuTypeSelect}
             </if>
             ORDER BY p.id DESC
+            LIMIT #{offset}, 12
             </script>
             """)
-    List<Product> productList(String menuTypeSelect);
+    List<Product> productList(String menuTypeSelect, Integer offset);
 
 
     @Delete("""
@@ -64,4 +65,16 @@ public interface ProductMapper {
             """)
     List<ProductType> typeList();
 
+    @Select("""
+            <script>
+            SELECT COUNT(*)
+            FROM product p
+            <if test="menuTypeSelect != 'all'">
+                     join product_type pt
+                          ON p.type = pt.id
+            WHERE p.type = #{menuTypeSelect};
+            </if>
+            </script>
+            """)
+    Integer totalCount(String menuTypeSelect);
 }

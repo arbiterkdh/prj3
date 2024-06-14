@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/store/product")
@@ -29,9 +30,11 @@ public class ProductController {
     }
 
     @GetMapping("/list/{menuTypeSelect}")
-    public List<Product> list(@PathVariable(required = false) String menuTypeSelect) {
+    public Map<String, Object> list(@PathVariable(required = false) String menuTypeSelect, @RequestParam(value = "page", defaultValue = "1") Integer page) {
 
-        return service.productList(menuTypeSelect);
+        System.out.println("page = " + page);
+
+        return service.productList(menuTypeSelect, page);
     }
 
     @GetMapping("/type")

@@ -131,3 +131,18 @@ FROM product p
               ON pt.id = p.type
 WHERE pt.id = 3
 ORDER BY p.id DESC;
+
+DESC product;
+DESC product_type;
+
+SELECT *
+from product;
+
+select *
+from product_type;
+
+SELECT COUNT(*)
+FROM product p
+         join product_type pt
+              ON p.type = pt.id
+WHERE p.type = '4';

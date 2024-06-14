@@ -12,7 +12,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import StoreMenuText from "../../../css/theme/component/text/StoreMenuText.jsx";
 import StoreMenuCursorBox from "../../../css/theme/component/box/StoreMenuCursorBox.jsx";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+  faCartShopping,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AddCartModal from "./cart/AddCartModal.jsx";
 import ModifyProductModal from "./modify/ModifyProductModal.jsx";
@@ -23,6 +29,7 @@ import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 export function StoreList() {
   const [productList, setProductList] = useState([]);
   const [menuTypeSelect, setMenuTypeSelect] = useState("all");
+  const [pageInfo, setPageInfo] = useState({});
   const [productId, setProductId] = useState(0);
   const [fileName, setFileName] = useState("");
   const [name, setName] = useState("");
@@ -31,6 +38,7 @@ export function StoreList() {
   const [file, setFile] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   const {
@@ -53,9 +61,14 @@ export function StoreList() {
 
   const productListRefresh = () => {
     axios
-      .get(`/api/store/product/list/${menuTypeSelect}`)
+      .get(`/api/store/product/list/${menuTypeSelect}`, {
+        params: {
+          page,
+        },
+      })
       .then((res) => {
-        setProductList(res.data);
+        setProductList(res.data.productList);
+        setPageInfo(res.data.pageInfo);
       })
       .catch(() => {})
       .finally(() => {});
@@ -63,7 +76,13 @@ export function StoreList() {
 
   useEffect(() => {
     productListRefresh();
-  }, [menuTypeSelect]);
+  }, [menuTypeSelect, page]);
+
+  const pageNumbers = [];
+
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
 
   return (
     <Center>
@@ -143,6 +162,40 @@ export function StoreList() {
           onDelOpen={onDelOpen}
           onModifyOpen={onModifyOpen}
         />
+
+        {pageInfo.prevPageNumber && (
+          <>
+            <Button onClick={() => setPage(1)}>
+              <FontAwesomeIcon icon={faAnglesLeft} />
+            </Button>
+            <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+              <FontAwesomeIcon icon={faAngleLeft} />
+            </Button>
+          </>
+        )}
+
+        {pageNumbers.map((pageNumber) => (
+          <Button
+            onClick={() => {
+              setPage(pageNumber);
+            }}
+            key={pageNumber}
+            colorScheme={pageNumber === pageInfo.currentPage ? "blue" : "gray"}
+          >
+            {pageNumber}
+          </Button>
+        ))}
+
+        {pageInfo.nextPageNumber && (
+          <>
+            <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+              <FontAwesomeIcon icon={faAngleRight} />
+            </Button>
+            <Button onClick={() => setPage(pageInfo.rightPageNumber)}>
+              <FontAwesomeIcon icon={faAnglesRight} />
+            </Button>
+          </>
+        )}
 
         <DeleteProductModal
           isDelOpen={isDelOpen}
