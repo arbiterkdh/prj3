@@ -17,7 +17,7 @@ export function TheaterLocation() {
     <Center>
       <CenterBox>
         <Heading textAlign={"center"}>{theaterLocation}점 CCV 정보</Heading>
-        <BorderBox w={"100%"} h={"800px"} mb={"100px"}>
+        <BorderBox w={"100%"} h={"1200px"} mb={"100px"}>
           <Button>극장 정보 삽입</Button>
           <Button>극장 정보 수정</Button>
         </BorderBox>
