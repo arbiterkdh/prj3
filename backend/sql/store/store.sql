@@ -10,11 +10,12 @@ CREATE TABLE product_image
 Select *
 from product;
 
-delete
-from product
-where id = 3;
 select *
 from product_image;
+
+select *
+from product_cart;
+
 
 SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
 FROM product p
@@ -40,7 +41,6 @@ CREATE TABLE product_cart
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(200),
-    path       VARCHAR(200),
     fileName   VARCHAR(200),
     product_id INT REFERENCES product (id),
     quantity   INT,

@@ -12,11 +12,12 @@ public class ProductCart {
     private Integer id;
     private Integer productId;
     private String name;
-    private String path;
     private String fileName;
     private Integer quantity;
     private Integer price;
     private LocalDateTime regDate;
+
+    private ProductImage image;
 
     public String getRegDate() {
         LocalDateTime beforeOneDay = LocalDateTime.now().minusDays(1);
