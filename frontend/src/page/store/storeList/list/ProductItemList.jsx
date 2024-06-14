@@ -9,7 +9,6 @@ import {
   Center,
   Divider,
   Flex,
-  Heading,
   Image,
   Stack,
   Text,
@@ -84,7 +83,7 @@ function ProductItemList({
               <Center>
                 <Box w={"100%"}>
                   <Flex alignItems={"center"} justifyContent={"center"} gap={3}>
-                    <Heading>{product.name}</Heading>
+                    <Text fontSize={"1.3rem"}>{product.name}</Text>
                     <Text
                       color={"red"}
                       onClick={() =>
