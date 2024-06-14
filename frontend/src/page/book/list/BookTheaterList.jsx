@@ -16,7 +16,9 @@ export function BookTheaterList({
     axios.get(`/api/theater/list`).then((res) => {
       setTheaterList(res.data);
     });
-  }, []);
+    setCheckedTheaterNumber(0);
+  }, [isCityChecked]);
+
   function handleClick(city) {
     axios
       .get(`/api/theater/list?city=${city}`)

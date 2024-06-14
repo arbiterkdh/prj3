@@ -13,12 +13,37 @@ import AddCommentModal from "./AddCommentModal.jsx";
 import DeleteCommentModal from "./DeleteCommentModal.jsx";
 import ModifyCommentModal from "./ModifyCommentModal.jsx";
 import axios from "axios";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Comment({ Login, productId, commentList, setCommentList }) {
   const [page, setPage] = useState(1);
   const [pageInfo, setPageInfo] = useState({});
   const [commentContent, setCommentContent] = useState("");
   const [commentId, setCommentId] = useState(0);
+
+  const {
+    isOpen: isAddOpen,
+    onOpen: onAddOpen,
+    onClose: onAddClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isModifyOpen,
+    onOpen: onModifyOpen,
+    onClose: onModifyClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onClose: onDeleteClose,
+  } = useDisclosure();
 
   useEffect(() => {
     commentListRefresh();
@@ -39,24 +64,6 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       .finally(() => {});
   };
 
-  const {
-    isOpen: isAddOpen,
-    onOpen: onAddOpen,
-    onClose: onAddClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isModifyOpen,
-    onOpen: onModifyOpen,
-    onClose: onModifyClose,
-  } = useDisclosure();
-
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose,
-  } = useDisclosure();
-
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumbers.push(i);
@@ -65,34 +72,55 @@ function Comment({ Login, productId, commentList, setCommentList }) {
   const ProductCommentList = ({ commentList }) => {
     return (
       <Box>
-        {commentList.map((commentItem) => (
-          <CommentItem key={commentItem.id} commentItem={commentItem} />
-        ))}
+        {commentList.length > 0 ? (
+          <>
+            {commentList.map((commentItem) => (
+              <CommentItem key={commentItem.id} commentItem={commentItem} />
+            ))}
 
-        <Box>
-          {pageInfo.prevPageNumber && (
-            <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
-              이전
-            </Button>
-          )}
-          {pageNumbers.map((pageNumber) => (
-            <Button
-              onClick={() => setPage(pageNumber)}
-              key={pageNumber}
-              colorScheme={
-                pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
-              }
-            >
-              {pageNumber}
-            </Button>
-          ))}
+            <Box>
+              {pageInfo.prevPageNumber && (
+                <>
+                  <Button onClick={() => setPage(1)}>
+                    <FontAwesomeIcon icon={faAnglesLeft} />
+                  </Button>
+                  <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </Button>
+                </>
+              )}
+              {pageNumbers.map(
+                (pageNumber) =>
+                  pageNumber !== 0 && (
+                    <Button
+                      onClick={() => setPage(pageNumber)}
+                      key={pageNumber}
+                      colorScheme={
+                        pageNumber === pageInfo.currentPageNumber
+                          ? "blue"
+                          : "gray"
+                      }
+                    >
+                      {pageNumber}
+                    </Button>
+                  ),
+              )}
 
-          {pageInfo.nextPageNumber && (
-            <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-              다음
-            </Button>
-          )}
-        </Box>
+              {pageInfo.nextPageNumber && (
+                <>
+                  <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                    <FontAwesomeIcon icon={faAngleRight} />
+                  </Button>
+                  <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
+                    <FontAwesomeIcon icon={faAnglesRight} />
+                  </Button>
+                </>
+              )}
+            </Box>
+          </>
+        ) : (
+          <Text>댓글이 없습니다</Text>
+        )}
       </Box>
     );
   };

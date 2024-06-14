@@ -8,10 +8,15 @@ export function BookMovieLocationAdd({
   setMovieLocationAdd,
   movieList,
   setMovieList,
+  onMovieList,
 }) {
   const [theaterList, setTheaterList] = useState([]);
   const [movieId, setMovieId] = useState(0);
   const [theaterNumber, setTheaterNumber] = useState(0);
+
+  const [isCitySelected, setIsCitySelected] = useState("");
+  const [isLocationSelected, setIsLocationSelected] = useState("");
+  const [isStateSelected, setIsStateSelected] = useState("");
 
   const toast = useToast();
 
@@ -48,12 +53,16 @@ export function BookMovieLocationAdd({
       setTheaterList(res.data);
     });
   }
+
   return (
     <Flex my={"100px"}>
       <BorderSelect
         placeholder={"도시명"}
+        value={isCitySelected}
         onChange={(e) => {
           handleCitySelect(e.target.value);
+          setIsCitySelected(e.target.value);
+          setIsLocationSelected("");
         }}
       >
         {cityList.map((city) => (
@@ -64,8 +73,11 @@ export function BookMovieLocationAdd({
       </BorderSelect>
       <BorderSelect
         placeholder={"지점명"}
+        value={isLocationSelected}
+        isDisabled={!isCitySelected}
         onChange={(e) => {
           setTheaterNumber(e.target.value);
+          setIsLocationSelected(e.target.value);
         }}
       >
         {theaterList.map((theater) => (
@@ -75,7 +87,20 @@ export function BookMovieLocationAdd({
         ))}
       </BorderSelect>
       <BorderSelect
+        placeholder={"상태"}
+        value={isStateSelected}
+        onChange={(e) => {
+          setIsStateSelected(e.target.value);
+          setMovieId("");
+        }}
+      >
+        <option value="상영예정">상영예정</option>
+        <option value="상영중">상영중</option>
+      </BorderSelect>
+      <BorderSelect
         placeholder={"영화명"}
+        value={movieId}
+        isDisabled={!isStateSelected}
         onChange={(e) => {
           setMovieId(e.target.value);
         }}
@@ -86,7 +111,11 @@ export function BookMovieLocationAdd({
           </option>
         ))}
       </BorderSelect>
-      <Button w={"200px"} onClick={handleClickMovieLocationAdd}>
+      <Button
+        w={"200px"}
+        isDisabled={!movieId || !isLocationSelected}
+        onClick={handleClickMovieLocationAdd}
+      >
         상영영화추가
       </Button>
     </Flex>

@@ -15,12 +15,11 @@ import { useState } from "react";
 export function Home() {
   const { toggleColorMode, colorMode } = useColorMode();
   const [mode, setMode] = useState(false);
+
   return (
     <Box>
       <Navbar />
-      <Box>
-        <Outlet />
-      </Box>
+      <Outlet />
       <IconButton
         aria-label={"toggle theme"}
         rounded={"full"}

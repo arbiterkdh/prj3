@@ -18,8 +18,11 @@ FROM movie_location ml
          JOIN movie m ON ml.movie_id = m.id
 WHERE ml.theater_number = 129;
 
-SELECT m.id, m.title, m.running_time, m.rating, m.start_date, l.movie_id, l.theater_number
-FROM movie m
-         LEFT JOIN movie_location l ON m.id = l.movie_id
+SELECT id, title, running_time, rating, start_date
+FROM movie
 WHERE DATE_ADD(start_date, INTERVAL 1 MONTH) >= NOW()
-  AND start_date <= NOW()
+  AND start_date <= NOW();
+
+SHOW VARIABLES LIKE 'event%';
+
+SET GLOBAL event_scheduler = ON;

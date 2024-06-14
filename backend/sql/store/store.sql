@@ -11,6 +11,9 @@ CREATE TABLE product
     reg_date DATETIME DEFAULT NOW()
 );
 
+alter table product
+    add column type int;
+
 CREATE TABLE product_image
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,
@@ -77,6 +80,14 @@ CREATE TABLE product_qna
     reg_date   datetime default now()
 );
 
+create table product_type
+(
+
+    id         int auto_increment primary key,
+    name       varchar(10),
+    product_id int references product (id)
+);
+
 select *
 from product_qna
 where product_id = 1;
@@ -88,4 +99,35 @@ WHERE product_id = 2;
 
 select count(*)
 from product_comment
-where product_id = 2
+where product_id = 2;
+
+insert into product_qna(writer, title, content, product_id)
+    (select writer, title, content, product_id from product_qna where product_id = 2);
+
+select *
+from product_type;
+
+select *
+from product;
+
+insert into product_type(name)
+values ('세트'),
+       ('팝콘'),
+       ('간식'),
+       ('드링크');
+
+select p.name
+from product p
+         join product_type pt
+              on p.type = pt.id
+where pt.id = 3;
+
+
+SELECT p.id, p.name, p.price, pi.path as path, p.stock, pi.name fileName, p.quantity
+FROM product p
+         JOIN product_image pi
+              ON p.id = pi.product_id
+         JOIN product_type pt
+              ON pt.id = p.type
+WHERE pt.id = 3
+ORDER BY p.id DESC;
