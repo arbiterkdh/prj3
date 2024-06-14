@@ -17,7 +17,12 @@ export function Home() {
   const [mode, setMode] = useState(false);
 
   return (
-    <Box>
+    <Box
+      w={{
+        base: "1000px",
+        lg: "100%",
+      }}
+    >
       <Navbar />
       <Outlet />
       <IconButton

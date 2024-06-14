@@ -1,4 +1,4 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Spinner } from "@chakra-ui/react";
 import BookBox from "../../../css/theme/component/box/BookBox.jsx";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -12,16 +12,24 @@ export function BookDateComponent() {
   const [dayOfOneWeekAgoInKorean, setDayOfOneWeekAgoInKorean] = useState("");
   const [bookPeriodList, setBookPeriodList] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSelected, setIsSelected] = useState(0);
+
   const dateRef = useRef(null);
   const [positionX, setPositionX] = useState(0);
 
   useEffect(() => {
-    axios.get(`/api/book/date`).then((res) => {
-      setToday(res.data.today.split("-"));
-      setDayOfOneWeekAgo(res.data.dayOfOneWeekAgo);
-      setDayOfOneWeekAgoInKorean(res.data.dayOfOneWeekAgoInKorean);
-      setBookPeriodList(res.data.bookPeriodList);
-    });
+    setIsLoading(true);
+    axios
+      .get(`/api/book/date`)
+      .then((res) => {
+        setToday(res.data.today.split("-"));
+        setDayOfOneWeekAgo(res.data.dayOfOneWeekAgo);
+        setDayOfOneWeekAgoInKorean(res.data.dayOfOneWeekAgoInKorean);
+        setBookPeriodList(res.data.bookPeriodList);
+      })
+      .catch()
+      .finally(() => setIsLoading(false));
   }, []);
 
   function handleClickLeft() {
@@ -67,53 +75,65 @@ export function BookDateComponent() {
 
   return (
     <Box>
-      <BookBox>
-        {today[0] +
-          "년 " +
-          today[1] +
-          "월 " +
-          today[2] +
-          "일 (" +
-          dayOfOneWeekAgoInKorean +
-          ")"}
-      </BookBox>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Box>
+          <BookBox>
+            {today[0] +
+              "년 " +
+              today[1] +
+              "월 " +
+              today[2] +
+              "일 (" +
+              dayOfOneWeekAgoInKorean +
+              ")"}
+          </BookBox>
 
-      <Flex
-        align={"center"}
-        borderLeft={"1px solid black"}
-        borderRight={"1px solid black"}
-      >
-        <ArrowLeftIcon onClick={handleClickLeft} cursor={"pointer"} />
-        <Box
-          w={"320px"}
-          h={"100px"}
-          alignContent={"center"}
-          overflow={"hidden"}
-        >
           <Flex
-            ref={dateRef}
-            sx={{
-              transform: `translateX(${positionX}px)`,
-              transition: "transform 0.5s ease",
-            }}
+            align={"center"}
+            borderLeft={"1px solid black"}
+            borderRight={"1px solid black"}
           >
-            {bookPeriodListPlusDayOfWeek.map((day) => (
-              <CursorBox key={day}>
-                <Flex w={"55px"} justifyContent={"space-evenly"}>
-                  <MarginBox fontSize={"xx-small"}>
-                    {day.split("-")[1]}
-                  </MarginBox>
-                  <Box fontSize={"x-large"} fontWeight={"500"}>
-                    {day.split("-")[2]}
-                  </Box>
-                </Flex>
-                <Box align={"center"}>{day.split("-")[3]}</Box>
-              </CursorBox>
-            ))}
+            <ArrowLeftIcon onClick={handleClickLeft} cursor={"pointer"} />
+            <Box
+              w={"320px"}
+              h={"100px"}
+              alignContent={"center"}
+              overflow={"hidden"}
+            >
+              <Flex
+                ref={dateRef}
+                sx={{
+                  transform: `translateX(${positionX}px)`,
+                  transition: "transform 0.5s ease",
+                }}
+              >
+                {bookPeriodListPlusDayOfWeek.map((day) => (
+                  <CursorBox
+                    key={day}
+                    onClick={() => setIsSelected(day)}
+                    rounded={"full"}
+                    color={isSelected === day ? "white" : ""}
+                    bgColor={isSelected === day ? "red.500" : ""}
+                  >
+                    <Flex w={"55px"} h={"33px"} justifyContent={"space-evenly"}>
+                      <MarginBox fontSize={"xx-small"}>
+                        {day.split("-")[1]}
+                      </MarginBox>
+                      <Box fontSize={"x-large"} fontWeight={"500"}>
+                        {day.split("-")[2]}
+                      </Box>
+                    </Flex>
+                    <Box align={"center"}>{day.split("-")[3]}</Box>
+                  </CursorBox>
+                ))}
+              </Flex>
+            </Box>
+            <ArrowRightIcon onClick={handleClickRight} cursor={"pointer"} />
           </Flex>
         </Box>
-        <ArrowRightIcon onClick={handleClickRight} cursor={"pointer"} />
-      </Flex>
+      )}
     </Box>
   );
 }

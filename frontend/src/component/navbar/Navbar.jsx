@@ -55,20 +55,21 @@ export function Navbar() {
           </GapFlex>
           <Heading mt={5} mb={0}>
             <Center>
-              <NavBox
+              <Image
                 position={"absolute"}
+                m={1}
                 top={0}
+                cursor={"pointer"}
                 onClick={() => navigate("/")}
-              >
-                <Image
-                  src={
-                    "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccv.jpg"
-                  }
-                />
-              </NavBox>
+                minWidth={"190px"}
+                maxWidth={"190px"}
+                src={
+                  "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccv.png"
+                }
+              />
             </Center>
             <GapFlex mb={-3} justifyContent="space-between">
-              <GapFlex>
+              <Flex>
                 <NavBox
                   onMouseEnter={() => setDrawer(1)}
                   onMouseLeave={() => setDrawer(0)}
@@ -90,7 +91,7 @@ export function Navbar() {
                 >
                   예매
                 </NavBox>
-              </GapFlex>
+              </Flex>
               <GapFlex>
                 <NavBox onClick={() => navigate("/store")}>스토어</NavBox>
                 <NavBox

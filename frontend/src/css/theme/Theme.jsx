@@ -1,9 +1,23 @@
 import { extendTheme } from "@chakra-ui/react";
 
 export const customTheme = extendTheme({
+  breakpoints: {
+    base: "0em",
+    sm: "30em",
+    md: "48em",
+    lg: "64em", // 창이 줄어들어도 컴포넌트 크기 변하지 않기 위해 적용
+    xl: "80em",
+    "2xl": "96em",
+  },
   styles: {
     global: {
       body: {
+        // "-ms-user-select": "none",
+        // "-moz-user-select": "none",
+        // "-webkit-user-select": "none",
+        // "-khtml-user-select": "none",
+        // "user-select": "none",
+        // 전역적으로 드래그 막고싶을 때 주석 해제하기
         _dark: {},
       },
     },
@@ -34,11 +48,11 @@ export const customTheme = extendTheme({
         mb: "20px",
       },
       sizes: {
-        xs: {},
-        sm: {},
-        md: {},
-        lg: {},
-        xl: {},
+        xs: { fontSize: "2xl", lineHeight: "1.2rem" },
+        sm: { fontSize: "2xl", lineHeight: "1.2rem" },
+        md: { fontSize: "2xl", lineHeight: "1.2rem" },
+        lg: { fontSize: "2xl", lineHeight: "1.2rem" },
+        xl: { fontSize: "2xl", lineHeight: "1.2rem" },
       },
     },
     Input: {
