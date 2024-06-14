@@ -4,6 +4,7 @@ import {
   Center,
   Checkbox,
   CheckboxGroup,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
@@ -22,7 +23,7 @@ import {
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -30,13 +31,24 @@ export function MovieModify() {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [movieTypes, setMovieTypes] = useState([]);
+  const [fileName, setFileName] = useState("");
+  const [addFile, setAddFile] = useState(null);
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const fileRef = useRef();
 
   useEffect(() => {
     axios.get(`/api/movie/${id}`).then((res) => {
+      const parts = res.data.movieImageFile.split("/");
+      const lastword = parts[parts.length - 1];
+      console.log(lastword);
       setMovie(res.data);
       setMovieTypes(res.data.type);
+      if (lastword === "null") {
+        setFileName("");
+      } else {
+        setFileName(lastword);
+      }
     });
   }, []);
 
@@ -57,6 +69,7 @@ export function MovieModify() {
         director: movie.director,
         actors: movie.actors,
         type: movieTypes,
+        file: addFile,
       })
       .then(() => navigate(`/movie/view/${movie.id}`))
       .catch(() => {})
@@ -73,6 +86,12 @@ export function MovieModify() {
     } else {
       setMovieTypes(movieTypes.filter((type) => type !== value));
     }
+  }
+
+  function splitFileName(value) {
+    const parts = value.split("\\");
+    const lastword = parts[parts.length - 1];
+    return lastword;
   }
 
   return (
@@ -93,16 +112,27 @@ export function MovieModify() {
                 />
               </FormControl>
             </Box>
-            {/*<Box>*/}
-            {/*  <FormControl>*/}
-            {/*    <FormLabel>이미지</FormLabel>*/}
-            {/*    <Input*/}
-            {/*      type="file"*/}
-            {/*      accept="image/*"*/}
-            {/*      onChange={(e) => setFile(e.target.files)}*/}
-            {/*    />*/}
-            {/*  </FormControl>*/}
-            {/*</Box>*/}
+            <Box>
+              <FormControl>
+                <FormLabel>이미지</FormLabel>
+                <Flex border={"1px solid black"} alignItems={"center"}>
+                  <Button onClick={() => fileRef.current.click()}>
+                    파일 선택
+                  </Button>
+                  <Input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      setFileName(splitFileName(e.target.value));
+                      setAddFile(e.target.files);
+                    }}
+                    hidden={"_hidden"}
+                  />
+                  {fileName && <Box>{fileName}</Box>}
+                </Flex>
+              </FormControl>
+            </Box>
             <Box>
               <FormControl>
                 <FormLabel>영화 설명</FormLabel>
@@ -184,7 +214,6 @@ export function MovieModify() {
                   locale={ko}
                   dateFormat="yyyy년 MM월 dd일"
                   selected={movie.startDate}
-                  minDate={new Date()}
                   onChange={(date) => setMovie({ ...movie, startDate: date })}
                 />
               </FormControl>

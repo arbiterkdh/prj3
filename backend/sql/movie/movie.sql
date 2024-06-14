@@ -20,6 +20,7 @@ CREATE TABLE movie_file
     PRIMARY KEY (movie_id, name)
 );
 
+
 CREATE TABLE movie_type
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,

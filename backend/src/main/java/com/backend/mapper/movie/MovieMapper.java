@@ -126,7 +126,7 @@ public interface MovieMapper {
     String selectFileNameByMovieId(Integer movieId);
 
 
-    @Select("""
+    @Delete("""           
             DELETE FROM movie_file
             WHERE movie_id = #{movieId}
             """)

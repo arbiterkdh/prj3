@@ -47,7 +47,7 @@ public class MovieService {
                 // db 에 해당 게시물의 파일 목록 저장
                 movieMapper.insertFileName(movie.getId(), file1.getOriginalFilename());
                 // 실제 파일 저장
-                String key = STR."prj3/\{movie.getId()}/\{file1.getOriginalFilename()}";
+                String key = STR."prj3/movie/\{movie.getId()}/\{file1.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -127,7 +127,7 @@ public class MovieService {
             for (Movie movie : list) {
                 String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
 
-                movie.setMovieImageFile(STR."\{srcPrefix}/\{movie.getId()}/\{fileName}");
+                movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
             }
 
             return Map.of("pageInfo", pageInfo,
@@ -153,7 +153,7 @@ public class MovieService {
             for (Movie movie : list) {
                 String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
 
-                movie.setMovieImageFile(STR."\{srcPrefix}/\{movie.getId()}/\{fileName}");
+                movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
             }
 
 
@@ -170,7 +170,7 @@ public class MovieService {
         movie.setType(movieMapper.selectMovieTypeById(movieId));
 
         String fileName = movieMapper.selectFileNameByMovieId(movieId);
-        String file = STR."\{srcPrefix}/\{movieId}/\{fileName}";
+        String file = STR."\{srcPrefix}/movie/\{movieId}/\{fileName}";
 
         movie.setMovieImageFile(file);
 
@@ -182,7 +182,8 @@ public class MovieService {
         // 이미지 파일명 조회
         String fileName = movieMapper.selectFileNameByMovieId(movieId);
 
-        String key = STR."prj3/\{movieId}/\{fileName}";
+        // s3에 있는 이미지 파일 삭제
+        String key = STR."prj3/movie/\{movieId}/\{fileName}";
         DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -202,6 +203,8 @@ public class MovieService {
     }
 
     public void editMovie(Movie movie) {
+        // todo : 파일 수정 로직 추가 필요....
+
         movieMapper.updateMovie(movie);
 
         // movie_type 수정 로직, movie_type 삭제 이후 새로 생성...
