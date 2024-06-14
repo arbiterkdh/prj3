@@ -59,6 +59,7 @@ export function BookTheaterList({
         w={"100%"}
         h={"600px"}
         overflow={"scroll"}
+        overflowX={"unset"}
       >
         {theaterNumberList.map((theater) => (
           <Flex key={theater.number} alignItems={"center"} gap={2}>

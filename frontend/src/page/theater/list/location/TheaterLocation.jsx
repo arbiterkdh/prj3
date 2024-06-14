@@ -27,7 +27,7 @@ export function TheaterLocation() {
 
   return (
     <Center>
-      <Box w={"100%"} justifyContent={"center"} align={"center"} mt={"-35px"}>
+      <Box w={"100%"} justifyContent={"center"} align={"center"}>
         <Image
           src={
             "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/theater/main/theatermain.jpg"

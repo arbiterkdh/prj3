@@ -15,7 +15,7 @@ export function BookMovieList({
 
   return (
     <Box>
-      <Stack h={"600px"} overflow={"scroll"}>
+      <Stack>
         {onScreenList.map((movie) => (
           <Box key={movie.id}>
             <Input

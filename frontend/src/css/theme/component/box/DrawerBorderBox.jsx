@@ -3,10 +3,11 @@ import { Box } from "@chakra-ui/react";
 const DrawerBorderBox = (props) => {
   return (
     <Box
+      h={"33px"}
       fontWeight={"600"}
       borderBottom={"1px solid black"}
       color={"white"}
-      bgColor={"blackAlpha.800"}
+      bgColor={"darkslategray"}
       {...props}
     />
   );

@@ -124,11 +124,11 @@ export function BookMovieLocationAdd({
         )}
       </BorderSelect>
       <Button
-        w={"200px"}
+        w={"40%"}
         isDisabled={!movieId || !isLocationSelected}
         onClick={handleClickMovieLocationAdd}
       >
-        상영영화추가
+        영화추가
       </Button>
     </Flex>
   );
