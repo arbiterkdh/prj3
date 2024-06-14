@@ -43,6 +43,12 @@ public interface MovieCommentMapper {
             """)
     int deleteCommentByCommentId(Integer commentId);
 
+    @Delete("""
+            DELETE FROM movie_comment
+            WHERE movie_id = #{movieId}
+            """)
+    int deleteCommentByMovieId(Integer movieId);
+
 
     @Update("""
             UPDATE movie_comment

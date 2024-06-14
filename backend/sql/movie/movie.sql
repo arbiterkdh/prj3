@@ -82,5 +82,20 @@ SELECT title,
        actors
 FROM movie;
 
+SELECT COUNT(*)
+FROM movie
+WHERE DATEDIFF(start_date, '2024-06-12') <= 0
+ORDER BY id DESC;
+
 SELECT *
 FROM movie;
+
+SELECT *
+FROM movie
+WHERE DATEDIFF(start_date, '2024-06-12') <= 0;
+
+
+DESC movie_location;
+
+DELETE
+FROM movie_location;

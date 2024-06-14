@@ -43,8 +43,8 @@ public class MovieController {
     }
 
     @GetMapping("list")
-    public Map<String, Object> list(@RequestParam Integer page) {
-        return movieService.list(page);
+    public Map<String, Object> list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "1") Integer tab, @RequestParam(required = false) String keyword) {
+        return movieService.list(page, tab, keyword);
     }
 
     @GetMapping("{id}")

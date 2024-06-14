@@ -3,6 +3,7 @@ package com.backend.mapper.movie;
 import com.backend.domain.movie.Movie;
 import org.apache.ibatis.annotations.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -29,10 +30,22 @@ public interface MovieMapper {
     @Select("""
             SELECT *
             FROM movie
+            WHERE DATEDIFF(start_date, #{today}) <= 0
             ORDER BY id DESC
             LIMIT 0, #{endset}
             """)
-    List<Movie> selectList(Integer endset);
+    List<Movie> selectNowShowingMovieList(Integer endset, LocalDate today);
+
+
+    @Select("""
+            SELECT *
+            FROM movie
+            WHERE DATEDIFF(start_date, #{today}) > 0
+            ORDER BY id DESC
+            LIMIT 0, #{endset}
+            """)
+    List<Movie> selectComingSoonMovietList(Integer endset, LocalDate today);
+
 
     @Select("""
             SELECT *
@@ -79,7 +92,18 @@ public interface MovieMapper {
     @Select("""
             SELECT COUNT(*)
             FROM movie
+            WHERE DATEDIFF(start_date, #{today}) <= 0
             """)
+    Integer countNowShowingMovie(LocalDate today);
+
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM movie
+            WHERE DATEDIFF(start_date, #{today}) > 0
+            """)
+    Integer countComingSoonMovie(LocalDate today);
+
     Integer countAllMovie();
 
     @Select("""
