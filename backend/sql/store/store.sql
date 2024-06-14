@@ -22,6 +22,11 @@ CREATE TABLE product_image
     product_id INT REFERENCES product (id)
 );
 
+alter table product_image
+    modify column path varchar(200);
+
+
+
 CREATE TABLE product_cart
 (
     id         INT PRIMARY KEY AUTO_INCREMENT,

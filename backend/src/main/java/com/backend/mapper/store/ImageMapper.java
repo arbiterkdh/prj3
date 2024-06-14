@@ -8,10 +8,10 @@ public interface ImageMapper {
 
 
     @Insert("""
-            INSERT INTO product_image(name, path, product_id)
-            VALUES(#{name}, #{path}, #{productId})
+            INSERT INTO product_image(name, product_id)
+            VALUES(#{name}, #{productId})
             """)
-    int add(Integer productId, String name, String path);
+    int add(Integer productId, String name);
 
 
     @Select("""
