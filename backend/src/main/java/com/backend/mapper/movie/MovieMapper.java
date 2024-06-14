@@ -90,7 +90,14 @@ public interface MovieMapper {
 
     @Insert("""
             INSERT INTO movie_file (movie_id, name)
-            VALUES (#{movie_id}, #{name})
+            VALUES (#{movieId}, #{name})
             """)
-    int insertFileName(Integer movie_id, String name);
+    int insertFileName(Integer movieId, String name);
+
+    @Select("""
+            SELECT name
+            FROM movie_file
+            WHERE movie_id = #{movieId}
+            """)
+    List<String> selectFileNameByMovieId(Integer movieId);
 }

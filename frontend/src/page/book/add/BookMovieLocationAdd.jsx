@@ -8,7 +8,8 @@ export function BookMovieLocationAdd({
   setMovieLocationAdd,
   movieList,
   setMovieList,
-  onMovieList,
+  onScreenList,
+  willScreenList,
 }) {
   const [theaterList, setTheaterList] = useState([]);
   const [movieId, setMovieId] = useState(0);
@@ -28,6 +29,7 @@ export function BookMovieLocationAdd({
       setMovieList(res.data);
     });
   }, []);
+
   function handleClickMovieLocationAdd() {
     axios
       .post(`/api/book/movielocation/add`, {
@@ -105,11 +107,21 @@ export function BookMovieLocationAdd({
           setMovieId(e.target.value);
         }}
       >
-        {movieList.map((movie) => (
-          <option key={movie.id} value={movie.id}>
-            {movie.title}
-          </option>
-        ))}
+        {isStateSelected === "상영예정" ? (
+          willScreenList.map((movie) => (
+            <option key={movie.id} value={movie.id}>
+              {movie.title}
+            </option>
+          ))
+        ) : isStateSelected === "상영중" ? (
+          onScreenList.map((movie) => (
+            <option key={movie.id} value={movie.id}>
+              {movie.title}
+            </option>
+          ))
+        ) : (
+          <option>영화명</option>
+        )}
       </BorderSelect>
       <Button
         w={"200px"}

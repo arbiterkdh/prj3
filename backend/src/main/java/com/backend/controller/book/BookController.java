@@ -18,10 +18,16 @@ public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("onmovielist")
-    public List<Map<String, Object>> getOnMovieList() {
+    @GetMapping("onscreenlist")
+    public List<Map<String, Object>> getOnScreenList() {
 
-        return bookService.getOnMovieList();
+        return bookService.getOnScreenList();
+    }
+
+    @GetMapping("willscreenlist")
+    public List<Map<String, Object>> getWillScreenList() {
+
+        return bookService.getWillScreenList();
     }
 
     @GetMapping("list")

@@ -48,7 +48,15 @@ public interface BookMapper {
             WHERE DATE_ADD(start_date, INTERVAL 1 MONTH) >= NOW()
               AND start_date <= NOW()
             """)
-    List<Map<String, Object>> selectAllOnMovieByDate();
+    List<Map<String, Object>> selectAllOnScreenByDate();
+
+    @Select("""
+            SELECT id, title, running_time, rating, start_date
+            FROM movie
+            WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
+              AND start_date > NOW()
+            """)
+    List<Map<String, Object>> selectAllWillScreenByDate();
 
     @Select("""
             SELECT theater_number

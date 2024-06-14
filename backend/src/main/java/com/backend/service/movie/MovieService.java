@@ -1,6 +1,7 @@
 package com.backend.service.movie;
 
 import com.backend.domain.movie.Movie;
+import com.backend.domain.movie.MovieImageFile;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -112,10 +114,20 @@ public class MovieService {
                 "movieList", movieMapper.selectList(endset));
     }
 
-    public Movie get(Integer movieId) {
+    public Map<String, Object> get(Integer movieId) {
+        Map<String, Object> result = new HashMap<>();
+
         Movie movie = movieMapper.selectByMovieId(movieId);
         movie.setType(movieMapper.selectMovieTypeById(movieId));
-        return movie;
+
+        List<String> fileNames = movieMapper.selectFileNameByMovieId(movieId);
+        // 버킷에 보관된 이미지 파일의 URL/{movieId}/{name}
+        List<MovieImageFile> files = fileNames.stream()
+                .map(name -> new MovieImageFile(name, STR."\{srcPrefix}\{movieId}/\{name}"))
+                .toList();
+
+
+        return result;
     }
 
 

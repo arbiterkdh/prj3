@@ -53,7 +53,7 @@ export function Navbar() {
               )}
             </GapFlex>
           </GapFlex>
-          <Heading mt={5}>
+          <Heading mt={5} mb={0}>
             <Center>
               <NavBox
                 position={"absolute"}

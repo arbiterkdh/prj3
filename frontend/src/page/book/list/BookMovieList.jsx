@@ -2,9 +2,10 @@ import { Box, Input, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export function BookMovieList({
-  onMovieList,
   checkedTheaterNumber,
   movieLocationAdd,
+  onScreenList,
+  willScreenList,
 }) {
   const [clickedBox, setClickedBox] = useState(0);
 
@@ -15,9 +16,10 @@ export function BookMovieList({
   return (
     <Box>
       <Stack h={"600px"} overflow={"scroll"}>
-        {onMovieList.map((movie) => (
+        {onScreenList.map((movie) => (
           <Box key={movie.id}>
             <Input
+              w={"95%"}
               cursor={"pointer"}
               border={"none"}
               value={movie.title}
