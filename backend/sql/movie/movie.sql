@@ -99,3 +99,8 @@ DESC movie_location;
 
 DELETE
 FROM movie_location;
+
+DESC movie_file;
+
+SELECT *
+FROM movie_file;

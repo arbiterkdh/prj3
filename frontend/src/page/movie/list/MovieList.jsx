@@ -119,28 +119,32 @@ export function MovieList() {
                 {movieList.map((movie) => (
                   <Card key={movie.id} maxW="sm" mb={"30px"}>
                     <CardBody>
-                      <Image
-                        cursor={"pointer"}
-                        onClick={() => handleImageClick(movie.id)}
-                        src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
+                      <Center>
+                        <Image
+                          h={"250px"}
+                          cursor={"pointer"}
+                          onClick={() => handleImageClick(movie.id)}
+                          src={movie.movieImageFile}
+                          borderRadius="lg"
+                        />
+                      </Center>
                       <Stack mt="6" spacing="3">
                         <Heading size="md">{movie.title}</Heading>
-                        <Text>개봉일 {movie.startDate}</Text>
+                        <Text mt={-6}>개봉일 {movie.startDate}</Text>
                       </Stack>
                     </CardBody>
-                    <CardFooter>
-                      <ButtonGroup spacing="2">
-                        <Button variant="ghost" colorScheme="purple">
-                          하트
-                        </Button>
-                        <Button variant="solid" colorScheme="purple">
-                          예매
-                        </Button>
-                      </ButtonGroup>
-                    </CardFooter>
+                    <Center>
+                      <CardFooter mt={-6}>
+                        <ButtonGroup spacing="2">
+                          <Button variant="outline" colorScheme="purple">
+                            하트
+                          </Button>
+                          <Button variant="solid" colorScheme="purple">
+                            예매
+                          </Button>
+                        </ButtonGroup>
+                      </CardFooter>
+                    </Center>
                   </Card>
                 ))}
               </SimpleGrid>
@@ -172,28 +176,32 @@ export function MovieList() {
                 {movieList.map((movie) => (
                   <Card key={movie.id} maxW="sm" mb={"30px"}>
                     <CardBody>
-                      <Image
-                        cursor={"pointer"}
-                        onClick={() => handleImageClick(movie.id)}
-                        src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                        alt="Green double couch with wooden legs"
-                        borderRadius="lg"
-                      />
+                      <Center>
+                        <Image
+                          h={"250px"}
+                          cursor={"pointer"}
+                          onClick={() => handleImageClick(movie.id)}
+                          src={movie.movieImageFile}
+                          borderRadius="lg"
+                        />
+                      </Center>
                       <Stack mt="6" spacing="3">
                         <Heading size="md">{movie.title}</Heading>
-                        <Text>개봉일 {movie.startDate}</Text>
+                        <Text mt={-6}>개봉일 {movie.startDate}</Text>
                       </Stack>
                     </CardBody>
-                    <CardFooter>
-                      <ButtonGroup spacing="2">
-                        <Button variant="ghost" colorScheme="purple">
-                          하트
-                        </Button>
-                        <Button variant="solid" colorScheme="purple">
-                          예매
-                        </Button>
-                      </ButtonGroup>
-                    </CardFooter>
+                    <Center>
+                      <CardFooter mt={-6}>
+                        <ButtonGroup spacing="2">
+                          <Button variant="outline" colorScheme="purple">
+                            하트
+                          </Button>
+                          <Button variant="solid" colorScheme="purple">
+                            예매
+                          </Button>
+                        </ButtonGroup>
+                      </CardFooter>
+                    </Center>
                   </Card>
                 ))}
               </SimpleGrid>
