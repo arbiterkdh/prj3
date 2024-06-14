@@ -1,15 +1,21 @@
 package com.backend.service.store;
 
 import com.backend.domain.store.Product;
+import com.backend.domain.store.ProductImage;
 import com.backend.domain.store.ProductType;
 import com.backend.mapper.store.ImageMapper;
 import com.backend.mapper.store.ProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +27,14 @@ public class ProductService {
 
     private final ProductMapper mapper;
     private final ImageMapper imageMapper;
+    private final S3Client s3Client;
+
+    @Value("${aws.s3.bucket.name}")
+    String bucketName;
+
+    @Value("${image.src.prefix}")
+    String srcPrefix;
+
 
     public void add(Product product, MultipartFile[] files) throws Exception {
 
@@ -28,23 +42,23 @@ public class ProductService {
 
         if (files != null) {
             for (MultipartFile file : files) {
+                imageMapper.add(product.getId(), file.getOriginalFilename());
 
-                String dir = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{product.getId()}";
-                File dirFile = new File(dir);
-                if (!dirFile.exists()) {
-                    dirFile.mkdirs();
-                }
+                String key = STR."prj3/store/\{product.getId()}/\{file.getOriginalFilename()}";
+                PutObjectRequest objectRequest = PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .acl(ObjectCannedACL.PUBLIC_READ)
+                        .build();
 
-                String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{product.getId()}/\{file.getOriginalFilename()}";
-                File destination = new File(path);
-                file.transferTo(destination);
-                imageMapper.add(product.getId(), file.getOriginalFilename(), path);
+                s3Client.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
             }
         }
     }
 
 
     public Map<String, Object> productList(String menuTypeSelect, Integer page) {
+
 
         Integer offset = (page - 1) * 12;
 
@@ -71,8 +85,18 @@ public class ProductService {
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
 
+        List<Product> productList = mapper.productList(menuTypeSelect, offset);
 
-        return Map.of("productList", mapper.productList(menuTypeSelect, offset),
+        for (Product product : productList) {
+            String fileName = imageMapper.selectFileName(product.getId());
+
+            ProductImage imageFile = new ProductImage(fileName, STR."\{srcPrefix}/store/\{product.getId()}/\{fileName}");
+
+            product.setImage(imageFile);
+        }
+
+
+        return Map.of("productList", productList,
                 "pageInfo", pageInfo);
     }
 
@@ -80,18 +104,13 @@ public class ProductService {
 
         String fileName = imageMapper.selectFileName(id);
 
-        String dir = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{id}/";
+        String key = STR."prj3/store/\{id}/\{fileName}";
+        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
 
-        if (fileName != null) {
-
-            File file = new File(dir + fileName);
-            file.delete();
-
-            File dirFile = new File(dir);
-            if (dirFile.exists()) {
-                dirFile.delete();
-            }
-        }
+        s3Client.deleteObject(objectRequest);
 
         imageMapper.deleteImage(id);
 
@@ -99,35 +118,46 @@ public class ProductService {
 
     }
 
-    public void updateProduct(Integer productId, Product product, String originalFileName, MultipartFile[] file) throws Exception {
+    public void updateProduct(Integer productId, Product product, String originalFileName, MultipartFile file) throws Exception {
 
         if (file == null) {
             mapper.updateProduct(product, productId);
         }
         if (file != null) {
 
-            for (MultipartFile newFile : file) {
+            String key = STR."prj3/store/\{productId}/\{originalFileName}";
+            DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
 
-                String originalPath = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productId}/\{originalFileName}";
-                File originalFile = new File(originalPath);
+            s3Client.deleteObject(objectRequest);
 
-                if (originalFile.exists()) {
-                    originalFile.delete();
-                }
-                String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productId}/\{newFile.getOriginalFilename()}";
-                File modifyFile = new File(path);
+            String newKey = STR."prj3/store/\{productId}/\{file.getOriginalFilename()}";
 
-                newFile.transferTo(modifyFile);
+            PutObjectRequest newObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(newKey)
+                    .acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
 
-                mapper.updateProduct(product, productId);
-                imageMapper.update(newFile.getOriginalFilename(), path, productId);
-            }
+            s3Client.putObject(newObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+            imageMapper.update(file.getOriginalFilename(), productId);
+            mapper.updateProduct(product, productId);
         }
     }
 
     public Product info(Integer id) {
 
-        return mapper.info(id);
+        Product product = mapper.info(id);
+        String fileName = imageMapper.selectFileName(id);
+
+        ProductImage imageFile = new ProductImage(fileName, STR."\{srcPrefix}/store/\{id}/\{fileName}");
+
+        product.setImage(imageFile);
+
+        return product;
     }
 
     public List<ProductType> typeList() {

@@ -102,9 +102,7 @@ export function StoreCart() {
             ></Checkbox>
           </CenterTd>
           <CenterTd>
-            <Image
-              src={`http://127.0.0.1:8888/${cartItem.productId}/${cartItem.fileName}`}
-            ></Image>
+            <Image src={cartItem.image.src}></Image>
           </CenterTd>
           <CenterTd>{cartItem.name}</CenterTd>
           <CenterTd>

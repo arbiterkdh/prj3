@@ -29,7 +29,7 @@ import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 
 export function StoreAdd() {
   const [name, setName] = useState("");
-  const [files, setFiles] = useState([]);
+  const [file, setFile] = useState(null);
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
   const [content, setContent] = useState("");
@@ -42,7 +42,7 @@ export function StoreAdd() {
 
   let disabled = true;
 
-  if (name && files && stock && price && content) {
+  if (name && file && stock && price && content) {
     disabled = false;
   }
 
@@ -54,7 +54,7 @@ export function StoreAdd() {
         stock,
         price,
         content,
-        files,
+        file,
         type: selectType,
       })
       .then((res) => {
@@ -120,11 +120,10 @@ export function StoreAdd() {
                   </Heading>
                   <Text pt="2" fontSize="sm">
                     <input
-                      multiple
                       type={"file"}
                       accept="image/*"
                       placeholder={"이미지를 등록하세요"}
-                      onChange={(e) => setFiles(e.target.files)}
+                      onChange={(e) => setFile(e.target.files[0])}
                     />
                   </Text>
                 </Box>
@@ -143,7 +142,6 @@ export function StoreAdd() {
                       </option>
                     ))}
                   </Select>
-                  {/*<p>{selectType}</p>*/}
                 </Box>
               </Flex>
               <Box>

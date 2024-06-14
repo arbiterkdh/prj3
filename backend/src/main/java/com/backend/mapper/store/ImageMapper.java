@@ -8,16 +8,16 @@ public interface ImageMapper {
 
 
     @Insert("""
-            INSERT INTO product_image(name, path, product_id)
-            VALUES(#{name}, #{path}, #{productId})
+            INSERT INTO product_image(name, product_id)
+            VALUES(#{name}, #{productId})
             """)
-    int add(Integer productId, String name, String path);
+    int add(Integer productId, String name);
 
 
     @Select("""
             SELECT name
             FROM product_image
-            WHERE id = #{productId}
+            WHERE product_id = #{productId}
             """)
     String selectFileName(Integer productId);
 
@@ -29,8 +29,9 @@ public interface ImageMapper {
 
     @Update("""
             UPDATE product_image
-            SET name = #{newFileName}, path = #{path}
+            SET name = #{newFileName}
             WHERE product_id = #{productId}
             """)
-    int update(String newFileName, String path, Integer productId);
+    int update(String newFileName, Integer productId);
+
 }

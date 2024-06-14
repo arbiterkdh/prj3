@@ -23,6 +23,7 @@ function AddCartModal({
 }) {
   const toast = useToast();
   function handleCartAdd(productId) {
+    console.log("fileName:" + fileName);
     axios
       .postForm(`/api/store/cart/add`, {
         id: productId,
