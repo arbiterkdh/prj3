@@ -30,6 +30,7 @@ import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 import { BookHome } from "./page/book/BookHome.jsx";
+import { PromoAll } from "./page/promotion/view/PromoAll.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -98,51 +99,55 @@ const router = createBrowserRouter([
         path: "promotion",
         element: <Promo />,
         children: [
-          { index: true, element: <PromoList /> },
+          {
+            index: true,
+            element: <PromoAll />,
+          },
+          {
+            path: "all",
+            element: <PromoAll />,
+          },
+          {
+            path: "movie",
+            element: <PromoList eventType="영화" />,
+          },
+          {
+            path: "theater",
+            element: <PromoList eventType="극장" />,
+          },
+          {
+            path: "membership",
+            element: <PromoList eventType="멤버십" />,
+          },
+          {
+            path: "discount",
+            element: <PromoList eventType="제휴/할인" />,
+          },
           {
             path: "add",
             element: <PromoAdd />,
           },
           {
-            path: "view",
-            children: [
-              {
-                path: ":promoId",
-                element: <PromoView />,
-                children: [
-                  {
-                    path: "upcoming",
-                    element: <PromoEnd />,
-                  },
-                  {
-                    path: "end",
-                    element: <PromoEnd />,
-                  },
-                  {
-                    path: "eventResult",
-                    element: <PromoResult />,
-                  },
-                ],
-              },
-            ],
+            path: "view/:promoId",
+            element: <PromoView />,
           },
           {
             path: "modify/:promoId",
             element: <PromoModify />,
           },
+          {
+            path: "eventUpcoming",
+            element: <PromoUpcoming />,
+          },
+          {
+            path: "eventEnd",
+            element: <PromoEnd />,
+          },
+          {
+            path: "eventResult",
+            element: <PromoResult />,
+          },
         ],
-      },
-      {
-        path: "promotion/eventUpcoming",
-        element: <PromoUpcoming />,
-      },
-      {
-        path: "promotion/eventEnd",
-        element: <PromoEnd />,
-      },
-      {
-        path: "promotion/eventResult",
-        element: <PromoResult />,
       },
       {
         path: "store",
