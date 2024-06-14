@@ -9,6 +9,10 @@ CREATE TABLE product_image
 
 Select *
 from product;
+
+delete
+from product
+where id = 3;
 select *
 from product_image;
 

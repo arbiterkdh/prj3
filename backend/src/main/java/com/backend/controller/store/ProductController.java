@@ -44,13 +44,16 @@ public class ProductController {
     }
 
     @PutMapping("/modify")
-    public void Modify(Product product, @RequestParam("productId") Integer productId, @RequestParam("fileName") String originalFileName, @RequestParam(value = "file[]", required = false) MultipartFile[] file) throws Exception {
+    public void Modify(Product product, @RequestParam("productId") Integer productId, @RequestParam("fileName") String originalFileName, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+
 
         service.updateProduct(productId, product, originalFileName, file);
     }
 
     @GetMapping("/view/{productId}")
     public Product view(@PathVariable Integer productId) {
+
+        System.out.println("productId = " + productId);
 
         return service.info(productId);
 

@@ -29,8 +29,9 @@ public interface ImageMapper {
 
     @Update("""
             UPDATE product_image
-            SET name = #{newFileName}, path = #{path}
+            SET name = #{newFileName}
             WHERE product_id = #{productId}
             """)
-    int update(String newFileName, String path, Integer productId);
+    int update(String newFileName, Integer productId);
+
 }

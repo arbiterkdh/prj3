@@ -31,17 +31,19 @@ function ProductItemList({
   setPrice,
   setStock,
   setQuantity,
+  setImage,
   onDelOpen,
   onModifyOpen,
 }) {
   const navigate = useNavigate();
 
-  function handleModifyModal(id, fileName, name, price, stock) {
+  function handleModifyModal(id, fileName, name, price, stock, imgSrc) {
     setProductId(id);
     setFileName(fileName);
     setName(name);
     setPrice(price);
     setStock(stock);
+    setImage(imgSrc);
     onModifyOpen();
   }
   const handleProductView = (productId) => {
@@ -86,15 +88,17 @@ function ProductItemList({
                     <Text fontSize={"1.3rem"}>{product.name}</Text>
                     <Text
                       color={"red"}
-                      onClick={() =>
+                      onClick={() => {
                         handleModifyModal(
                           product.id,
                           product.fileName,
                           product.name,
                           product.price,
                           product.stock,
-                        )
-                      }
+                          product.image.src,
+                        );
+                        console.log("name:" + product.fileName);
+                      }}
                     >
                       {" "}
                       <FontAwesomeIcon

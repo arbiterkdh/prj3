@@ -16,7 +16,6 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,29 +118,33 @@ public class ProductService {
 
     }
 
-    public void updateProduct(Integer productId, Product product, String originalFileName, MultipartFile[] file) throws Exception {
+    public void updateProduct(Integer productId, Product product, String originalFileName, MultipartFile file) throws Exception {
 
         if (file == null) {
             mapper.updateProduct(product, productId);
         }
         if (file != null) {
 
-            for (MultipartFile newFile : file) {
+            String key = STR."prj3/store/\{productId}/\{originalFileName}";
+            DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
 
-                String originalPath = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productId}/\{originalFileName}";
-                File originalFile = new File(originalPath);
+            s3Client.deleteObject(objectRequest);
 
-                if (originalFile.exists()) {
-                    originalFile.delete();
-                }
-                String path = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{productId}/\{newFile.getOriginalFilename()}";
-                File modifyFile = new File(path);
+            String newKey = STR."prj3/store/\{productId}/\{file.getOriginalFilename()}";
 
-                newFile.transferTo(modifyFile);
+            PutObjectRequest newObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(newKey)
+                    .acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
 
-                mapper.updateProduct(product, productId);
-                imageMapper.update(newFile.getOriginalFilename(), path, productId);
-            }
+            s3Client.putObject(newObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+            imageMapper.update(file.getOriginalFilename(), productId);
+            mapper.updateProduct(product, productId);
         }
     }
 

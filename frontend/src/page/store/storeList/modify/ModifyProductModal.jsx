@@ -41,6 +41,9 @@ function ModifyProductModal({
   productListRefresh,
   file,
   setFile,
+  image,
+  imageName,
+  setImageName,
 }) {
   const toast = useToast();
 
@@ -81,14 +84,16 @@ function ModifyProductModal({
           <ModalHeader>상품 수정</ModalHeader>
           <ModalBody>
             <FormControl mb={3}>
-              <Image src={`http://127.0.0.1:8888/${productId}/${fileName}`} />
+              <Image src={image} />
               <input
-                multiple
                 type={"file"}
                 accept="image/*"
                 placeholder={"이미지를 등록하세요"}
-                onChange={(e) => setFile(e.target.files)}
+                id="file-input"
+                className="file-input"
+                onChange={(e) => setFile(e.target.files[0])}
               />
+              {fileName}
             </FormControl>
             <FormControl mb={3}>
               <FormLabel>상품명</FormLabel>

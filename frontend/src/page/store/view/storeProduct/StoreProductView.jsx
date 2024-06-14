@@ -38,7 +38,9 @@ export function StoreProductView() {
       .then((res) => {
         setProduct(res.data);
       })
-      .catch(() => {})
+      .catch((err) => {
+        console.log("====" + err);
+      })
       .finally(() => {});
   }, []);
 
@@ -50,7 +52,7 @@ export function StoreProductView() {
         </Box>
         <Flex w={"100%"}>
           <Box w={"50%"} p={20}>
-            <Image src={product.image.src} />
+            <Image src={product.image ? product.image.src : ""} />
           </Box>
           <Flex
             w={"50%"}

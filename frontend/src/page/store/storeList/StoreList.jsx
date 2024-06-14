@@ -37,6 +37,7 @@ export function StoreList() {
   const [stock, setStock] = useState(0);
   const [file, setFile] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
@@ -159,6 +160,8 @@ export function StoreList() {
           setPrice={setPrice}
           setStock={setStock}
           setQuantity={setQuantity}
+          image={image}
+          setImage={setImage}
           onDelOpen={onDelOpen}
           onModifyOpen={onModifyOpen}
         />
@@ -220,6 +223,7 @@ export function StoreList() {
           setPrice={setPrice}
           file={file}
           setFile={setFile}
+          image={image}
           isLoading={isLoading}
           onModifyClose={onModifyClose}
           productListRefresh={productListRefresh}
