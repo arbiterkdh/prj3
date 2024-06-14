@@ -96,7 +96,7 @@ export function Book() {
         </OuterBookBox>
         <OuterBookBox>
           <BookDateComponent />
-          <Box h={"600px"} border={"1px solid black"}>
+          <Box h={"550px"} border={"1px solid black"}>
             선택한 지점의 영화 상영 테이블 나올 곳
             <Button onClick={() => navigate("/book/theaterseat")}>예매</Button>
           </Box>

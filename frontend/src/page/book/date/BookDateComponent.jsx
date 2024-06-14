@@ -4,10 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
+import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 
 export function BookDateComponent() {
   const [today, setToday] = useState("");
   const [dayOfOneWeekAgo, setDayOfOneWeekAgo] = useState(0);
+  const [dayOfOneWeekAgoInKorean, setDayOfOneWeekAgoInKorean] = useState("");
   const [bookPeriodList, setBookPeriodList] = useState([]);
 
   const dateRef = useRef(null);
@@ -15,20 +17,21 @@ export function BookDateComponent() {
 
   useEffect(() => {
     axios.get(`/api/book/date`).then((res) => {
-      setToday(res.data.today);
+      setToday(res.data.today.split("-"));
       setDayOfOneWeekAgo(res.data.dayOfOneWeekAgo);
+      setDayOfOneWeekAgoInKorean(res.data.dayOfOneWeekAgoInKorean);
       setBookPeriodList(res.data.bookPeriodList);
     });
   }, []);
 
   function handleClickLeft() {
-    setPositionX((prev) => Math.min(prev + 100, 0));
+    setPositionX((prev) => Math.min(prev + 125, 0));
   }
 
   function handleClickRight() {
     const flexWidth = dateRef.current.scrollWidth;
     const containerWidth = dateRef.current.parentElement.offsetWidth;
-    setPositionX((prev) => Math.max(prev - 100, containerWidth - flexWidth));
+    setPositionX((prev) => Math.max(prev - 125, containerWidth - flexWidth));
   }
 
   let bookPeriodListPlusDayOfWeek = [];
@@ -71,32 +74,46 @@ export function BookDateComponent() {
           "월 " +
           today[2] +
           "일 (" +
-          dayOfOneWeekAgo +
+          dayOfOneWeekAgoInKorean +
           ")"}
       </BookBox>
-      <Box w={"300px"}>
+
+      <Flex
+        align={"center"}
+        borderLeft={"1px solid black"}
+        borderRight={"1px solid black"}
+      >
         <ArrowLeftIcon onClick={handleClickLeft} />
-        <Flex
-          ref={dateRef}
-          sx={{
-            transform: `translateX(${positionX}px)`,
-            transition: "transform 0.5s ease",
-          }}
+        <Box
+          w={"320px"}
+          h={"100px"}
+          alignContent={"center"}
+          overflow={"hidden"}
         >
-          {bookPeriodListPlusDayOfWeek.map((day) => (
-            <Box key={day}>
-              <Flex w={"100px"}>
-                <MarginBox fontSize={"xx-small"}>{day.split("-")[1]}</MarginBox>
-                <Box fontSize={"x-large"} fontWeight={"500"}>
-                  {day.split("-")[2]}
-                </Box>
-              </Flex>
-              <Box>{day.split("-")[3]}</Box>
-            </Box>
-          ))}
-        </Flex>
+          <Flex
+            ref={dateRef}
+            sx={{
+              transform: `translateX(${positionX}px)`,
+              transition: "transform 0.5s ease",
+            }}
+          >
+            {bookPeriodListPlusDayOfWeek.map((day) => (
+              <CursorBox key={day}>
+                <Flex w={"55px"} justifyContent={"space-evenly"}>
+                  <MarginBox fontSize={"xx-small"}>
+                    {day.split("-")[1]}
+                  </MarginBox>
+                  <Box fontSize={"x-large"} fontWeight={"500"}>
+                    {day.split("-")[2]}
+                  </Box>
+                </Flex>
+                <Box align={"center"}>{day.split("-")[3]}</Box>
+              </CursorBox>
+            ))}
+          </Flex>
+        </Box>
         <ArrowRightIcon onClick={handleClickRight} />
-      </Box>
+      </Flex>
     </Box>
   );
 }

@@ -55,11 +55,23 @@ public class BookController {
     public Map<String, Object> getDate() {
         LocalDate today = LocalDate.now();
         Integer dayOfOneWeekAgo = bookService.getDayOfOneWeekAgo();
+        String dayOfOneWeekAgoInKorean = switch (dayOfOneWeekAgo) {
+            case 1 -> "일";
+            case 2 -> "월";
+            case 3 -> "화";
+            case 4 -> "수";
+            case 5 -> "목";
+            case 6 -> "금";
+            case 7 -> "토";
+            default -> "";
+        };
+
         List<LocalDate> bookPeriodList = bookService.getBookPeriodList();
 
         Map<String, Object> map = new HashMap<>();
         map.put("today", today);
         map.put("dayOfOneWeekAgo", dayOfOneWeekAgo);
+        map.put("dayOfOneWeekAgoInKorean", dayOfOneWeekAgoInKorean);
         map.put("bookPeriodList", bookPeriodList);
 
         return map;
