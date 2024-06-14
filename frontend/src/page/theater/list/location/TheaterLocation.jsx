@@ -3,6 +3,7 @@ import {
   Center,
   Flex,
   Heading,
+  Image,
   Stack,
   Tab,
   TabList,
@@ -27,7 +28,18 @@ export function TheaterLocation() {
   return (
     <Center>
       <Box w={"100%"} justifyContent={"center"} align={"center"} mt={"-35px"}>
-        <Stack w={"100%"} bgColor={"blackAlpha.900"} align={"center"}>
+        <Image
+          src={
+            "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/theater/main/theatermain.jpg"
+          }
+          zIndex={-1}
+        />
+        <Stack
+          mt={"-190px"}
+          w={"100%"}
+          bgColor={"blackAlpha.900"}
+          align={"center"}
+        >
           <Tabs isFitted w={"1000px"}>
             <TabList color={"white"} mt={"35px"}>
               <TheaterTab>서울</TheaterTab>
@@ -40,7 +52,7 @@ export function TheaterLocation() {
               <TheaterTab>제주</TheaterTab>
             </TabList>
           </Tabs>
-          <Flex justifyContent="space-between" w={"1000px"} mt={"75px"}>
+          <Flex justifyContent="space-between" w={"1000px"} mt={"30px"}>
             <Box w={"30%"}></Box>
             <Box>
               <Heading textAlign={"center"} color={"white"}>
