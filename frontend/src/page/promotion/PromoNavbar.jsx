@@ -17,16 +17,26 @@ export function PromoNavbar({ children }) {
             <PGridItem onClick={() => navigate("/promotion/all")}>
               전체
             </PGridItem>
-            <PGridItem onClick={() => navigate("/promotion/movie")}>
+            <PGridItem
+              onClick={() => navigate("/promotion/movie?eventType=영화")}
+            >
               영화
             </PGridItem>
-            <PGridItem onClick={() => navigate("/promotion/theater")}>
+            <PGridItem
+              onClick={() => navigate("/promotion/theater?eventType=극장")}
+            >
               극장
             </PGridItem>
-            <PGridItem onClick={() => navigate("/promotion/membership")}>
+            <PGridItem
+              onClick={() => navigate("/promotion/membership?eventType=멤버십")}
+            >
               멤버십
             </PGridItem>
-            <PGridItem onClick={() => navigate("/promotion/discount")}>
+            <PGridItem
+              onClick={() =>
+                navigate("/promotion/discount?eventType=제휴/할인")
+              }
+            >
               제휴/할인
             </PGridItem>
           </Box>

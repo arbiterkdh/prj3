@@ -1,13 +1,21 @@
 package com.backend.service.movie;
 
 import com.backend.domain.movie.Movie;
+import com.backend.domain.movie.MovieImageFile;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -15,12 +23,37 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MovieService {
 
+    private final S3Client s3Client;
+
+    @Value("${aws.s3.bucket.name}")
+    String bucketName;
+
+    @Value("${image.src.prefix}")
+    String srcPrefix;
+
     private final MovieMapper movieMapper;
 
-    public void addMovie(Movie movie, String[] movieType, MultipartFile[] file) {
+    public void addMovie(Movie movie, String[] movieType, MultipartFile[] file) throws IOException {
         movieMapper.insertMovie(movie);
         for (int i = 0; i < movieType.length; i++) {
             movieMapper.insertMovieType(movie.getId(), movieType[i]);
+        }
+
+        if (file != null) {
+            for (MultipartFile file1 : file) {
+                // db 에 해당 게시물의 파일 목록 저장
+                movieMapper.insertFileName(movie.getId(), file1.getOriginalFilename());
+                // 실제 파일 저장
+                String key = STR."prj3/\{movie.getId()}/\{file1.getOriginalFilename()}";
+                PutObjectRequest objectRequest = PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .acl(ObjectCannedACL.PUBLIC_READ)
+                        .build();
+
+                s3Client.putObject(objectRequest,
+                        RequestBody.fromInputStream(file1.getInputStream(), file1.getSize()));
+            }
         }
 
 
@@ -81,10 +114,20 @@ public class MovieService {
                 "movieList", movieMapper.selectList(endset));
     }
 
-    public Movie get(Integer movieId) {
+    public Map<String, Object> get(Integer movieId) {
+        Map<String, Object> result = new HashMap<>();
+
         Movie movie = movieMapper.selectByMovieId(movieId);
         movie.setType(movieMapper.selectMovieTypeById(movieId));
-        return movie;
+
+        List<String> fileNames = movieMapper.selectFileNameByMovieId(movieId);
+        // 버킷에 보관된 이미지 파일의 URL/{movieId}/{name}
+        List<MovieImageFile> files = fileNames.stream()
+                .map(name -> new MovieImageFile(name, STR."\{srcPrefix}\{movieId}/\{name}"))
+                .toList();
+
+
+        return result;
     }
 
 

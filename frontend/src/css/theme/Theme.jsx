@@ -11,13 +11,13 @@ export const customTheme = extendTheme({
   components: {
     Button: {
       baseStyle: {
+        _disabled: {
+          cursor: "default",
+        },
         m: "1",
       },
       variants: {
         solid: {
-          _hover: {},
-        },
-        _disabled: {
           _hover: {},
         },
         _dark: {
@@ -30,7 +30,9 @@ export const customTheme = extendTheme({
       baseStyle: {},
     },
     Heading: {
-      baseStyle: {},
+      baseStyle: {
+        mb: "20px",
+      },
       sizes: {
         xs: {},
         sm: {},
@@ -45,6 +47,9 @@ export const customTheme = extendTheme({
           border: "1px solid gray",
           borderRadius: "none",
           m: "1",
+          _disabled: {
+            cursor: "default",
+          },
           _focus: {},
           _dark: {
             _focus: {},
@@ -62,6 +67,9 @@ export const customTheme = extendTheme({
     Select: {
       baseStyle: {
         field: {
+          _disabled: {
+            cursor: "default",
+          },
           _focus: { border: "2px solid gray" },
           _dark: {},
         },

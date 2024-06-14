@@ -1,51 +1,36 @@
 import { Box, Input, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 
-export function BookMovieList({ movieList, checkedTheaterNumber }) {
-  const [onMovieList, setOnMovieList] = useState([]);
-  const [clickedBox, setClickedBox] = useState("");
-  const [canBookMovieIdList, setCanBookMovieIdList] = useState([]);
+export function BookMovieList({
+  checkedTheaterNumber,
+  movieLocationAdd,
+  onScreenList,
+  willScreenList,
+}) {
+  const [clickedBox, setClickedBox] = useState(0);
 
   useEffect(() => {
-    axios.get("/api/book/onmovielist").then((res) => {
-      setOnMovieList(res.data);
-    });
-
-    if (checkedTheaterNumber) {
-      axios
-        .get(`/api/book/list?theaternumber=${checkedTheaterNumber}`)
-        .then((res) => {
-          setCanBookMovieIdList(res.data);
-        })
-        .catch()
-        .finally(() => {});
-    }
-  }, [checkedTheaterNumber]);
+    setClickedBox(0);
+  }, [checkedTheaterNumber, movieLocationAdd]);
 
   return (
     <Box>
       <Stack h={"600px"} overflow={"scroll"}>
-        {onMovieList.map((movie) => (
-          <CursorBox
-            bgColor={clickedBox === movie.id ? "lightgray" : ""}
-            key={movie.id + (movie.theater_number ? movie.theater_number : "")}
-            onClick={() => {
-              setClickedBox(movie.id);
-            }}
-          >
+        {onScreenList.map((movie) => (
+          <Box key={movie.id}>
             <Input
+              w={"95%"}
               cursor={"pointer"}
               border={"none"}
-              isDisabled={
-                movie.id !== movie.movie_id ||
-                movie.theater_number !== checkedTheaterNumber
-              }
               value={movie.title}
+              bgColor={clickedBox === movie.id ? "lightgray" : ""}
+              isDisabled={!movie.theater_number.includes(checkedTheaterNumber)}
+              onClick={() => {
+                setClickedBox(movie.id);
+              }}
               readOnly
             />
-          </CursorBox>
+          </Box>
         ))}
       </Stack>
     </Box>

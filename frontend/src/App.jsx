@@ -27,7 +27,9 @@ import { PromoResult } from "./page/promotion/view/PromoResult.jsx";
 import { PromoEnd } from "./page/promotion/view/PromoEnd.jsx";
 import { PromoUpcoming } from "./page/promotion/view/PromoUpcoming.jsx";
 import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
-import { PromoView } from "./page/promotion/view/PromoView.jsx";
+import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
+import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
+import { BookHome } from "./page/book/BookHome.jsx";
 import { PromoAll } from "./page/promotion/view/PromoAll.jsx";
 
 // axios interceptor 설정
@@ -79,7 +81,15 @@ const router = createBrowserRouter([
           },
         ],
       },
-      { path: "book", element: <Book /> },
+      {
+        path: "book",
+        element: <BookHome />,
+        children: [
+          { index: true, element: <Book /> },
+          { path: "theaterseat", element: <TheaterSeatList /> },
+        ],
+      },
+
       {
         path: "theater",
         element: <Theater />,

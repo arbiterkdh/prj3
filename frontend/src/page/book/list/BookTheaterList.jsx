@@ -1,30 +1,35 @@
 import { Box, Flex, Stack } from "@chakra-ui/react";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export function BookTheaterList({
   cityList,
-  theaterList,
-  setTheaterList,
+  theaterNumberList,
+  setTheaterNumberList,
+  isCityChecked,
+  setIsCityChecked,
   checkedTheaterNumber,
   setCheckedTheaterNumber,
 }) {
-  const [isCityChecked, setIsCityChecked] = useState("서울");
-
   useEffect(() => {
-    axios.get(`/api/theater/list`).then((res) => {
-      setTheaterList(res.data);
-    });
-  }, []);
+    if (theaterNumberList.length === 0) {
+      axios.get(`/api/theater/list`).then((res) => {
+        setTheaterNumberList(res.data);
+      });
+    }
+    setCheckedTheaterNumber(0);
+  }, [isCityChecked]);
+
   function handleClick(city) {
     axios
       .get(`/api/theater/list?city=${city}`)
       .then((res) => {
-        setTheaterList(res.data);
+        setTheaterNumberList(res.data);
       })
       .catch(() => {})
       .finally(() => {});
+    setIsCityChecked("");
   }
 
   return (
@@ -55,7 +60,7 @@ export function BookTheaterList({
         h={"600px"}
         overflow={"scroll"}
       >
-        {theaterList.map((theater) => (
+        {theaterNumberList.map((theater) => (
           <Flex key={theater.number} alignItems={"center"} gap={2}>
             <CursorBox
               w={"100%"}

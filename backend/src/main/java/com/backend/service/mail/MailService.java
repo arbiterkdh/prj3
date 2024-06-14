@@ -21,14 +21,16 @@ public class MailService {
     String fromAddress;
 
     public Mail mailSend(Mail mail) throws MailException {
-        Integer verifyNumber = null;
+        String verifyNumber = null;
         Mail dbMail = null;
         do {
-            verifyNumber = (int) (Math.random() * 1000000);
-            dbMail = mapper.selectMailByVerifyNumber(verifyNumber);
-        } while (dbMail != null || verifyNumber < 100000);
+            int verifyCode = (int) (Math.random() * 1000000);
+            verifyNumber = verifyCode > 100000
+                    ? String.valueOf(verifyCode) : "0" + verifyCode;
+            dbMail = mapper.selectMailByVerifyNumber(Integer.parseInt(verifyNumber));
+        } while (dbMail != null);
 
-        mail.setVerifyNumber(verifyNumber);
+        mail.setVerifyNumber(Integer.parseInt(verifyNumber));
         mapper.insertVerifyNumberTemporary(mail);
 
         SimpleMailMessage message = new SimpleMailMessage();
@@ -39,7 +41,7 @@ public class MailService {
 
         mailSender.send(message);
 
-        return mapper.selectMailByVerifyNumber(verifyNumber);
+        return mapper.selectMailByVerifyNumber(Integer.parseInt(verifyNumber));
     }
 
     public void delete(Integer verifyNumber) {

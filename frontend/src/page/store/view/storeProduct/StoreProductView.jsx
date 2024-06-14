@@ -27,6 +27,7 @@ export function StoreProductView() {
   const { productId } = useParams();
   const [product, setProduct] = useState([]);
   const [commentList, setCommentList] = useState([]);
+  const [listQnA, setListQnA] = useState([]);
   const Login = useContext(LoginContext);
 
   useEffect(() => {
@@ -106,7 +107,12 @@ export function StoreProductView() {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <QnA productId={productId} Login={Login} />
+                    <QnA
+                      productId={productId}
+                      Login={Login}
+                      listQnA={listQnA}
+                      setListQnA={setListQnA}
+                    />
                   </Tbody>
                 </Table>
               </TableContainer>

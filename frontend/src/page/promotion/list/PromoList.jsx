@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -16,17 +16,15 @@ import axios from "axios";
 export function PromoList({ eventType }) {
   const [promoList, setPromoList] = useState([]);
   const navigate = useNavigate();
-  const { eventTypeParam } = useParams();
-  const eventTypeFilter = eventType || eventTypeParam;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
 
-  const filteredPromoList = eventTypeFilter
-    ? promoList.filter((promo) => promo.eventType === eventTypeFilter)
-    : promoList;
+  const filteredPromoList = promoList.filter(
+    (promo) => promo.eventType === eventType,
+  );
 
   useEffect(() => {
     axios

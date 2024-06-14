@@ -12,15 +12,13 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
-import DrawerBorderBox from "../../../css/theme/component/box/DrawerBorderBox.jsx";
 
 export function PromoEnd() {
   return (
     <Center>
       <CenterBox>
-        <Box width="100%">
+        <Box width="100%" textAlign="center">
           <Heading>종료된 이벤트</Heading>
-          <DrawerBorderBox />
           <Box height="30px" />
           <Text>
             -응모하신 이벤트의 당첨 여부는 당첨자발표의 나의 응모결과 확인을

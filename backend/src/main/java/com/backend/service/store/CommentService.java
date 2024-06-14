@@ -37,7 +37,7 @@ public class CommentService {
         Integer prevPageNumber = leftPageNumber - 1;
         Integer nextPageNumber = rightPageNumber + 1;
 
-
+        pageInfo.put("totalCount", totalCount);
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);

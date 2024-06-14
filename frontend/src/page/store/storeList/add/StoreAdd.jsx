@@ -13,6 +13,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   Stack,
   StackDivider,
   Text,
@@ -30,6 +31,8 @@ export function StoreAdd() {
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
   const [content, setContent] = useState("");
+  const [selectType, setSelectType] = useState(null);
+  const [typeOption, setTypeOption] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
@@ -50,6 +53,7 @@ export function StoreAdd() {
         price,
         content,
         files,
+        type: selectType,
       })
       .then((res) => {
         toast({
@@ -71,6 +75,16 @@ export function StoreAdd() {
         onClose();
       });
   }
+
+  const typeOptions = () => {
+    axios
+      .get("/api/store/product/type")
+      .then((res) => {
+        setTypeOption(res.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  };
 
   return (
     <Box>
@@ -96,20 +110,39 @@ export function StoreAdd() {
                 />
               </Text>
             </Box>
-            <Box>
-              <Heading size="xs" textTransform="uppercase">
-                상품이미지
-              </Heading>
-              <Text pt="2" fontSize="sm">
-                <input
-                  multiple
-                  type={"file"}
-                  accept="image/*"
-                  placeholder={"이미지를 등록하세요"}
-                  onChange={(e) => setFiles(e.target.files)}
-                />
-              </Text>
-            </Box>
+            <Flex>
+              <Box>
+                <Heading size="xs" textTransform="uppercase">
+                  상품이미지
+                </Heading>
+                <Text pt="2" fontSize="sm">
+                  <input
+                    multiple
+                    type={"file"}
+                    accept="image/*"
+                    placeholder={"이미지를 등록하세요"}
+                    onChange={(e) => setFiles(e.target.files)}
+                  />
+                </Text>
+              </Box>
+
+              <Box>
+                <Select
+                  placeholder="분류선택"
+                  onFocus={typeOptions}
+                  onChange={(e) => {
+                    setSelectType(e.target.value);
+                  }}
+                >
+                  {typeOption.map((typeItem) => (
+                    <option key={typeItem.id} value={typeItem.id}>
+                      {typeItem.name}
+                    </option>
+                  ))}
+                </Select>
+                {/*<p>{selectType}</p>*/}
+              </Box>
+            </Flex>
             <Box>
               <Heading size="xs" textTransform="uppercase">
                 재고수량

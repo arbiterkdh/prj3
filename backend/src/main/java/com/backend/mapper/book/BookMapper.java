@@ -43,10 +43,25 @@ public interface BookMapper {
     List<Integer> selectMovieIdByTheaterNumber(Integer theater_number);
 
     @Select("""
-            SELECT m.id, m.title, m.running_time, m.rating, m.start_date, l.movie_id, l.theater_number
-            FROM movie m LEFT JOIN movie_location l ON m.id = l.movie_id
+            SELECT id, title, running_time, rating, start_date
+            FROM movie
             WHERE DATE_ADD(start_date, INTERVAL 1 MONTH) >= NOW()
-            AND start_date <= NOW()
+              AND start_date <= NOW()
             """)
-    List<Map<String, Object>> selectAllOnMovieByDate();
+    List<Map<String, Object>> selectAllOnScreenByDate();
+
+    @Select("""
+            SELECT id, title, running_time, rating, start_date
+            FROM movie
+            WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
+              AND start_date > NOW()
+            """)
+    List<Map<String, Object>> selectAllWillScreenByDate();
+
+    @Select("""
+            SELECT theater_number
+            FROM movie_location
+            WHERE movie_id = #{movie_id};
+            """)
+    List<Integer> selectAllTheaterNumberByMovieId(Integer movie_id);
 }

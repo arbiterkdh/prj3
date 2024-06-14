@@ -1,7 +1,6 @@
-import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
 import { PromoNavbar } from "./PromoNavbar.jsx";
+import { Box } from "@chakra-ui/react";
 
 export function Promo() {
   const location = useLocation();
@@ -11,7 +10,9 @@ export function Promo() {
     "/promotion/eventUpcoming",
   ];
 
-  const shouldShowNavbar = !excludeNavbarPaths.includes(location.pathname);
+  const shouldShowNavbar = !excludeNavbarPaths.some((path) =>
+    location.pathname.includes(path),
+  );
 
   return (
     <Box>

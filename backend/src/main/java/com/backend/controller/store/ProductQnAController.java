@@ -6,7 +6,7 @@ import com.backend.service.store.ProductQnAService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -25,10 +25,11 @@ public class ProductQnAController {
     }
 
     @GetMapping("/list/{productId}")
-    public List<ProductQnA> listQnA(@PathVariable Integer productId) {
+    public Map<String, Object> listQnA(@PathVariable Integer productId, @RequestParam(defaultValue = "1", value = "page") Integer page) {
 
-        return service.listQnA(productId);
+        return service.listQnA(productId, page);
     }
+
 
     @DeleteMapping("/delete/{id}")
     public void deleteQnA(@PathVariable Integer id) {
