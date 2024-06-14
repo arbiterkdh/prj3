@@ -60,7 +60,11 @@ export function Navbar() {
                 top={0}
                 onClick={() => navigate("/")}
               >
-                CCV
+                <Image
+                  src={
+                    "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccv.jpg"
+                  }
+                />
               </NavBox>
             </Center>
             <GapFlex mb={-3} justifyContent="space-between">

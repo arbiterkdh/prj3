@@ -55,15 +55,18 @@ public class BookController {
     public Map<String, Object> getDate() {
         LocalDate today = LocalDate.now();
         String dayOfWeek = bookService.getDayOfWeek();
-        LocalDate twoWeeksAgo = LocalDate.now().minusDays(14);
+        LocalDate oneWeekAgo = LocalDate.now().minusDays(14);
         LocalDate oneMonthLater = LocalDate.now().plusMonths(1);
+        LocalDate endOfMonthByOneWeekAgo = bookService.getEndOfMonthByOneWeekAgo(oneWeekAgo);
+        LocalDate endOfMonthByTwoWeeksAgo = bookService.getEndOfMonthByOneWeekAgo(oneWeekAgo);
 
         Map<String, Object> map = new HashMap<>();
         map.put("today", today);
         map.put("dayOfWeek", dayOfWeek);
-        map.put("twoWeeksAgo", twoWeeksAgo);
+        map.put("oneWeekAgo", oneWeekAgo);
         map.put("oneMonthLater", oneMonthLater);
-        
+        map.put("endOfMonthByOneWeekAgo", endOfMonthByOneWeekAgo);
+
         return map;
     }
 }

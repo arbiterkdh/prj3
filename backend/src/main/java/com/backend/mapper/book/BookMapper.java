@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -69,4 +70,9 @@ public interface BookMapper {
             SELECT DAYOFWEEK(NOW())
             """)
     Integer selectDayOfWeek();
+
+    @Select("""
+            SELECT LAST_DAY(#{oneWeekAgo})
+            """)
+    LocalDate selectEndOfMonthByOneWeekAgo(LocalDate oneWeekAgo);
 }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,5 +70,9 @@ public class BookService {
             case 7 -> "토";
             default -> "";
         };
+    }
+
+    public LocalDate getEndOfMonthByOneWeekAgo(LocalDate oneWeekAgo) {
+        return bookMapper.selectEndOfMonthByOneWeekAgo(oneWeekAgo);
     }
 }
