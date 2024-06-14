@@ -72,7 +72,7 @@ public class BookService {
         };
     }
 
-    public LocalDate getEndOfMonthByOneWeekAgo(LocalDate oneWeekAgo) {
-        return bookMapper.selectEndOfMonthByOneWeekAgo(oneWeekAgo);
+    public List<LocalDate> getBookPeriodList(Integer date) {
+        return bookMapper.selectAllBookPeriodListByDate(date);
     }
 }

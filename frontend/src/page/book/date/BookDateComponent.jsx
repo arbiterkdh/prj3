@@ -6,25 +6,14 @@ import axios from "axios";
 export function BookDateComponent() {
   const [today, setToday] = useState("");
   const [dayOfWeek, setDayOfWeek] = useState(0);
-  const [oneWeekAgo, setOneWeekAgo] = useState("");
-  const [oneMonthLater, setOneMonthLater] = useState("");
-  const [endOfMonth, setEndOfMonth] = useState("");
+  const [date, setDate] = useState(0);
 
   useEffect(() => {
-    axios.get("/api/book/date").then((res) => {
+    axios.get(`/api/book/date/${date}`).then((res) => {
       setToday(res.data.today.split("-"));
       setDayOfWeek(res.data.dayOfWeek);
-      setOneWeekAgo(res.data.oneWeekAgo);
-      setOneMonthLater(res.data.oneMonthLater);
-      setEndOfMonth(res.data.endOfMonth.split("-"));
     });
-  }, []);
-
-  const dateList = [];
-
-  for (let i = oneWeekAgo[2]; i < endOfMonth[2]; i++) {
-    // dateList.push(oneWeekAgo[])
-  }
+  }, [date]);
 
   return (
     <Box>
@@ -38,11 +27,7 @@ export function BookDateComponent() {
           dayOfWeek +
           ")"}
       </BookBox>
-      <BookBox>
-        {dateList.map((date) => (
-          <Box key={date}>{date}</Box>
-        ))}
-      </BookBox>
+      <BookBox onClick={() => setDate(1)}>날짜 페이징 할 곳</BookBox>
     </Box>
   );
 }

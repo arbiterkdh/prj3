@@ -51,21 +51,15 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
-    @GetMapping("date")
-    public Map<String, Object> getDate() {
+    @GetMapping("date/{date}")
+    public Map<String, Object> getDate(@PathVariable Integer date) {
         LocalDate today = LocalDate.now();
         String dayOfWeek = bookService.getDayOfWeek();
-        LocalDate oneWeekAgo = LocalDate.now().minusDays(14);
-        LocalDate oneMonthLater = LocalDate.now().plusMonths(1);
-        LocalDate endOfMonthByOneWeekAgo = bookService.getEndOfMonthByOneWeekAgo(oneWeekAgo);
-        LocalDate endOfMonthByTwoWeeksAgo = bookService.getEndOfMonthByOneWeekAgo(oneWeekAgo);
+        List<LocalDate> bookPeriodList = bookService.getBookPeriodList(date);
 
         Map<String, Object> map = new HashMap<>();
         map.put("today", today);
         map.put("dayOfWeek", dayOfWeek);
-        map.put("oneWeekAgo", oneWeekAgo);
-        map.put("oneMonthLater", oneMonthLater);
-        map.put("endOfMonthByOneWeekAgo", endOfMonthByOneWeekAgo);
 
         return map;
     }
