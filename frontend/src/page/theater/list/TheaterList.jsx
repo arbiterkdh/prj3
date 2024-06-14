@@ -39,6 +39,7 @@ export function TheaterList({
   const [modifyButton, setModifyButton] = useState(0);
   const [theaterNumber, setTheaterNumber] = useState(0);
   const [theaterLocation, setTheaterLocation] = useState("");
+  const [checkedCity, setCheckedCity] = useState("서울");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -60,6 +61,8 @@ export function TheaterList({
   }, [isModifying, isRemoving]);
 
   function handleClick(city) {
+    setCheckedCity(city);
+
     axios
       .get(`/api/theater/list?city=${city}`)
       .then((res) => {
@@ -91,7 +94,13 @@ export function TheaterList({
     <Box w={"100%"} border={"1px solid black"}>
       <Flex width={"100%"} mb={4}>
         {cityList.map((city) => (
-          <TheaterListBox key={city} onClick={() => handleClick(city)}>
+          <TheaterListBox
+            key={city}
+            bgColor={checkedCity === city ? "red.500" : ""}
+            color={checkedCity === city ? "white" : ""}
+            fontWeight={checkedCity === city ? "600" : ""}
+            onClick={() => handleClick(city)}
+          >
             {city}
           </TheaterListBox>
         ))}

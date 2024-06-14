@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +51,19 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
+    @GetMapping("date")
+    public Map<String, Object> getDate() {
+        LocalDate today = LocalDate.now();
+        String dayOfWeek = bookService.getDayOfWeek();
+        LocalDate twoWeeksAgo = LocalDate.now().minusDays(14);
+        LocalDate oneMonthLater = LocalDate.now().plusMonths(1);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("today", today);
+        map.put("dayOfWeek", dayOfWeek);
+        map.put("twoWeeksAgo", twoWeeksAgo);
+        map.put("oneMonthLater", oneMonthLater);
+        
+        return map;
+    }
 }

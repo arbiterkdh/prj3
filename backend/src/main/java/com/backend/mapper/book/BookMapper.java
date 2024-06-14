@@ -64,4 +64,9 @@ public interface BookMapper {
             WHERE movie_id = #{movie_id};
             """)
     List<Integer> selectAllTheaterNumberByMovieId(Integer movie_id);
+
+    @Select("""
+            SELECT DAYOFWEEK(NOW())
+            """)
+    Integer selectDayOfWeek();
 }

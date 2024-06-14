@@ -102,7 +102,7 @@ export function Navbar() {
         </Box>
       </Center>
       <Center>
-        <Box w={"100%"}>
+        <Box w={"100%"} zIndex={1}>
           {drawer === 0 && <Box h={"33px"} />}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
           {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}
