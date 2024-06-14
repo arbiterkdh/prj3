@@ -69,12 +69,7 @@ public interface BookMapper {
     @Select("""
             SELECT DAYOFWEEK(NOW())
             """)
-    Integer selectDayOfWeek();
-
-    @Select("""
-            SELECT LAST_DAY(#{oneWeekAgo})
-            """)
-    LocalDate selectEndOfMonthByOneWeekAgo(LocalDate oneWeekAgo);
+    Integer selectDayOfOneWeekAgo();
 
     @Select("""
             WITH RECURSIVE DateRange AS (

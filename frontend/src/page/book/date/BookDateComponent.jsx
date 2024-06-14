@@ -3,12 +3,12 @@ import BookBox from "../../../css/theme/component/box/BookBox.jsx";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
+import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
 
 export function BookDateComponent() {
   const [today, setToday] = useState("");
-  const [dayOfWeek, setDayOfWeek] = useState("");
+  const [dayOfOneWeekAgo, setDayOfOneWeekAgo] = useState(0);
   const [bookPeriodList, setBookPeriodList] = useState([]);
-  const [date, setDate] = useState("");
 
   const dateRef = useRef(null);
   const [positionX, setPositionX] = useState(0);
@@ -16,14 +16,51 @@ export function BookDateComponent() {
   useEffect(() => {
     axios.get(`/api/book/date`).then((res) => {
       setToday(res.data.today);
-      setDayOfWeek(res.data.dayOfWeek);
+      setDayOfOneWeekAgo(res.data.dayOfOneWeekAgo);
       setBookPeriodList(res.data.bookPeriodList);
     });
-  }, [date]);
+  }, []);
 
-  function handleClickLeft() {}
+  function handleClickLeft() {
+    setPositionX((prev) => Math.min(prev + 100, 0));
+  }
 
-  function handleClickRight() {}
+  function handleClickRight() {
+    const flexWidth = dateRef.current.scrollWidth;
+    const containerWidth = dateRef.current.parentElement.offsetWidth;
+    setPositionX((prev) => Math.max(prev - 100, containerWidth - flexWidth));
+  }
+
+  let bookPeriodListPlusDayOfWeek = [];
+
+  bookPeriodList.map((book, index) => {
+    let dayOfWeek = "";
+
+    switch (((dayOfOneWeekAgo + index) % 7) + 1) {
+      case 1:
+        dayOfWeek = "일";
+        break;
+      case 2:
+        dayOfWeek = "월";
+        break;
+      case 3:
+        dayOfWeek = "화";
+        break;
+      case 4:
+        dayOfWeek = "수";
+        break;
+      case 5:
+        dayOfWeek = "목";
+        break;
+      case 6:
+        dayOfWeek = "금";
+        break;
+      case 7:
+        dayOfWeek = "토";
+        break;
+    }
+    bookPeriodListPlusDayOfWeek.push(book + "-" + dayOfWeek);
+  });
 
   return (
     <Box>
@@ -34,14 +71,28 @@ export function BookDateComponent() {
           "월 " +
           today[2] +
           "일 (" +
-          dayOfWeek +
+          dayOfOneWeekAgo +
           ")"}
       </BookBox>
       <Box w={"300px"}>
         <ArrowLeftIcon onClick={handleClickLeft} />
-        <Flex ref={dateRef} sx={{ transform: `translateX(${positionX}px)` }}>
-          {bookPeriodList.map((day) => (
-            <BookBox key={day}>{day}</BookBox>
+        <Flex
+          ref={dateRef}
+          sx={{
+            transform: `translateX(${positionX}px)`,
+            transition: "transform 0.5s ease",
+          }}
+        >
+          {bookPeriodListPlusDayOfWeek.map((day) => (
+            <Box key={day}>
+              <Flex w={"100px"}>
+                <MarginBox fontSize={"xx-small"}>{day.split("-")[1]}</MarginBox>
+                <Box fontSize={"x-large"} fontWeight={"500"}>
+                  {day.split("-")[2]}
+                </Box>
+              </Flex>
+              <Box>{day.split("-")[3]}</Box>
+            </Box>
           ))}
         </Flex>
         <ArrowRightIcon onClick={handleClickRight} />

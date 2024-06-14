@@ -54,12 +54,12 @@ public class BookController {
     @GetMapping("date")
     public Map<String, Object> getDate() {
         LocalDate today = LocalDate.now();
-        String dayOfWeek = bookService.getDayOfWeek();
+        Integer dayOfOneWeekAgo = bookService.getDayOfOneWeekAgo();
         List<LocalDate> bookPeriodList = bookService.getBookPeriodList();
 
         Map<String, Object> map = new HashMap<>();
         map.put("today", today);
-        map.put("dayOfWeek", dayOfWeek);
+        map.put("dayOfOneWeekAgo", dayOfOneWeekAgo);
         map.put("bookPeriodList", bookPeriodList);
 
         return map;
