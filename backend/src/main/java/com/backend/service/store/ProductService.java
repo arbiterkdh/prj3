@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -104,18 +105,13 @@ public class ProductService {
 
         String fileName = imageMapper.selectFileName(id);
 
-        String dir = STR."/Users/igyeyeong/Desktop/Store/ProductImage/\{id}/";
+        String key = STR."prj3/store/\{id}/\{fileName}";
+        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
 
-        if (fileName != null) {
-
-            File file = new File(dir + fileName);
-            file.delete();
-
-            File dirFile = new File(dir);
-            if (dirFile.exists()) {
-                dirFile.delete();
-            }
-        }
+        s3Client.deleteObject(objectRequest);
 
         imageMapper.deleteImage(id);
 
