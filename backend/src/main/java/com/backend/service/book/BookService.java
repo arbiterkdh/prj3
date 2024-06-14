@@ -60,18 +60,6 @@ public class BookService {
 
     public Integer getDayOfOneWeekAgo() {
         return bookMapper.selectDayOfOneWeekAgo();
-
-//        return switch (dayOfOneWeekAgoNumber) {
-//            case 1 -> "일";
-//            case 2 -> "월";
-//            case 3 -> "화";
-//            case 4 -> "수";
-//            case 5 -> "목";
-//            case 6 -> "금";
-//            case 7 -> "토";
-//            default -> "";
-//        };
-
     }
 
     public List<LocalDate> getBookPeriodList() {
