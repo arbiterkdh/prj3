@@ -59,6 +59,7 @@ public class ProductService {
 
     public Map<String, Object> productList(String menuTypeSelect, Integer page) {
 
+
         Integer offset = (page - 1) * 12;
 
         Integer totalCount = mapper.totalCount(menuTypeSelect);
@@ -84,8 +85,18 @@ public class ProductService {
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
 
+        List<Product> productList = mapper.productList(menuTypeSelect, offset);
 
-        return Map.of("productList", mapper.productList(menuTypeSelect, offset),
+        for (Product product : productList) {
+            String fileName = imageMapper.selectFileName(product.getId());
+
+            ProductImage imageFile = new ProductImage(fileName, STR."\{srcPrefix}/store/\{product.getId()}/\{fileName}");
+
+            product.setImage(imageFile);
+        }
+
+
+        return Map.of("productList", productList,
                 "pageInfo", pageInfo);
     }
 

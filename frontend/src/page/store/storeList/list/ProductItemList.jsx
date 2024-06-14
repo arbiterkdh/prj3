@@ -75,7 +75,7 @@ function ProductItemList({
                 width: "100%",
                 height: "250px",
               }}
-              src={`http://127.0.0.1:8888/${product.id}/${product.fileName}`}
+              src={product.image.src}
               borderRadius="lg"
               onClick={() => handleProductView(product.id)}
             />
