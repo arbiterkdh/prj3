@@ -17,26 +17,16 @@ export function PromoNavbar({ children }) {
             <PGridItem onClick={() => navigate("/promotion/all")}>
               전체
             </PGridItem>
-            <PGridItem
-              onClick={() => navigate("/promotion/movie?eventType=영화")}
-            >
+            <PGridItem onClick={() => navigate("/promotion/movie")}>
               영화
             </PGridItem>
-            <PGridItem
-              onClick={() => navigate("/promotion/theater?eventType=극장")}
-            >
+            <PGridItem onClick={() => navigate("/promotion/theater")}>
               극장
             </PGridItem>
-            <PGridItem
-              onClick={() => navigate("/promotion/membership?eventType=멤버십")}
-            >
+            <PGridItem onClick={() => navigate("/promotion/membership")}>
               멤버십
             </PGridItem>
-            <PGridItem
-              onClick={() =>
-                navigate("/promotion/discount?eventType=제휴/할인")
-              }
-            >
+            <PGridItem onClick={() => navigate("/promotion/discount")}>
               제휴/할인
             </PGridItem>
           </Box>
@@ -70,9 +60,7 @@ export function PromoNavbar({ children }) {
             </Button>
           </Box>
         </Box>
-        <DrawerBorderBox
-          style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
-        />
+        <DrawerBorderBox style={{ borderBottom: "1px solid lightgray" }} />
         {children}
       </CenterBox>
     </Center>

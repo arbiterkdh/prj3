@@ -18,7 +18,7 @@ export function PromoEnd() {
     <Center>
       <CenterBox>
         <Box width="100%" textAlign="center">
-          <Heading>종료된 이벤트</Heading>
+          <Heading>종료 이벤트</Heading>
           <Box height="30px" />
           <Text>
             -응모하신 이벤트의 당첨 여부는 당첨자발표의 나의 응모결과 확인을

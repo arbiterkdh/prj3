@@ -10,9 +10,7 @@ export function Promo() {
     "/promotion/eventUpcoming",
   ];
 
-  const shouldShowNavbar = !excludeNavbarPaths.some((path) =>
-    location.pathname.includes(path),
-  );
+  const shouldShowNavbar = !excludeNavbarPaths.includes(location.pathname);
 
   return (
     <Box>

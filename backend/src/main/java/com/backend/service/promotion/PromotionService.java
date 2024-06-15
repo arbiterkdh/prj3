@@ -4,11 +4,16 @@ import com.backend.domain.promotion.Promotion;
 import com.backend.domain.promotion.PromotionFile;
 import com.backend.mapper.promotion.PromotionMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,8 +21,14 @@ import java.util.List;
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class PromotionService {
-
     private final PromotionMapper promotionMapper;
+    final S3Client s3Client;
+
+    @Value("${aws.s3.bucket.name}")
+    String bucketName;
+
+    @Value("${image.src.prefix}")
+    String SrcPrefix;
 
     public void addPromo(Promotion promotion, MultipartFile[] files) throws IOException {
         promotionMapper.insertPromo(promotion);
@@ -26,14 +37,16 @@ public class PromotionService {
             for (MultipartFile file : files) {
                 promotionMapper.insertFileName(promotion.getId(), file.getOriginalFilename());
 
-                String dir = STR."C:/Temp/prj3/\{promotion.getId()}";
-                File dirFile = new File(dir);
-                if (!dirFile.exists()) {
-                    dirFile.mkdirs();
-                }
-                String path = STR."C:/Temp/prj3/\{promotion.getId()}/\{file.getOriginalFilename()}";
-                File destination = new File(path);
-                file.transferTo(destination);
+                String key = STR."prj3/\{promotion.getId()}/\{file.getOriginalFilename()}";
+                PutObjectRequest objectRequest = PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .acl(ObjectCannedACL.PUBLIC_READ)
+                        .build();
+
+                s3Client.putObject(objectRequest,
+                        RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
             }
         }
 
@@ -67,7 +80,7 @@ public class PromotionService {
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         List<PromotionFile> files = fileNames.stream()
-                .map(name -> new PromotionFile(name, STR."http://172.30.1.3:8888/\{id}/\{name}"))
+                .map(name -> new PromotionFile(name, STR."\{SrcPrefix}\{id}/\{name}"))
                 .toList();
 
         promotion.setFileList(files);
@@ -78,14 +91,14 @@ public class PromotionService {
     public void remove(Integer id) {
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
-        String dir = STR."C:/Temp/prj3/\{id}";
         for (String fileName : fileNames) {
-            File file = new File(dir, fileName);
-            file.delete();
-        }
-        File dirfile = new File(dir);
-        if (dirfile.exists()) {
-            dirfile.delete();
+            String key = STR."prj3/\{id}/\{fileName}";
+            DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+
+            s3Client.deleteObject(objectRequest);
         }
         promotionMapper.deleteFileByPromoId(id);
         promotionMapper.deleteById(id);

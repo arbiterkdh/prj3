@@ -48,7 +48,7 @@ export function PromoView() {
     const end = new Date(endDate);
 
     if (now < start) {
-      return "예정된 이벤트";
+      return "예정 이벤트";
     } else if (now >= start && now <= end) {
       return "진행 중인 이벤트";
     } else {
@@ -108,7 +108,6 @@ export function PromoView() {
         </Text>
       </Box>
       <Box mt={4}>
-        이미지파일
         {promo.fileList &&
           promo.fileList.map((file) => (
             <Box key={file.name}>

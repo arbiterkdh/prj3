@@ -25,7 +25,6 @@ import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import axios from "axios";
 import { PromoResult } from "./page/promotion/view/PromoResult.jsx";
 import { PromoEnd } from "./page/promotion/view/PromoEnd.jsx";
-import { PromoUpcoming } from "./page/promotion/view/PromoUpcoming.jsx";
 import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
@@ -129,10 +128,6 @@ const router = createBrowserRouter([
           {
             path: "modify/:promoId",
             element: <PromoModify />,
-          },
-          {
-            path: "eventUpcoming",
-            element: <PromoUpcoming />,
           },
           {
             path: "eventEnd",
