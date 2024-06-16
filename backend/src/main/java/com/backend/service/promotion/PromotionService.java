@@ -28,11 +28,10 @@ public class PromotionService {
     String bucketName;
 
     @Value("${image.src.prefix}")
-    String SrcPrefix;
+    String srcPrefix;
 
     public void addPromo(Promotion promotion, MultipartFile[] files) throws IOException {
         promotionMapper.insertPromo(promotion);
-
         if (files != null) {
             for (MultipartFile file : files) {
                 promotionMapper.insertFileName(promotion.getId(), file.getOriginalFilename());
@@ -43,13 +42,10 @@ public class PromotionService {
                         .key(key)
                         .acl(ObjectCannedACL.PUBLIC_READ)
                         .build();
-
                 s3Client.putObject(objectRequest,
                         RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-
             }
         }
-
     }
 
     public boolean validate(Promotion promotion) {
@@ -80,7 +76,7 @@ public class PromotionService {
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         List<PromotionFile> files = fileNames.stream()
-                .map(name -> new PromotionFile(name, STR."\{SrcPrefix}\{id}/\{name}"))
+                .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{id}/\{name}"))
                 .toList();
 
         promotion.setFileList(files);
@@ -97,14 +93,42 @@ public class PromotionService {
                     .bucket(bucketName)
                     .key(key)
                     .build();
-
             s3Client.deleteObject(objectRequest);
         }
         promotionMapper.deleteFileByPromoId(id);
         promotionMapper.deleteById(id);
     }
 
-    public void modify(Promotion promotion) {
+    public void modify(Promotion promotion, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
+        if (removeFileList != null && removeFileList.size() > 0) {
+            for (String fileName : removeFileList) {
+                String key = STR."prj3/\{promotion.getId()}/\{fileName}";
+                DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .build();
+                s3Client.deleteObject(objectRequest);
+
+                promotionMapper.deleteFileByPromoIdAndName(promotion.getId(), fileName);
+            }
+        }
+        if (addFileList != null && addFileList.length > 0) {
+            List<String> fileNameList = promotionMapper.selectFileNameByPromoId(promotion.getId());
+            for (MultipartFile file : addFileList) {
+                String fileName = file.getOriginalFilename();
+                if (!fileNameList.contains(fileName)) {
+                    promotionMapper.insertFileName(promotion.getId(), fileName);
+                }
+                String key = STR."prj3/\{promotion.getId()}/\{fileName}";
+                PutObjectRequest objectRequest = PutObjectRequest.builder()
+                        .bucket(bucketName)
+                        .key(key)
+                        .acl(ObjectCannedACL.PUBLIC_READ)
+                        .build();
+
+                s3Client.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            }
+        }
         promotionMapper.update(promotion);
     }
 }

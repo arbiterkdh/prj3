@@ -12,7 +12,6 @@ import { MovieAdd } from "./page/movie/add/MovieAdd.jsx";
 import { MovieList } from "./page/movie/list/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
 import { PromoAdd } from "./page/promotion/add/PromoAdd.jsx";
-import { PromoList } from "./page/promotion/list/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
@@ -30,6 +29,10 @@ import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interc
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 import { BookHome } from "./page/book/BookHome.jsx";
 import { PromoAll } from "./page/promotion/view/PromoAll.jsx";
+import { PromoMovie } from "./page/promotion/view/PromoMovie.jsx";
+import { PromoTheater } from "./page/promotion/view/PromoTheater.jsx";
+import { PromoMembership } from "./page/promotion/view/PromoMembership.jsx";
+import { PromoDiscount } from "./page/promotion/view/PromoDiscount.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -103,19 +106,19 @@ const router = createBrowserRouter([
           },
           {
             path: "movie",
-            element: <PromoList eventType="영화" />,
+            element: <PromoMovie />,
           },
           {
             path: "theater",
-            element: <PromoList eventType="극장" />,
+            element: <PromoTheater />,
           },
           {
             path: "membership",
-            element: <PromoList eventType="멤버십" />,
+            element: <PromoMembership />,
           },
           {
             path: "discount",
-            element: <PromoList eventType="제휴/할인" />,
+            element: <PromoDiscount />,
           },
           {
             path: "add",

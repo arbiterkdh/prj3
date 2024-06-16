@@ -66,4 +66,11 @@ public interface PromotionMapper {
             WHERE promo_id=#{promoId}
             """)
     int deleteFileByPromoId(Integer promoId);
+
+    @Delete("""
+            DELETE FROM promo_file
+            WHERE promo_id=#{promoId}
+              AND name=#{fileName}
+            """)
+    int deleteFileByPromoIdAndName(Integer PromoId, String fileName);
 }

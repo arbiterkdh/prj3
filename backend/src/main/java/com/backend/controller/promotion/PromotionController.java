@@ -48,10 +48,13 @@ public class PromotionController {
         promotionService.remove(id);
     }
 
-    @PutMapping("modify")
-    public ResponseEntity modifyPromotion(@RequestBody Promotion promotion) {
+    @PutMapping("/modify")
+    public ResponseEntity modifyPromotion(Promotion promotion,
+                                          @RequestParam(value = "removeFileList[]", required = false)List<String> removeFileList,
+                                          @RequestParam(value = "addFileList[]", required = false)MultipartFile[] addFileList) throws IOException {
+
         if (promotionService.validate(promotion)) {
-            promotionService.modify(promotion);
+            promotionService.modify(promotion, removeFileList, addFileList);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();

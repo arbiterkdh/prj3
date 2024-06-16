@@ -25,3 +25,5 @@ FROM promo;
 
 SELECT *
 FROM promo_file;
+
+SELECT * FROM promo_file WHERE promo_id = 29;
