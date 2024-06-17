@@ -95,49 +95,79 @@ export function TheaterSeatList() {
           <Box mt={"80px"} w={"500px"} h={"400px"}>
             <Stack align={"center"}>
               {seatList.map((seatRow, index) => (
-                <Flex key={index}>
-                  {seatRow.seat.map((seat, index2) => (
-                    <Box
-                      key={index2}
-                      mx={"1px"}
-                      my={"-2px"}
-                      onMouseEnter={() =>
-                        setMouseLocation(seatRow.alphabet + index2)
-                      }
-                      onMouseLeave={() => setMouseLocation(0)}
-                      onClick={() => {
-                        setCheckedSeat({ alphabet: seatRow.alphabet, seat });
-                        handleSeatClick();
-                      }}
-                    >
-                      {seatRow.alphabet === "A" &&
-                      (seat === 5 || seat === 14) ? (
-                        <EmptySeatBox></EmptySeatBox>
-                      ) : seatRow.alphabet === "J" && seat > 4 && seat < 15 ? (
-                        <EmptySeatBox></EmptySeatBox>
-                      ) : seatRow.alphabet === "I" && seat > 6 && seat < 17 ? (
-                        <EmptySeatBox></EmptySeatBox>
-                      ) : seatRow.alphabet !== "A" &&
-                        seatRow.alphabet !== "J" &&
-                        (seat === 7 || seat === 16) ? (
-                        <EmptySeatBox></EmptySeatBox>
-                      ) : (
-                        <FontAwesomeIcon
-                          cursor={"pointer"}
-                          color={
-                            checkedSeat.alphabet === seatRow.alphabet &&
-                            checkedSeat.seat === seat
-                              ? "gray"
-                              : mouseLocation === seatRow.alphabet + index2
+                <Box key={index}>
+                  <Box
+                    position={"absolute"}
+                    w={"30px"}
+                    top={600 + index * 28}
+                    left={285}
+                    color={
+                      mouseLocation && mouseLocation[0] === seatRow.alphabet
+                        ? "red.900"
+                        : "white"
+                    }
+                    textAlign={"center"}
+                    fontSize={
+                      mouseLocation && mouseLocation[0] === seatRow.alphabet
+                        ? "20px"
+                        : "lg"
+                    }
+                    fontWeight={
+                      mouseLocation && mouseLocation[0] === seatRow.alphabet
+                        ? "700"
+                        : ""
+                    }
+                  >
+                    {seatRow.alphabet}
+                  </Box>
+                  <Flex>
+                    {seatRow.seat.map((seat, index2) => (
+                      <Box
+                        key={index2}
+                        w={"22px"}
+                        my={"-2px"}
+                        onMouseEnter={() =>
+                          setMouseLocation(seatRow.alphabet + index2)
+                        }
+                        onMouseLeave={() => setMouseLocation(0)}
+                        onClick={() => {
+                          setCheckedSeat({ alphabet: seatRow.alphabet, seat });
+                          handleSeatClick();
+                        }}
+                      >
+                        {seatRow.alphabet === "A" &&
+                        (seat === 5 || seat === 14) ? (
+                          <EmptySeatBox></EmptySeatBox>
+                        ) : seatRow.alphabet === "J" &&
+                          seat > 4 &&
+                          seat < 15 ? (
+                          <EmptySeatBox></EmptySeatBox>
+                        ) : seatRow.alphabet === "I" &&
+                          seat > 6 &&
+                          seat < 17 ? (
+                          <EmptySeatBox></EmptySeatBox>
+                        ) : seatRow.alphabet !== "A" &&
+                          seatRow.alphabet !== "J" &&
+                          (seat === 7 || seat === 16) ? (
+                          <EmptySeatBox></EmptySeatBox>
+                        ) : (
+                          <FontAwesomeIcon
+                            cursor={"pointer"}
+                            color={
+                              checkedSeat.alphabet === seatRow.alphabet &&
+                              checkedSeat.seat === seat
                                 ? "gray"
-                                : ""
-                          }
-                          icon={faCouch}
-                        />
-                      )}
-                    </Box>
-                  ))}
-                </Flex>
+                                : mouseLocation === seatRow.alphabet + index2
+                                  ? "gray"
+                                  : ""
+                            }
+                            icon={faCouch}
+                          />
+                        )}
+                      </Box>
+                    ))}
+                  </Flex>
+                </Box>
               ))}
             </Stack>
           </Box>
