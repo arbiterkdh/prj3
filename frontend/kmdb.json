@@ -1,0 +1,369 @@
+{
+  "Query": "",
+  "KMAQuery": "인사이드 아웃 2",
+  "TotalCount": 1,
+  "Data": [
+    {
+      "CollName": "kmdb_new2",
+      "TotalCount": 1,
+      "Count": 1,
+      "Result": [
+        {
+          "DOCID": "F59819",
+          "movieId": "F",
+          "movieSeq": "59819",
+          "title": "!HS 인사이드 !HE !HS 아웃 !HE !HS 2 !HE ",
+          "titleEng": "Inside Out 2",
+          "titleOrg": "",
+          "titleEtc": "인사이드아웃2^인사이드 아웃 2^인사이드아웃 2, 인사이드 아웃2^Inside Out 2",
+          "prodYear": "2024",
+          "directors": {
+            "director": [
+              {
+                "directorNm": "켈시 만",
+                "directorEnNm": "",
+                "directorId": ""
+              }
+            ]
+          },
+          "actors": {
+            "actor": [
+              {
+                "actorNm": "마야 호크",
+                "actorEnNm": "",
+                "actorId": ""
+              },
+              {
+                "actorNm": "폴 월터 하우저",
+                "actorEnNm": "Paul Walter Hauser",
+                "actorId": "00203559"
+              },
+              {
+                "actorNm": "아델 엑사르코풀로스",
+                "actorEnNm": "Adele Exarchopoulos",
+                "actorId": "00149239"
+              },
+              {
+                "actorNm": "아이요 어데버리",
+                "actorEnNm": "",
+                "actorId": ""
+              },
+              {
+                "actorNm": "켄싱턴 톨먼",
+                "actorEnNm": "",
+                "actorId": ""
+              },
+              {
+                "actorNm": "다이안 레인",
+                "actorEnNm": "Diane Lane",
+                "actorId": "00048915"
+              },
+              {
+                "actorNm": "카일 맥라클란",
+                "actorEnNm": "Kyle MacLachlan",
+                "actorId": "00049131"
+              },
+              {
+                "actorNm": "에이미 포엘러",
+                "actorEnNm": "Amy Poehler",
+                "actorId": "00054454"
+              },
+              {
+                "actorNm": "필립스 스미스",
+                "actorEnNm": "Phyllis Smith",
+                "actorId": "00109501"
+              },
+              {
+                "actorNm": "루이스 블랙",
+                "actorEnNm": "Louis Black",
+                "actorId": "00097560"
+              },
+              {
+                "actorNm": "리자 라피라",
+                "actorEnNm": "Liza Lapira",
+                "actorId": "00097230"
+              },
+              {
+                "actorNm": "토니 핼",
+                "actorEnNm": "Tony Hale",
+                "actorId": "00121018"
+              }
+            ]
+          },
+          "nation": "미국",
+          "company": "Pixar Animation Studios,Walt Disney Pictures",
+          "plots": {
+            "plot": [
+              {
+                "plotLang": "한국어",
+                "plotText": "디즈니·픽사의 대표작 인사이드 아웃 새로운 감정과 함께 돌아오다!13살이 된 라일리의 행복을 위해 매일 바쁘게 머릿속 감정 컨트롤 본부를 운영하는 ‘기쁨’, ‘슬픔’, ‘버럭’, ‘까칠’, ‘소심’.그러던 어느 날,낯선 감정인 ‘불안’, ‘당황’, ‘따분’, ‘부럽’이가 본부에 등장하고, 언제나 최악의 상황을 대비하며 제멋대로인 ‘불안’이와 기존 감정들은 계속 충돌한다.결국 새로운 감정들에 의해 본부에서 쫓겨나게 된 기존 감정들은 다시 본부로 돌아가기 위해 위험천만한 모험을 시작하는데…2024년, 전 세계를 공감으로 물들인 유쾌한 상상이 다시 시작된다!"
+              }
+            ]
+          },
+          "runtime": "96",
+          "rating": "전체관람가",
+          "genre": "어드벤처,코메디,드라마,가족,판타지",
+          "kmdbUrl": "https://www.kmdb.or.kr/db/kor/detail/movie/F/59819",
+          "type": "애니메이션",
+          "use": "극장용",
+          "episodes": "",
+          "ratedYn": "Y",
+          "repRatDate": "20240603",
+          "repRlsDate": "20240612",
+          "ratings": {
+            "rating": [
+              {
+                "ratingMain": "Y",
+                "ratingDate": "20240603",
+                "ratingNo": "2024-MF01445",
+                "ratingGrade": "전체관람가",
+                "releaseDate": "20240612",
+                "runtime": "96"
+              }
+            ]
+          },
+          "keywords": "",
+          "posters": "http://file.koreafilm.or.kr/thm/02/99/18/36/tn_DPF028953.jpg|http://file.koreafilm.or.kr/thm/02/99/18/42/tn_DPF029348.jpg|http://file.koreafilm.or.kr/thm/02/99/18/43/tn_DPF029349.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029023.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029024.jpg|http://file.koreafilm.or.kr/thm/02/99/18/41/tn_DPF029245.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029026.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029027.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029028.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029029.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029030.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029031.jpg|http://file.koreafilm.or.kr/thm/02/99/18/25/tn_DPF028343.jpg|http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPF029025.jpg",
+          "stlls": "http://file.koreafilm.or.kr/thm/01/copy/00/67/05/tn_DST846257.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/97/tn_DST843772.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/97/tn_DST843773.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/97/tn_DST843771.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/99/tn_DST844504.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/67/05/tn_DST846258.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/67/05/tn_DST846259.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/67/05/tn_DST846260.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/67/05/tn_DST846261.jpg",
+          "staffs": {
+            "staff": [
+              {
+                "staffNm": "켈시 만",
+                "staffEnNm": "",
+                "staffRoleGroup": "감독",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "맥 르포브",
+                "staffEnNm": "",
+                "staffRoleGroup": "각본",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "마야 호크",
+                "staffEnNm": "",
+                "staffRoleGroup": "출연",
+                "staffRole": "불안 목소리",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "폴 월터 하우저",
+                "staffEnNm": "Paul Walter Hauser",
+                "staffRoleGroup": "출연",
+                "staffRole": "당황 목소리",
+                "staffEtc": "",
+                "staffId": "00203559"
+              },
+              {
+                "staffNm": "아델 엑사르코풀로스",
+                "staffEnNm": "Adele Exarchopoulos",
+                "staffRoleGroup": "출연",
+                "staffRole": "따분 목소리",
+                "staffEtc": "",
+                "staffId": "00149239"
+              },
+              {
+                "staffNm": "아이요 어데버리",
+                "staffEnNm": "",
+                "staffRoleGroup": "출연",
+                "staffRole": "부럽 목소리",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "켄싱턴 톨먼",
+                "staffEnNm": "",
+                "staffRoleGroup": "출연",
+                "staffRole": "라일리 목소리",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "다이안 레인",
+                "staffEnNm": "Diane Lane",
+                "staffRoleGroup": "출연",
+                "staffRole": "엄마 목소리",
+                "staffEtc": "",
+                "staffId": "00048915"
+              },
+              {
+                "staffNm": "카일 맥라클란",
+                "staffEnNm": "Kyle MacLachlan",
+                "staffRoleGroup": "출연",
+                "staffRole": "아빠 목소리",
+                "staffEtc": "",
+                "staffId": "00049131"
+              },
+              {
+                "staffNm": "에이미 포엘러",
+                "staffEnNm": "Amy Poehler",
+                "staffRoleGroup": "출연",
+                "staffRole": "기쁨 목소리",
+                "staffEtc": "",
+                "staffId": "00054454"
+              },
+              {
+                "staffNm": "필립스 스미스",
+                "staffEnNm": "Phyllis Smith",
+                "staffRoleGroup": "출연",
+                "staffRole": "슬픔 목소리",
+                "staffEtc": "",
+                "staffId": "00109501"
+              },
+              {
+                "staffNm": "루이스 블랙",
+                "staffEnNm": "Louis Black",
+                "staffRoleGroup": "출연",
+                "staffRole": "버럭 목소리",
+                "staffEtc": "",
+                "staffId": "00097560"
+              },
+              {
+                "staffNm": "리자 라피라",
+                "staffEnNm": "Liza Lapira",
+                "staffRoleGroup": "출연",
+                "staffRole": "까칠 목소리",
+                "staffEtc": "",
+                "staffId": "00097230"
+              },
+              {
+                "staffNm": "토니 핼",
+                "staffEnNm": "Tony Hale",
+                "staffRoleGroup": "출연",
+                "staffRole": "소심 목소리",
+                "staffEtc": "",
+                "staffId": "00121018"
+              },
+              {
+                "staffNm": "피터 닥터",
+                "staffEnNm": "Pete Docter",
+                "staffRoleGroup": "제작자",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": "00108389"
+              },
+              {
+                "staffNm": "마크 닐슨",
+                "staffEnNm": "Mark Nielsen",
+                "staffRoleGroup": "프로듀서",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": "00210961"
+              },
+              {
+                "staffNm": "제이슨 디머",
+                "staffEnNm": "",
+                "staffRoleGroup": "미술",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "이동욱",
+                "staffEnNm": "Lee Dong-wook",
+                "staffRoleGroup": "더빙",
+                "staffRole": "랜스 한국어 목소리",
+                "staffEtc": "",
+                "staffId": "00011595"
+              },
+              {
+                "staffNm": "Pixar Animation Studios",
+                "staffEnNm": "Pixar Animation Studios",
+                "staffRoleGroup": "제작사",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "Walt Disney Pictures",
+                "staffEnNm": "Walt Disney Pictures",
+                "staffRoleGroup": "제작사",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "월트 디즈니 컴퍼니 코리아",
+                "staffEnNm": "The Walt Disney Company (Korea)",
+                "staffRoleGroup": "배급사",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              },
+              {
+                "staffNm": "월트 디즈니 컴퍼니 코리아",
+                "staffEnNm": "The Walt Disney Company (Korea)",
+                "staffRoleGroup": "수입사",
+                "staffRole": "",
+                "staffEtc": "",
+                "staffId": ""
+              }
+            ]
+          },
+          "vods": {
+            "vod": [
+              {
+                "vodClass": "인사이드 아웃 2 [메인예고편]",
+                "vodUrl": "https://www.kmdb.or.kr/trailer/trailerPlayPop?pFileNm=MK060918_P02.mp4"
+              },
+              {
+                "vodClass": "인사이드 아웃 2 [파이널예고편]",
+                "vodUrl": "https://www.kmdb.or.kr/trailer/trailerPlayPop?pFileNm=MK061188_P02.mp4"
+              },
+              {
+                "vodClass": "인사이드 아웃 2 [티저예고편]",
+                "vodUrl": "https://www.kmdb.or.kr/trailer/trailerPlayPop?pFileNm=MK060806_P02.mp4"
+              }
+            ]
+          },
+          "openThtr": "",
+          "stat": [
+            {
+              "screenArea": "",
+              "screenCnt": "",
+              "salesAcc": "",
+              "audiAcc": "",
+              "statSouce": "",
+              "statDate": ""
+            }
+          ],
+          "screenArea": "",
+          "screenCnt": "",
+          "salesAcc": "",
+          "audiAcc": "",
+          "statSouce": "",
+          "statDate": "",
+          "themeSong": "",
+          "soundtrack": "",
+          "fLocation": "",
+          "Awards1": "",
+          "Awards2": "",
+          "regDate": "20231110",
+          "modDate": "20240605",
+          "Codes": {
+            "Code": [
+              {
+                "CodeNm": "",
+                "CodeNo": ""
+              }
+            ]
+          },
+          "CommCodes": {
+            "CommCode": [
+              {
+                "CodeNm": "",
+                "CodeNo": ""
+              }
+            ]
+          },
+          "ALIAS": "srcKmdb2"
+        }
+      ]
+    }
+  ]
+}
