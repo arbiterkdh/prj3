@@ -50,10 +50,10 @@ public interface CartMapper {
             """)
     String selectFileName(Integer productId);
 
-    @Select("""
-            SELECT  pc.payment_id, p.id
-            FROM product_cart pc JOIN payment p
-            on pc.member_number = p.member_number
+    @Update("""
+            UPDATE product_cart
+            SET payment_id = #{paymentId}
+            WHERE id = #{cartId}            
             """)
-    List<Integer> selectCartNo(Integer memberNumber);
+    int updatePaymentId(Integer paymentId, Integer cartId);
 }

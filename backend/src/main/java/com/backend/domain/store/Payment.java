@@ -15,5 +15,5 @@ public class Payment {
     private String buyerEmail;
     private String buyerDate;
     private Integer memberNumber;
-    private List<String> checkCartId;
+    private List<Integer> checkCartId;
 }

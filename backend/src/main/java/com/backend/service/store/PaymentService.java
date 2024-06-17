@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Service
@@ -21,15 +19,19 @@ public class PaymentService {
 
         mapper.add(payment);
 
-        Payment paymentInfo = mapper.paymentInfo(payment.getId());
+        System.out.println("service ===" + payment);
 
-        System.out.println("paymentInfo = " + paymentInfo);
-        if (paymentInfo.getStatus().equals("paid")) {
-            System.out.println("같다");
-            List<Integer> cartNoList = cartMapper.selectCartNo(payment.getMemberNumber());
+        for (int i = 0; i < payment.getCheckCartId().size(); i++) {
 
-
+            cartMapper.updatePaymentId(payment.getId(), payment.getCheckCartId().get(i));
         }
+
+
+//        System.out.println("paymentInfo = " + paymentInfo);
+//        if (paymentInfo.getStatus().equals("paid")) {
+//            System.out.println("같다");
+//            List<Integer> cartNoList = cartMapper.selectCartNo(payment.getMemberNumber());
+//        }
 
 
     }
