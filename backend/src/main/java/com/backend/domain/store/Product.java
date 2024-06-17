@@ -15,4 +15,5 @@ public class Product {
     private Integer quantity;
     private LocalDateTime regDate;
     private Integer type;
+    private ProductImage image;
 }

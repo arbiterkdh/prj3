@@ -10,8 +10,8 @@ import java.util.List;
 public interface CartMapper {
 
     @Insert("""
-            INSERT INTO product_cart(name, product_id, price, path, quantity, fileName)
-            VALUES(#{name}, #{id}, #{price}, #{path}, #{quantity}, #{fileName} )
+            INSERT INTO product_cart(name, product_id, price, quantity, fileName)
+            VALUES(#{name}, #{id}, #{price}, #{quantity}, #{fileName} )
             """)
     int addCart(ProductCart productCart);
 
@@ -42,4 +42,11 @@ public interface CartMapper {
             WHERE product_id = #{productId}
             """)
     int deleteItem(Integer productId);
+
+    @Select("""
+            SELECT fileName
+            FROM product_cart
+            WHERE product_id = #{productId}
+            """)
+    String selectFileName(Integer productId);
 }

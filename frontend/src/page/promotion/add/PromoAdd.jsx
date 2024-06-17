@@ -101,6 +101,7 @@ export function PromoAdd() {
             <option value="극장">극장</option>
             <option value="멤버십">멤버십</option>
             <option value="제휴/할인">제휴/할인</option>
+            <option value="당첨자발표">당첨자발표</option>
           </Select>
         </FormControl>
       </Box>

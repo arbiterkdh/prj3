@@ -18,15 +18,9 @@ public class ProductController {
     private final ProductService service;
 
     @PostMapping("/add")
-    public void add(Product product, @RequestParam(value = "files[]", required = true) MultipartFile[] files) throws Exception {
+    public void add(Product product, @RequestParam(value = "file", required = true) MultipartFile[] file) throws Exception {
 
-        System.out.println("product = " + product);
-
-        for (int i = 0; i < files.length; i++) {
-            System.out.println(files[i].getOriginalFilename());
-        }
-
-        service.add(product, files);
+        service.add(product, file);
     }
 
     @GetMapping("/list/{menuTypeSelect}")
@@ -50,13 +44,16 @@ public class ProductController {
     }
 
     @PutMapping("/modify")
-    public void Modify(Product product, @RequestParam("productId") Integer productId, @RequestParam("fileName") String originalFileName, @RequestParam(value = "file[]", required = false) MultipartFile[] file) throws Exception {
+    public void Modify(Product product, @RequestParam("productId") Integer productId, @RequestParam("fileName") String originalFileName, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+
 
         service.updateProduct(productId, product, originalFileName, file);
     }
 
     @GetMapping("/view/{productId}")
     public Product view(@PathVariable Integer productId) {
+
+        System.out.println("productId = " + productId);
 
         return service.info(productId);
 
