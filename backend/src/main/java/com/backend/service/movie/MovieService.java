@@ -202,8 +202,36 @@ public class MovieService {
         movieMapper.deleteMovieByMovieId(movieId);
     }
 
-    public void editMovie(Movie movie) {
+    public void editMovie(Movie movie, MultipartFile file) throws IOException {
         // todo : 파일 수정 로직 추가 필요....
+        if (file != null && file.getSize() > 0) {
+            // 파일 업데이트 이전 삭제 먼저 실행...
+            String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
+            String key = STR."prj3/movie/\{movie.getId()}/\{fileName}";
+
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+            // db에서 파일 레코드 삭제
+            movieMapper.deleteMovieImageFileByMovieId(movie.getId());
+
+
+            // 파일 추가
+            fileName = file.getOriginalFilename();
+            movieMapper.insertFileName(movie.getId(), fileName);
+
+            key = STR."prj3/movie/\{movie.getId()}/\{fileName}";
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(key)
+                    .acl(ObjectCannedACL.PUBLIC_READ)
+                    .build();
+
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+        }
 
         movieMapper.updateMovie(movie);
 

@@ -60,8 +60,8 @@ public class MovieController {
     }
 
     @PutMapping("edit")
-    public void edit(Movie movie, String[] movieType, @RequestParam(value = "file") MultipartFile file) throws IOException {
-        movieService.editMovie(movie);
+    public void edit(Movie movie, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        movieService.editMovie(movie, file);
     }
 
 
