@@ -146,3 +146,4 @@ FROM product_cart pc
 UPDATE product_cart
 SET payment_id = 1
 WHERE id = 10;
+

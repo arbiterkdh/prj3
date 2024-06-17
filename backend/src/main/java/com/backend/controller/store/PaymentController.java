@@ -19,7 +19,6 @@ public class PaymentController {
     @PostMapping("/add")
     public void addPayment(@RequestBody Payment payment) {
 
-        System.out.println("payment = " + payment);
 
         service.add(payment);
 

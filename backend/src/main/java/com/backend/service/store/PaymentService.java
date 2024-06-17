@@ -19,9 +19,11 @@ public class PaymentService {
 
         mapper.add(payment);
 
-        System.out.println("service ===" + payment);
 
         for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+
+            System.out.println("payment id = " + payment.getId());
+            System.out.println("checkcartid = " + payment.getCheckCartId().get(i));
 
             cartMapper.updatePaymentId(payment.getId(), payment.getCheckCartId().get(i));
         }
