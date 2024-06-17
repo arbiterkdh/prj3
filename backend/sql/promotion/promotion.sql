@@ -9,11 +9,6 @@ CREATE TABLE promo
     eventEndDate   DATE          NOT NULL,
     content        VARCHAR(1000) NOT NULL
 );
-DROP TABLE promo;
-DESC promo;
-
-SELECT *
-FROM promo;
 
 CREATE TABLE promo_file
 (
@@ -22,5 +17,13 @@ CREATE TABLE promo_file
     PRIMARY KEY (promo_id, name)
 );
 
+DESC promo;
+DESC promo_file;
+
+SELECT *
+FROM promo;
+
 SELECT *
 FROM promo_file;
+
+SELECT * FROM promo_file WHERE promo_id = 29;

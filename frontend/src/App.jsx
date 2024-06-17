@@ -12,7 +12,6 @@ import { MovieAdd } from "./page/movie/add/MovieAdd.jsx";
 import { MovieList } from "./page/movie/list/MovieList.jsx";
 import { LoginProvider } from "./component/LoginProvider.jsx";
 import { PromoAdd } from "./page/promotion/add/PromoAdd.jsx";
-import { PromoList } from "./page/promotion/list/PromoList.jsx";
 import { MovieView } from "./page/movie/list/view/MovieView.jsx";
 import { TheaterLocation } from "./page/theater/list/location/TheaterLocation.jsx";
 import { StoreCart } from "./page/store/cart/StoreCart.jsx";
@@ -25,12 +24,15 @@ import { KakaoRedirect } from "./page/oauth/callback/KakaoRedirect.jsx";
 import axios from "axios";
 import { PromoResult } from "./page/promotion/view/PromoResult.jsx";
 import { PromoEnd } from "./page/promotion/view/PromoEnd.jsx";
-import { PromoUpcoming } from "./page/promotion/view/PromoUpcoming.jsx";
 import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 import { BookHome } from "./page/book/BookHome.jsx";
 import { PromoAll } from "./page/promotion/view/PromoAll.jsx";
+import { PromoMovie } from "./page/promotion/view/PromoMovie.jsx";
+import { PromoTheater } from "./page/promotion/view/PromoTheater.jsx";
+import { PromoMembership } from "./page/promotion/view/PromoMembership.jsx";
+import { PromoDiscount } from "./page/promotion/view/PromoDiscount.jsx";
 
 const exceptionHost = [
   "http://www.kobis.or.kr",
@@ -117,19 +119,19 @@ const router = createBrowserRouter([
           },
           {
             path: "movie",
-            element: <PromoList eventType="영화" />,
+            element: <PromoMovie />,
           },
           {
             path: "theater",
-            element: <PromoList eventType="극장" />,
+            element: <PromoTheater />,
           },
           {
             path: "membership",
-            element: <PromoList eventType="멤버십" />,
+            element: <PromoMembership />,
           },
           {
             path: "discount",
-            element: <PromoList eventType="제휴/할인" />,
+            element: <PromoDiscount />,
           },
           {
             path: "add",
@@ -142,10 +144,6 @@ const router = createBrowserRouter([
           {
             path: "modify/:promoId",
             element: <PromoModify />,
-          },
-          {
-            path: "eventUpcoming",
-            element: <PromoUpcoming />,
           },
           {
             path: "eventEnd",

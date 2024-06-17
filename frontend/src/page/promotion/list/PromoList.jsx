@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -8,36 +8,53 @@ import {
   Heading,
   Image,
   SimpleGrid,
+  Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function PromoList({ eventType }) {
+export function PromoList({ eventType: propEventType, maxItems }) {
   const [promoList, setPromoList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { eventType: paramEventType } = useParams();
+  const eventType = propEventType || paramEventType;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
 
-  const filteredPromoList = promoList.filter(
-    (promo) => promo.eventType === eventType,
-  );
-
   useEffect(() => {
     axios
       .get("/api/promotion/list")
       .then((res) => {
+        console.log(res.data); // 디버깅용 로그
         setPromoList(res.data);
       })
-      .catch(() => {})
-      .finally(() => {});
+      .catch((error) => {
+        console.error("프로모션 데이터 가져오기 에러:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
+
+  const filteredPromoList = eventType
+    ? promoList.filter((promo) => promo.eventType === eventType)
+    : promoList;
+
+  const displayedPromos = maxItems
+    ? filteredPromoList.slice(0, maxItems)
+    : filteredPromoList;
 
   function handleButtonClick(promoId) {
     navigate(`/promotion/view/${promoId}`);
+  }
+
+  if (loading) {
+    return <Spinner />;
   }
 
   return (
@@ -46,17 +63,15 @@ export function PromoList({ eventType }) {
         spacing={3}
         templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
       >
-        {filteredPromoList.map((promo) => (
+        {displayedPromos.map((promo) => (
           <Card key={promo.id} height="100%">
             <CardBody display="flex" flexDirection="column">
               <Box mt={4}>
-                이미지파일
-                {promo.fileList &&
-                  promo.fileList.map((file) => (
-                    <Box key={file.name}>
-                      <Image src={file.src} />
-                    </Box>
-                  ))}
+                {promo.fileList && promo.fileList.length > 0 && (
+                  <Box key={promo.fileList[0].name}>
+                    <Image src={promo.fileList[0].src} />
+                  </Box>
+                )}
               </Box>
               <Box flex={1}>
                 <Heading as="b" mb={2}>

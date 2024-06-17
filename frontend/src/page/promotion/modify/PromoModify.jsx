@@ -1,8 +1,11 @@
 import {
+  Badge,
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -12,6 +15,8 @@ import {
   ModalOverlay,
   Select,
   Spinner,
+  Switch,
+  Text,
   Textarea,
   useDisclosure,
   useToast,
@@ -19,25 +24,34 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 export function PromoModify() {
   const { promoId } = useParams();
   const [promo, setPromo] = useState(null);
+  const [removeFileList, setRemoveFileList] = useState([]);
+  const [addFileList, setAddFileList] = useState([]);
   const toast = useToast();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   useEffect(() => {
-    axios
-      .get(`/api/promotion/${promoId}`)
-      .then((res) => setPromo(res.data))
-      .catch(() => {})
-      .finally(() => {});
-  }, []);
+    axios.get(`/api/promotion/${promoId}`).then((res) => setPromo(res.data));
+  }, [promoId]);
 
   function handleModifyClick() {
     axios
-      .put("/api/promotion/modify", promo)
+      .put("/api/promotion/modify", {
+        id: promo.id,
+        title: promo.title,
+        eventType: promo.eventType,
+        eventStartDate: promo.eventStartDate,
+        eventEndDate: promo.eventEndDate,
+        content: promo.content,
+        removeFileList,
+        addFileList,
+      })
       .then(() => {
         toast({
           status: "success",
@@ -54,11 +68,53 @@ export function PromoModify() {
               "게시물이 수정되지 않았습니다. 작성한 내용을 확인해주세요.",
             position: "top",
           });
+        } else {
+          toast({
+            status: "error",
+            description: "게시물 수정 중 오류가 발생하였습니다.",
+            position: "top",
+          });
         }
       })
       .finally(() => {
         onClose();
       });
+  }
+
+  const fileNameList = [];
+  for (let addFile of addFileList) {
+    // 이미 있는 파일과 중복된 파일명인지?
+    let duplicate = false;
+    for (let file of promo.fileList) {
+      if (file.name === addFile.name) {
+        duplicate = true;
+        break;
+      }
+    }
+    fileNameList.push(
+      <li>
+        {addFile.name}
+        {duplicate && <Badge colorScheme="red">override</Badge>}
+      </li>,
+    );
+  }
+
+  function handleRemoveSwitchChange(name, checked) {
+    if (checked) {
+      setRemoveFileList([...removeFileList, name]);
+      toast({
+        status: "info",
+        description: `${name} 파일이 삭제 목록에 추가되었습니다.`,
+        position: "top",
+      });
+    } else {
+      setRemoveFileList(removeFileList.filter((item) => item !== name));
+      toast({
+        status: "info",
+        description: `${name} 파일이 삭제 목록에서 제거되었습니다.`,
+        position: "top",
+      });
+    }
   }
 
   if (promo === null) {
@@ -119,13 +175,39 @@ export function PromoModify() {
           </FormControl>
         </Box>
         <Box>
+          {promo.fileList &&
+            promo.fileList.map((file) => (
+              <Box border={"2px solid black"} m={3} key={file.name}>
+                <Flex>
+                  <FontAwesomeIcon icon={faTrashCan} />
+                  <Switch
+                    onChange={(e) =>
+                      handleRemoveSwitchChange(file.name, e.target.checked)
+                    }
+                  />
+                  <Text>{file.name}</Text>
+                </Flex>
+                <Box>
+                  <Image
+                    sx={
+                      removeFileList.includes(file.name)
+                        ? { filter: "blur(8px)" }
+                        : {}
+                    }
+                    src={file.src}
+                  />
+                </Box>
+              </Box>
+            ))}
+        </Box>
+        <Box>
           <FormControl>
             <FormLabel>사진파일</FormLabel>
             <Input
               multiple
               type="file"
               accept="image/*"
-              onChange={(e) => setPromo({ ...promo, files: e.target.files })}
+              onChange={(e) => setAddFileList(e.target.files)}
             />
           </FormControl>
         </Box>

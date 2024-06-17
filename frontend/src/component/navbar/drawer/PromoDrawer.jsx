@@ -15,9 +15,6 @@ export function PromoDrawer({ setDrawer }) {
       <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"right"}>
-            <CursorBox onClick={() => navigate("/promotion/eventUpcoming")}>
-              예정된 이벤트
-            </CursorBox>
             <CursorBox onClick={() => navigate("/promotion/all")}>
               진행중 이벤트
             </CursorBox>
