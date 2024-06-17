@@ -17,4 +17,5 @@ public class Movie {
     private String director;
     private String actors;
     private List<String> type;
+    private String movieImageFile;
 }

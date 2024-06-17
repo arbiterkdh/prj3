@@ -1,7 +1,6 @@
 package com.backend.service.movie;
 
 import com.backend.domain.movie.Movie;
-import com.backend.domain.movie.MovieImageFile;
 import com.backend.mapper.movie.MovieCommentMapper;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.time.LocalDate;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class MovieService {
                 // db 에 해당 게시물의 파일 목록 저장
                 movieMapper.insertFileName(movie.getId(), file1.getOriginalFilename());
                 // 실제 파일 저장
-                String key = STR."prj3/\{movie.getId()}/\{file1.getOriginalFilename()}";
+                String key = STR."prj3/movie/\{movie.getId()}/\{file1.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -93,7 +93,14 @@ public class MovieService {
         }
 
         // file 있는지 없는지 검증 필요...
-
+        if (file == null || file.length == 0) {
+            return false;
+        }
+        for (MultipartFile file1 : file) {
+            if (file1 == null || file1.isEmpty()) {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -115,9 +122,16 @@ public class MovieService {
             pageInfo.put("numberOfMovie", numberOfMovie);
             pageInfo.put("lastPageNumber", lastPageNumber);
 
+            List<Movie> list = movieMapper.selectNowShowingMovieList(endset, today);
+
+            for (Movie movie : list) {
+                String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
+
+                movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
+            }
 
             return Map.of("pageInfo", pageInfo,
-                    "movieList", movieMapper.selectNowShowingMovieList(endset, today));
+                    "movieList", list);
         }
 
         // 상영예정작을 눌렀을때... db 조회
@@ -134,9 +148,17 @@ public class MovieService {
             pageInfo.put("numberOfMovie", numberOfMovie);
             pageInfo.put("lastPageNumber", lastPageNumber);
 
+            List<Movie> list = movieMapper.selectComingSoonMovietList(endset, today);
+
+            for (Movie movie : list) {
+                String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
+
+                movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
+            }
+
 
             return Map.of("pageInfo", pageInfo,
-                    "movieList", movieMapper.selectComingSoonMovietList(endset, today));
+                    "movieList", list);
         }
 
         return null;
@@ -146,13 +168,34 @@ public class MovieService {
     public Movie get(Integer movieId) {
         Movie movie = movieMapper.selectByMovieId(movieId);
         movie.setType(movieMapper.selectMovieTypeById(movieId));
+
+        String fileName = movieMapper.selectFileNameByMovieId(movieId);
+        String file = STR."\{srcPrefix}/movie/\{movieId}/\{fileName}";
+
+        movie.setMovieImageFile(file);
+
         return movie;
     }
 
 
     public void deleteMovie(Integer movieId) {
+        // 이미지 파일명 조회
+        String fileName = movieMapper.selectFileNameByMovieId(movieId);
+
+        // s3에 있는 이미지 파일 삭제
+        String key = STR."prj3/movie/\{movieId}/\{fileName}";
+        DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+
+        s3Client.deleteObject(objectRequest);
+
+
         // 영화 타입 삭제
         movieMapper.deleteMovieTypeByMovieId(movieId);
+        // 영화 이미지 삭제
+        movieMapper.deleteMovieImageFileByMovieId(movieId);
         // 영화 댓글 삭제
         commentMapper.deleteCommentByMovieId(movieId);
         // 영화 삭제
@@ -160,6 +203,8 @@ public class MovieService {
     }
 
     public void editMovie(Movie movie) {
+        // todo : 파일 수정 로직 추가 필요....
+
         movieMapper.updateMovie(movie);
 
         // movie_type 수정 로직, movie_type 삭제 이후 새로 생성...

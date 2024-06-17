@@ -20,6 +20,7 @@ CREATE TABLE movie_file
     PRIMARY KEY (movie_id, name)
 );
 
+
 CREATE TABLE movie_type
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
@@ -99,3 +100,8 @@ DESC movie_location;
 
 DELETE
 FROM movie_location;
+
+DESC movie_file;
+
+SELECT *
+FROM movie_file;
