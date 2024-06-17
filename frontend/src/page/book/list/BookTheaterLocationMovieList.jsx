@@ -11,12 +11,16 @@ export function BookTheaterLocationMovieList({
   selectedDay,
   setSelectedDay,
 }) {
-  useEffect(() => {}, [checkedTheaterNumber]);
+  useEffect(() => {
+    // 체크한 날짜에 맞는 타임테이블 가져오기.
+  }, [checkedTheaterNumber, selectedDay]);
 
   // 영화 시작시간 아침 9시
   // 영화 마감시간 밤 12시
 
-  function handleBookDataClick(state) {}
+  function handleBookDataClick(state) {
+    // 예매 데이터 클릭 처리
+  }
 
   return (
     <Box h={"inherit"} overflowY={"scroll"}>

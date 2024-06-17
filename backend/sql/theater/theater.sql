@@ -50,7 +50,43 @@ DROP TABLE theater_box;
 CREATE TABLE theater_box_time_table
 (
     id            INT PRIMARY KEY AUTO_INCREMENT,
-    movie_id      INT REFERENCES movie (id),
     box_number    INT REFERENCES theater_box (box_number),
+    movie_id      INT REFERENCES movie (id),
     time_interval INT NOT NULL
 );
+
+DROP TABLE theater_box_time_table;
+
+SELECT *
+FROM movie;
+
+SELECT *
+FROM theater;
+
+INSERT INTO theater_box
+    (box_number, theater_number)
+VALUES (1, 112);
+INSERT INTO theater_box
+    (box_number, theater_number)
+VALUES (2, 112);
+INSERT INTO theater_box
+    (box_number, theater_number)
+VALUES (3, 112);
+
+SELECT *
+FROM theater_box;
+
+INSERT INTO theater_box_time_table
+    (movie_id, box_number, time_interval)
+VALUES (519, 1, 140);
+
+SELECT *
+FROM theater_box_time_table;
+
+INSERT INTO theater_box_time_table
+    (movie_id, box_number, time_interval)
+VALUES (520, 2, 130);
+
+INSERT INTO theater_box_time_table
+    (movie_id, box_number, time_interval)
+VALUES (521, 2, 160);

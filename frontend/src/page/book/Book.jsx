@@ -35,20 +35,14 @@ export function Book() {
   useEffect(() => {
     setBookProgress(1);
 
-    axios
-      .get(`/api/theater`)
-      .then((res) => {
-        setCityList(res.data);
-      })
-      .catch()
-      .finally();
-
-    axios.get("/api/book/onscreenlist").then((res) => {
-      setOnScreenList(res.data);
-    });
-
-    axios.get("/api/book/willscreenlist").then((res) => {
-      setWillScreenList(res.data);
+    Promise.all([
+      axios.get("/api/theater"),
+      axios.get("/api/book/onscreenlist"),
+      axios.get("/api/book/willscreenlist"),
+    ]).then(([theaterRes, onScreenRes, willScreenRes]) => {
+      setCityList(theaterRes.data);
+      setOnScreenList(onScreenRes.data);
+      setWillScreenList(willScreenRes.data);
     });
   }, [theaterNumberList, movieLocationAdd]);
 
