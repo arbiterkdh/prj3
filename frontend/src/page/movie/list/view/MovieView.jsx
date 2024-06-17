@@ -6,13 +6,13 @@ import {
   Box,
   Center,
   Heading,
+  Image,
   Stack,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
-  Text,
 } from "@chakra-ui/react";
 import { MovieInfo } from "./MovieInfo.jsx";
 import { MovieComment } from "./comment/MovieComment.jsx";
@@ -39,7 +39,9 @@ export function MovieView() {
               <Heading textAlign={"center"}>{movie.title}</Heading>
             </Box>
             <Box mb={10}>
-              <Text textAlign={"center"}> 이미지 </Text>
+              <Center>
+                <Image w={"300px"} src={movie.movieImageFile} />
+              </Center>
             </Box>
           </Box>
           <Box>

@@ -123,5 +123,12 @@ public interface MovieMapper {
             FROM movie_file
             WHERE movie_id = #{movieId}
             """)
-    List<String> selectFileNameByMovieId(Integer movieId);
+    String selectFileNameByMovieId(Integer movieId);
+
+
+    @Delete("""           
+            DELETE FROM movie_file
+            WHERE movie_id = #{movieId}
+            """)
+    int deleteMovieImageFileByMovieId(Integer movieId);
 }
