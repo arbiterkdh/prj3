@@ -32,9 +32,22 @@ import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 import { BookHome } from "./page/book/BookHome.jsx";
 import { PromoAll } from "./page/promotion/view/PromoAll.jsx";
 
+const exceptionHost = [
+  "http://www.kobis.or.kr",
+  "https://api.koreafilm.or.kr",
+  "http://api.koreafilm.or.kr",
+];
+
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
+  console.log(config.url);
+  const isExceptionHost = exceptionHost.some((item) =>
+    config.url.startsWith(item),
+  );
+  if (isExceptionHost) {
+    return config;
+  }
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

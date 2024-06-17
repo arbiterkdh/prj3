@@ -4,8 +4,8 @@ const DrawerBorderBox = (props) => {
   return (
     <Box
       h={"33px"}
+      opacity={"0.9"}
       fontWeight={"600"}
-      borderBottom={"1px solid black"}
       color={"white"}
       bgColor={"darkslategray"}
       {...props}

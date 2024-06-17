@@ -40,13 +40,14 @@ export function MovieHome() {
   }, [dailyBoxOffice]);
 
   return (
-    <Box>
+    <Box align={"center"} overflow={"hidden"}>
       <Image
-        w={"100%"}
-        h={"120%"}
-        position={"absolute"}
+        mt={"-33px"}
+        w={"1920px"}
+        h={"1280px"}
+        position={"fixed"}
         src={
-          "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/megabox_bg_1.png"
+          "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/theater-8569119_1920.jpg"
         }
         zIndex={-2}
       />

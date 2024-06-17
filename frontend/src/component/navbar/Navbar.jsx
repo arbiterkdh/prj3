@@ -108,7 +108,9 @@ export function Navbar() {
       </Center>
       <Center>
         <Box w={"100%"}>
-          {drawer === 0 && <Box h={"33px"} />}
+          {drawer === 0 && (
+            <Box h={"33px"} bgColor={"darkslategray"} opacity={"0.9"} />
+          )}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
           {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}
           {drawer === 3 && <TheaterDrawer setDrawer={setDrawer} />}
