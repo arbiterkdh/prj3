@@ -37,11 +37,20 @@ WHERE number = 143;
 
 CREATE TABLE theater_box
 (
-    theater_number INT REFERENCES theater (number),
-    box_number     INT NOT NULL,
-    box_capacity   INT NOT NULL,
-    CONSTRAINT box_capacity CHECK ( box_capacity % 2 = 0 )
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    box_number     INT NOT NULL UNIQUE,
+    theater_number INT REFERENCES theater (number)
 );
 
 SELECT *
 FROM theater_box;
+
+DROP TABLE theater_box;
+
+CREATE TABLE theater_box_time_table
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    movie_id      INT REFERENCES movie (id),
+    box_number    INT REFERENCES theater_box (box_number),
+    time_interval INT NOT NULL
+);

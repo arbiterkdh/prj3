@@ -47,25 +47,25 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
 
     switch (((dayOfOneWeekAgo + index) % 7) + 1) {
       case 1:
-        dayOfWeek = "일";
+        dayOfWeek = "토";
         break;
       case 2:
-        dayOfWeek = "월";
+        dayOfWeek = "일";
         break;
       case 3:
-        dayOfWeek = "화";
+        dayOfWeek = "월";
         break;
       case 4:
-        dayOfWeek = "수";
+        dayOfWeek = "화";
         break;
       case 5:
-        dayOfWeek = "목";
+        dayOfWeek = "수";
         break;
       case 6:
-        dayOfWeek = "금";
+        dayOfWeek = "목";
         break;
       case 7:
-        dayOfWeek = "토";
+        dayOfWeek = "금";
         break;
     }
     bookPeriodListPlusDayOfWeek.push(book + "-" + dayOfWeek);

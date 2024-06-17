@@ -34,7 +34,7 @@ export function BookTheaterLocationMovieList({
                     : "inherit"
                 : "none"
             }
-            onClick={(e) => handleBookDataClick("상영중")}
+            onClick={() => handleBookDataClick("상영중")}
           >
             {movie.theater_number.includes(checkedTheaterNumber)
               ? `상영중 : ${movie.title}`
@@ -55,7 +55,7 @@ export function BookTheaterLocationMovieList({
                     : "inherit"
                 : "none"
             }
-            onClick={(e) => {
+            onClick={() => {
               handleBookDataClick("예정작");
             }}
           >

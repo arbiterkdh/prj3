@@ -34,7 +34,30 @@ export function TheaterSeatList() {
     setBookProgress(2);
   }, [checkedSeat]);
 
-  function handleSeatClick() {}
+  function handleSeatClick(alphabet, number) {
+    let seatNumber = number;
+    if (alphabet === "A") {
+      if (number > 13) {
+        seatNumber = number - 2;
+      } else if (number > 4) {
+        seatNumber = number - 1;
+      }
+    } else if (alphabet === "I") {
+      if (number > 6) {
+        seatNumber = number - 10;
+      }
+    } else if (alphabet === "J") {
+      if (number > 4) {
+        seatNumber = number - 10;
+      }
+    } else {
+      if (number > 15) {
+        seatNumber = number - 2;
+      } else if (number > 6) {
+        seatNumber = number - 1;
+      }
+    }
+  }
 
   return (
     <Box>
@@ -132,12 +155,14 @@ export function TheaterSeatList() {
                         onMouseLeave={() => setMouseLocation(0)}
                         onClick={() => {
                           setCheckedSeat({ alphabet: seatRow.alphabet, seat });
-                          handleSeatClick();
+                          handleSeatClick(seatRow.alphabet, seat);
                         }}
                       >
                         {seatRow.alphabet === "A" &&
                         (seat === 5 || seat === 14) ? (
-                          <EmptySeatBox></EmptySeatBox>
+                          <Flex>
+                            <EmptySeatBox></EmptySeatBox>
+                          </Flex>
                         ) : seatRow.alphabet === "J" &&
                           seat > 4 &&
                           seat < 15 ? (
@@ -151,18 +176,20 @@ export function TheaterSeatList() {
                           (seat === 7 || seat === 16) ? (
                           <EmptySeatBox></EmptySeatBox>
                         ) : (
-                          <FontAwesomeIcon
-                            cursor={"pointer"}
-                            color={
-                              checkedSeat.alphabet === seatRow.alphabet &&
-                              checkedSeat.seat === seat
-                                ? "gray"
-                                : mouseLocation === seatRow.alphabet + index2
+                          <Box>
+                            <FontAwesomeIcon
+                              cursor={"pointer"}
+                              color={
+                                checkedSeat.alphabet === seatRow.alphabet &&
+                                checkedSeat.seat === seat
                                   ? "gray"
-                                  : ""
-                            }
-                            icon={faCouch}
-                          />
+                                  : mouseLocation === seatRow.alphabet + index2
+                                    ? "gray"
+                                    : ""
+                              }
+                              icon={faCouch}
+                            />
+                          </Box>
                         )}
                       </Box>
                     ))}
