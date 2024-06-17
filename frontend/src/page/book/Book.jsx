@@ -30,6 +30,7 @@ export function Book() {
   const [isCityChecked, setIsCityChecked] = useState("서울");
   const [checkedTheaterNumber, setCheckedTheaterNumber] = useState(0);
   const [checkedMovieId, setCheckedMovieId] = useState(0);
+  const [selectedDay, setSelectedDay] = useState(0);
 
   useEffect(() => {
     setBookProgress(1);
@@ -99,13 +100,18 @@ export function Book() {
           </Box>
         </OuterBookBox>
         <OuterBookBox>
-          <BookDateComponent />
+          <BookDateComponent
+            selectedDay={selectedDay}
+            setSelectedDay={setSelectedDay}
+          />
           <Box h={"550px"} border={"1px solid black"}>
             <BookTheaterLocationMovieList
               checkedTheaterNumber={checkedTheaterNumber}
               onScreenList={onScreenList}
               willScreenList={willScreenList}
               checkedMovieId={checkedMovieId}
+              selectedDay={selectedDay}
+              setSelectedDay={setSelectedDay}
             />
             <Button onClick={() => navigate("/book/theaterseat")}>예매</Button>
           </Box>
