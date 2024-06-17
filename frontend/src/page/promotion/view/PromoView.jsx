@@ -109,7 +109,7 @@ export function PromoView() {
       </Box>
       <Box mt={4}>
         {promo.fileList &&
-          promo.fileList.map((file) => (
+          promo.fileList.slice(1).map((file) => (
             <Box key={file.name}>
               <Image src={file.src} />
             </Box>

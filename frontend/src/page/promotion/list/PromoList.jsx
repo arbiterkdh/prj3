@@ -20,7 +20,6 @@ export function PromoList({ eventType: propEventType, maxItems }) {
   const navigate = useNavigate();
   const { eventType: paramEventType } = useParams();
   const eventType = propEventType || paramEventType;
-  const [promo, setPromo] = useState("");
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -68,12 +67,11 @@ export function PromoList({ eventType: propEventType, maxItems }) {
           <Card key={promo.id} height="100%">
             <CardBody display="flex" flexDirection="column">
               <Box mt={4}>
-                {promo.fileList &&
-                  promo.fileList.map((file) => (
-                    <Box key={file.name}>
-                      <Image src={file.src} />
-                    </Box>
-                  ))}
+                {promo.fileList && promo.fileList.length > 0 && (
+                  <Box key={promo.fileList[0].name}>
+                    <Image src={promo.fileList[0].src} />
+                  </Box>
+                )}
               </Box>
               <Box flex={1}>
                 <Heading as="b" mb={2}>

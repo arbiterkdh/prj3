@@ -42,7 +42,7 @@ export function PromoModify() {
 
   function handleModifyClick() {
     axios
-      .putForm("/api/promotion/modify", {
+      .put("/api/promotion/modify", {
         id: promo.id,
         title: promo.title,
         eventType: promo.eventType,
@@ -68,15 +68,17 @@ export function PromoModify() {
               "게시물이 수정되지 않았습니다. 작성한 내용을 확인해주세요.",
             position: "top",
           });
+        } else {
+          toast({
+            status: "error",
+            description: "게시물 수정 중 오류가 발생하였습니다.",
+            position: "top",
+          });
         }
       })
       .finally(() => {
         onClose();
       });
-  }
-
-  if (promo === null) {
-    return <Spinner />;
   }
 
   const fileNameList = [];
@@ -100,9 +102,23 @@ export function PromoModify() {
   function handleRemoveSwitchChange(name, checked) {
     if (checked) {
       setRemoveFileList([...removeFileList, name]);
+      toast({
+        status: "info",
+        description: `${name} 파일이 삭제 목록에 추가되었습니다.`,
+        position: "top",
+      });
     } else {
       setRemoveFileList(removeFileList.filter((item) => item !== name));
+      toast({
+        status: "info",
+        description: `${name} 파일이 삭제 목록에서 제거되었습니다.`,
+        position: "top",
+      });
     }
+  }
+
+  if (promo === null) {
+    return <Spinner />;
   }
 
   return (

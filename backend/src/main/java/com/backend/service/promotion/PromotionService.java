@@ -68,7 +68,15 @@ public class PromotionService {
     }
 
     public List<Promotion> list() {
-        return promotionMapper.selectList();
+        List<Promotion> promotions = promotionMapper.selectList();
+        for (Promotion promotion : promotions) {
+            List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
+            List<PromotionFile> files = fileNames.stream()
+                    .map(name -> new PromotionFile(name, srcPrefix + promotion.getId() + "/" + name))
+                    .toList();
+            promotion.setFileList(files);
+        }
+        return promotions;
     }
 
     public Promotion get(Integer id) {
