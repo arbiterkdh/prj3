@@ -4,9 +4,12 @@ import { useParams } from "react-router-dom";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import {
   Box,
+  Button,
   Center,
+  Flex,
   Heading,
   Image,
+  Spacer,
   Stack,
   Tab,
   TabList,
@@ -21,6 +24,10 @@ export function MovieView() {
   const { id } = useParams();
   const [isProcessing, setIsProcessing] = useState(false);
   const [movie, setMovie] = useState({});
+  const [like, setLike] = useState({
+    like: false,
+    count: 0,
+  });
 
   useEffect(() => {
     axios
@@ -30,20 +37,42 @@ export function MovieView() {
       .finally(() => {});
   }, []);
 
+  function handleLikeClick() {
+    axios.put("/api/movie/like", {
+      boardId: id,
+    });
+  }
+
   return (
     <Center>
       <CenterBox>
         <Stack>
-          <Box>
-            <Box>
-              <Heading textAlign={"center"}>{movie.title}</Heading>
-            </Box>
+          <Flex>
+            <Stack justify={"space-between"}>
+              <Heading mt={"20px"} fontSize={"5xl"} textAlign={"center"}>
+                {movie.title}
+              </Heading>
+              <Box>
+                <Button
+                  onClick={handleLikeClick}
+                  variant={"outline"}
+                  colorScheme={"purple"}
+                  w={"200px"}
+                >
+                  하트
+                </Button>
+                <Button variant={"solid"} colorScheme={"purple"} w={"200px"}>
+                  예매
+                </Button>
+              </Box>
+            </Stack>
+            <Spacer />
             <Box mb={10}>
               <Center>
-                <Image w={"300px"} src={movie.movieImageFile} />
+                <Image mb={"-30px"} w={"300px"} src={movie.movieImageFile} />
               </Center>
             </Box>
-          </Box>
+          </Flex>
           <Box>
             <Tabs isFitted variant="enclosed">
               <TabList mb="1em">

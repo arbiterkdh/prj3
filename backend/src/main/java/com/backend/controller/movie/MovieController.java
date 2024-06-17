@@ -5,6 +5,7 @@ import com.backend.service.movie.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -64,5 +65,9 @@ public class MovieController {
         movieService.editMovie(movie, file);
     }
 
+    @PutMapping("like")
+    public void like(@RequestBody Map<String, Object> req, Authentication authentication) {
+        movieService.like(req, authentication);
+    }
 
 }

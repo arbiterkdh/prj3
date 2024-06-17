@@ -47,14 +47,20 @@ export function MovieList() {
       setPageInfo(res.data.pageInfo);
     });
 
+    setSearchKeyword("");
+
     const pageParam = parseInt(searchParams.get("page"));
     const tabParam = parseInt(searchParams.get("tab"));
+    const keyword = searchParams.get("keyword");
 
     if (pageParam) {
       setPage(pageParam);
     }
     if (tabParam) {
       setTab(tabParam);
+    }
+    if (keyword) {
+      setSearchKeyword(keyword);
     }
   }, [searchParams]);
 
@@ -69,11 +75,12 @@ export function MovieList() {
   function handlePageClick() {
     searchParams.set("page", page + 1);
     searchParams.set("tab", tab);
+    searchParams.set("keyword", searchKeyword);
     navigate(`/movie?${searchParams}`);
   }
 
   function handleSearchClick() {
-    navigate(`/movie?keyword=${searchKeyword}`);
+    navigate(`/movie?page=1&tab=${tab}&keyword=${searchKeyword}`);
   }
 
   function handleNowShowingMovieTab() {
@@ -104,6 +111,7 @@ export function MovieList() {
                 <Spacer />
                 <InputGroup mb={5} w={"300px"} size="md">
                   <Input
+                    value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     placeholder="영화명 검색"
                   />
@@ -163,9 +171,13 @@ export function MovieList() {
               <Flex>
                 <Spacer />
                 <InputGroup mb={5} w={"300px"} size="md">
-                  <Input placeholder="영화명 검색" />
+                  <Input
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    placeholder="영화명 검색"
+                  />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="md">
+                    <Button onClick={handleSearchClick} h="1.75rem" size="md">
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Button>
                   </InputRightElement>

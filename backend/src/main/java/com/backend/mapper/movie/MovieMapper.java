@@ -28,23 +28,35 @@ public interface MovieMapper {
 
 
     @Select("""
+            <script>
             SELECT *
             FROM movie
-            WHERE DATEDIFF(start_date, #{today}) <= 0
+            WHERE DATEDIFF(start_date, #{today}) &lt;= 0
+                <if test="keyword != null">
+                    <bind name="pattern" value="'%' + keyword + '%'" />
+                    AND title LIKE #{pattern}
+                </if>
             ORDER BY id DESC
             LIMIT 0, #{endset}
+            </script>
             """)
-    List<Movie> selectNowShowingMovieList(Integer endset, LocalDate today);
+    List<Movie> selectNowShowingMovieList(Integer endset, LocalDate today, String keyword);
 
 
     @Select("""
+            <script>
             SELECT *
             FROM movie
-            WHERE DATEDIFF(start_date, #{today}) > 0
+            WHERE DATEDIFF(start_date, #{today}) &gt; 0
+                <if test="keyword != null">
+                    <bind name="pattern" value="'%' + keyword + '%'" />
+                    AND title LIKE #{pattern}
+                </if>
             ORDER BY id DESC
             LIMIT 0, #{endset}
+            </script>
             """)
-    List<Movie> selectComingSoonMovietList(Integer endset, LocalDate today);
+    List<Movie> selectComingSoonMovietList(Integer endset, LocalDate today, String keyword);
 
 
     @Select("""
@@ -90,21 +102,32 @@ public interface MovieMapper {
 
 
     @Select("""
+            <script>
             SELECT COUNT(*)
             FROM movie
-            WHERE DATEDIFF(start_date, #{today}) <= 0
+            WHERE DATEDIFF(start_date, #{today}) <![CDATA[<=]]>0
+                <if test="keyword != null">
+                    <bind name="pattern" value="'%' + keyword + '%'" />
+                    AND title LIKE #{pattern}
+                </if>
+            </script>
             """)
-    Integer countNowShowingMovie(LocalDate today);
+    Integer countNowShowingMovie(LocalDate today, String keyword);
 
 
     @Select("""
+            <script>
             SELECT COUNT(*)
             FROM movie
-            WHERE DATEDIFF(start_date, #{today}) > 0
+            WHERE DATEDIFF(start_date, #{today}) <![CDATA[>]]> 0
+                <if test="keyword != null">
+                    <bind name="pattern" value="'%' + keyword + '%'" />
+                    AND title LIKE #{pattern}
+                </if>
+            </script>
             """)
-    Integer countComingSoonMovie(LocalDate today);
+    Integer countComingSoonMovie(LocalDate today, String keyword);
 
-    Integer countAllMovie();
 
     @Select("""
             SELECT *
