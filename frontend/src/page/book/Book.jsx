@@ -7,6 +7,7 @@ import { BookTheaterList } from "./list/BookTheaterList.jsx";
 import { BookMovieList } from "./list/BookMovieList.jsx";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { BookDateComponent } from "./date/BookDateComponent.jsx";
+import { BookTheaterLocationMovieList } from "./list/BookTheaterLocationMovieList.jsx";
 
 export function Book() {
   const {
@@ -28,6 +29,7 @@ export function Book() {
 
   const [isCityChecked, setIsCityChecked] = useState("서울");
   const [checkedTheaterNumber, setCheckedTheaterNumber] = useState(0);
+  const [checkedMovieId, setCheckedMovieId] = useState(0);
 
   useEffect(() => {
     setBookProgress(1);
@@ -85,6 +87,8 @@ export function Book() {
               movieLocationAdd={movieLocationAdd}
               onScreenList={onScreenList}
               willScreenList={willScreenList}
+              checkedMovieId={checkedMovieId}
+              setCheckedMovieId={setCheckedMovieId}
             />
             <Box>
               {movieLocationAdd &&
@@ -97,7 +101,12 @@ export function Book() {
         <OuterBookBox>
           <BookDateComponent />
           <Box h={"550px"} border={"1px solid black"}>
-            선택한 지점의 영화 상영 테이블 나올 곳
+            <BookTheaterLocationMovieList
+              checkedTheaterNumber={checkedTheaterNumber}
+              onScreenList={onScreenList}
+              willScreenList={willScreenList}
+              checkedMovieId={checkedMovieId}
+            />
             <Button onClick={() => navigate("/book/theaterseat")}>예매</Button>
           </Box>
         </OuterBookBox>

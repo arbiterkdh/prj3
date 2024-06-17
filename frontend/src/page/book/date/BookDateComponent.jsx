@@ -1,9 +1,8 @@
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Stack } from "@chakra-ui/react";
 import BookBox from "../../../css/theme/component/box/BookBox.jsx";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
-import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 
 export function BookDateComponent() {
@@ -116,16 +115,17 @@ export function BookDateComponent() {
                     rounded={"full"}
                     color={isSelected === day ? "white" : ""}
                     bgColor={isSelected === day ? "red.500" : ""}
+                    align={"center"}
                   >
-                    <Flex w={"55px"} h={"33px"} justifyContent={"space-evenly"}>
-                      <MarginBox fontSize={"xx-small"}>
-                        {day.split("-")[1]}
-                      </MarginBox>
-                      <Box fontSize={"x-large"} fontWeight={"500"}>
+                    <Stack w={"55px"} justifyContent={"space-evenly"}>
+                      <Box fontSize={"xx-small"}>{day.split("-")[1]}</Box>
+                      <Box mt={-4} fontSize={"x-large"} fontWeight={"500"}>
                         {day.split("-")[2]}
                       </Box>
-                    </Flex>
-                    <Box align={"center"}>{day.split("-")[3]}</Box>
+                      <Box mt={-4} align={"center"}>
+                        {day.split("-")[3]}
+                      </Box>
+                    </Stack>
                   </CursorBox>
                 ))}
               </Flex>
