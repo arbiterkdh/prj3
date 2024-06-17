@@ -16,6 +16,9 @@ from product_image;
 select *
 from product_cart;
 
+select *
+from member;
+
 
 SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
 FROM product p
@@ -36,17 +39,23 @@ CREATE TABLE product
 );
 
 
-
 CREATE TABLE product_cart
 (
-    id         INT PRIMARY KEY AUTO_INCREMENT,
-    name       VARCHAR(200),
-    fileName   VARCHAR(200),
-    product_id INT REFERENCES product (id),
-    quantity   INT,
-    price      INT,
-    reg_date   DATETIME DEFAULT NOW()
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    name          VARCHAR(200),
+    fileName      VARCHAR(200),
+    product_id    INT REFERENCES product (id),
+    quantity      INT,
+    price         INT,
+    member_number INT REFERENCES member (number),
+    reg_date      DATETIME DEFAULT NOW(),
+    payment_id    INT REFERENCES payment (id)
 );
+
+drop table product_cart;
+
+select *
+from product_cart;
 
 CREATE TABLE product_comment
 (
@@ -87,4 +96,53 @@ values ('세트'),
        ('간식'),
        ('드링크');
 
-show tables;
+CREATE TABLE product_cart_order
+(
+
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    cart_id       INT REFERENCES product_cart (id),
+    member_number INT REFERENCES member (number),
+    payment_id    INT REFERENCES payment (id),
+    reg_date      DATETIME DEFAULT NOW()
+);
+drop table product_cart_order;
+
+CREATE TABLE payment
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    order_number  VARCHAR(50),
+    status        VARCHAR(10),
+    amount        INT,
+    buyer_name    VARCHAR(50),
+    buyer_email   VARCHAR(100),
+    buyer_date    DATETIME DEFAULT NOW(),
+    success       BOOLEAN,
+    member_number INT REFERENCES member (number)
+);
+
+drop table payment;
+
+select *
+from payment;
+
+select *
+from product_cart;
+
+select *
+from member;
+
+drop table payment;
+
+select product_id
+from payment p
+         join product_cart pc
+              on p.member_number = pc.member_number;
+
+SELECT pc.payment_id, p.id
+FROM product_cart pc
+         JOIN payment p
+              on pc.member_number = p.member_number;
+
+UPDATE product_cart
+SET payment_id = 1
+WHERE id = 10;

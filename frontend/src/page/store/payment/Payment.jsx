@@ -4,7 +4,7 @@ import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Payment() {
+function Payment({ totalSum, productCartList, checkCartId }) {
   const Login = useContext(LoginContext);
   const navigate = useNavigate();
 
@@ -37,8 +37,8 @@ function Payment() {
         pg: "html5_inicis.INIpayTest",
         pay_method: "card",
         merchant_uid: "order_no_" + makeMerchantUid(),
-        name: `${Login.nickName} 결제테스트`,
-        amount: 1,
+        name: `${productCartList[0].name} 외 ${productCartList.length - 1} 개`,
+        amount: totalSum,
         buyer_email: Login.email,
         buyer_name: Login.nickName,
         buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
@@ -48,17 +48,13 @@ function Payment() {
         escrow: true, //에스크로 결제인 경우 설정
         vbank_due: "YYYYMMDD",
         bypass: {
-          // PC 경우
-          acceptmethod: "noeasypay", // 간편결제 버튼을 통합결제창에서 제외(PC)
-          // acceptmethod: "cardpoint", // 카드포인트 사용시 설정(PC)
-          // 모바일 경우
-          P_RESERVED: "noeasypay=Y", // 간편결제 버튼을 통합결제창에서 제외(모바일)
-          // P_RESERVED: "cp_yn=Y", // 카드포인트 사용시 설정(모바일)
-          // P_RESERVED: "twotrs_bank=Y&iosapp=Y&app_scheme=your_app_scheme://", // iOS에서 계좌이체시 결제가 이뤄지던 앱으로 돌아가기
+          acceptmethod: "noeasypay",
+
+          P_RESERVED: "noeasypay=Y",
         },
         period: {
-          from: "20200101", //YYYYMMDD
-          to: "20201231", //YYYYMMDD
+          from: "20200101",
+          to: "20201231",
         },
       },
       function (rsp) {
@@ -72,17 +68,20 @@ function Payment() {
           const buyerEmail = rsp.buyer_email;
 
           console.log(
-            success +
-              " " +
+            "success=" +
+              success +
+              ", orderNumber=" +
               orderNumber +
-              " " +
+              ", status=" +
               status +
-              " " +
+              ", amount= " +
               amount +
-              " " +
+              ", buyerName=" +
               buyerName +
-              " " +
-              buyerEmail,
+              ", buyerEmail=" +
+              buyerEmail +
+              ", member.no=" +
+              Login.id,
           );
 
           axios
@@ -93,6 +92,8 @@ function Payment() {
               amount: rsp.paid_amount,
               buyerName: rsp.buyer_name,
               buyerEmail: rsp.buyer_email,
+              memberNumber: Login.id,
+              checkCartId,
             })
             .then((res) => {})
             .catch(() => {})
@@ -119,7 +120,14 @@ function Payment() {
 
   return (
     <Box>
-      <Button onClick={onClickTestInfo}>결제 테스트</Button>
+      <Button
+        onClick={() => {
+          onClickTestInfo();
+          console.log("checkId" + checkCartId);
+        }}
+      >
+        결제 테스트
+      </Button>
     </Box>
   );
 }

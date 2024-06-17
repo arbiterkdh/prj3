@@ -172,6 +172,12 @@ export function StoreCart() {
     0,
   );
 
+  const checkCartId = () => {
+    return productCartList
+      .filter((item) => checkItem[item.productId])
+      .map((item) => item.productId);
+  };
+
   return (
     <Center>
       <CenterBox>
@@ -236,10 +242,14 @@ export function StoreCart() {
         </Box>
         <Box>
           <Button colorScheme={"green"} w={"100%"}>
-            상품 결제
+            상품 결제 {checkCartId()}
           </Button>
           <Box>
-            <Payment />
+            <Payment
+              totalSum={totalSum}
+              productCartList={productCartList}
+              checkCartId={checkCartId()}
+            />
           </Box>
         </Box>
         <Modal isOpen={isOpen} onClose={onClose}>

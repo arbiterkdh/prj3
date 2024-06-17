@@ -30,7 +30,7 @@ public class CartService {
     @Value("${image.src.prefix}")
     String srcPrefix;
 
-    public void addCart(Product product) {
+    public void addCart(Product product, Integer memberNumber) {
 
 
         ProductCart existCart = mapper.getExistItem(product.getId());
@@ -52,6 +52,7 @@ public class CartService {
                 cart.setPrice(product.getPrice());
                 cart.setFileName(product.getFileName());
                 cart.setQuantity(product.getQuantity());
+                cart.setMemberNumber(memberNumber);
 
                 mapper.addCart(cart);
             }

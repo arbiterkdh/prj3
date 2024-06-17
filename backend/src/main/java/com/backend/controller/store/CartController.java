@@ -17,9 +17,10 @@ public class CartController {
     private final CartService service;
 
     @PostMapping("/add")
-    public void addCart(Product product) {
+    public void addCart(Product product, @RequestParam("memberNumber") Integer memberNumber) {
 
-        service.addCart(product);
+
+        service.addCart(product, memberNumber);
     }
 
     @GetMapping("/list")
