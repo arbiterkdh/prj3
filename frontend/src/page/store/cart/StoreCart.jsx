@@ -4,6 +4,7 @@ import {
   AlertIcon,
   Box,
   Button,
+  Center,
   Checkbox,
   Flex,
   Heading,
@@ -23,10 +24,13 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import CenterTh from "../../../css/theme/component/table/thead/tr/th/CenterTh.jsx";
 import axios from "axios";
 import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.jsx";
+import Payment from "../payment/Payment.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 
 export function StoreCart() {
   const [productCartList, setProductCartList] = useState([]);
@@ -37,6 +41,8 @@ export function StoreCart() {
   const [checkItem, setCheckItem] = useState({});
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const Login = useContext(LoginContext);
 
   const updateQuantity = (productId, quantityItem) => {
     setProductCartList((itemList) =>
@@ -167,90 +173,95 @@ export function StoreCart() {
   );
 
   return (
-    <Box>
-      <Box>
-        <Heading>카트</Heading>
-      </Box>
-      <Box>
-        <hr />
-      </Box>
-
-      <TableContainer mb={10}>
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <CenterTh w={"10%"}>
-                <Checkbox
-                  isChecked={productCartList.every(
-                    (item) => checkItem[item.productId],
-                  )}
-                  onChange={() => {
-                    const allChecked = productCartList.every(
-                      (item) => checkItem[item.productId],
-                    );
-                    const newCheckItem = productCartList.reduce(
-                      (itemArr, item) => {
-                        itemArr[item.productId] = !allChecked;
-                        return itemArr;
-                      },
-                      {},
-                    );
-                    setCheckItem(newCheckItem);
-                  }}
-                ></Checkbox>
-              </CenterTh>
-              <CenterTh w={"20%"}>이미지</CenterTh>
-              <CenterTh w={"20%"}>상품명</CenterTh>
-              <CenterTh w={"10%"}>수량</CenterTh>
-              <CenterTh w={"10%"}>가격</CenterTh>
-              <CenterTh w={"10%"}>삭제</CenterTh>
-              <CenterTh w={"20%"}>날짜</CenterTh>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <ProductCartList />
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <Box>
-        <Box mb={10}>
-          <Heading>최종 결제 금액</Heading>
+    <Center>
+      <CenterBox>
+        <Box>
+          <Heading>카트</Heading>
         </Box>
-        <Alert status="info">
-          <Flex m={10} justifyContent={"flex-end"} w={"100%"}>
-            <AlertIcon />
-            <AlertDescription>
-              <Text fontSize={"1.3rem"}>
-                총 {totalSelectItem}개의 상품금액 = 합계 {totalSum}원
-              </Text>
-            </AlertDescription>
-          </Flex>
-        </Alert>
-      </Box>
-      <Box>
-        <Button colorScheme={"green"} w={"100%"}>
-          상품 결제
-        </Button>
-      </Box>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>장바구니 알림</ModalHeader>
-          <ModalBody>{productName}을 삭제하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Flex>
-              <Button
-                onClick={() => handleItemDelete(productId)}
-                colorScheme={"red"}
-                isLoading={isLoading}
-              >
-                확인
-              </Button>
-              <Button onClick={onClose}>취소</Button>
+        <Box>
+          <hr />
+        </Box>
+
+        <TableContainer mb={10}>
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <CenterTh w={"10%"}>
+                  <Checkbox
+                    isChecked={productCartList.every(
+                      (item) => checkItem[item.productId],
+                    )}
+                    onChange={() => {
+                      const allChecked = productCartList.every(
+                        (item) => checkItem[item.productId],
+                      );
+                      const newCheckItem = productCartList.reduce(
+                        (itemArr, item) => {
+                          itemArr[item.productId] = !allChecked;
+                          return itemArr;
+                        },
+                        {},
+                      );
+                      setCheckItem(newCheckItem);
+                    }}
+                  ></Checkbox>
+                </CenterTh>
+                <CenterTh w={"20%"}>이미지</CenterTh>
+                <CenterTh w={"20%"}>상품명</CenterTh>
+                <CenterTh w={"10%"}>수량</CenterTh>
+                <CenterTh w={"10%"}>가격</CenterTh>
+                <CenterTh w={"10%"}>삭제</CenterTh>
+                <CenterTh w={"20%"}>날짜</CenterTh>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <ProductCartList />
+            </Tbody>
+          </Table>
+        </TableContainer>
+        <Box>
+          <Box mb={10}>
+            <Heading>최종 결제 금액</Heading>
+          </Box>
+          <Alert status="info">
+            <Flex m={10} justifyContent={"flex-end"} w={"100%"}>
+              <AlertIcon />
+              <AlertDescription>
+                <Text fontSize={"1.3rem"}>
+                  총 {totalSelectItem}개의 상품금액 = 합계 {totalSum}원
+                </Text>
+              </AlertDescription>
             </Flex>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Box>
+          </Alert>
+        </Box>
+        <Box>
+          <Button colorScheme={"green"} w={"100%"}>
+            상품 결제
+          </Button>
+          <Box>
+            <Payment />
+          </Box>
+        </Box>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>장바구니 알림</ModalHeader>
+            <ModalBody>{productName}을 삭제하시겠습니까?</ModalBody>
+            <ModalFooter>
+              <Flex>
+                <Button
+                  onClick={() => handleItemDelete(productId)}
+                  colorScheme={"red"}
+                  isLoading={isLoading}
+                >
+                  확인
+                </Button>
+                <Button onClick={onClose}>취소</Button>
+              </Flex>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </CenterBox>
+    </Center>
   );
 }

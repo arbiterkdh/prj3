@@ -30,6 +30,7 @@ import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 import { BookHome } from "./page/book/BookHome.jsx";
+import PaymentSuccess from "./page/store/payment/PaymentSuccess.jsx";
 
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
@@ -158,6 +159,10 @@ const router = createBrowserRouter([
           {
             path: "productView/:productId",
             element: <StoreProductView />,
+          },
+          {
+            path: "/store/payment/payment-success",
+            element: <PaymentSuccess />,
           },
         ],
       },
