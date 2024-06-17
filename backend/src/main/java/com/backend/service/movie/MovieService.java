@@ -226,6 +226,7 @@ public class MovieService {
 
     public void like(Map<String, Object> req, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
+        // todo : 좋아요 로직... 삭제 로직 먼저 실행... 0 리턴하면 insert 로직 실행
 
     }
 }
