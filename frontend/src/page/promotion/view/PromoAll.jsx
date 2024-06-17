@@ -10,7 +10,13 @@ export function PromoAll() {
   const [promoList, setPromoList] = useState([]);
 
   useEffect(() => {
-    axios.get(`/api/promotion/list`).then((res) => setPromoList(res.data));
+    axios.get(`/api/promotion/list`).then((res) => {
+      const now = new Date();
+      const activePromos = res.data.filter(
+        (promo) => new Date(promo.eventEndDate) >= now,
+      );
+      setPromoList(activePromos);
+    });
   }, []);
 
   return (
@@ -21,14 +27,14 @@ export function PromoAll() {
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/movie")} />
       </Box>
-      <PromoList eventType={"영화"} maxItems={3} />
+      <PromoList eventType={"영화"} eventStatusList={promoList} maxItems={3} />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           극장
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/theater")} />
       </Box>
-      <PromoList eventType={"극장"} maxItems={3} />
+      <PromoList eventType={"극장"} eventStatusList={promoList} maxItems={3} />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           멤버십
@@ -37,14 +43,22 @@ export function PromoAll() {
           buttonOnclick={() => navigate("/promotion/membership")}
         />
       </Box>
-      <PromoList eventType={"멤버십"} maxItems={3} />
+      <PromoList
+        eventType={"멤버십"}
+        eventStatusList={promoList}
+        maxItems={3}
+      />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           제휴/할인
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/discount")} />
       </Box>
-      <PromoList eventType={"제휴/할인"} maxItems={3} />
+      <PromoList
+        eventType={"제휴/할인"}
+        eventStatusList={promoList}
+        maxItems={3}
+      />
     </Box>
   );
 }

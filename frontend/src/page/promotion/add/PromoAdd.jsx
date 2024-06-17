@@ -57,12 +57,13 @@ export function PromoAdd() {
   }
 
   let disableSaveButton = false;
+
   if (title.trim().length === 0) {
     disableSaveButton = true;
   }
-  if (content.trim().length === 0) {
-    disableSaveButton = true;
-  }
+  // if (content.trim().length === 0 && disableSaveButton === false) {
+  //   disableSaveButton = true;
+  // }
   if (!eventType) {
     disableSaveButton = true;
   }
@@ -70,6 +71,9 @@ export function PromoAdd() {
     disableSaveButton = true;
   }
   if (!eventEndDate) {
+    disableSaveButton = true;
+  }
+  if (files.length === 0) {
     disableSaveButton = true;
   }
 
@@ -139,6 +143,7 @@ export function PromoAdd() {
         <FormControl>
           <FormLabel>이벤트 설명</FormLabel>
           <Textarea
+            value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="설명을 입력하세요."
           />

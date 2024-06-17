@@ -42,7 +42,7 @@ export function PromoModify() {
 
   function handleModifyClick() {
     axios
-      .put("/api/promotion/modify", {
+      .putForm("/api/promotion/modify", {
         id: promo.id,
         title: promo.title,
         eventType: promo.eventType,

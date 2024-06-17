@@ -72,5 +72,5 @@ public interface PromotionMapper {
             WHERE promo_id=#{promoId}
               AND name=#{fileName}
             """)
-    int deleteFileByPromoIdAndName(Integer PromoId, String fileName);
+    int deleteFileByPromoIdAndName(Integer promoId, String fileName);
 }

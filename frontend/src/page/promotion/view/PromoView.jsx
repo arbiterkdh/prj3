@@ -38,8 +38,7 @@ export function PromoView() {
           });
           navigate("/promotion");
         }
-      })
-      .finally(() => {});
+      });
   }, [promoId, navigate, toast]);
 
   const getEventStatus = (startDate, endDate) => {
@@ -55,6 +54,8 @@ export function PromoView() {
       return "종료된 이벤트";
     }
   };
+
+  const eventStatus = getEventStatus(promo.eventStartDate, promo.eventEndDate);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -88,8 +89,6 @@ export function PromoView() {
     return <Spinner />;
   }
 
-  const eventStatus = getEventStatus(promo.eventStartDate, promo.eventEndDate);
-
   return (
     <Box>
       <Heading>{promo.title}</Heading>
@@ -98,15 +97,14 @@ export function PromoView() {
           <strong>이벤트 타입:</strong> {promo.eventType}
         </Text>
         <Text>
-          <strong>이벤트 시작일:</strong> {formatDate(promo.eventStartDate)}
-        </Text>
-        <Text>
-          <strong>이벤트 종료일:</strong> {formatDate(promo.eventEndDate)}
+          <strong>기간 |</strong> {formatDate(promo.eventStartDate)} ~{" "}
+          {formatDate(promo.eventEndDate)}
         </Text>
         <Text>
           <strong>이벤트 상태:</strong> {eventStatus}
         </Text>
       </Box>
+      <Box m={1} borderBottom={"1px solid black"} />
       <Box mt={4}>
         {promo.fileList &&
           promo.fileList.slice(1).map((file) => (

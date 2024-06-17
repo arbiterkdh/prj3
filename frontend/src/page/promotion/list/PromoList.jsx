@@ -14,7 +14,11 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export function PromoList({ eventType: propEventType, maxItems }) {
+export function PromoList({
+  eventType: propEventType,
+  eventStatusList: getEventStatus,
+  maxItems,
+}) {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -27,19 +31,23 @@ export function PromoList({ eventType: propEventType, maxItems }) {
   };
 
   useEffect(() => {
-    axios
-      .get("/api/promotion/list")
-      .then((res) => {
-        console.log(res.data); // 디버깅용 로그
-        setPromoList(res.data);
-      })
-      .catch((error) => {
-        console.error("프로모션 데이터 가져오기 에러:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    if (getEventStatus) {
+      setPromoList(getEventStatus);
+      setLoading(false);
+    } else {
+      axios
+        .get("/api/promotion/list")
+        .then((res) => {
+          setPromoList(res.data);
+        })
+        .catch((error) => {
+          console.error("프로모션 데이터 가져오기 에러:", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [getEventStatus]);
 
   const filteredPromoList = eventType
     ? promoList.filter((promo) => promo.eventType === eventType)
@@ -73,7 +81,7 @@ export function PromoList({ eventType: propEventType, maxItems }) {
                   </Box>
                 )}
               </Box>
-              <Box flex={1}>
+              <Box margin={3} flex={1}>
                 <Heading as="b" mb={2}>
                   {promo.title}
                 </Heading>
