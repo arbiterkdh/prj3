@@ -125,7 +125,7 @@ export function MovieModify() {
                     accept="image/*"
                     onChange={(e) => {
                       setFileName(splitFileName(e.target.value));
-                      setAddFile(e.target.files);
+                      setAddFile(e.target.files[0]);
                     }}
                     hidden={"_hidden"}
                   />
