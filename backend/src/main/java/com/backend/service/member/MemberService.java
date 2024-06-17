@@ -44,6 +44,7 @@ public class MemberService {
                         .expiresAt(now.plusSeconds(60 * 60 * 24))
                         .subject(db.getNumber().toString())
                         .claim("nickName", db.getNickName())
+                        .claim("email", db.getEmail())
                         .build();
 
                 token = jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

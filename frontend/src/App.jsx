@@ -33,6 +33,7 @@ import { PromoMovie } from "./page/promotion/view/PromoMovie.jsx";
 import { PromoTheater } from "./page/promotion/view/PromoTheater.jsx";
 import { PromoMembership } from "./page/promotion/view/PromoMembership.jsx";
 import { PromoDiscount } from "./page/promotion/view/PromoDiscount.jsx";
+import PaymentSuccess from "./page/store/payment/PaymentSuccess.jsx";
 
 const exceptionHost = [
   "http://www.kobis.or.kr",
@@ -174,6 +175,10 @@ const router = createBrowserRouter([
           {
             path: "productView/:productId",
             element: <StoreProductView />,
+          },
+          {
+            path: "/store/payment/payment-success",
+            element: <PaymentSuccess />,
           },
         ],
       },
