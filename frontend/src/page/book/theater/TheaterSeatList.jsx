@@ -1,14 +1,17 @@
-import { Box, Flex, Stack } from "@chakra-ui/react";
+import { Box, CloseButton, Flex, Stack } from "@chakra-ui/react";
 import { faCouch, faDoorOpen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BorderBox from "../../../css/theme/component/box/BorderBox.jsx";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import EmptySeatBox from "../../../css/theme/component/box/EmptySeatBox.jsx";
 
 export function TheaterSeatList() {
   const { setBookProgress } = useOutletContext();
   const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
+  const [mouseLocation, setMouseLocation] = useState(null);
+
+  const navigate = useNavigate();
 
   let seatList = [];
   let ASCII_A = "A".charCodeAt(0);
@@ -31,10 +34,16 @@ export function TheaterSeatList() {
     setBookProgress(2);
   }, [checkedSeat]);
 
+  function handleSeatClick() {}
+
   return (
     <Box>
       <BorderBox alignContent={"center"} textAlign={"center"} h={"50px"}>
-        인원/좌석 선택
+        <Flex justifyContent={"space-between"} m={1}>
+          <Box></Box>
+          <Box>인원/좌석 선택</Box>
+          <CloseButton onClick={() => navigate("/book")}></CloseButton>
+        </Flex>
       </BorderBox>
       <BorderBox h={"100px"}>영화 나오는 곳</BorderBox>
       <BorderBox
@@ -64,7 +73,7 @@ export function TheaterSeatList() {
         <Box
           w={"900px"}
           h={"25px"}
-          borderBottom={"1px solid black"}
+          borderX={"20px solid gray"}
           bgColor={"whiteAlpha.800"}
           zIndex={1}
           position={"absolute"}
@@ -92,9 +101,14 @@ export function TheaterSeatList() {
                       key={index2}
                       mx={"1px"}
                       my={"-2px"}
-                      onClick={() =>
-                        setCheckedSeat({ alphabet: seatRow.alphabet, seat })
+                      onMouseEnter={() =>
+                        setMouseLocation(seatRow.alphabet + index2)
                       }
+                      onMouseLeave={() => setMouseLocation(0)}
+                      onClick={() => {
+                        setCheckedSeat({ alphabet: seatRow.alphabet, seat });
+                        handleSeatClick();
+                      }}
                     >
                       {seatRow.alphabet === "A" &&
                       (seat === 5 || seat === 14) ? (
@@ -114,7 +128,9 @@ export function TheaterSeatList() {
                             checkedSeat.alphabet === seatRow.alphabet &&
                             checkedSeat.seat === seat
                               ? "gray"
-                              : ""
+                              : mouseLocation === seatRow.alphabet + index2
+                                ? "gray"
+                                : ""
                           }
                           icon={faCouch}
                         />
