@@ -10,6 +10,7 @@ import {
   Heading,
   Image,
   Spacer,
+  Spinner,
   Stack,
   Tab,
   TabList,
@@ -19,11 +20,14 @@ import {
 } from "@chakra-ui/react";
 import { MovieInfo } from "./MovieInfo.jsx";
 import { MovieComment } from "./comment/MovieComment.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 
 export function MovieView() {
   const { id } = useParams();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null);
   const [like, setLike] = useState({
     like: false,
     count: 0,
@@ -32,15 +36,24 @@ export function MovieView() {
   useEffect(() => {
     axios
       .get(`/api/movie/${id}`)
-      .then((res) => setMovie(res.data))
+      .then((res) => {
+        setMovie(res.data.movie);
+        setLike(res.data.like);
+      })
       .catch(() => {})
       .finally(() => {});
   }, []);
 
   function handleLikeClick() {
-    axios.put("/api/movie/like", {
-      boardId: id,
-    });
+    axios
+      .put("/api/movie/like", {
+        movieId: id,
+      })
+      .then((res) => setLike(res.data));
+  }
+
+  if (movie === null) {
+    return <Spinner />;
   }
 
   return (
@@ -54,12 +67,19 @@ export function MovieView() {
               </Heading>
               <Box>
                 <Button
+                  leftIcon={
+                    like.like ? (
+                      <FontAwesomeIcon icon={fullHeart} />
+                    ) : (
+                      <FontAwesomeIcon icon={emptyHeart} />
+                    )
+                  }
                   onClick={handleLikeClick}
                   variant={"outline"}
                   colorScheme={"purple"}
                   w={"200px"}
                 >
-                  하트
+                  {like.count}
                 </Button>
                 <Button variant={"solid"} colorScheme={"purple"} w={"200px"}>
                   예매

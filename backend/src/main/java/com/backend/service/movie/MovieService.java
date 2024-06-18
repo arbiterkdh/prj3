@@ -1,6 +1,7 @@
 package com.backend.service.movie;
 
 import com.backend.domain.movie.Movie;
+import com.backend.domain.movie.MovieHeart;
 import com.backend.mapper.movie.MovieCommentMapper;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +107,7 @@ public class MovieService {
         return true;
     }
 
-    public Map<String, Object> list(Integer page, Integer tab, String keyword) {
+    public Map<String, Object> list(Integer page, Integer tab, String keyword, Authentication authentication) {
         Map<String, Object> pageInfo = new HashMap<>();
         LocalDate today = LocalDate.now();
 
@@ -136,17 +137,32 @@ public class MovieService {
             list = movieMapper.selectComingSoonMovietList(endset, today, keyword);
         }
 
+
         for (Movie movie : list) {
             String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
-
             movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
+
+            MovieHeart movieHeart = new MovieHeart();
+            if (authentication == null) {
+                movieHeart.setLike(false);
+            } else {
+                int c = movieMapper.selectMovieLikeByMovieIdAndMemberId(movie.getId(), Integer.valueOf(authentication.getName()));
+                movieHeart.setLike(c == 1);
+            }
+            movieHeart.setCount(movieMapper.countMovieLike(movie.getId()));
+            movie.setMovieHeart(movieHeart);
         }
+
 
         return Map.of("pageInfo", pageInfo,
                 "movieList", list);
     }
 
-    public Movie get(Integer movieId) {
+    public Map<String, Object> get(Integer movieId, Authentication authentication) {
+        Map<String, Object> result = new HashMap<>();
+        Integer memberId = Integer.valueOf(authentication.getName());
+
+        // 무비 객체
         Movie movie = movieMapper.selectByMovieId(movieId);
         movie.setType(movieMapper.selectMovieTypeById(movieId));
 
@@ -155,7 +171,20 @@ public class MovieService {
 
         movie.setMovieImageFile(file);
 
-        return movie;
+        // 좋아요
+        Map<String, Object> like = new HashMap<>();
+        if (authentication == null) {
+            like.put("like", false);
+        } else {
+            int c = movieMapper.selectMovieLikeByMovieIdAndMemberId(movieId, memberId);
+            like.put("like", c == 1);
+        }
+        like.put("count", movieMapper.countMovieLike(movieId));
+
+        result.put("movie", movie);
+        result.put("like", like);
+
+        return result;
     }
 
 
@@ -179,6 +208,8 @@ public class MovieService {
         movieMapper.deleteMovieImageFileByMovieId(movieId);
         // 영화 댓글 삭제
         commentMapper.deleteCommentByMovieId(movieId);
+        // 영화 좋아요 삭제
+        movieMapper.deleteMovieLikeByMovieId(movieId);
         // 영화 삭제
         movieMapper.deleteMovieByMovieId(movieId);
     }
@@ -224,9 +255,23 @@ public class MovieService {
         }
     }
 
-    public void like(Map<String, Object> req, Authentication authentication) {
+    public Map<String, Object> like(Map<String, String> req, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        // todo : 좋아요 로직... 삭제 로직 먼저 실행... 0 리턴하면 insert 로직 실행
+        result.put("like", false);
+
+        Integer movieId = Integer.parseInt(req.get("movieId"));
+        Integer memberId = Integer.valueOf(authentication.getName());
+
+        int c = movieMapper.deleteLikeByMovieIdAndMemberId(movieId, memberId);
+
+        if (c == 0) {
+            movieMapper.insertMovieLike(movieId, memberId);
+            result.put("like", true);
+        }
+
+        result.put("count", movieMapper.countMovieLike(movieId));
+
+        return result;
 
     }
 }

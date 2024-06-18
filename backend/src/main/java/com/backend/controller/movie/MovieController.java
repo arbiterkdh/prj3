@@ -44,15 +44,14 @@ public class MovieController {
     }
 
     @GetMapping("list")
-    public Map<String, Object> list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "1") Integer tab, @RequestParam(required = false) String keyword) {
-        return movieService.list(page, tab, keyword);
+    public Map<String, Object> list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "1") Integer tab,
+                                    @RequestParam(required = false) String keyword, Authentication authentication) {
+        return movieService.list(page, tab, keyword, authentication);
     }
 
     @GetMapping("{id}")
-    public Movie get(@PathVariable Integer id) {
-        Movie movie = movieService.get(id);
-
-        return movie;
+    public Map<String, Object> get(@PathVariable Integer id, Authentication authentication) {
+        return movieService.get(id, authentication);
     }
 
     @DeleteMapping("delete/{id}")
@@ -66,8 +65,8 @@ public class MovieController {
     }
 
     @PutMapping("like")
-    public void like(@RequestBody Map<String, Object> req, Authentication authentication) {
-        movieService.like(req, authentication);
+    public Map<String, Object> like(@RequestBody Map<String, String> req, Authentication authentication) {
+        return movieService.like(req, authentication);
     }
 
 }

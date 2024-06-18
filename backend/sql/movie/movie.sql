@@ -57,6 +57,7 @@ WHERE number = 6;
 
 SELECT *
 FROM member;
+DESC member;
 
 SELECT *
 FROM movie_comment;

@@ -28,9 +28,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import {
   faAngleDown,
+  faHeart as fullHeart,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -38,31 +40,43 @@ export function MovieList() {
   const [page, setPage] = useState(1);
   const [tab, setTab] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [isLikeProcessing, setIsLikeProcessing] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    axios.get(`/api/movie/list?${searchParams}`).then((res) => {
-      setMovieList(res.data.movieList);
-      setPageInfo(res.data.pageInfo);
-    });
+    if (!isLikeProcessing) {
+      axios.get(`/api/movie/list?${searchParams}`).then((res) => {
+        setMovieList(res.data.movieList);
+        setPageInfo(res.data.pageInfo);
+      });
 
-    setSearchKeyword("");
+      setSearchKeyword("");
 
-    const pageParam = parseInt(searchParams.get("page"));
-    const tabParam = parseInt(searchParams.get("tab"));
-    const keyword = searchParams.get("keyword");
+      const pageParam = parseInt(searchParams.get("page"));
+      const tabParam = parseInt(searchParams.get("tab"));
+      const keyword = searchParams.get("keyword");
 
-    if (pageParam) {
-      setPage(pageParam);
+      if (pageParam) {
+        setPage(pageParam);
+      }
+      if (tabParam) {
+        setTab(tabParam);
+      }
+      if (keyword) {
+        setSearchKeyword(keyword);
+      }
     }
-    if (tabParam) {
-      setTab(tabParam);
-    }
-    if (keyword) {
-      setSearchKeyword(keyword);
-    }
-  }, [searchParams]);
+  }, [searchParams, isLikeProcessing]);
+
+  function handleLikeClick(movieId) {
+    setIsLikeProcessing(true);
+    axios
+      .put("/api/movie/like", {
+        movieId: movieId,
+      })
+      .finally(() => setIsLikeProcessing(false));
+  }
 
   function handleAddClick() {
     navigate("/movie/add");
@@ -144,10 +158,26 @@ export function MovieList() {
                     <Center>
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
-                          <Button variant="outline" colorScheme="purple">
-                            하트
+                          <Button
+                            w={"100px"}
+                            leftIcon={
+                              movie.movieHeart.like ? (
+                                <FontAwesomeIcon icon={fullHeart} />
+                              ) : (
+                                <FontAwesomeIcon icon={emptyHeart} />
+                              )
+                            }
+                            onClick={() => handleLikeClick(movie.id)}
+                            variant="outline"
+                            colorScheme="purple"
+                          >
+                            {movie.movieHeart.count}
                           </Button>
-                          <Button variant="solid" colorScheme="purple">
+                          <Button
+                            w={"100px"}
+                            variant="solid"
+                            colorScheme="purple"
+                          >
                             예매
                           </Button>
                         </ButtonGroup>
@@ -205,10 +235,26 @@ export function MovieList() {
                     <Center>
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
-                          <Button variant="outline" colorScheme="purple">
-                            하트
+                          <Button
+                            w={"100px"}
+                            leftIcon={
+                              movie.movieHeart.like ? (
+                                <FontAwesomeIcon icon={fullHeart} />
+                              ) : (
+                                <FontAwesomeIcon icon={emptyHeart} />
+                              )
+                            }
+                            onClick={() => handleLikeClick(movie.id)}
+                            variant="outline"
+                            colorScheme="purple"
+                          >
+                            {movie.movieHeart.count}
                           </Button>
-                          <Button variant="solid" colorScheme="purple">
+                          <Button
+                            w={"100px"}
+                            variant="solid"
+                            colorScheme="purple"
+                          >
                             예매
                           </Button>
                         </ButtonGroup>

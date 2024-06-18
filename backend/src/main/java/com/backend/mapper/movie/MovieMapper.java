@@ -154,4 +154,40 @@ public interface MovieMapper {
             WHERE movie_id = #{movieId}
             """)
     int deleteMovieImageFileByMovieId(Integer movieId);
+
+
+    @Delete("""
+            DELETE FROM movie_like
+            WHERE movie_id = #{movieId} AND member_id = #{memberId}
+            """)
+    int deleteLikeByMovieIdAndMemberId(Integer movieId, Integer memberId);
+
+
+    @Insert("""
+            INSERT INTO movie_like (movie_id, member_id)
+            VALUES (#{movieId}, #{memberId})
+            """)
+    int insertMovieLike(Integer movieId, Integer memberId);
+
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM movie_like
+            WHERE movie_id = #{movieId}
+            """)
+    int countMovieLike(Integer movieId);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM movie_like
+            WHERE movie_id = #{movieId} AND member_id = #{memberId}
+            """)
+    int selectMovieLikeByMovieIdAndMemberId(Integer movieId, Integer memberId);
+
+
+    @Delete("""
+            DELETE FROM movie_like
+            WHERE movie_id = #{movieId}
+            """)
+    int deleteMovieLikeByMovieId(Integer movieId);
 }
