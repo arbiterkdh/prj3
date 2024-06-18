@@ -175,7 +175,7 @@ export function StoreCart() {
   const checkCartId = () => {
     return productCartList
       .filter((item) => checkItem[item.productId])
-      .map((item) => item.productId);
+      .map((item) => item.id);
   };
 
   return (
@@ -242,7 +242,8 @@ export function StoreCart() {
         </Box>
         <Box>
           <Button colorScheme={"green"} w={"100%"}>
-            상품 결제 {checkCartId()}
+            {/*상품 결제 {checkCartId()}*/}
+            상품결제 {checkCartId()}
           </Button>
           <Box>
             <Payment

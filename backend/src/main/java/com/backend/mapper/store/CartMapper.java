@@ -18,6 +18,7 @@ public interface CartMapper {
     @Select("""
             SELECT *
             FROM product_cart
+            WHERE payment_id is null
             """)
     List<ProductCart> cartProductList();
 
@@ -53,7 +54,7 @@ public interface CartMapper {
     @Update("""
             UPDATE product_cart
             SET payment_id = #{paymentId}
-            WHERE product_id = #{cartId}          
+            WHERE id = #{cartId}          
             """)
     int updatePaymentId(Integer paymentId, Integer cartId);
 }

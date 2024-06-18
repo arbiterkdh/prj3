@@ -147,3 +147,9 @@ UPDATE product_cart
 SET payment_id = 1
 WHERE id = 10;
 
+CREATE TABLE product_order
+(
+    id         INT PRIMARY KEY AUTO_INCREMENT,
+    payment_id INT REFERENCES payment (id),
+    reg_date   DATETIME DEFAULT NOW()
+);
