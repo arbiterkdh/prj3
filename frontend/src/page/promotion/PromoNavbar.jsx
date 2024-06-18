@@ -55,7 +55,7 @@ export function PromoNavbar({ children }) {
               onClick={() => navigate("/promotion/eventEnd")}
               size="sm"
             >
-              종료 이벤트
+              종료된 이벤트
             </Button>
           </Box>
         </Box>

@@ -61,9 +61,9 @@ export function PromoAdd() {
   if (title.trim().length === 0) {
     disableSaveButton = true;
   }
-  if (content.trim().length === 0) {
-    disableSaveButton = true;
-  }
+  // if (content.trim().length === 0 && disableSaveButton === false) {
+  //   disableSaveButton = true;
+  // }
   if (!eventType) {
     disableSaveButton = true;
   }

@@ -12,7 +12,7 @@ export function PromoAll() {
   useEffect(() => {
     axios.get(`/api/promotion/list`).then((res) => {
       const now = new Date();
-      const activePromos = res.data.promotionList.filter(
+      const activePromos = res.data.filter(
         (promo) => new Date(promo.eventEndDate) >= now,
       );
       setPromoList(activePromos);
@@ -22,29 +22,19 @@ export function PromoAll() {
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="25px">
+        <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           영화
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/movie")} />
       </Box>
-      <PromoList
-        eventType={"영화"}
-        eventStatusList={promoList}
-        maxItems={3}
-        showTotalPosts={false}
-      />
+      <PromoList eventType={"영화"} eventStatusList={promoList} maxItems={3} />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           극장
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/theater")} />
       </Box>
-      <PromoList
-        eventType={"극장"}
-        eventStatusList={promoList}
-        maxItems={3}
-        showTotalPosts={false}
-      />
+      <PromoList eventType={"극장"} eventStatusList={promoList} maxItems={3} />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           멤버십
@@ -57,7 +47,6 @@ export function PromoAll() {
         eventType={"멤버십"}
         eventStatusList={promoList}
         maxItems={3}
-        showTotalPosts={false}
       />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
@@ -69,7 +58,6 @@ export function PromoAll() {
         eventType={"제휴/할인"}
         eventStatusList={promoList}
         maxItems={3}
-        showTotalPosts={false}
       />
     </Box>
   );

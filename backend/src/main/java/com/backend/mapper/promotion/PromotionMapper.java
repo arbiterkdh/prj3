@@ -73,17 +73,4 @@ public interface PromotionMapper {
               AND name=#{fileName}
             """)
     int deleteFileByPromoIdAndName(Integer promoId, String fileName);
-
-    @Select("""
-            SELECT *
-            FROM promo
-            ORDER BY id DESC
-            LIMIT #{offset}, 10
-            """)
-    List<Promotion> selectAllPaging(Integer offset);
-
-    @Select("""
-            SELECT COUNT(*) FROM promo
-            """)
-    Integer countAll();
 }
