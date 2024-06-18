@@ -4,10 +4,12 @@ import {
   Center,
   Checkbox,
   CheckboxGroup,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
   Input,
+  Spacer,
   Stack,
   Textarea,
 } from "@chakra-ui/react";
@@ -97,8 +99,10 @@ export function MovieAdd() {
   return (
     <Center>
       <CenterBox>
-        <Heading mb={10}>영화 추가</Heading>
-
+        <Flex>
+          <Heading mb={10}>영화 추가</Heading>
+          <Spacer />
+        </Flex>
         <Box>
           <Stack>
             <Box>
