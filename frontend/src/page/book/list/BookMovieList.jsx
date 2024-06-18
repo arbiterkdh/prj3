@@ -24,7 +24,7 @@ export function BookMovieList({
               border={"none"}
               value={movie.title}
               bgColor={checkedMovieId === movie.id ? "lightgray" : ""}
-              isDisabled={!movie.theater_number.includes(checkedTheaterNumber)}
+              isDisabled={!movie.theaterNumber.includes(checkedTheaterNumber)}
               onClick={() => {
                 setCheckedMovieId(movie.id);
               }}
@@ -40,7 +40,7 @@ export function BookMovieList({
               border={"none"}
               value={movie.title}
               bgColor={checkedMovieId === movie.id ? "lightgray" : ""}
-              isDisabled={!movie.theater_number.includes(checkedTheaterNumber)}
+              isDisabled={!movie.theaterNumber.includes(checkedTheaterNumber)}
               onClick={() => {
                 setCheckedMovieId(movie.id);
               }}

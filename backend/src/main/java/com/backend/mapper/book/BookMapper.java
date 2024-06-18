@@ -1,6 +1,7 @@
 package com.backend.mapper.book;
 
 import com.backend.domain.book.MovieLocation;
+import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
 import com.backend.domain.theater.box.TheaterBoxTimeTable;
 import org.apache.ibatis.annotations.Insert;
@@ -20,7 +21,7 @@ public interface BookMapper {
             INSERT INTO movie_location
             (movie_id, theater_number)
             VALUES
-            (#{movie_id}, #{theater_number})
+            (#{movieId}, #{theaterNumber})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertMovieLocation(MovieLocation movieLocation);
@@ -28,7 +29,7 @@ public interface BookMapper {
     @Select("""
             SELECT COUNT(*)
             FROM movie_location
-            WHERE movie_id = #{movie_id} AND theater_number = #{theater_number}
+            WHERE movie_id = #{movieId} AND theater_number = #{theaterNumber}
             """)
     int checkConflict(MovieLocation movieLocation);
 
@@ -41,9 +42,9 @@ public interface BookMapper {
     @Select("""
             SELECT movie_id
             FROM movie_location
-            WHERE theater_number = #{theater_number}
+            WHERE theater_number = #{theaterNumber}
             """)
-    List<Integer> selectMovieIdByTheaterNumber(Integer theater_number);
+    List<Integer> selectMovieIdByTheaterNumber(Integer theaterNumber);
 
     @Select("""
             SELECT id, title, running_time, rating, start_date
@@ -65,9 +66,9 @@ public interface BookMapper {
     @Select("""
             SELECT theater_number
             FROM movie_location
-            WHERE movie_id = #{movie_id}
+            WHERE movie_id = #{movieId}
             """)
-    List<Integer> selectAllTheaterNumberByMovieId(Integer movie_id);
+    List<Integer> selectAllTheaterNumberByMovieId(Integer movieId);
 
     @Select("""
             SELECT DAYOFWEEK(NOW())
@@ -80,7 +81,7 @@ public interface BookMapper {
                 UNION ALL
                 SELECT DATE_ADD(Date, INTERVAL 1 DAY)
                 FROM DateRange
-                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 21 DAY )
+                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 3 WEEK)
             )
             SELECT Date
             FROM DateRange;
@@ -88,16 +89,34 @@ public interface BookMapper {
     List<LocalDate> selectAllBookPeriodListByDate();
 
     @Select("""
-            SELECT *
-            FROM theater_box
-            WHERE theater_number = #{theaterNumber}
+            SELECT tb.id, tb.box_number, tb.theater_number, t.location as theaterLocation, tbtb.movie_id, m.title as movieTitle
+            FROM theater_box tb
+                JOIN theater t ON t.number = tb.theater_number
+                JOIN theater_box_time_table tbtb ON tbtb.theater_box_id = tb.id
+                JOIN movie m ON tbtb.movie_id = m.id
+            WHERE tb.theater_number = #{theaterNumber}
             """)
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
 
     @Select("""
-            SELECT *
-            FROM theater_box_time_table
+            SELECT tbtb.id, tbtb.movie_id, tbtb.theater_box_id, tbtb.time_interval, m.title
+            FROM theater_box_time_table tbtb JOIN movie m ON tbtb.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
     TheaterBoxTimeTable selectTheaterBoxTimeTableByTheaterBoxId(Integer id);
+
+    @Select("""
+            SELECT *
+            FROM movie
+            WHERE start_date <= CURRENT_DATE()
+              AND DATE_ADD(start_date, INTERVAL 3 WEEK) > CURRENT_DATE()
+            """)
+    List<Movie> selectAllOnscreen();
+
+    @Select("""
+            SELECT *
+            FROM movie
+            WHERE start_date > CURRENT_DATE()
+            """)
+    List<Movie> selectAllWillScreen();
 }

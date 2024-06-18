@@ -54,7 +54,7 @@ public class BookService {
     private List<Map<String, Object>> getMaps(List<Map<String, Object>> mapList) {
         List<Map<String, Object>> screenList = new ArrayList<>();
         for (Map<String, Object> map : mapList) {
-            map.put("theater_number", bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id")));
+            map.put("theaterNumber", bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id")));
             screenList.add(map);
         }
         return screenList;
@@ -69,11 +69,18 @@ public class BookService {
     }
 
     public List<TheaterBox> getTheaterBox(Integer theaterNumber) {
-        System.out.println("theaterNumber = " + theaterNumber);
         return bookMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
     }
 
     public TheaterBoxTimeTable getTheaterBoxTimeTable(TheaterBox theaterBox) {
         return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
+    }
+
+    public List<Movie> getOnScreenList() {
+        return bookMapper.selectAllOnscreen();
+    }
+
+    public List<Movie> getWillScreenList() {
+        return bookMapper.selectAllWillScreen();
     }
 }

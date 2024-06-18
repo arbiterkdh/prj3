@@ -8,8 +8,6 @@ export function BookMovieLocationAdd({
   setMovieLocationAdd,
   movieList,
   setMovieList,
-  onScreenList,
-  willScreenList,
 }) {
   const [theaterList, setTheaterList] = useState([]);
   const [movieId, setMovieId] = useState(0);
@@ -18,23 +16,30 @@ export function BookMovieLocationAdd({
   const [isCitySelected, setIsCitySelected] = useState("");
   const [isLocationSelected, setIsLocationSelected] = useState("");
   const [isStateSelected, setIsStateSelected] = useState("");
+  const [onScreenList, setOnScreenList] = useState([]);
+  const [willScreenList, setWillScreenList] = useState([]);
 
   const toast = useToast();
 
   useEffect(() => {
-    axios.get(`/api/theater/list`).then((res) => {
-      setTheaterList(res.data);
-    });
-    axios.get("/api/book/movie/list").then((res) => {
-      setMovieList(res.data);
+    Promise.all([
+      axios.get(`/api/book/onscreenlist/all`),
+      axios.get(`/api/book/willscreenlist/all`),
+      axios.get(`/api/theater/list`),
+      axios.get("/api/book/movie/list"),
+    ]).then(([onScreenRes, willScreenRes, theaterRes, movieRes]) => {
+      setOnScreenList(onScreenRes.data);
+      setWillScreenList(willScreenRes.data);
+      setTheaterList(theaterRes.data);
+      setMovieList(movieRes.data);
     });
   }, []);
 
   function handleClickMovieLocationAdd() {
     axios
       .post(`/api/book/movielocation/add`, {
-        movie_id: movieId,
-        theater_number: theaterNumber,
+        movieId,
+        theaterNumber,
       })
       .then((res) => {
         setMovieLocationAdd(res.data);

@@ -26,6 +26,16 @@ public class BookController {
     private final BookService bookService;
     private final TheaterService theaterService;
 
+    @GetMapping("onscreenlist/all")
+    public List<Movie> getOnScreenListAll() {
+        return bookService.getOnScreenList();
+    }
+
+    @GetMapping("willscreenlist/all")
+    public List<Movie> getWillScreenListAll() {
+        return bookService.getWillScreenList();
+    }
+
     @GetMapping("onscreenlist/{selectedDay}")
     public List<Map<String, Object>> getOnScreenList(@PathVariable String selectedDay) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

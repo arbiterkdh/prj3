@@ -120,7 +120,7 @@ export function Book() {
             <Box>
               {movieLocationAdd &&
                 movieLocationAdd.map((movie) => (
-                  <Box key={movie.movie_id}>{movie.movie_id}</Box>
+                  <Box key={movie.movieId}>{movie.movieId}</Box>
                 ))}
             </Box>
           </Box>

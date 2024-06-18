@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Heading,
   Table,
@@ -41,10 +42,13 @@ export function BookMovieAddInTheaterBox({
     axios
       .get(`/api/book/movielocation?theaternumber=${theaterNumber}`)
       .then((res) => {
-        console.log(res.data);
         setTheaterBoxList(res.data.theaterBoxList);
         setTheaterBoxTimeTableList(res.data.theaterBoxTimeTableList);
       });
+  }
+
+  function handleClickTheaterBox() {
+    axios.post("/api/theaterbox/add");
   }
 
   return (
@@ -90,15 +94,21 @@ export function BookMovieAddInTheaterBox({
             <Tr>
               <Th>극장명(theater_number)</Th>
               <Th>상영관(box_number)</Th>
-              <Th>영화명(movie_id)</Th>
+              <Th>상영중인 영화(movie_id)</Th>
+              <Th></Th>
             </Tr>
           </Thead>
           <Tbody>
             {theaterBoxList.map((theaterBox, index) => (
               <Tr key={index}>
-                <Td>{theaterBox.theaterNumber}</Td>
-                <Td>{theaterBox.boxNumber}</Td>
-                <Td></Td>
+                <Td>
+                  {theaterBox.theaterLocation} ({theaterBox.theaterNumber})
+                </Td>
+                <Td>{theaterBox.boxNumber} 관</Td>
+                <Td>{theaterBox.movieTitle}</Td>
+                <Td>
+                  <Button onClick={handleClickTheaterBox}>상영영화 추가</Button>
+                </Td>
               </Tr>
             ))}
           </Tbody>

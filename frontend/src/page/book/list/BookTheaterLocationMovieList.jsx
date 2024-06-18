@@ -27,11 +27,11 @@ export function BookTheaterLocationMovieList({
       {checkedTheaterNumber > 0 ? "" : "도시/지점을 선택해주세요."}
       <CursorBox m={0}>
         {onScreenList.map((movie, index) =>
-          movie.theater_number.includes(checkedTheaterNumber) ? (
+          movie.theaterNumber.includes(checkedTheaterNumber) ? (
             <BookTimeBox
               key={index}
               display={
-                movie.theater_number.includes(checkedTheaterNumber)
+                movie.theaterNumber.includes(checkedTheaterNumber)
                   ? checkedMovieId === movie.id
                     ? "inherit"
                     : checkedMovieId > 0
@@ -41,7 +41,7 @@ export function BookTheaterLocationMovieList({
               }
               onClick={() => handleBookDataClick("상영중")}
             >
-              {movie.theater_number.includes(checkedTheaterNumber)
+              {movie.theaterNumber.includes(checkedTheaterNumber)
                 ? `상영중 : ${movie.title}`
                 : ""}
             </BookTimeBox>
@@ -50,11 +50,11 @@ export function BookTheaterLocationMovieList({
       </CursorBox>
       <CursorBox m={0}>
         {willScreenList.map((movie, index) =>
-          movie.theater_number.includes(checkedTheaterNumber) ? (
+          movie.theaterNumber.includes(checkedTheaterNumber) ? (
             <BookTimeBox
               key={index}
               display={
-                movie.theater_number.includes(checkedTheaterNumber)
+                movie.theaterNumber.includes(checkedTheaterNumber)
                   ? checkedMovieId === movie.id
                     ? "inherit"
                     : checkedMovieId > 0
@@ -66,7 +66,7 @@ export function BookTheaterLocationMovieList({
                 handleBookDataClick("예정작");
               }}
             >
-              {movie.theater_number.includes(checkedTheaterNumber)
+              {movie.theaterNumber.includes(checkedTheaterNumber)
                 ? `예정작 : ${movie.title}`
                 : ""}
             </BookTimeBox>
