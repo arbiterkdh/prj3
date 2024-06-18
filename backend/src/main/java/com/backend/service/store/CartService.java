@@ -37,9 +37,11 @@ public class CartService {
 
         if (existCart != null) {
 
-            System.out.println("수량:" + existCart.getQuantity());
+            System.out.println("수량:" + product.getQuantity());
+            System.out.println("가격:" + product.getPrice());
 
-            mapper.updateQuantity(existCart.getQuantity(), existCart.getProductId());
+//            mapper.updateQuantity(existCart.getQuantity(), existCart.getPrice(), existCart.getProductId());
+            mapper.updateQuantity(product.getQuantity(), product.getPrice(), existCart.getId());
         } else {
             Product productInfo = productMapper.info(product.getId());
 
@@ -78,5 +80,10 @@ public class CartService {
     public void deleteItem(Integer productId) {
 
         mapper.deleteItem(productId);
+    }
+
+    public void modifyQuantity(ProductCart productCart) {
+
+        mapper.modifyQuantity(productCart);
     }
 }

@@ -18,17 +18,16 @@ public interface CartMapper {
     @Select("""
             SELECT *
             FROM product_cart
-            WHERE payment_id is null
             """)
     List<ProductCart> cartProductList();
 
 
     @Update("""
             UPDATE product_cart
-            SET quantity = #{quantity} +1
-            WHERE product_id = #{productId}
+            SET quantity = quantity+#{quantity}, price = price + #{price}
+            WHERE id = #{id}
             """)
-    int updateQuantity(Integer quantity, Integer productId);
+    int updateQuantity(Integer quantity, Integer price, Integer id);
 
     @Select("""
             SELECT *
@@ -51,10 +50,25 @@ public interface CartMapper {
             """)
     String selectFileName(Integer productId);
 
+    @Select("""
+            SELECT *
+            FROM product_cart
+            WHERE id = #{checkCartId}
+            """)
+    List<ProductCart> cartDataByCheckCartId(Integer checkCartId);
+
+    @Delete("""
+            DELETE
+            FROM product_cart
+            WHERE id = #{checkCartId}
+            """)
+    int deleteCartByCheckCartId(Integer checkCartId);
+
+
     @Update("""
             UPDATE product_cart
-            SET payment_id = #{paymentId}
-            WHERE id = #{cartId}          
+            SET quantity = #{quantity}, price = #{price}
+            WHERE id = #{id}
             """)
-    int updatePaymentId(Integer paymentId, Integer cartId);
+    int modifyQuantity(ProductCart productCart);
 }

@@ -7,25 +7,6 @@ CREATE TABLE product_image
     PRIMARY KEY (product_id, name)
 );
 
-Select *
-from product;
-
-select *
-from product_image;
-
-select *
-from product_cart;
-
-select *
-from member;
-
-
-SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
-FROM product p
-         JOIN product_image pi
-              ON p.id = pi.product_id;
-
-
 CREATE TABLE product
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
@@ -38,7 +19,6 @@ CREATE TABLE product
     reg_date DATETIME DEFAULT NOW()
 );
 
-
 CREATE TABLE product_cart
 (
     id            INT PRIMARY KEY AUTO_INCREMENT,
@@ -48,14 +28,8 @@ CREATE TABLE product_cart
     quantity      INT,
     price         INT,
     member_number INT REFERENCES member (number),
-    reg_date      DATETIME DEFAULT NOW(),
-    payment_id    INT REFERENCES payment (id)
+    reg_date      DATETIME DEFAULT NOW()
 );
-
-drop table product_cart;
-
-select *
-from product_cart;
 
 CREATE TABLE product_comment
 (
@@ -65,13 +39,6 @@ CREATE TABLE product_comment
     product_id int references product (id),
     reg_date   datetime default now()
 );
-
-drop table product;
-drop table product_image;
-drop table product_cart;
-drop table product_comment;
-drop table product_qna;
-drop table product_type;
 
 CREATE TABLE product_qna
 (
@@ -96,16 +63,6 @@ values ('세트'),
        ('간식'),
        ('드링크');
 
-CREATE TABLE product_cart_order
-(
-
-    id            INT PRIMARY KEY AUTO_INCREMENT,
-    cart_id       INT REFERENCES product_cart (id),
-    member_number INT REFERENCES member (number),
-    payment_id    INT REFERENCES payment (id),
-    reg_date      DATETIME DEFAULT NOW()
-);
-drop table product_cart_order;
 
 CREATE TABLE payment
 (
@@ -120,36 +77,34 @@ CREATE TABLE payment
     member_number INT REFERENCES member (number)
 );
 
-drop table payment;
+CREATE TABLE product_order
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    payment_id    INT REFERENCES payment (id),
+    name          VARCHAR(50),
+    file_name     VARCHAR(100),
+    product_id    INT,
+    quantity      INT,
+    price         INT,
+    reg_date      DATETIME,
+    member_number INT,
+    order_date    DATETIME DEFAULT NOW()
+);
 
-select *
-from payment;
+drop table payment;
+drop table product_cart;
+drop table product_order;
+
 
 select *
 from product_cart;
 
+SELECT *
+FROM product_cart
+WHERE id = 26;
+
 select *
-from member;
+from product_order;
 
-drop table payment;
-
-select product_id
-from payment p
-         join product_cart pc
-              on p.member_number = pc.member_number;
-
-SELECT pc.payment_id, p.id
-FROM product_cart pc
-         JOIN payment p
-              on pc.member_number = p.member_number;
-
-UPDATE product_cart
-SET payment_id = 1
-WHERE id = 10;
-
-CREATE TABLE product_order
-(
-    id         INT PRIMARY KEY AUTO_INCREMENT,
-    payment_id INT REFERENCES payment (id),
-    reg_date   DATETIME DEFAULT NOW()
-);
+select *
+from payment;

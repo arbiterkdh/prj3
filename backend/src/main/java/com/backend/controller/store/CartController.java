@@ -33,6 +33,13 @@ public class CartController {
     public void deleteItem(@PathVariable Integer productId) {
 
         service.deleteItem(productId);
-
     }
+
+    @PutMapping("/modifyQuantity")
+    public void modifyQuantity(@RequestBody ProductCart productCart) {
+
+
+        service.modifyQuantity(productCart);
+    }
+
 }

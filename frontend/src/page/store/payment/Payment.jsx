@@ -126,7 +126,7 @@ function Payment({ totalSum, productCartList, checkCartId }) {
           console.log("checkId" + checkCartId);
         }}
       >
-        결제 테스트
+        결제
       </Button>
     </Box>
   );
