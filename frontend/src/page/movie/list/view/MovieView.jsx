@@ -4,9 +4,13 @@ import { useParams } from "react-router-dom";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import {
   Box,
+  Button,
   Center,
+  Flex,
   Heading,
   Image,
+  Spacer,
+  Spinner,
   Stack,
   Tab,
   TabList,
@@ -16,34 +20,79 @@ import {
 } from "@chakra-ui/react";
 import { MovieInfo } from "./MovieInfo.jsx";
 import { MovieComment } from "./comment/MovieComment.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 
 export function MovieView() {
   const { id } = useParams();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState(null);
+  const [like, setLike] = useState({
+    like: false,
+    count: 0,
+  });
 
   useEffect(() => {
     axios
       .get(`/api/movie/${id}`)
-      .then((res) => setMovie(res.data))
+      .then((res) => {
+        setMovie(res.data.movie);
+        setLike(res.data.like);
+      })
       .catch(() => {})
       .finally(() => {});
   }, []);
+
+  function handleLikeClick() {
+    axios
+      .put("/api/movie/like", {
+        movieId: id,
+      })
+      .then((res) => setLike(res.data));
+  }
+
+  if (movie === null) {
+    return <Spinner />;
+  }
 
   return (
     <Center>
       <CenterBox>
         <Stack>
-          <Box>
-            <Box>
-              <Heading textAlign={"center"}>{movie.title}</Heading>
-            </Box>
+          <Flex>
+            <Stack justify={"space-between"}>
+              <Heading mt={"20px"} fontSize={"5xl"} textAlign={"center"}>
+                {movie.title}
+              </Heading>
+              <Box>
+                <Button
+                  leftIcon={
+                    like.like ? (
+                      <FontAwesomeIcon icon={fullHeart} />
+                    ) : (
+                      <FontAwesomeIcon icon={emptyHeart} />
+                    )
+                  }
+                  onClick={handleLikeClick}
+                  variant={"outline"}
+                  colorScheme={"purple"}
+                  w={"200px"}
+                >
+                  {like.count}
+                </Button>
+                <Button variant={"solid"} colorScheme={"purple"} w={"200px"}>
+                  예매
+                </Button>
+              </Box>
+            </Stack>
+            <Spacer />
             <Box mb={10}>
               <Center>
-                <Image w={"300px"} src={movie.movieImageFile} />
+                <Image mb={"-30px"} w={"300px"} src={movie.movieImageFile} />
               </Center>
             </Box>
-          </Box>
+          </Flex>
           <Box>
             <Tabs isFitted variant="enclosed">
               <TabList mb="1em">

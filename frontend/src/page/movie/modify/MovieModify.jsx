@@ -58,7 +58,7 @@ export function MovieModify() {
 
   function handleModifyClick() {
     axios
-      .put("/api/movie/edit", {
+      .putForm("/api/movie/edit", {
         id: movie.id,
         title: movie.title,
         content: movie.content,
@@ -137,6 +137,7 @@ export function MovieModify() {
               <FormControl>
                 <FormLabel>영화 설명</FormLabel>
                 <Textarea
+                  resize={"none"}
                   border={"1px solid black"}
                   defaultValue={movie.content}
                   placeholder={"영화 내용을 입력해주세요."}

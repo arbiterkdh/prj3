@@ -18,4 +18,5 @@ public class Movie {
     private String actors;
     private List<String> type;
     private String movieImageFile;
+    private MovieHeart movieHeart;
 }

@@ -62,7 +62,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
             </p>
           </Box>
           <Divider />
-          <Box>
+          <Box mt={10}>
             <Flex>
               <Text mr={2}>상영타입 : </Text>
               {movie.type.map((type, index) => ShowType(type, index))}

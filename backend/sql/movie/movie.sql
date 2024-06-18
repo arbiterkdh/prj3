@@ -57,6 +57,7 @@ WHERE number = 6;
 
 SELECT *
 FROM member;
+DESC member;
 
 SELECT *
 FROM movie_comment;
@@ -89,7 +90,8 @@ WHERE DATEDIFF(start_date, '2024-06-12') <= 0
 ORDER BY id DESC;
 
 SELECT *
-FROM movie;
+FROM movie
+WHERE title LIKE '%소닉%';
 
 SELECT *
 FROM movie
@@ -105,3 +107,10 @@ DESC movie_file;
 
 SELECT *
 FROM movie_file;
+
+CREATE TABLE movie_like
+(
+    id        INT PRIMARY KEY AUTO_INCREMENT,
+    movie_id  INT NOT NULL REFERENCES movie (id),
+    member_id INT NOT NULL REFERENCES member (number)
+);

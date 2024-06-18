@@ -28,9 +28,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import {
   faAngleDown,
+  faHeart as fullHeart,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -38,25 +40,43 @@ export function MovieList() {
   const [page, setPage] = useState(1);
   const [tab, setTab] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [isLikeProcessing, setIsLikeProcessing] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    axios.get(`/api/movie/list?${searchParams}`).then((res) => {
-      setMovieList(res.data.movieList);
-      setPageInfo(res.data.pageInfo);
-    });
+    if (!isLikeProcessing) {
+      axios.get(`/api/movie/list?${searchParams}`).then((res) => {
+        setMovieList(res.data.movieList);
+        setPageInfo(res.data.pageInfo);
+      });
 
-    const pageParam = parseInt(searchParams.get("page"));
-    const tabParam = parseInt(searchParams.get("tab"));
+      setSearchKeyword("");
 
-    if (pageParam) {
-      setPage(pageParam);
+      const pageParam = parseInt(searchParams.get("page"));
+      const tabParam = parseInt(searchParams.get("tab"));
+      const keyword = searchParams.get("keyword");
+
+      if (pageParam) {
+        setPage(pageParam);
+      }
+      if (tabParam) {
+        setTab(tabParam);
+      }
+      if (keyword) {
+        setSearchKeyword(keyword);
+      }
     }
-    if (tabParam) {
-      setTab(tabParam);
-    }
-  }, [searchParams]);
+  }, [searchParams, isLikeProcessing]);
+
+  function handleLikeClick(movieId) {
+    setIsLikeProcessing(true);
+    axios
+      .put("/api/movie/like", {
+        movieId: movieId,
+      })
+      .finally(() => setIsLikeProcessing(false));
+  }
 
   function handleAddClick() {
     navigate("/movie/add");
@@ -69,11 +89,12 @@ export function MovieList() {
   function handlePageClick() {
     searchParams.set("page", page + 1);
     searchParams.set("tab", tab);
+    searchParams.set("keyword", searchKeyword);
     navigate(`/movie?${searchParams}`);
   }
 
   function handleSearchClick() {
-    navigate(`/movie?keyword=${searchKeyword}`);
+    navigate(`/movie?page=1&tab=${tab}&keyword=${searchKeyword}`);
   }
 
   function handleNowShowingMovieTab() {
@@ -104,6 +125,7 @@ export function MovieList() {
                 <Spacer />
                 <InputGroup mb={5} w={"300px"} size="md">
                   <Input
+                    value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     placeholder="영화명 검색"
                   />
@@ -136,10 +158,26 @@ export function MovieList() {
                     <Center>
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
-                          <Button variant="outline" colorScheme="purple">
-                            하트
+                          <Button
+                            w={"100px"}
+                            leftIcon={
+                              movie.movieHeart.like ? (
+                                <FontAwesomeIcon icon={fullHeart} />
+                              ) : (
+                                <FontAwesomeIcon icon={emptyHeart} />
+                              )
+                            }
+                            onClick={() => handleLikeClick(movie.id)}
+                            variant="outline"
+                            colorScheme="purple"
+                          >
+                            {movie.movieHeart.count}
                           </Button>
-                          <Button variant="solid" colorScheme="purple">
+                          <Button
+                            w={"100px"}
+                            variant="solid"
+                            colorScheme="purple"
+                          >
                             예매
                           </Button>
                         </ButtonGroup>
@@ -163,9 +201,13 @@ export function MovieList() {
               <Flex>
                 <Spacer />
                 <InputGroup mb={5} w={"300px"} size="md">
-                  <Input placeholder="영화명 검색" />
+                  <Input
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    placeholder="영화명 검색"
+                  />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="md">
+                    <Button onClick={handleSearchClick} h="1.75rem" size="md">
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Button>
                   </InputRightElement>
@@ -193,10 +235,26 @@ export function MovieList() {
                     <Center>
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
-                          <Button variant="outline" colorScheme="purple">
-                            하트
+                          <Button
+                            w={"100px"}
+                            leftIcon={
+                              movie.movieHeart.like ? (
+                                <FontAwesomeIcon icon={fullHeart} />
+                              ) : (
+                                <FontAwesomeIcon icon={emptyHeart} />
+                              )
+                            }
+                            onClick={() => handleLikeClick(movie.id)}
+                            variant="outline"
+                            colorScheme="purple"
+                          >
+                            {movie.movieHeart.count}
                           </Button>
-                          <Button variant="solid" colorScheme="purple">
+                          <Button
+                            w={"100px"}
+                            variant="solid"
+                            colorScheme="purple"
+                          >
                             예매
                           </Button>
                         </ButtonGroup>

@@ -5,6 +5,7 @@ import com.backend.service.movie.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -43,15 +44,14 @@ public class MovieController {
     }
 
     @GetMapping("list")
-    public Map<String, Object> list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "1") Integer tab, @RequestParam(required = false) String keyword) {
-        return movieService.list(page, tab, keyword);
+    public Map<String, Object> list(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "1") Integer tab,
+                                    @RequestParam(required = false) String keyword, Authentication authentication) {
+        return movieService.list(page, tab, keyword, authentication);
     }
 
     @GetMapping("{id}")
-    public Movie get(@PathVariable Integer id) {
-        Movie movie = movieService.get(id);
-
-        return movie;
+    public Map<String, Object> get(@PathVariable Integer id, Authentication authentication) {
+        return movieService.get(id, authentication);
     }
 
     @DeleteMapping("delete/{id}")
@@ -64,5 +64,9 @@ public class MovieController {
         movieService.editMovie(movie, file);
     }
 
+    @PutMapping("like")
+    public Map<String, Object> like(@RequestBody Map<String, String> req, Authentication authentication) {
+        return movieService.like(req, authentication);
+    }
 
 }

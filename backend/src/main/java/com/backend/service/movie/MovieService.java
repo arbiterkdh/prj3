@@ -1,10 +1,12 @@
 package com.backend.service.movie;
 
 import com.backend.domain.movie.Movie;
+import com.backend.domain.movie.MovieHeart;
 import com.backend.mapper.movie.MovieCommentMapper;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -105,67 +107,62 @@ public class MovieService {
         return true;
     }
 
-    public Map<String, Object> list(Integer page, Integer tab, String keyword) {
+    public Map<String, Object> list(Integer page, Integer tab, String keyword, Authentication authentication) {
         Map<String, Object> pageInfo = new HashMap<>();
         LocalDate today = LocalDate.now();
 
-        // 현재 상영작을 눌렀을때... db 조회
+        Integer numberOfMovie;
+
+        // 현재 상영작 = 1, 상영예정작 = 2 ... db 조회
         if (tab == 1) {
-            Integer numberOfMovie = movieMapper.countNowShowingMovie(today);
-            Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
-            Integer endset = page * 20;
-
-            if (page == lastPageNumber) {
-                endset = numberOfMovie;
-            }
-
-            pageInfo.put("numberOfMovie", numberOfMovie);
-            pageInfo.put("lastPageNumber", lastPageNumber);
-
-            List<Movie> list = movieMapper.selectNowShowingMovieList(endset, today);
-
-            for (Movie movie : list) {
-                String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
-
-                movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
-            }
-
-            return Map.of("pageInfo", pageInfo,
-                    "movieList", list);
+            numberOfMovie = movieMapper.countNowShowingMovie(today, keyword);
+        } else {
+            numberOfMovie = movieMapper.countComingSoonMovie(today, keyword);
         }
 
-        // 상영예정작을 눌렀을때... db 조회
-        if (tab == 2) {
+        Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
+        Integer endset = page * 20;
 
-            Integer numberOfMovie = movieMapper.countComingSoonMovie(today);
-            Integer lastPageNumber = (numberOfMovie - 1) / 20 + 1;
-            Integer endset = page * 20;
-
-            if (page == lastPageNumber) {
-                endset = numberOfMovie;
-            }
-
-            pageInfo.put("numberOfMovie", numberOfMovie);
-            pageInfo.put("lastPageNumber", lastPageNumber);
-
-            List<Movie> list = movieMapper.selectComingSoonMovietList(endset, today);
-
-            for (Movie movie : list) {
-                String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
-
-                movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
-            }
-
-
-            return Map.of("pageInfo", pageInfo,
-                    "movieList", list);
+        if (page == lastPageNumber) {
+            endset = numberOfMovie;
         }
 
-        return null;
+        pageInfo.put("numberOfMovie", numberOfMovie);
+        pageInfo.put("lastPageNumber", lastPageNumber);
 
+        List<Movie> list;
+        if (tab == 1) {
+            list = movieMapper.selectNowShowingMovieList(endset, today, keyword);
+        } else {
+            list = movieMapper.selectComingSoonMovietList(endset, today, keyword);
+        }
+
+
+        for (Movie movie : list) {
+            String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
+            movie.setMovieImageFile(STR."\{srcPrefix}/movie/\{movie.getId()}/\{fileName}");
+
+            MovieHeart movieHeart = new MovieHeart();
+            if (authentication == null) {
+                movieHeart.setLike(false);
+            } else {
+                int c = movieMapper.selectMovieLikeByMovieIdAndMemberId(movie.getId(), Integer.valueOf(authentication.getName()));
+                movieHeart.setLike(c == 1);
+            }
+            movieHeart.setCount(movieMapper.countMovieLike(movie.getId()));
+            movie.setMovieHeart(movieHeart);
+        }
+
+
+        return Map.of("pageInfo", pageInfo,
+                "movieList", list);
     }
 
-    public Movie get(Integer movieId) {
+    public Map<String, Object> get(Integer movieId, Authentication authentication) {
+        Map<String, Object> result = new HashMap<>();
+        Integer memberId = Integer.valueOf(authentication.getName());
+
+        // 무비 객체
         Movie movie = movieMapper.selectByMovieId(movieId);
         movie.setType(movieMapper.selectMovieTypeById(movieId));
 
@@ -174,7 +171,20 @@ public class MovieService {
 
         movie.setMovieImageFile(file);
 
-        return movie;
+        // 좋아요
+        Map<String, Object> like = new HashMap<>();
+        if (authentication == null) {
+            like.put("like", false);
+        } else {
+            int c = movieMapper.selectMovieLikeByMovieIdAndMemberId(movieId, memberId);
+            like.put("like", c == 1);
+        }
+        like.put("count", movieMapper.countMovieLike(movieId));
+
+        result.put("movie", movie);
+        result.put("like", like);
+
+        return result;
     }
 
 
@@ -198,12 +208,14 @@ public class MovieService {
         movieMapper.deleteMovieImageFileByMovieId(movieId);
         // 영화 댓글 삭제
         commentMapper.deleteCommentByMovieId(movieId);
+        // 영화 좋아요 삭제
+        movieMapper.deleteMovieLikeByMovieId(movieId);
         // 영화 삭제
         movieMapper.deleteMovieByMovieId(movieId);
     }
 
     public void editMovie(Movie movie, MultipartFile file) throws IOException {
-        // todo : 파일 수정 로직 추가 필요....
+
         if (file != null && file.getSize() > 0) {
             // 파일 업데이트 이전 삭제 먼저 실행...
             String fileName = movieMapper.selectFileNameByMovieId(movie.getId());
@@ -241,5 +253,25 @@ public class MovieService {
         for (int i = 0; i < movie.getType().size(); i++) {
             movieMapper.insertMovieType(movie.getId(), movie.getType().get(i));
         }
+    }
+
+    public Map<String, Object> like(Map<String, String> req, Authentication authentication) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("like", false);
+
+        Integer movieId = Integer.parseInt(req.get("movieId"));
+        Integer memberId = Integer.valueOf(authentication.getName());
+
+        int c = movieMapper.deleteLikeByMovieIdAndMemberId(movieId, memberId);
+
+        if (c == 0) {
+            movieMapper.insertMovieLike(movieId, memberId);
+            result.put("like", true);
+        }
+
+        result.put("count", movieMapper.countMovieLike(movieId));
+
+        return result;
+
     }
 }
