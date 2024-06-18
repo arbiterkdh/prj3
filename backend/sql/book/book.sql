@@ -31,12 +31,10 @@ WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
 
 CREATE TABLE book_movie_state
 (
-    id               INT PRIMARY KEY AUTO_INCREMENT,
-    movie_id         INT REFERENCES movie (id),
-    running_time     INT  NOT NULL,
-    movie_start_date DATE NOT NULL,
-    book_start_date  DATE NOT NULL,
-    book_end_date    DATE NOT NULL
+    id           INT PRIMARY KEY AUTO_INCREMENT,
+    movie_id     INT REFERENCES movie (id),
+    theater_box_id INT REFERENCES theater_box(id),
+
 );
 
 SELECT *
@@ -47,8 +45,8 @@ FROM movie;
 
 DESC movie;
 
-INSERT INTO book_movie_state (movie_id, running_time, movie_start_date, book_start_date, book_end_date)
-VALUES (519, 120, '2024-06-05', DATE_SUB('2024-06-05', INTERVAL 10 DAY), DATE_ADD('2024-06-05', INTERVAL 30 DAY));
+INSERT INTO book_movie_state (movie_id, running_time)
+VALUES (519, 120);
 
 DROP TABLE book_movie_state;
 

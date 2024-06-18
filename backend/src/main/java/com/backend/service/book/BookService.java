@@ -39,13 +39,13 @@ public class BookService {
         return bookMapper.selectMovieIdByTheaterNumber(number);
     }
 
-    public List<Map<String, Object>> getOnScreenList() {
-        List<Map<String, Object>> mapList = bookMapper.selectAllOnScreenByDate();
+    public List<Map<String, Object>> getOnScreenList(LocalDate date) {
+        List<Map<String, Object>> mapList = bookMapper.selectAllOnScreenByDate(date);
         return getMaps(mapList);
     }
 
-    public List<Map<String, Object>> getWillScreenList() {
-        List<Map<String, Object>> mapList = bookMapper.selectAllWillScreenByDate();
+    public List<Map<String, Object>> getWillScreenList(LocalDate date) {
+        List<Map<String, Object>> mapList = bookMapper.selectAllWillScreenByDate(date);
         return getMaps(mapList);
     }
 
@@ -58,8 +58,8 @@ public class BookService {
         return screenList;
     }
 
-    public Integer getDayOfOneWeekAgo() {
-        return bookMapper.selectDayOfOneWeekAgo();
+    public Integer getDayOfWeek() {
+        return bookMapper.selectDayOfWeek();
     }
 
     public List<LocalDate> getBookPeriodList() {

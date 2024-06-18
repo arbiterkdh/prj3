@@ -6,9 +6,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 
 export function BookDateComponent({ selectedDay, setSelectedDay }) {
-  const [today, setToday] = useState("");
-  const [dayOfOneWeekAgo, setDayOfOneWeekAgo] = useState(0);
-  const [dayOfOneWeekAgoInKorean, setDayOfOneWeekAgoInKorean] = useState("");
+  const [dayOfWeek, setDayOfWeek] = useState(0);
   const [bookPeriodList, setBookPeriodList] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -21,9 +19,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
     axios
       .get(`/api/book/date`)
       .then((res) => {
-        setToday(res.data.today.split("-"));
-        setDayOfOneWeekAgo(res.data.dayOfOneWeekAgo);
-        setDayOfOneWeekAgoInKorean(res.data.dayOfOneWeekAgoInKorean);
+        setDayOfWeek(res.data.dayOfWeek);
         setBookPeriodList(res.data.bookPeriodList);
       })
       .catch()
@@ -43,32 +39,32 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
   let bookPeriodListPlusDayOfWeek = [];
 
   bookPeriodList.map((book, index) => {
-    let dayOfWeek = "";
+    let dayOfOneWeek = "";
 
-    switch (((dayOfOneWeekAgo + index) % 7) + 1) {
+    switch (((dayOfWeek + index) % 7) + 1) {
       case 1:
-        dayOfWeek = "토";
+        dayOfOneWeek = "토";
         break;
       case 2:
-        dayOfWeek = "일";
+        dayOfOneWeek = "일";
         break;
       case 3:
-        dayOfWeek = "월";
+        dayOfOneWeek = "월";
         break;
       case 4:
-        dayOfWeek = "화";
+        dayOfOneWeek = "화";
         break;
       case 5:
-        dayOfWeek = "수";
+        dayOfOneWeek = "수";
         break;
       case 6:
-        dayOfWeek = "목";
+        dayOfOneWeek = "목";
         break;
       case 7:
-        dayOfWeek = "금";
+        dayOfOneWeek = "금";
         break;
     }
-    bookPeriodListPlusDayOfWeek.push(book + "-" + dayOfWeek);
+    bookPeriodListPlusDayOfWeek.push(book + "-" + dayOfOneWeek);
   });
 
   return (
@@ -78,13 +74,13 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
       ) : (
         <Box>
           <BookBox>
-            {today[0] +
+            {selectedDay.split("-")[0] +
               "년 " +
-              today[1] +
+              selectedDay.split("-")[1] +
               "월 " +
-              today[2] +
+              selectedDay.split("-")[2] +
               "일 (" +
-              dayOfOneWeekAgoInKorean +
+              selectedDay.split("-")[3] +
               ")"}
           </BookBox>
 
@@ -107,7 +103,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                   transition: "transform 0.5s ease",
                 }}
               >
-                {bookPeriodListPlusDayOfWeek.map((day) => (
+                {bookPeriodListPlusDayOfWeek.map((day, index) => (
                   <CursorBox
                     key={day}
                     onClick={() => setSelectedDay(day)}

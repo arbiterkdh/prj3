@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +21,20 @@ public class BookController {
 
     private final BookService bookService;
 
-    @GetMapping("onscreenlist")
-    public List<Map<String, Object>> getOnScreenList() {
+    @GetMapping("onscreenlist/{selectedDay}")
+    public List<Map<String, Object>> getOnScreenList(@PathVariable String selectedDay) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(selectedDay, formatter);
 
-        return bookService.getOnScreenList();
+        return bookService.getOnScreenList(date);
     }
 
-    @GetMapping("willscreenlist")
-    public List<Map<String, Object>> getWillScreenList() {
+    @GetMapping("willscreenlist/{selectedDay}")
+    public List<Map<String, Object>> getWillScreenList(@PathVariable String selectedDay) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(selectedDay, formatter);
 
-        return bookService.getWillScreenList();
+        return bookService.getWillScreenList(date);
     }
 
     @GetMapping("list")
@@ -53,25 +58,11 @@ public class BookController {
 
     @GetMapping("date")
     public Map<String, Object> getDate() {
-        LocalDate today = LocalDate.now();
-        Integer dayOfOneWeekAgo = bookService.getDayOfOneWeekAgo();
-        String dayOfOneWeekAgoInKorean = switch (dayOfOneWeekAgo) {
-            case 1 -> "일";
-            case 2 -> "월";
-            case 3 -> "화";
-            case 4 -> "수";
-            case 5 -> "목";
-            case 6 -> "금";
-            case 7 -> "토";
-            default -> "";
-        };
-
+        Integer dayOfWeek = bookService.getDayOfWeek();
         List<LocalDate> bookPeriodList = bookService.getBookPeriodList();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("today", today);
-        map.put("dayOfOneWeekAgo", dayOfOneWeekAgo);
-        map.put("dayOfOneWeekAgoInKorean", dayOfOneWeekAgoInKorean);
+        map.put("dayOfWeek", dayOfWeek);
         map.put("bookPeriodList", bookPeriodList);
 
         return map;

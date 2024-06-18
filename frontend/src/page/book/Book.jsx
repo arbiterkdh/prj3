@@ -27,25 +27,56 @@ export function Book() {
 
   const navigate = useNavigate();
 
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  let yoil = date.getDay();
+  switch ((yoil % 7) + 1) {
+    case 1:
+      yoil = "일";
+      break;
+    case 2:
+      yoil = "월";
+      break;
+    case 3:
+      yoil = "화";
+      break;
+    case 4:
+      yoil = "수";
+      break;
+    case 5:
+      yoil = "목";
+      break;
+    case 6:
+      yoil = "금";
+      break;
+    case 7:
+      yoil = "토";
+      break;
+  }
+  const dateString = year + "-" + month + "-" + day + "-" + yoil;
+
   const [isCityChecked, setIsCityChecked] = useState("서울");
   const [checkedTheaterNumber, setCheckedTheaterNumber] = useState(0);
   const [checkedMovieId, setCheckedMovieId] = useState(0);
-  const [selectedDay, setSelectedDay] = useState(0);
-  const [titleSearch, setTitleSearch] = useState("");
+  const [selectedDay, setSelectedDay] = useState(dateString);
 
   useEffect(() => {
     setBookProgress(1);
 
+    axios.get("/api/theater").then((res) => {
+      setCityList(res.data);
+    });
+
     Promise.all([
-      axios.get("/api/theater"),
-      axios.get("/api/book/onscreenlist"),
-      axios.get("/api/book/willscreenlist"),
-    ]).then(([theaterRes, onScreenRes, willScreenRes]) => {
-      setCityList(theaterRes.data);
+      axios.get(`/api/book/onscreenlist/${selectedDay.slice(0, -2)}`),
+      axios.get(`/api/book/willscreenlist/${selectedDay.slice(0, -2)}`),
+    ]).then(([onScreenRes, willScreenRes]) => {
       setOnScreenList(onScreenRes.data);
       setWillScreenList(willScreenRes.data);
     });
-  }, [theaterNumberList, movieLocationAdd]);
+  }, [theaterNumberList, movieLocationAdd, selectedDay]);
 
   return (
     <Stack w={"100%"} h={"500px"}>

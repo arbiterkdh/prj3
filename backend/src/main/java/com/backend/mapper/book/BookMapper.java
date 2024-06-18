@@ -46,18 +46,19 @@ public interface BookMapper {
     @Select("""
             SELECT id, title, running_time, rating, start_date
             FROM movie
-            WHERE DATE_ADD(start_date, INTERVAL 1 MONTH) >= NOW()
+            WHERE DATE_ADD(start_date, INTERVAL 3 WEEK) >= #{date}
+              AND start_date <= #{date}
               AND start_date <= NOW()
             """)
-    List<Map<String, Object>> selectAllOnScreenByDate();
+    List<Map<String, Object>> selectAllOnScreenByDate(LocalDate date);
 
     @Select("""
             SELECT id, title, running_time, rating, start_date
             FROM movie
-            WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
-              AND start_date > NOW()
+            WHERE #{date} > start_date
+              AND start_date >= NOW()
             """)
-    List<Map<String, Object>> selectAllWillScreenByDate();
+    List<Map<String, Object>> selectAllWillScreenByDate(LocalDate date);
 
     @Select("""
             SELECT theater_number
@@ -69,15 +70,15 @@ public interface BookMapper {
     @Select("""
             SELECT DAYOFWEEK(NOW())
             """)
-    Integer selectDayOfOneWeekAgo();
+    Integer selectDayOfWeek();
 
     @Select("""
             WITH RECURSIVE DateRange AS (
-                SELECT DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AS Date
+                SELECT CURRENT_DATE() AS Date
                 UNION ALL
                 SELECT DATE_ADD(Date, INTERVAL 1 DAY)
                 FROM DateRange
-                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 14 DAY )
+                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 21 DAY )
             )
             SELECT Date
             FROM DateRange;
