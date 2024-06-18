@@ -1,10 +1,11 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardFooter,
+  Center,
   Heading,
   Image,
   SimpleGrid,
@@ -13,17 +14,27 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 export function PromoList({
   eventType: propEventType,
   eventStatusList: getEventStatus,
   maxItems,
+  showTotalPosts = true,
 }) {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
   const { eventType: paramEventType } = useParams();
   const eventType = propEventType || paramEventType;
+  const [searchParams] = useSearchParams();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -36,9 +47,10 @@ export function PromoList({
       setLoading(false);
     } else {
       axios
-        .get("/api/promotion/list")
+        .get(`/api/promotion/list?${searchParams}`)
         .then((res) => {
-          setPromoList(res.data);
+          setPromoList(res.data.promotionList);
+          setPageInfo(res.data.pageInfo);
         })
         .catch((error) => {
           console.error("프로모션 데이터 가져오기 에러:", error);
@@ -47,7 +59,12 @@ export function PromoList({
           setLoading(false);
         });
     }
-  }, [getEventStatus]);
+  }, [getEventStatus, searchParams]);
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
 
   const filteredPromoList = eventType
     ? promoList.filter((promo) => promo.eventType === eventType)
@@ -67,6 +84,11 @@ export function PromoList({
 
   return (
     <Box>
+      {showTotalPosts && (
+        <Text as={"b"} mt={4} marginLeft={"20px"}>
+          전체 {filteredPromoList.length}건
+        </Text>
+      )}
       <SimpleGrid
         spacing={3}
         templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
@@ -99,6 +121,53 @@ export function PromoList({
           </Card>
         ))}
       </SimpleGrid>
+      <Box>
+        <Center>
+          {pageInfo.prevPageNumber && (
+            <>
+              <Button onClick={() => navigate("/promotion?page=1")}>
+                <FontAwesomeIcon icon={faAnglesLeft} />
+              </Button>
+              <Button
+                onClick={() =>
+                  navigate(`/promotion?page=${pageInfo.prevPageNumber}`)
+                }
+              >
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </Button>
+            </>
+          )}
+          {pageNumbers.map((pageNumber) => (
+            <Button
+              onClick={() => navigate(`/promotion?page=${pageNumber}`)}
+              key={pageNumber}
+              colorScheme={
+                pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
+              }
+            >
+              {pageNumber}
+            </Button>
+          ))}
+          {pageInfo.nextPageNumber && (
+            <>
+              <Button
+                onClick={() =>
+                  navigate(`/promotion?page=${pageInfo.nextPageNumber}`)
+                }
+              >
+                <FontAwesomeIcon icon={faAngleRight} />
+              </Button>
+              <Button
+                onClick={() =>
+                  navigate(`/promotion?page=${pageInfo.lastPageNumber}`)
+                }
+              >
+                <FontAwesomeIcon icon={faAnglesRight} />
+              </Button>
+            </>
+          )}
+        </Center>
+      </Box>
     </Box>
   );
 }

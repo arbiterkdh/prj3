@@ -94,14 +94,14 @@ export function PromoView() {
       <Heading>{promo.title}</Heading>
       <Box>
         <Text>
-          <strong>이벤트 타입:</strong> {promo.eventType}
+          <strong>이벤트 타입 |</strong> {promo.eventType}
         </Text>
         <Text>
           <strong>기간 |</strong> {formatDate(promo.eventStartDate)} ~{" "}
           {formatDate(promo.eventEndDate)}
         </Text>
         <Text>
-          <strong>이벤트 상태:</strong> {eventStatus}
+          <strong>이벤트 상태 |</strong> {eventStatus}
         </Text>
       </Box>
       <Box m={1} borderBottom={"1px solid black"} />

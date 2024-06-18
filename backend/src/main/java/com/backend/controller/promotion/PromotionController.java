@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/promotion")
@@ -17,7 +18,7 @@ public class PromotionController {
 
     private final PromotionService promotionService;
 
-    @PostMapping("/add")
+    @PostMapping("add")
     public ResponseEntity addPromo(Promotion promotion, @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws IOException {
 
         if (promotionService.validate(promotion)) {
@@ -28,9 +29,9 @@ public class PromotionController {
         }
     }
 
-    @GetMapping("/list")
-    public List<Promotion> listPromotion() {
-        return promotionService.list();
+    @GetMapping("list")
+    public Map<String, Object> listPromotion(@RequestParam(defaultValue = "1") Integer page) {
+        return promotionService.list(page);
     }
 
     @GetMapping("{id}")
@@ -48,10 +49,10 @@ public class PromotionController {
         promotionService.remove(id);
     }
 
-    @PutMapping("/modify")
+    @PutMapping("modify")
     public ResponseEntity modifyPromotion(Promotion promotion,
-                                          @RequestParam(value = "removeFileList[]", required = false)List<String> removeFileList,
-                                          @RequestParam(value = "addFileList[]", required = false)MultipartFile[] addFileList) throws IOException {
+                                          @RequestParam(value = "removeFileList[]", required = false) List<String> removeFileList,
+                                          @RequestParam(value = "addFileList[]", required = false) MultipartFile[] addFileList) throws IOException {
 
         if (promotionService.validate(promotion)) {
             promotionService.modify(promotion, removeFileList, addFileList);

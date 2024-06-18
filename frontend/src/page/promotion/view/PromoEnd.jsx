@@ -27,7 +27,7 @@ export function PromoEnd() {
       .get(`/api/promotion/list`)
       .then((res) => {
         const now = new Date();
-        const endedPromos = res.data.filter(
+        const endedPromos = res.data.promotionList.filter(
           (promo) => new Date(promo.eventEndDate) < now,
         );
         setPromoList(endedPromos);
@@ -35,9 +35,6 @@ export function PromoEnd() {
       .catch(() => {})
       .finally(() => {});
   }, []);
-  // useEffect(() => {
-  //   axios.get(`/api/promotion/list`).then((res) => setPromoList(res.data));
-  // }, []);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -63,6 +60,9 @@ export function PromoEnd() {
             통해 확인하실 수 있습니다.
           </Text>
           <Box borderBottom={"2px solid black"} padding="20px" />
+          <Text fontWeight={"bold"} textAlign="left" mt={4} marginLeft="30px">
+            전체 {promoList.length}건
+          </Text>
           <Box border="1px solid #e2e8f0" borderRadius="8px" padding="20px">
             <TableContainer>
               <Table variant="simple">
