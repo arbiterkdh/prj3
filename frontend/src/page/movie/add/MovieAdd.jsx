@@ -9,9 +9,18 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spacer,
   Stack,
   Textarea,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -20,6 +29,8 @@ import DatePicker from "react-datepicker";
 import { ko } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 export function MovieAdd() {
   const [title, setTitle] = useState("");
@@ -32,8 +43,12 @@ export function MovieAdd() {
   const [startDate, setStartDate] = useState(new Date());
   const [director, setDirector] = useState("");
   const [actors, setActors] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const navigate = useNavigate();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const kmdbKey = import.meta.env.VITE_KMDb_APP_KEY;
 
   function handleMovieSave() {
     axios
@@ -50,6 +65,16 @@ export function MovieAdd() {
         actors,
       })
       .then(() => navigate("/movie"));
+  }
+
+  const kmdbUrl =
+    "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2";
+
+  function handleSearchClick() {
+    // todo: kmdb에서 검색어로 영화제목들 가져오고 그중에서 선택하면 add화면에 영화정보를 뿌려주도록하기....
+    axios.get(
+      `${kmdbUrl}&detail=N&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
+    );
   }
 
   let disableSaveButton = false;
@@ -102,6 +127,12 @@ export function MovieAdd() {
         <Flex>
           <Heading mb={10}>영화 추가</Heading>
           <Spacer />
+          <Button
+            onClick={onOpen}
+            rightIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+          >
+            영화검색
+          </Button>
         </Flex>
         <Box>
           <Stack>
@@ -216,6 +247,29 @@ export function MovieAdd() {
           </Stack>
         </Box>
       </CenterBox>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>영화검색</ModalHeader>
+          <ModalBody>
+            <InputGroup mb={5} w={"100%"} size="md">
+              <Input
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
+                placeholder="영화명 검색"
+              />
+              <InputRightElement width="4.5rem">
+                <Button onClick={handleSearchClick} h="1.75rem" size="md">
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </Button>
+              </InputRightElement>
+            </InputGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>닫기</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Center>
   );
 }
