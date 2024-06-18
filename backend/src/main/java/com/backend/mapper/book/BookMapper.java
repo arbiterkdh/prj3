@@ -1,6 +1,8 @@
 package com.backend.mapper.book;
 
 import com.backend.domain.book.MovieLocation;
+import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxTimeTable;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -39,7 +41,7 @@ public interface BookMapper {
     @Select("""
             SELECT movie_id
             FROM movie_location
-            WHERE theater_number = #{theater_number};
+            WHERE theater_number = #{theater_number}
             """)
     List<Integer> selectMovieIdByTheaterNumber(Integer theater_number);
 
@@ -63,7 +65,7 @@ public interface BookMapper {
     @Select("""
             SELECT theater_number
             FROM movie_location
-            WHERE movie_id = #{movie_id};
+            WHERE movie_id = #{movie_id}
             """)
     List<Integer> selectAllTheaterNumberByMovieId(Integer movie_id);
 
@@ -84,4 +86,18 @@ public interface BookMapper {
             FROM DateRange;
             """)
     List<LocalDate> selectAllBookPeriodListByDate();
+
+    @Select("""
+            SELECT *
+            FROM theater_box
+            WHERE theater_number = #{theaterNumber}
+            """)
+    List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
+
+    @Select("""
+            SELECT *
+            FROM theater_box_time_table
+            WHERE theater_box_id = #{id}
+            """)
+    TheaterBoxTimeTable selectTheaterBoxTimeTableByTheaterBoxId(Integer id);
 }

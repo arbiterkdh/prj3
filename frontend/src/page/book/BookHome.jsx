@@ -6,6 +6,7 @@ import OuterBookStack from "../../css/theme/component/stack/OuterBookStack.jsx";
 import { BookMovieLocationAdd } from "./add/BookMovieLocationAdd.jsx";
 import { useState } from "react";
 import LargeFontBox from "../../css/theme/component/box/LargeFontBox.jsx";
+import { BookMovieAddInTheaterBox } from "./add/BookMovieAddInTheaterBox.jsx";
 
 export function BookHome() {
   const [bookProgress, setBookProgress] = useState(1);
@@ -76,6 +77,11 @@ export function BookHome() {
           setMovieLocationAdd={setMovieLocationAdd}
           movieList={movieList}
           setMovieList={setMovieList}
+          onScreenList={onScreenList}
+          willScreenList={willScreenList}
+        />
+        <BookMovieAddInTheaterBox
+          cityList={cityList}
           onScreenList={onScreenList}
           willScreenList={willScreenList}
         />

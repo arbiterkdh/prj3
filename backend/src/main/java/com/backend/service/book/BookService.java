@@ -2,6 +2,8 @@ package com.backend.service.book;
 
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
+import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxTimeTable;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
 import lombok.RequiredArgsConstructor;
@@ -64,5 +66,14 @@ public class BookService {
 
     public List<LocalDate> getBookPeriodList() {
         return bookMapper.selectAllBookPeriodListByDate();
+    }
+
+    public List<TheaterBox> getTheaterBox(Integer theaterNumber) {
+        System.out.println("theaterNumber = " + theaterNumber);
+        return bookMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
+    }
+
+    public TheaterBoxTimeTable getTheaterBoxTimeTable(TheaterBox theaterBox) {
+        return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
     }
 }

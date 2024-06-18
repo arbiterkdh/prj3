@@ -74,7 +74,8 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
       ) : (
         <Box>
           <BookBox>
-            {selectedDay.split("-")[0] +
+            {"기준일: " +
+              selectedDay.split("-")[0] +
               "년 " +
               selectedDay.split("-")[1] +
               "월 " +
@@ -112,8 +113,10 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                     bgColor={selectedDay === day ? "red.500" : ""}
                     align={"center"}
                   >
-                    <Stack w={"55px"} justifyContent={"space-evenly"}>
-                      <Box fontSize={"xx-small"}>{day.split("-")[1]}</Box>
+                    <Stack w={"55px"} h={"55px"}>
+                      <Box fontSize={"xx-small"} mb={"-3px"}>
+                        {day.split("-")[1]}
+                      </Box>
                       <Box mt={-4} fontSize={"x-large"} fontWeight={"500"}>
                         {day.split("-")[2]}
                       </Box>

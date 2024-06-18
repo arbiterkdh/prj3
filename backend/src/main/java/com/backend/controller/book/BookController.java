@@ -2,7 +2,10 @@ package com.backend.controller.book;
 
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
+import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxTimeTable;
 import com.backend.service.book.BookService;
+import com.backend.service.theater.TheaterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +24,7 @@ import java.util.Map;
 public class BookController {
 
     private final BookService bookService;
+    private final TheaterService theaterService;
 
     @GetMapping("onscreenlist/{selectedDay}")
     public List<Map<String, Object>> getOnScreenList(@PathVariable String selectedDay) {
@@ -54,6 +59,22 @@ public class BookController {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @GetMapping("movielocation")
+    public Map<String, Object> getTheaterBox(@RequestParam("theaternumber") Integer theaterNumber) {
+        Map<String, Object> result = new HashMap<>();
+        List<TheaterBox> theaterBoxList = bookService.getTheaterBox(theaterNumber);
+        List<TheaterBoxTimeTable> theaterBoxTimeTableList = new ArrayList<>();
+
+        for (TheaterBox theaterBox : theaterBoxList) {
+            theaterBoxTimeTableList.add(bookService.getTheaterBoxTimeTable(theaterBox));
+        }
+
+        result.put("theaterBoxList", theaterBoxList);
+        result.put("theaterBoxTimeTableList", theaterBoxTimeTableList);
+
+        return result;
     }
 
     @GetMapping("date")

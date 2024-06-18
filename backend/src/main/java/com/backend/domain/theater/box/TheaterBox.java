@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class TheaterBox {
-    private Integer theater_number;
-    private Integer box_number;
-    private Integer box_capacity;
+    private Integer id;
+    private Integer boxNumber;
+    private Integer theaterNumber;
 }

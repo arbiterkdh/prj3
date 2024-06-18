@@ -85,11 +85,13 @@ VALUES (519, (SELECT id FROM theater_box WHERE theater_number = 112 AND box_numb
 
 INSERT INTO theater_box_time_table
     (movie_id, theater_box_id, time_interval)
-VALUES (520, 2, (SELECT running_time FROM movie WHERE id = 520) / 10 * 10 + 30);
+VALUES (520, (SELECT id FROM theater_box WHERE theater_number = 112 AND box_number = 2),
+        (SELECT running_time FROM movie WHERE id = 520) / 10 * 10 + 30);
 
 INSERT INTO theater_box_time_table
     (movie_id, theater_box_id, time_interval)
-VALUES (521, 3, (SELECT running_time FROM movie WHERE id = 521) / 10 * 10 + 30);
+VALUES (521, (SELECT id FROM theater_box WHERE theater_number = 112 AND box_number = 3),
+        (SELECT running_time FROM movie WHERE id = 521) / 10 * 10 + 30);
 
 SELECT *
 FROM theater_box_time_table;

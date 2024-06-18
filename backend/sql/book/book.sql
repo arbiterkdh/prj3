@@ -29,27 +29,3 @@ WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
   AND start_date > NOW();
 
 
-CREATE TABLE book_movie_state
-(
-    id           INT PRIMARY KEY AUTO_INCREMENT,
-    movie_id     INT REFERENCES movie (id),
-    theater_box_id INT REFERENCES theater_box(id),
-
-);
-
-SELECT *
-FROM book_movie_state;
-
-SELECT *
-FROM movie;
-
-DESC movie;
-
-INSERT INTO book_movie_state (movie_id, running_time)
-VALUES (519, 120);
-
-DROP TABLE book_movie_state;
-
-
-
-
