@@ -31,6 +31,7 @@ export function Book() {
   const [checkedTheaterNumber, setCheckedTheaterNumber] = useState(0);
   const [checkedMovieId, setCheckedMovieId] = useState(0);
   const [selectedDay, setSelectedDay] = useState(0);
+  const [titleSearch, setTitleSearch] = useState("");
 
   useEffect(() => {
     setBookProgress(1);
@@ -111,7 +112,6 @@ export function Book() {
           </Box>
         </OuterBookBox>
       </Flex>
-      <Box></Box>
     </Stack>
   );
 }

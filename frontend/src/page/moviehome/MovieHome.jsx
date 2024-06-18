@@ -25,9 +25,9 @@ export function MovieHome() {
 
       try {
         const res = await Promise.all(requests);
-        const posterUrl = res.map(
-          (res) => res.data.Data[0].Result[0].posters.split("|")[0],
-        );
+        const posterUrl = res.map((res) => {
+          return res.data.Data[0].Result[0].posters.split("|")[0];
+        });
         setPosterUrlList(posterUrl);
       } catch (err) {
         console.error(err);

@@ -122,8 +122,7 @@ export function TheaterSeatList() {
                   <Box
                     position={"absolute"}
                     w={"30px"}
-                    top={600 + index * 28}
-                    left={285}
+                    left={"700px"}
                     color={
                       mouseLocation && mouseLocation[0] === seatRow.alphabet
                         ? "red.900"
