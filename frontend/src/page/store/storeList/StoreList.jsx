@@ -157,9 +157,12 @@ export function StoreList() {
           setProductId={setProductId}
           setFileName={setFileName}
           setName={setName}
+          name={name}
           setPrice={setPrice}
+          price={price}
           setStock={setStock}
           setQuantity={setQuantity}
+          quantity={quantity}
           image={image}
           setImage={setImage}
           onDelOpen={onDelOpen}

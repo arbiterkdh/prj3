@@ -9,9 +9,18 @@ import {
   Center,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
   Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,6 +30,7 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Payment from "../../payment/Payment.jsx";
 
 function ProductItemList({
   productList,
@@ -28,14 +38,22 @@ function ProductItemList({
   setProductId,
   setFileName,
   setName,
+  name,
   setPrice,
+  price,
   setStock,
   setQuantity,
+  quantity,
   setImage,
   onDelOpen,
   onModifyOpen,
 }) {
   const navigate = useNavigate();
+  const {
+    isOpen: isPayOpen,
+    onOpen: onPayOpen,
+    onClose: onPayClose,
+  } = useDisclosure();
 
   function handleModifyModal(id, fileName, name, price, stock, imgSrc) {
     setProductId(id);
@@ -136,7 +154,17 @@ function ProductItemList({
                 }}
               >
                 <Box>
-                  <Button variant="solid" colorScheme="blue">
+                  <Button
+                    variant="solid"
+                    colorScheme="blue"
+                    onClick={() => {
+                      onPayOpen();
+                      setProductId(product.id);
+                      setName(product.name);
+                      setPrice(product.price);
+                      setQuantity(product.quantity);
+                    }}
+                  >
                     <FontAwesomeIcon icon={faCreditCard} />
                     <Text textIndent={"10px"}>구매</Text>
                   </Button>
@@ -173,6 +201,28 @@ function ProductItemList({
             )}
           </CardFooter>
         </Card>
+        <Modal isOpen={isPayOpen} onClose={onPayClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>알림</ModalHeader>
+            <ModalBody>
+              <FormControl>
+                <FormLabel>결제방식을 선택해주세요</FormLabel>
+                <FormLabel>
+                  상품명:{name}
+                  <br />
+                  수량:{quantity}
+                  <br />
+                  가격:{price}
+                </FormLabel>
+                <Payment />
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onPayClose}>취소</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     );
   };
