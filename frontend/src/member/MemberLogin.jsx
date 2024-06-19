@@ -176,7 +176,7 @@ export function MemberLogin() {
                 </a>
               </ModalFooter>
             </MarginBox>
-            <MarginBox border={"1px solid black"} w={"50%"} h={"100%"}>
+            <MarginBox border={"1px solid"} w={"50%"} h={"100%"}>
               광고
             </MarginBox>
           </Flex>

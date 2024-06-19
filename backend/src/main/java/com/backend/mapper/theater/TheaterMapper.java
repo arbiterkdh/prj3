@@ -1,6 +1,7 @@
 package com.backend.mapper.theater;
 
 import com.backend.domain.theater.Theater;
+import com.backend.domain.theater.box.TheaterBox;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -43,4 +44,9 @@ public interface TheaterMapper {
             WHERE number = #{number}
             """)
     int deleteTheaterByNumber(Integer number);
+
+    @Select("""
+            SELECT 
+            """)
+    List<TheaterBox> selectTheaterBoxByTheaterNumber(Integer theaterNumber);
 }

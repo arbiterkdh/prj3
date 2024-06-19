@@ -87,8 +87,8 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
 
           <Flex
             align={"center"}
-            borderLeft={"1px solid black"}
-            borderRight={"1px solid black"}
+            borderLeft={"1px solid"}
+            borderRight={"1px solid"}
           >
             <ArrowLeftIcon onClick={handleClickLeft} cursor={"pointer"} />
             <Box

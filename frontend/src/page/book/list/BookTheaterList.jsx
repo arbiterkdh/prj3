@@ -34,7 +34,7 @@ export function BookTheaterList({
 
   return (
     <Flex h={"100%"}>
-      <Box border={"1px solid black"} w={"100%"} h={"600px"}>
+      <Box border={"1px solid"} w={"100%"} h={"600px"}>
         <Stack gap={0}>
           {cityList.map((city) => (
             <Flex key={city} alignItems={"center"} gap={1}>
@@ -55,7 +55,7 @@ export function BookTheaterList({
         </Stack>
       </Box>
       <Box
-        border={"1px solid black"}
+        border={"1px solid"}
         w={"100%"}
         h={"600px"}
         overflow={"scroll"}

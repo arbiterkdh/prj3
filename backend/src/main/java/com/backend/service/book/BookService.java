@@ -6,6 +6,7 @@ import com.backend.domain.theater.box.TheaterBox;
 import com.backend.domain.theater.box.TheaterBoxTimeTable;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
+import com.backend.mapper.theater.TheaterMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class BookService {
     private final BookMapper bookMapper;
     private final MovieMapper movieMapper;
+    private final TheaterMapper theaterMapper;
 
     public List<Movie> getMovieList() {
         return movieMapper.selectAllMovie();
@@ -53,8 +55,14 @@ public class BookService {
 
     private List<Map<String, Object>> getMaps(List<Map<String, Object>> mapList) {
         List<Map<String, Object>> screenList = new ArrayList<>();
+
         for (Map<String, Object> map : mapList) {
-            map.put("theaterNumber", bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id")));
+            List<Integer> theaterNumberList = bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id"));
+
+            for (Integer theaterNumber : theaterNumberList) {
+                theaterMapper.selectTheaterBoxByTheaterNumber(theaterNumber);
+            }
+
             screenList.add(map);
         }
         return screenList;

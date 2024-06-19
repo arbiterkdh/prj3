@@ -36,3 +36,8 @@ CREATE TABLE book_place_time
     date                 DATE NOT NULL,
     time                 TIME NOT NULL
 );
+
+DROP TABLE book_place_time;
+
+SELECT *
+FROM book_place_time;

@@ -91,7 +91,7 @@ export function TheaterList({
   }
 
   return (
-    <Box w={"100%"} border={"1px solid black"}>
+    <Box w={"100%"} border={"1px solid"}>
       <Flex width={"100%"} mb={4}>
         {cityList.map((city) => (
           <TheaterListBox

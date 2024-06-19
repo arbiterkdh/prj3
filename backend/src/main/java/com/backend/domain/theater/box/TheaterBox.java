@@ -10,6 +10,7 @@ public class TheaterBox {
     // ㄴ(극장 지점 번호가 없어도 이걸로 상영관 구분 가능)
     private Integer boxNumber; // 몇 관 번호
     private Integer theaterNumber; // 극장 지점 번호
+    private Integer capacity; // 각 관의 객석 수
 
     // 테이블 조인용
     private String theaterLocation;

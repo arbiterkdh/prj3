@@ -107,7 +107,7 @@ export function Book() {
             h={"600px"}
             overflow={"scroll"}
             overflowX={"unset"}
-            border={"1px solid black"}
+            border={"1px solid"}
           >
             <BookMovieList
               checkedTheaterNumber={checkedTheaterNumber}
@@ -130,7 +130,7 @@ export function Book() {
             selectedDay={selectedDay}
             setSelectedDay={setSelectedDay}
           />
-          <Box h={"550px"} border={"1px solid black"}>
+          <Box h={"550px"} border={"1px solid"}>
             <BookTheaterLocationMovieList
               checkedTheaterNumber={checkedTheaterNumber}
               onScreenList={onScreenList}
