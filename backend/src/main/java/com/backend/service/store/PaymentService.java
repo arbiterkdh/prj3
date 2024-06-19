@@ -40,4 +40,11 @@ public class PaymentService {
             cartMapper.deleteCartByCheckCartId(payment.getCheckCartId().get(i));
         }
     }
+
+    public void getData(Integer memberNumber) {
+
+        int limitData;
+
+//        List<ProductOrder> orderData = mapper.getData(memberNumber, limitData);
+    }
 }

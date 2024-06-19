@@ -1,11 +1,21 @@
 import { Center } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 function PaymentSuccess() {
+  const [paymentData, setPaymentData] = useState([]);
+  const Login = useContext(LoginContext);
+
   useEffect(() => {
-    axios.get();
+    axios
+      .get(`/api/store/payment/orderDataList/${Login.id}`)
+      .then((res) => {
+        setPaymentData(res.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
   }, []);
   return (
     <Center>
