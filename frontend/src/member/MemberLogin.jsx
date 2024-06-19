@@ -87,10 +87,18 @@ export function MemberLogin() {
       >
         <ModalOverlay />
         <ModalContent h={"500px"}>
-          <ModalHeader bgColor={"purple"} h={12} alignContent={"center"}>
+          <ModalHeader
+            bgColor={"red.600"}
+            color={"whiteAlpha.900"}
+            _dark={{
+              bgColor: "darkslategray",
+            }}
+            h={12}
+            alignContent={"center"}
+          >
             로그인
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={"whiteAlpha.900"} />
           <Flex justifyContent={"space-between"} h={"100%"}>
             <MarginBox w={"50%"}>
               <ModalBody>
@@ -176,7 +184,7 @@ export function MemberLogin() {
                 </a>
               </ModalFooter>
             </MarginBox>
-            <MarginBox border={"1px solid"} w={"50%"} h={"100%"}>
+            <MarginBox border={"1px solid"} w={"50%"} h={"95%"}>
               광고
             </MarginBox>
           </Flex>

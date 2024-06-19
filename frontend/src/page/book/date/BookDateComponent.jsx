@@ -109,7 +109,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                     key={day}
                     onClick={() => setSelectedDay(day)}
                     rounded={"full"}
-                    color={selectedDay === day ? "white" : ""}
+                    color={selectedDay === day ? "whiteAlpha.900" : ""}
                     bgColor={selectedDay === day ? "red.500" : ""}
                     align={"center"}
                   >

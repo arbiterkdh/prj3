@@ -29,7 +29,7 @@ export function Navbar() {
 
   return (
     <Box>
-      <Center borderBottom={"2px solid darkslategray"}>
+      <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
             <CursorBox>고객센터</CursorBox>
@@ -109,7 +109,12 @@ export function Navbar() {
       <Center>
         <Box w={"100%"}>
           {drawer === 0 && (
-            <Box h={"33px"} bgColor={"darkslategray"} opacity={"0.9"} />
+            <Box
+              h={"35px"}
+              bgColor={"darkslategray"}
+              _dark={{ bgColor: "blackAlpha.700" }}
+              opacity={"0.9"}
+            />
           )}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
           {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}

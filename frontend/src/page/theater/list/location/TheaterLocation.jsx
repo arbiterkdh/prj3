@@ -41,7 +41,7 @@ export function TheaterLocation() {
           align={"center"}
         >
           <Tabs isFitted w={"1000px"}>
-            <TabList color={"white"} mt={"35px"}>
+            <TabList color={"whiteAlpha.900"} mt={"35px"}>
               <TheaterTab>서울</TheaterTab>
               <TheaterTab>경기</TheaterTab>
               <TheaterTab>인천</TheaterTab>

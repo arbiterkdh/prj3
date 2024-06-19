@@ -19,7 +19,7 @@ export function BookMovieList({
         <Stack>
           {onScreenList.length > 0 && (
             <Box
-              color={"white"}
+              color={"whiteAlpha.900"}
               bgColor={"darkslategray"}
               opacity={"0.9"}
               h={"50px"}
@@ -49,7 +49,7 @@ export function BookMovieList({
           ))}
           {willScreenList.length > 0 && (
             <Box
-              color={"white"}
+              color={"whiteAlpha.900"}
               bgColor={"darkslategray"}
               opacity={"0.9"}
               h={"50px"}

@@ -52,7 +52,7 @@ export function MovieHome() {
         zIndex={-1}
       />
       <Center bgColor="blackAlpha.800">
-        <CenterBox m={10} bgColor="black" color={"white"}>
+        <CenterBox m={10} bgColor={"blackAlpha.900"} color={"whiteAlpha.900"}>
           <Heading fontSize={"2rem"}>BOX OFFICE 순위</Heading>
           <Box>(오늘 {month + "월 " + day + "일 "}기준)</Box>
           {dailyBoxOffice.length > 0 ? (

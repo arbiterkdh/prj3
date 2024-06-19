@@ -28,28 +28,28 @@ export function BookHome() {
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack
               bgColor={bookProgress === 1 ? "red.500" : ""}
-              color={bookProgress === 1 ? "white" : ""}
+              color={bookProgress === 1 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>01</LargeFontBox>
               <Box>상영시간</Box>
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 2 ? "red.500" : ""}
-              color={bookProgress === 2 ? "white" : ""}
+              color={bookProgress === 2 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>02</LargeFontBox>
               <Box>인원/좌석</Box>
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 3 ? "red.500" : ""}
-              color={bookProgress === 3 ? "white" : ""}
+              color={bookProgress === 3 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>03</LargeFontBox>
               <Box>결제</Box>
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 4 ? "red.500" : ""}
-              color={bookProgress === 4 ? "white" : ""}
+              color={bookProgress === 4 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>04</LargeFontBox>
               <Box>결제완료</Box>
