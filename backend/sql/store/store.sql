@@ -7,22 +7,6 @@ CREATE TABLE product_image
     PRIMARY KEY (product_id, name)
 );
 
-Select *
-from product;
-
-select *
-from product_image;
-
-select *
-from product_cart;
-
-
-SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
-FROM product p
-         JOIN product_image pi
-              ON p.id = pi.product_id;
-
-
 CREATE TABLE product
 (
     id       INT PRIMARY KEY AUTO_INCREMENT,
@@ -35,18 +19,19 @@ CREATE TABLE product
     reg_date DATETIME DEFAULT NOW()
 );
 
-
-
 CREATE TABLE product_cart
 (
-    id         INT PRIMARY KEY AUTO_INCREMENT,
-    name       VARCHAR(200),
-    fileName   VARCHAR(200),
-    product_id INT REFERENCES product (id),
-    quantity   INT,
-    price      INT,
-    reg_date   DATETIME DEFAULT NOW()
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    name          VARCHAR(200),
+    fileName      VARCHAR(200),
+    product_id    INT REFERENCES product (id),
+    quantity      INT,
+    price         INT,
+    total_price   INT,
+    member_number INT REFERENCES member (number),
+    reg_date      DATETIME DEFAULT NOW()
 );
+
 
 CREATE TABLE product_comment
 (
@@ -56,13 +41,6 @@ CREATE TABLE product_comment
     product_id int references product (id),
     reg_date   datetime default now()
 );
-
-drop table product;
-drop table product_image;
-drop table product_cart;
-drop table product_comment;
-drop table product_qna;
-drop table product_type;
 
 CREATE TABLE product_qna
 (
@@ -87,4 +65,47 @@ values ('세트'),
        ('간식'),
        ('드링크');
 
-show tables;
+
+CREATE TABLE payment
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    order_number  VARCHAR(50),
+    status        VARCHAR(10),
+    amount        INT,
+    buyer_name    VARCHAR(50),
+    buyer_email   VARCHAR(100),
+    buyer_date    DATETIME DEFAULT NOW(),
+    success       BOOLEAN,
+    member_number INT REFERENCES member (number)
+);
+
+CREATE TABLE product_order
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    payment_id    INT REFERENCES payment (id),
+    name          VARCHAR(50),
+    file_name     VARCHAR(100),
+    product_id    INT,
+    quantity      INT,
+    price         INT,
+    reg_date      DATETIME,
+    member_number INT,
+    total_price   INT,
+    order_date    DATETIME DEFAULT NOW()
+);
+
+drop table payment;
+drop table product_cart;
+drop table product_order;
+
+select *
+from product;
+
+SELECT *
+FROM product_cart;
+
+select *
+from product_order;
+
+select *
+from payment;

@@ -77,4 +77,12 @@ public interface ProductMapper {
             </script>
             """)
     Integer totalCount(String menuTypeSelect);
+
+
+    @Update("""
+            UPDATE product
+            SET stock = stock - #{getQuantity}
+            WHERE id = #{productId}
+            """)
+    int updateStock(Integer productId, Integer getQuantity);
 }

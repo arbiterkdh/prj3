@@ -31,6 +31,7 @@ import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.js
 import Payment from "../payment/Payment.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import { ModifyCartModal } from "./ModifyCartModal.jsx";
 
 export function StoreCart() {
   const [productCartList, setProductCartList] = useState([]);
@@ -39,8 +40,18 @@ export function StoreCart() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [checkItem, setCheckItem] = useState({});
+
+  const [changeQuantity, setChangeQuantity] = useState(1);
+  const [changeTotalPrice, setChangeTotalPrice] = useState(1);
+
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [cartId, setCartId] = useState(null);
+  const {
+    isOpen: isModifyOpen,
+    onOpen: onModifyOpen,
+    onClose: onModifyClose,
+  } = useDisclosure();
 
   const Login = useContext(LoginContext);
 
@@ -118,6 +129,8 @@ export function StoreCart() {
                   if (cartItem.quantity > 1) {
                     updateQuantity(cartItem.productId, cartItem.quantity - 1);
                   }
+                  setChangeQuantity(cartItem.quantity - 1);
+                  setChangeTotalPrice((cartItem.quantity - 1) * cartItem.price);
                 }}
               >
                 -
@@ -126,13 +139,29 @@ export function StoreCart() {
               <Button
                 onClick={() => {
                   updateQuantity(cartItem.productId, cartItem.quantity + 1);
+                  setChangeQuantity(cartItem.quantity + 1);
+                  setChangeTotalPrice((cartItem.quantity + 1) * cartItem.price);
                 }}
               >
                 +
               </Button>
             </Flex>
           </CenterTd>
-          <CenterTd>{cartItem.price * cartItem.quantity}원</CenterTd>
+          <CenterTd>{cartItem.price}원</CenterTd>
+          <CenterTd>
+            <Button
+              colorScheme={"blue"}
+              onClick={() => {
+                onModifyOpen();
+                setCartId(cartItem.id);
+                console.log("changeQuantity= " + changeQuantity);
+                console.log("changeTotalPrice= " + changeTotalPrice);
+                console.log("cartId= " + cartItem.id);
+              }}
+            >
+              변경
+            </Button>
+          </CenterTd>
           <CenterTd>
             <Button
               colorScheme={"red"}
@@ -172,6 +201,12 @@ export function StoreCart() {
     0,
   );
 
+  const checkCartId = () => {
+    return productCartList
+      .filter((item) => checkItem[item.productId])
+      .map((item) => item.id);
+  };
+
   return (
     <Center>
       <CenterBox>
@@ -181,7 +216,6 @@ export function StoreCart() {
         <Box>
           <hr />
         </Box>
-
         <TableContainer mb={10}>
           <Table variant="simple">
             <Thead>
@@ -210,6 +244,7 @@ export function StoreCart() {
                 <CenterTh w={"20%"}>상품명</CenterTh>
                 <CenterTh w={"10%"}>수량</CenterTh>
                 <CenterTh w={"10%"}>가격</CenterTh>
+                <CenterTh w={"10%"}>수정</CenterTh>
                 <CenterTh w={"10%"}>삭제</CenterTh>
                 <CenterTh w={"20%"}>날짜</CenterTh>
               </Tr>
@@ -234,14 +269,19 @@ export function StoreCart() {
             </Flex>
           </Alert>
         </Box>
-        <Box>
-          <Button colorScheme={"green"} w={"100%"}>
-            상품 결제
-          </Button>
-          <Box>
-            <Payment />
-          </Box>
-        </Box>
+        <Payment
+          totalSum={totalSum}
+          productCartList={productCartList}
+          checkCartId={checkCartId()}
+        />
+        <ModifyCartModal
+          isModifyOpen={isModifyOpen}
+          onModifyClose={onModifyClose}
+          cartId={cartId}
+          changeQuantity={changeQuantity}
+          changeTotalPrice={changeTotalPrice}
+        />
+
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>

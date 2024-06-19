@@ -10,8 +10,8 @@ import java.util.List;
 public interface CartMapper {
 
     @Insert("""
-            INSERT INTO product_cart(name, product_id, price, quantity, fileName)
-            VALUES(#{name}, #{id}, #{price}, #{quantity}, #{fileName} )
+            INSERT INTO product_cart(name, product_id, price, quantity, fileName, member_number)
+            VALUES(#{name}, #{id}, #{price}, #{quantity}, #{fileName}, #{memberNumber} )
             """)
     int addCart(ProductCart productCart);
 
@@ -24,10 +24,10 @@ public interface CartMapper {
 
     @Update("""
             UPDATE product_cart
-            SET quantity = #{quantity} +1
-            WHERE product_id = #{productId}
+            SET quantity = quantity +1
+            WHERE id = #{id}
             """)
-    int updateQuantity(Integer quantity, Integer productId);
+    int updateQuantity(Integer id);
 
     @Select("""
             SELECT *
@@ -49,4 +49,41 @@ public interface CartMapper {
             WHERE product_id = #{productId}
             """)
     String selectFileName(Integer productId);
+
+    @Select("""
+            SELECT *
+            FROM product_cart
+            WHERE id = #{checkCartId}
+            """)
+    List<ProductCart> cartDataByCheckCartId(Integer checkCartId);
+
+    @Delete("""
+            DELETE
+            FROM product_cart
+            WHERE id = #{checkCartId}
+            """)
+    int deleteCartByCheckCartId(Integer checkCartId);
+
+
+    @Update("""
+            UPDATE product_cart
+            SET quantity = #{quantity}, total_price = #{totalPrice}
+            WHERE id = #{id}
+            """)
+    int modifyQuantity(ProductCart productCart);
+
+    @Select("""
+            SELECT quantity
+            FROM product_cart
+            WHERE id = #{cartId}
+            """)
+    Integer getQuantity(Integer cartId);
+
+
+    @Select("""
+            SELECT product_id
+            FROM product_cart
+            WHERE id = #{cartId}
+            """)
+    Integer getProductId(Integer cartId);
 }

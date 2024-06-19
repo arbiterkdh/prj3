@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Flex,
@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { LoginContext } from "../../../../component/LoginProvider.jsx";
 
 function AddCartModal({
   isCartOpen,
@@ -22,6 +23,7 @@ function AddCartModal({
   name,
 }) {
   const toast = useToast();
+  const Login = useContext(LoginContext);
   function handleCartAdd(productId) {
     console.log("fileName:" + fileName);
     axios
@@ -31,6 +33,7 @@ function AddCartModal({
         fileName,
         price,
         quantity,
+        memberNumber: Login.id,
       })
       .then(() => {
         toast({
