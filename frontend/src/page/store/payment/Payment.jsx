@@ -4,7 +4,7 @@ import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Payment({ totalSum, productCartList, checkCartId }) {
+function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
   const Login = useContext(LoginContext);
   const navigate = useNavigate();
 
@@ -220,6 +220,7 @@ function Payment({ totalSum, productCartList, checkCartId }) {
   return (
     <Box>
       <Button
+        isDisabled={isDisabled}
         onClick={() => {
           onClickInicsis();
         }}
@@ -227,6 +228,7 @@ function Payment({ totalSum, productCartList, checkCartId }) {
         카드결제
       </Button>
       <Button
+        isDisabled={isDisabled}
         onClick={() => {
           onClickKakaopay();
         }}

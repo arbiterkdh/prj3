@@ -44,6 +44,8 @@ export function StoreCart() {
   const [changeQuantity, setChangeQuantity] = useState(1);
   const [changeTotalPrice, setChangeTotalPrice] = useState(1);
 
+  const [isDisabled, setIsDisabled] = useState(false);
+
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cartId, setCartId] = useState(null);
@@ -131,6 +133,7 @@ export function StoreCart() {
                   }
                   setChangeQuantity(cartItem.quantity - 1);
                   setChangeTotalPrice((cartItem.quantity - 1) * cartItem.price);
+                  setIsDisabled(true);
                 }}
               >
                 -
@@ -141,6 +144,7 @@ export function StoreCart() {
                   updateQuantity(cartItem.productId, cartItem.quantity + 1);
                   setChangeQuantity(cartItem.quantity + 1);
                   setChangeTotalPrice((cartItem.quantity + 1) * cartItem.price);
+                  setIsDisabled(true);
                 }}
               >
                 +
@@ -157,6 +161,7 @@ export function StoreCart() {
                 console.log("changeQuantity= " + changeQuantity);
                 console.log("changeTotalPrice= " + changeTotalPrice);
                 console.log("cartId= " + cartItem.id);
+                setIsDisabled(false);
               }}
             >
               변경
@@ -273,6 +278,7 @@ export function StoreCart() {
           totalSum={totalSum}
           productCartList={productCartList}
           checkCartId={checkCartId()}
+          isDisabled={isDisabled}
         />
         <ModifyCartModal
           isModifyOpen={isModifyOpen}
