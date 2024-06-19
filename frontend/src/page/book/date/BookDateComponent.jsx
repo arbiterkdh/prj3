@@ -111,6 +111,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                     rounded={"full"}
                     color={selectedDay === day ? "whiteAlpha.900" : ""}
                     bgColor={selectedDay === day ? "red.500" : ""}
+                    _dark={selectedDay === day ? { bgColor: "red.700" } : {}}
                     align={"center"}
                   >
                     <Stack w={"55px"} h={"55px"}>

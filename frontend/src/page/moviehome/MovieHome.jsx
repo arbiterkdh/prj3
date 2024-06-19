@@ -42,7 +42,6 @@ export function MovieHome() {
   return (
     <Box align={"center"} overflow={"hidden"} bgColor={"blackAlpha.500"}>
       <Image
-        mt={"-33px"}
         h={"1280px"}
         minWidth={"1920px"}
         position={"fixed"}

@@ -42,8 +42,10 @@ export function BookTheaterList({
                 h={"50px"}
                 w={"100%"}
                 alignContent={"center"}
-                color={city === isCityChecked ? "whiteAlpha.900" : ""}
-                bgColor={city === isCityChecked ? "blackAlpha.600" : ""}
+                bgColor={city === isCityChecked ? "blackAlpha.400" : ""}
+                _dark={
+                  city === isCityChecked ? { bgColor: "blackAlpha.800" } : {}
+                }
                 onClick={() => {
                   handleClick(city);
                   setIsCityChecked(city);
@@ -66,14 +68,16 @@ export function BookTheaterList({
           <Flex key={theater.number} alignItems={"center"} gap={2}>
             <CursorBox
               w={"100%"}
-              h={"40px"}
+              h={"45px"}
               alignContent={"center"}
               fontSize={"sm"}
-              color={
-                checkedTheaterNumber === theater.number ? "whiteAlpha.900" : ""
-              }
               bgColor={
-                checkedTheaterNumber === theater.number ? "blackAlpha.600" : ""
+                checkedTheaterNumber === theater.number ? "blackAlpha.400" : ""
+              }
+              _dark={
+                checkedTheaterNumber === theater.number
+                  ? { bgColor: "blackAlpha.800" }
+                  : {}
               }
               onClick={() => {
                 setCheckedTheaterNumber(theater.number);

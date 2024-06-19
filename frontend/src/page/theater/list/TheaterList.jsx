@@ -97,6 +97,7 @@ export function TheaterList({
           <TheaterListBox
             key={city}
             bgColor={checkedCity === city ? "red.500" : ""}
+            _dark={checkedCity === city ? { bgColor: "red.700" } : {}}
             color={checkedCity === city ? "whiteAlpha.900" : ""}
             fontWeight={checkedCity === city ? "600" : ""}
             onClick={() => handleClick(city)}

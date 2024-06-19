@@ -113,7 +113,6 @@ export function Navbar() {
               h={"35px"}
               bgColor={"darkslategray"}
               _dark={{ bgColor: "blackAlpha.700" }}
-              opacity={"0.9"}
             />
           )}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}

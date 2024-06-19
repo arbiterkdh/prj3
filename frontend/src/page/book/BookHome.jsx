@@ -28,6 +28,7 @@ export function BookHome() {
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack
               bgColor={bookProgress === 1 ? "red.500" : ""}
+              _dark={bookProgress === 1 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 1 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>01</LargeFontBox>
@@ -35,6 +36,7 @@ export function BookHome() {
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 2 ? "red.500" : ""}
+              _dark={bookProgress === 2 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 2 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>02</LargeFontBox>
@@ -42,6 +44,7 @@ export function BookHome() {
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 3 ? "red.500" : ""}
+              _dark={bookProgress === 3 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 3 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>03</LargeFontBox>
@@ -49,6 +52,7 @@ export function BookHome() {
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 4 ? "red.500" : ""}
+              _dark={bookProgress === 4 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 4 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>04</LargeFontBox>
