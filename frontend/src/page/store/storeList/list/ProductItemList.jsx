@@ -126,47 +126,51 @@ function ProductItemList({
           </CardBody>
           <Divider />
           <CardFooter>
-            <Flex
-              style={{
-                width: "100%",
-                justifyContent: "center",
-              }}
-            >
-              <Box>
-                <Button variant="solid" colorScheme="blue">
-                  <FontAwesomeIcon icon={faCreditCard} />
-                  <Text textIndent={"10px"}>구매</Text>
-                </Button>
-              </Box>
-              <Box>
-                <Button
-                  variant="solid"
-                  colorScheme="red"
-                  onClick={() => {
-                    onCartOpen();
-                    setProductId(product.id);
-                    setName(product.name);
-                    setPrice(product.price);
-                    setFileName(product.fileName);
-                    setQuantity(product.quantity);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faCartShopping} />
-                  <Text textIndent={"10px"}>카트</Text>
-                </Button>
-              </Box>
+            {product.stock === 0 ? (
+              <Text color="red.500">구매 불가</Text>
+            ) : (
+              <Flex
+                style={{
+                  width: "100%",
+                  justifyContent: "center",
+                }}
+              >
+                <Box>
+                  <Button variant="solid" colorScheme="blue">
+                    <FontAwesomeIcon icon={faCreditCard} />
+                    <Text textIndent={"10px"}>구매</Text>
+                  </Button>
+                </Box>
+                <Box>
+                  <Button
+                    variant="solid"
+                    colorScheme="red"
+                    onClick={() => {
+                      onCartOpen();
+                      setProductId(product.id);
+                      setName(product.name);
+                      setPrice(product.price);
+                      setFileName(product.fileName);
+                      setQuantity(product.quantity);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faCartShopping} />
+                    <Text textIndent={"10px"}>카트</Text>
+                  </Button>
+                </Box>
 
-              <Box>
-                <Button
-                  onClick={() => {
-                    onDelOpen();
-                    setProductId(product.id);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faX} />
-                </Button>
-              </Box>
-            </Flex>
+                <Box>
+                  <Button
+                    onClick={() => {
+                      onDelOpen();
+                      setProductId(product.id);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faX} />
+                  </Button>
+                </Box>
+              </Flex>
+            )}
           </CardFooter>
         </Card>
       </Box>

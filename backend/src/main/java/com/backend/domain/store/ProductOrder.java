@@ -15,6 +15,7 @@ public class ProductOrder {
     private Integer quantity;
     private Integer price;
     private Integer memberNumber;
+    private Integer totalPrice;
     private LocalDateTime regDate;
     private LocalDateTime orderDate;
 }

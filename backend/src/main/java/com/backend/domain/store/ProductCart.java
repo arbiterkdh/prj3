@@ -20,6 +20,8 @@ public class ProductCart {
     private Integer memberNumber;
     private Integer paymentId;
 
+    private Integer totalPrice;
+
     private ProductImage image;
 
     public String getRegDate() {

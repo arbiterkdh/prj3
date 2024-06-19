@@ -25,7 +25,7 @@ export function ModifyCartModal({
       .put("/api/store/cart/modifyQuantity", {
         id: cartId,
         quantity: changeQuantity,
-        price: changeTotalPrice,
+        totalPrice: changeTotalPrice,
       })
       .then((res) => {
         toast({
@@ -45,7 +45,7 @@ export function ModifyCartModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>수량 변경 알림</ModalHeader>
-        <ModalBody>수량을 변경하시겠습니까?{cartId}</ModalBody>
+        <ModalBody>수량을 변경하시겠습니까?</ModalBody>
         <ModalFooter>
           <Flex>
             <Button onClick={handleModifyCart}>확인</Button>

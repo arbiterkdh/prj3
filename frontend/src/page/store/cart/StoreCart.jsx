@@ -147,8 +147,7 @@ export function StoreCart() {
               </Button>
             </Flex>
           </CenterTd>
-          {/*<CenterTd>{cartItem.price * cartItem.quantity}원</CenterTd>*/}
-          <CenterTd>{changeQuantity * cartItem.price}원</CenterTd>
+          <CenterTd>{cartItem.price}원</CenterTd>
           <CenterTd>
             <Button
               colorScheme={"blue"}
@@ -160,7 +159,7 @@ export function StoreCart() {
                 console.log("cartId= " + cartItem.id);
               }}
             >
-              수정
+              변경
             </Button>
           </CenterTd>
           <CenterTd>
@@ -192,7 +191,8 @@ export function StoreCart() {
   };
 
   const totalSum = productCartList.reduce(
-    (sum, item) => (checkItem[item.productId] ? sum + item.price : sum),
+    (sum, item) =>
+      checkItem[item.productId] ? sum + item.price * item.quantity : sum,
     0,
   );
 

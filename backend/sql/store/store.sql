@@ -27,9 +27,11 @@ CREATE TABLE product_cart
     product_id    INT REFERENCES product (id),
     quantity      INT,
     price         INT,
+    total_price   INT,
     member_number INT REFERENCES member (number),
     reg_date      DATETIME DEFAULT NOW()
 );
+
 
 CREATE TABLE product_comment
 (
@@ -88,6 +90,7 @@ CREATE TABLE product_order
     price         INT,
     reg_date      DATETIME,
     member_number INT,
+    total_price   INT,
     order_date    DATETIME DEFAULT NOW()
 );
 
@@ -95,13 +98,11 @@ drop table payment;
 drop table product_cart;
 drop table product_order;
 
-
 select *
-from product_cart;
+from product;
 
 SELECT *
-FROM product_cart
-WHERE id = 26;
+FROM product_cart;
 
 select *
 from product_order;

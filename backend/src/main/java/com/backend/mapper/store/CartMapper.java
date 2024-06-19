@@ -24,10 +24,10 @@ public interface CartMapper {
 
     @Update("""
             UPDATE product_cart
-            SET quantity = quantity+#{quantity}, price = price + #{price}
+            SET quantity = quantity +1
             WHERE id = #{id}
             """)
-    int updateQuantity(Integer quantity, Integer price, Integer id);
+    int updateQuantity(Integer id);
 
     @Select("""
             SELECT *
@@ -67,8 +67,23 @@ public interface CartMapper {
 
     @Update("""
             UPDATE product_cart
-            SET quantity = #{quantity}, price = #{price}
+            SET quantity = #{quantity}, total_price = #{totalPrice}
             WHERE id = #{id}
             """)
     int modifyQuantity(ProductCart productCart);
+
+    @Select("""
+            SELECT quantity
+            FROM product_cart
+            WHERE id = #{cartId}
+            """)
+    Integer getQuantity(Integer cartId);
+
+
+    @Select("""
+            SELECT product_id
+            FROM product_cart
+            WHERE id = #{cartId}
+            """)
+    Integer getProductId(Integer cartId);
 }
