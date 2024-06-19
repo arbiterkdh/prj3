@@ -2,6 +2,7 @@ package com.backend.domain.store;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -16,4 +17,11 @@ public class Payment {
     private String buyerDate;
     private Integer memberNumber;
     private List<Integer> checkCartId;
+
+
+    //추가컬럼
+    private String name;
+    private Integer quantity;
+    private Integer totalPrice;
+    private LocalDateTime orderDate;
 }

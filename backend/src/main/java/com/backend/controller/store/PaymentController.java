@@ -2,7 +2,6 @@ package com.backend.controller.store;
 
 
 import com.backend.domain.store.Payment;
-import com.backend.domain.store.ProductOrder;
 import com.backend.service.store.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +16,19 @@ public class PaymentController {
     private final PaymentService service;
 
     @PostMapping("/add")
-    public void addPayment(@RequestBody Payment payment) {
+    public int addPayment(@RequestBody Payment payment) {
 
-        service.add(payment);
+        int paymentId = service.add(payment);
+
+        System.out.println("paymentId = " + paymentId);
+
+        return paymentId;
     }
 
-    @GetMapping("/orderDataList/{memberNumber}")
-    public List<ProductOrder> orderDataList(@PathVariable Integer memberNumber) {
+    @GetMapping("/orderDataList/{memberNumber}/{paymentId}")
+    public List<Payment> orderDataList(@PathVariable Integer memberNumber, @PathVariable Integer paymentId) {
 
-        System.out.println("memberNumber = " + memberNumber);
 
-        service.getData(memberNumber);
-
-        return null;
+        return service.getData(memberNumber, paymentId);
     }
-
 }

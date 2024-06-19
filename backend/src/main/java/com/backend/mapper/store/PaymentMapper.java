@@ -1,7 +1,6 @@
 package com.backend.mapper.store;
 
 import com.backend.domain.store.Payment;
-import com.backend.domain.store.ProductOrder;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -32,16 +31,15 @@ public interface PaymentMapper {
                    p.amount,
                    p.buyer_name,
                    p.buyer_date,
-                   po.name,
-                   po.quantity,
-                   po.total_price,
-                   po.order_date
+                   po.name as name,
+                   po.quantity as quantity,
+                   po.total_price as totalPrice,
+                   po.order_date as orderDate
             from payment p
                      join product_order po
                           on po.payment_id = p.id
             where p.member_number = #{memberNumber}
-            order by p.buyer_date desc
-            limit #{limitData};
+              and p.id = #{paymentId}
             """)
-    List<ProductOrder> getData(Integer memberNumber, int limitData);
+    List<Payment> getData(Integer memberNumber, Integer paymentId);
 }

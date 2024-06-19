@@ -108,10 +108,8 @@ select *
 from product_order
 order by id desc;
 
-select count(*)
-from product_order
-where member_number = 9
-order by order_date desc;
+select *
+from product_order;
 
 select *
 from payment
@@ -122,6 +120,7 @@ select p.order_number,
        p.buyer_name,
        p.buyer_date,
        po.name,
+       po.file_name,
        po.quantity,
        po.total_price,
        po.order_date
@@ -129,12 +128,7 @@ from payment p
          join product_order po
               on po.payment_id = p.id
 where p.member_number = 9
-  and p.id = 13
-order by p.buyer_date desc
-/** 필요한 데이터 payment_id,
-              limit #{값} => order테이블에서 해당하는 payment를 가지고 있는 개수로 구함
-
- */
+  and p.id = 21;
 
 
 /*

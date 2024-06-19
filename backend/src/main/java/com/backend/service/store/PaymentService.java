@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Service
@@ -19,7 +21,7 @@ public class PaymentService {
     private final ProductOrderMapper orderMapper;
     private final ProductMapper productMapper;
 
-    public void add(Payment payment) {
+    public int add(Payment payment) {
 
         mapper.add(payment);
 
@@ -39,12 +41,12 @@ public class PaymentService {
 
             cartMapper.deleteCartByCheckCartId(payment.getCheckCartId().get(i));
         }
+
+        return payment.getId();
     }
 
-    public void getData(Integer memberNumber) {
+    public List<Payment> getData(Integer memberNumber, Integer paymentId) {
 
-        int limitData;
-
-//        List<ProductOrder> orderData = mapper.getData(memberNumber, limitData);
+        return mapper.getData(memberNumber, paymentId);
     }
 }

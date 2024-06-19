@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
   const Login = useContext(LoginContext);
   const navigate = useNavigate();
+  const [paymentId, setPaymentId] = useState(null);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -95,10 +96,16 @@ function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
               memberNumber: Login.id,
               checkCartId,
             })
-            .then((res) => {})
+            .then((res) => {
+              const paymentId = res.data;
+              setPaymentId(paymentId);
+              console.log("payment id 값 " + paymentId);
+              navigate("/store/payment/payment-success", {
+                state: { paymentId },
+              });
+            })
             .catch(() => {})
             .finally(() => {});
-          navigate("/store/payment/payment-success");
         } else {
           console.log(rsp + "결제 실패");
           axios
