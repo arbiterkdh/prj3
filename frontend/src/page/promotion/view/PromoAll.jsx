@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Spinner } from "@chakra-ui/react";
 import { PromoList } from "../list/PromoList.jsx";
 import ShowMoreButton from "../../../css/theme/component/button/ShowMoreButton.jsx";
 import { useNavigate } from "react-router-dom";
@@ -8,16 +8,24 @@ import axios from "axios";
 export function PromoAll() {
   const navigate = useNavigate();
   const [promoList, setPromoList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pageInfo, setPageInfo] = useState({});
 
   useEffect(() => {
-    axios.get(`/api/promotion/list`).then((res) => {
+    axios.get(`/api/promotion/list?type=all`).then((res) => {
       const now = new Date();
       const activePromos = res.data.promotionList.filter(
         (promo) => new Date(promo.eventEndDate) >= now,
       );
       setPromoList(activePromos);
+      setPageInfo(res.data.pageInfo);
+      setLoading(false);
     });
   }, []);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <Box>
@@ -28,8 +36,10 @@ export function PromoAll() {
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/movie")} />
       </Box>
       <PromoList
-        eventType={"영화"}
-        eventStatusList={promoList}
+        eventType={"movie"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "movie",
+        )}
         maxItems={3}
         showTotalPosts={false}
       />
@@ -40,8 +50,10 @@ export function PromoAll() {
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/theater")} />
       </Box>
       <PromoList
-        eventType={"극장"}
-        eventStatusList={promoList}
+        eventType={"theater"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "theater",
+        )}
         maxItems={3}
         showTotalPosts={false}
       />
@@ -54,8 +66,10 @@ export function PromoAll() {
         />
       </Box>
       <PromoList
-        eventType={"멤버십"}
-        eventStatusList={promoList}
+        eventType={"membership"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "membership",
+        )}
         maxItems={3}
         showTotalPosts={false}
       />
@@ -66,8 +80,10 @@ export function PromoAll() {
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/discount")} />
       </Box>
       <PromoList
-        eventType={"제휴/할인"}
-        eventStatusList={promoList}
+        eventType={"discount"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "discount",
+        )}
         maxItems={3}
         showTotalPosts={false}
       />

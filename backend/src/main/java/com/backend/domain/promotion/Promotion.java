@@ -15,5 +15,5 @@ public class Promotion {
     private String content;
 
     private List<PromotionFile> fileList;
-
+    private String eventStatus;
 }

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Center,
   Heading,
   Image,
@@ -15,33 +16,49 @@ import {
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
+import {
+  faAngleLeft,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function PromoEnd() {
   const [promoList, setPromoList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
+    const currentPage = searchParams.get("page") || 1;
     axios
-      .get(`/api/promotion/list`)
+      .get(`/api/promotion/list?page=${currentPage}&type=ended`)
       .then((res) => {
-        const now = new Date();
-        const endedPromos = res.data.promotionList.filter(
-          (promo) => new Date(promo.eventEndDate) < now,
-        );
-        setPromoList(endedPromos);
+        setPromoList(res.data.promotionList);
+        setPageInfo(res.data.pageInfo);
       })
-      .catch(() => {})
-      .finally(() => {});
-  }, []);
+      .catch((error) => {
+        console.error("프로모션 데이터 가져오기 에러:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [searchParams]);
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
 
   function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   }
 
-  if (promoList === null) {
+  if (loading) {
     return <Spinner />;
   }
 
@@ -102,6 +119,63 @@ export function PromoEnd() {
                 </Tbody>
               </Table>
             </TableContainer>
+          </Box>
+          <Box>
+            <Center>
+              {pageInfo.prevPageNumber && (
+                <>
+                  <Button
+                    onClick={() => navigate(`/promotion/eventEnd?page=1`)}
+                  >
+                    <FontAwesomeIcon icon={faAnglesLeft} />
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate(
+                        `/promotion/eventEnd?page=${pageInfo.prevPageNumber}`,
+                      )
+                    }
+                  >
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </Button>
+                </>
+              )}
+              {pageNumbers.map((pageNumber) => (
+                <Button
+                  onClick={() =>
+                    navigate(`/promotion/eventEnd?page=${pageNumber}`)
+                  }
+                  key={pageNumber}
+                  colorScheme={
+                    pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
+                  }
+                >
+                  {pageNumber}
+                </Button>
+              ))}
+              {pageInfo.nextPageNumber && (
+                <>
+                  <Button
+                    onClick={() =>
+                      navigate(
+                        `/promotion/eventEnd?page=${pageInfo.nextPageNumber}`,
+                      )
+                    }
+                  >
+                    <FontAwesomeIcon icon={faAngleRight} />
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      navigate(
+                        `/promotion/eventEnd?page=${pageInfo.lastPageNumber}`,
+                      )
+                    }
+                  >
+                    <FontAwesomeIcon icon={faAnglesRight} />
+                  </Button>
+                </>
+              )}
+            </Center>
           </Box>
         </Box>
       </CenterBox>

@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 export function PromoAdd() {
   const [title, setTitle] = useState("");
-  const [eventType, setEventType] = useState([]);
+  const [eventType, setEventType] = useState("");
   const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [content, setContent] = useState("");
@@ -61,9 +61,6 @@ export function PromoAdd() {
   if (title.trim().length === 0) {
     disableSaveButton = true;
   }
-  if (content.trim().length === 0) {
-    disableSaveButton = true;
-  }
   if (!eventType) {
     disableSaveButton = true;
   }
@@ -79,7 +76,7 @@ export function PromoAdd() {
 
   const fileNameList = [];
   for (let i = 0; i < files.length; i++) {
-    fileNameList.push(<li>{files[i].name}</li>);
+    fileNameList.push(<li key={i}>{files[i].name}</li>);
   }
 
   return (
@@ -101,11 +98,10 @@ export function PromoAdd() {
             placeholder="이벤트 타입을 선택하세요."
             value={eventType}
           >
-            <option value="영화">영화</option>
-            <option value="극장">극장</option>
-            <option value="멤버십">멤버십</option>
-            <option value="제휴/할인">제휴/할인</option>
-            <option value="당첨자발표">당첨자발표</option>
+            <option value="movie">영화</option>
+            <option value="theater">극장</option>
+            <option value="membership">멤버십</option>
+            <option value="discount">제휴/할인</option>
           </Select>
         </FormControl>
       </Box>

@@ -20,7 +20,6 @@ public class PromotionController {
 
     @PostMapping("add")
     public ResponseEntity addPromo(Promotion promotion, @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws IOException {
-
         if (promotionService.validate(promotion)) {
             promotionService.addPromo(promotion, files);
             return ResponseEntity.ok().build();
@@ -30,14 +29,20 @@ public class PromotionController {
     }
 
     @GetMapping("list")
-    public Map<String, Object> listPromotion(@RequestParam(defaultValue = "1") Integer page) {
-        return promotionService.list(page);
+    public Map<String, Object> listPromotion(@RequestParam(defaultValue = "1") Integer page,
+                                             @RequestParam(defaultValue = "") String type) {
+        if (type.equals("ended")) {
+            return promotionService.listEnded(page);
+        } else if (type.equals("all")) {
+            return promotionService.listAll(page);
+        } else {
+            return promotionService.listExcludingEnded(page, type);
+        }
     }
 
     @GetMapping("{id}")
     public ResponseEntity getPromotion(@PathVariable Integer id) {
         Promotion promotion = promotionService.get(id);
-
         if (promotion == null) {
             return ResponseEntity.notFound().build();
         }
@@ -53,7 +58,6 @@ public class PromotionController {
     public ResponseEntity modifyPromotion(Promotion promotion,
                                           @RequestParam(value = "removeFileList[]", required = false) List<String> removeFileList,
                                           @RequestParam(value = "addFileList[]", required = false) MultipartFile[] addFileList) throws IOException {
-
         if (promotionService.validate(promotion)) {
             promotionService.modify(promotion, removeFileList, addFileList);
             return ResponseEntity.ok().build();

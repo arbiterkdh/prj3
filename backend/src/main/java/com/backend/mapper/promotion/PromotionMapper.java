@@ -30,7 +30,6 @@ public interface PromotionMapper {
             """)
     Promotion selectById(Integer id);
 
-
     @Delete("""
             DELETE FROM promo
             WHERE id = #{id}
@@ -72,18 +71,53 @@ public interface PromotionMapper {
             WHERE promo_id=#{promoId}
               AND name=#{fileName}
             """)
-    int deleteFileByPromoIdAndName(Integer promoId, String fileName);
+    int deleteFileByPromoIdAndName(@Param("promoId") Integer promoId, @Param("fileName") String fileName);
 
     @Select("""
-            SELECT *
-            FROM promo
-            ORDER BY id DESC
-            LIMIT #{offset}, 10
-            """)
-    List<Promotion> selectAllPaging(Integer offset);
-
-    @Select("""
-            SELECT COUNT(*) FROM promo
-            """)
+        SELECT COUNT(*)
+        FROM promo
+        """)
     Integer countAll();
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM promo
+        WHERE eventEndDate >= CURRENT_DATE
+        AND eventType = #{type}
+        """)
+    Integer countAllExcludingEnded(@Param("type") String type);
+
+    @Select("""
+        SELECT *
+        FROM promo
+        WHERE eventEndDate >= CURRENT_DATE
+        AND eventType = #{type}
+        ORDER BY id DESC
+        LIMIT #{offset}, #{pageSize}
+        """)
+    List<Promotion> selectAllPagingExcludingEnded(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("type") String type);
+
+    @Select("""
+        SELECT COUNT(*)
+        FROM promo
+        WHERE eventEndDate < CURRENT_DATE
+        """)
+    Integer countAllEnded();
+
+    @Select("""
+        SELECT *
+        FROM promo
+        WHERE eventEndDate < CURRENT_DATE
+        ORDER BY id DESC
+        LIMIT #{offset}, #{pageSize}
+        """)
+    List<Promotion> selectAllPagingEnded(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
+
+    @Select("""
+        SELECT *
+        FROM promo
+        ORDER BY id DESC
+        LIMIT #{offset}, #{pageSize}
+        """)
+    List<Promotion> selectAllPaging(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
 }

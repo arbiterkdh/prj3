@@ -1,4 +1,3 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -21,6 +20,7 @@ import {
   faAnglesLeft,
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export function PromoList({
   eventType: propEventType,
@@ -35,6 +35,7 @@ export function PromoList({
   const { eventType: paramEventType } = useParams();
   const eventType = propEventType || paramEventType;
   const [searchParams] = useSearchParams();
+  const eventStatus = searchParams.get("eventStatus") || "ongoing"; // 이벤트 상태 기본값 추가
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -42,12 +43,15 @@ export function PromoList({
   };
 
   useEffect(() => {
+    const currentPage = searchParams.get("page") || 1;
     if (getEventStatus) {
       setPromoList(getEventStatus);
       setLoading(false);
     } else {
       axios
-        .get(`/api/promotion/list?${searchParams}`)
+        .get(
+          `/api/promotion/list?page=${currentPage}&type=${eventType}&eventStatus=${eventStatus}`,
+        )
         .then((res) => {
           setPromoList(res.data.promotionList);
           setPageInfo(res.data.pageInfo);
@@ -59,7 +63,7 @@ export function PromoList({
           setLoading(false);
         });
     }
-  }, [getEventStatus, searchParams]);
+  }, [getEventStatus, searchParams, eventType, eventStatus]);
 
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -69,7 +73,6 @@ export function PromoList({
   const filteredPromoList = eventType
     ? promoList.filter((promo) => promo.eventType === eventType)
     : promoList;
-
   const displayedPromos = maxItems
     ? filteredPromoList.slice(0, maxItems)
     : filteredPromoList;
@@ -125,12 +128,20 @@ export function PromoList({
         <Center>
           {pageInfo.prevPageNumber && (
             <>
-              <Button onClick={() => navigate("/promotion?page=1")}>
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/promotion/${eventType}?page=1&eventStatus=${eventStatus}`,
+                  )
+                }
+              >
                 <FontAwesomeIcon icon={faAnglesLeft} />
               </Button>
               <Button
                 onClick={() =>
-                  navigate(`/promotion?page=${pageInfo.prevPageNumber}`)
+                  navigate(
+                    `/promotion/${eventType}?page=${pageInfo.prevPageNumber}&eventStatus=${eventStatus}`,
+                  )
                 }
               >
                 <FontAwesomeIcon icon={faAngleLeft} />
@@ -139,7 +150,11 @@ export function PromoList({
           )}
           {pageNumbers.map((pageNumber) => (
             <Button
-              onClick={() => navigate(`/promotion?page=${pageNumber}`)}
+              onClick={() =>
+                navigate(
+                  `/promotion/${eventType}?page=${pageNumber}&eventStatus=${eventStatus}`,
+                )
+              }
               key={pageNumber}
               colorScheme={
                 pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
@@ -152,14 +167,18 @@ export function PromoList({
             <>
               <Button
                 onClick={() =>
-                  navigate(`/promotion?page=${pageInfo.nextPageNumber}`)
+                  navigate(
+                    `/promotion/${eventType}?page=${pageInfo.nextPageNumber}&eventStatus=${eventStatus}`,
+                  )
                 }
               >
                 <FontAwesomeIcon icon={faAngleRight} />
               </Button>
               <Button
                 onClick={() =>
-                  navigate(`/promotion?page=${pageInfo.lastPageNumber}`)
+                  navigate(
+                    `/promotion/${eventType}?page=${pageInfo.lastPageNumber}&eventStatus=${eventStatus}`,
+                  )
                 }
               >
                 <FontAwesomeIcon icon={faAnglesRight} />
