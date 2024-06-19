@@ -35,7 +35,6 @@ export function PromoList({
   const { eventType: paramEventType } = useParams();
   const eventType = propEventType || paramEventType;
   const [searchParams] = useSearchParams();
-  const eventStatus = searchParams.get("eventStatus") || "ongoing"; // 이벤트 상태 기본값 추가
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -49,9 +48,7 @@ export function PromoList({
       setLoading(false);
     } else {
       axios
-        .get(
-          `/api/promotion/list?page=${currentPage}&type=${eventType}&eventStatus=${eventStatus}`,
-        )
+        .get(`/api/promotion/list?page=${currentPage}&type=${eventType}`)
         .then((res) => {
           setPromoList(res.data.promotionList);
           setPageInfo(res.data.pageInfo);
@@ -63,7 +60,7 @@ export function PromoList({
           setLoading(false);
         });
     }
-  }, [getEventStatus, searchParams, eventType, eventStatus]);
+  }, [getEventStatus, searchParams, eventType]);
 
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -89,7 +86,7 @@ export function PromoList({
     <Box>
       {showTotalPosts && (
         <Text as={"b"} mt={4} marginLeft={"20px"}>
-          전체 {filteredPromoList.length}건
+          전체 {pageInfo.totalItems}건 {/* 전체 개수를 표시 */}
         </Text>
       )}
       <SimpleGrid
@@ -129,18 +126,14 @@ export function PromoList({
           {pageInfo.prevPageNumber && (
             <>
               <Button
-                onClick={() =>
-                  navigate(
-                    `/promotion/${eventType}?page=1&eventStatus=${eventStatus}`,
-                  )
-                }
+                onClick={() => navigate(`/promotion/${eventType}?page=1`)}
               >
                 <FontAwesomeIcon icon={faAnglesLeft} />
               </Button>
               <Button
                 onClick={() =>
                   navigate(
-                    `/promotion/${eventType}?page=${pageInfo.prevPageNumber}&eventStatus=${eventStatus}`,
+                    `/promotion/${eventType}?page=${pageInfo.prevPageNumber}`,
                   )
                 }
               >
@@ -150,15 +143,11 @@ export function PromoList({
           )}
           {pageNumbers.map((pageNumber) => (
             <Button
-              onClick={() =>
-                navigate(
-                  `/promotion/${eventType}?page=${pageNumber}&eventStatus=${eventStatus}`,
-                )
-              }
               key={pageNumber}
-              colorScheme={
-                pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
+              onClick={() =>
+                navigate(`/promotion/${eventType}?page=${pageNumber}`)
               }
+              isActive={pageNumber === parseInt(searchParams.get("page"), 10)}
             >
               {pageNumber}
             </Button>
@@ -168,7 +157,7 @@ export function PromoList({
               <Button
                 onClick={() =>
                   navigate(
-                    `/promotion/${eventType}?page=${pageInfo.nextPageNumber}&eventStatus=${eventStatus}`,
+                    `/promotion/${eventType}?page=${pageInfo.nextPageNumber}`,
                   )
                 }
               >
@@ -177,7 +166,7 @@ export function PromoList({
               <Button
                 onClick={() =>
                   navigate(
-                    `/promotion/${eventType}?page=${pageInfo.lastPageNumber}&eventStatus=${eventStatus}`,
+                    `/promotion/${eventType}?page=${pageInfo.lastPageNumber}`,
                   )
                 }
               >

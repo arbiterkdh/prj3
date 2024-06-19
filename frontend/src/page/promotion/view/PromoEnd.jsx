@@ -20,6 +20,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
   faAngleLeft,
+  faAngleRight,
   faAnglesLeft,
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
@@ -78,7 +79,7 @@ export function PromoEnd() {
           </Text>
           <Box borderBottom={"2px solid black"} padding="20px" />
           <Text fontWeight={"bold"} textAlign="left" mt={4} marginLeft="30px">
-            전체 {promoList.length}건
+            전체 {pageInfo.totalItems}건
           </Text>
           <Box border="1px solid #e2e8f0" borderRadius="8px" padding="20px">
             <TableContainer>

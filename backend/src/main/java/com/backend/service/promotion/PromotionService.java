@@ -135,6 +135,7 @@ public class PromotionService {
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
+        pageInfo.put("totalItems", countAll); // 전체 개수를 추가합니다.
 
         List<Promotion> promotions = promotionMapper.selectAllPagingExcludingEnded(offset, 9, type);
         LocalDate now = LocalDate.now();
@@ -180,6 +181,7 @@ public class PromotionService {
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
+        pageInfo.put("totalItems", countAll); // 전체 개수를 추가합니다.
 
         List<Promotion> promotions = promotionMapper.selectAllPagingEnded(offset, 9);
         LocalDate now = LocalDate.now();
