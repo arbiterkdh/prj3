@@ -72,7 +72,7 @@ public class BookService {
         return bookMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
     }
 
-    public TheaterBoxTimeTable getTheaterBoxTimeTable(TheaterBox theaterBox) {
+    public List<TheaterBoxTimeTable> getTheaterBoxTimeTable(TheaterBox theaterBox) {
         return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
     }
 

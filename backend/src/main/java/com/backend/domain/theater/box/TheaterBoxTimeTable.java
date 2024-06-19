@@ -11,5 +11,4 @@ public class TheaterBoxTimeTable {
 
     // 테이블 조인용
     private String movieTitle;
-    private String theaterBoxBoxNumber;
 }

@@ -12,5 +12,5 @@ public class TheaterBox {
 
     // 테이블 조인용
     private String theaterLocation;
-    private List<TheaterBoxTimeTable> theaterTimeTableList;
+    private List<TheaterBoxTimeTable> theaterBoxTimeTableList;
 }

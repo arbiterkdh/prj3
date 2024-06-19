@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   Heading,
+  Stack,
   Table,
   Tbody,
   Td,
@@ -25,12 +26,8 @@ export function BookMovieAddInTheaterBox({
   const [theaterList, setTheaterList] = useState([]);
 
   const [theaterBoxList, setTheaterBoxList] = useState([]);
-  const [theaterBoxTimeTableList, setTheaterBoxTimeTableList] = useState([]);
 
-  let theaterBoxWithTimeTableList = [];
-  // 극장명과 영화이름이 필요해서 이렇게 따로 또 배열에 담아서 넣음.
-
-  useEffect(() => {}, [theaterBoxList, theaterBoxTimeTableList]);
+  useEffect(() => {}, [theaterBoxList]);
 
   function handleCitySelect(city) {
     axios.get(`/api/theater/list?city=${city}`).then((res) => {
@@ -42,13 +39,13 @@ export function BookMovieAddInTheaterBox({
     axios
       .get(`/api/book/movielocation?theaternumber=${theaterNumber}`)
       .then((res) => {
-        setTheaterBoxList(res.data.theaterBoxList);
-        setTheaterBoxTimeTableList(res.data.theaterBoxTimeTableList);
+        setTheaterBoxList(res.data);
+        console.log(res.data);
       });
   }
 
   function handleClickTheaterBox() {
-    axios.post("/api/theaterbox/add");
+    axios.post("/api/theaterbox/add", {});
   }
 
   return (
@@ -94,7 +91,7 @@ export function BookMovieAddInTheaterBox({
             <Tr>
               <Th>극장명(theater_number)</Th>
               <Th>상영관(theater_box.id)</Th>
-              <Th>상영중인 영화(movie_id)</Th>
+              <Th>영화(movie_id) 리스트</Th>
               <Th></Th>
             </Tr>
           </Thead>
@@ -107,7 +104,17 @@ export function BookMovieAddInTheaterBox({
                 <Td>
                   {theaterBox.boxNumber} 관 ({theaterBox.id})
                 </Td>
-                <Td>{theaterBox.movieTitle}</Td>
+                <Td>
+                  <Stack>
+                    {theaterBox.theaterBoxTimeTableList.map(
+                      (theaterBoxTimeTable, index) => (
+                        <Box key={index}>
+                          {index + 1 + ". " + theaterBoxTimeTable.movieTitle}
+                        </Box>
+                      ),
+                    )}
+                  </Stack>
+                </Td>
                 <Td>
                   <Button onClick={handleClickTheaterBox}>상영영화 추가</Button>
                 </Td>

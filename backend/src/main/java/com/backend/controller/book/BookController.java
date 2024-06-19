@@ -3,7 +3,6 @@ package com.backend.controller.book;
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
-import com.backend.domain.theater.box.TheaterBoxTimeTable;
 import com.backend.service.book.BookService;
 import com.backend.service.theater.TheaterService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,19 +70,13 @@ public class BookController {
     }
 
     @GetMapping("movielocation")
-    public Map<String, Object> getTheaterBox(@RequestParam("theaternumber") Integer theaterNumber) {
-        Map<String, Object> result = new HashMap<>();
+    public List<TheaterBox> getTheaterBox(@RequestParam("theaternumber") Integer theaterNumber) {
         List<TheaterBox> theaterBoxList = bookService.getTheaterBox(theaterNumber);
-        List<TheaterBoxTimeTable> theaterBoxTimeTableList = new ArrayList<>();
 
         for (TheaterBox theaterBox : theaterBoxList) {
-            theaterBoxTimeTableList.add(bookService.getTheaterBoxTimeTable(theaterBox));
-            theaterBox.setTheaterTimeTableList(theaterBoxTimeTableList);
+            theaterBox.setTheaterBoxTimeTableList(bookService.getTheaterBoxTimeTable(theaterBox));
         }
-
-        result.put("theaterBoxList", theaterBoxList);
-
-        return result;
+        return theaterBoxList;
     }
 
     @GetMapping("date")
