@@ -28,4 +28,11 @@ FROM movie
 WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
   AND start_date > NOW();
 
-
+CREATE TABLE book_place_time
+(
+    id                   INT PRIMARY KEY AUTO_INCREMENT,
+    theater_box_movie_id INT REFERENCES theater_box_movie (id),
+    vacancy              INT  NOT NULL DEFAULT 176,
+    date                 DATE NOT NULL,
+    time                 TIME NOT NULL
+);

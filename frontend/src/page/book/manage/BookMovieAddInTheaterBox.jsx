@@ -44,16 +44,12 @@ export function BookMovieAddInTheaterBox({
       });
   }
 
-  function handleClickTheaterBox() {
-    axios.post("/api/theaterbox/add", {});
-  }
-
   function handleClickTheaterBoxTimeTable() {}
 
   return (
     <Box>
-      <Box my={"100px"}>
-        <Heading>상영관에 영화 상영일정 작성</Heading>
+      <Box mt={"100px"} mb={"200px"}>
+        <Heading>극장별 영화 상영 목록</Heading>
         <Flex>
           <BorderSelect
             placeholder={"도시명"}
@@ -92,7 +88,6 @@ export function BookMovieAddInTheaterBox({
           <Table>
             <Thead>
               <Tr>
-                <Th>극장명(theater_number)</Th>
                 <Th>상영관(theater_box.id)</Th>
                 <Th>영화(movie_id) 리스트</Th>
                 <Th></Th>
@@ -101,9 +96,6 @@ export function BookMovieAddInTheaterBox({
             <Tbody>
               {theaterBoxList.map((theaterBox, index) => (
                 <Tr key={index}>
-                  <Td>
-                    {theaterBox.theaterLocation} ({theaterBox.theaterNumber})
-                  </Td>
                   <Td>
                     {theaterBox.boxNumber} 관 ({theaterBox.id})
                   </Td>
@@ -125,14 +117,9 @@ export function BookMovieAddInTheaterBox({
                     </Stack>
                   </Td>
                   <Td>
-                    <Flex>
-                      <Button onClick={handleClickTheaterBox}>
-                        상영영화 추가
-                      </Button>
-                      <Button onClick={handleClickTheaterBoxTimeTable}>
-                        영화 상영표 작성
-                      </Button>
-                    </Flex>
+                    <Button onClick={handleClickTheaterBoxTimeTable}>
+                      영화 상영표 작성
+                    </Button>
                   </Td>
                 </Tr>
               ))}

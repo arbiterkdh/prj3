@@ -3,10 +3,10 @@ import { Box, Center, Flex, Heading } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import BookStack from "../../css/theme/component/stack/BookStack.jsx";
 import OuterBookStack from "../../css/theme/component/stack/OuterBookStack.jsx";
-import { BookMovieLocationAdd } from "./add/BookMovieLocationAdd.jsx";
+import { BookMovieLocationAdd } from "./manage/BookMovieLocationAdd.jsx";
 import { useState } from "react";
 import LargeFontBox from "../../css/theme/component/box/LargeFontBox.jsx";
-import { BookMovieAddInTheaterBox } from "./add/BookMovieAddInTheaterBox.jsx";
+import { BookMovieAddInTheaterBox } from "./manage/BookMovieAddInTheaterBox.jsx";
 
 export function BookHome() {
   const [bookProgress, setBookProgress] = useState(1);

@@ -97,8 +97,8 @@ public interface BookMapper {
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
 
     @Select("""
-            SELECT tbtb.id, tbtb.movie_id, tbtb.theater_box_id, tbtb.time_interval, m.title as movieTitle
-            FROM theater_box_time_table tbtb JOIN movie m ON tbtb.movie_id = m.id
+            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, tbm.time_interval, m.title as movieTitle
+            FROM theater_box_movie tbm JOIN movie m ON tbm.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
     List<TheaterBoxTimeTable> selectTheaterBoxTimeTableByTheaterBoxId(Integer id);
