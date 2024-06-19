@@ -79,10 +79,10 @@ public class BookController {
 
         for (TheaterBox theaterBox : theaterBoxList) {
             theaterBoxTimeTableList.add(bookService.getTheaterBoxTimeTable(theaterBox));
+            theaterBox.setTheaterTimeTableList(theaterBoxTimeTableList);
         }
 
         result.put("theaterBoxList", theaterBoxList);
-        result.put("theaterBoxTimeTableList", theaterBoxTimeTableList);
 
         return result;
     }

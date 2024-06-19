@@ -9,6 +9,7 @@ public class TheaterBoxTimeTable {
     private Integer theaterBoxId;
     private Integer timeInterval;
 
-    // movie 테이블 조인용
+    // 테이블 조인용
     private String movieTitle;
+    private String theaterBoxBoxNumber;
 }

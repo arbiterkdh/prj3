@@ -89,11 +89,9 @@ public interface BookMapper {
     List<LocalDate> selectAllBookPeriodListByDate();
 
     @Select("""
-            SELECT tb.id, tb.box_number, tb.theater_number, t.location as theaterLocation, tbtb.movie_id, m.title as movieTitle
+            SELECT tb.id, tb.box_number, tb.theater_number, t.location as theaterLocation
             FROM theater_box tb
                 JOIN theater t ON t.number = tb.theater_number
-                JOIN theater_box_time_table tbtb ON tbtb.theater_box_id = tb.id
-                JOIN movie m ON tbtb.movie_id = m.id
             WHERE tb.theater_number = #{theaterNumber}
             """)
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);

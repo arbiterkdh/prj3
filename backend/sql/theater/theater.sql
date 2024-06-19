@@ -108,5 +108,12 @@ WHERE ml.theater_number = 112
   AND m.start_date < CURRENT_DATE()
   AND DATE_ADD(m.start_date, INTERVAL 3 WEEK) >= CURRENT_DATE();
 
+SELECT tb.box_number, m.title, m.id, tbtb.id
+FROM theater_box_time_table tbtb
+         JOIN movie m ON tbtb.movie_id = m.id
+         JOIN theater_box tb ON tbtb.theater_box_id = tb.id
+WHERE tb.id = 1
+ORDER BY tb.box_number, m.id;
+
 SELECT *
 FROM movie;

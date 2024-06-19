@@ -93,7 +93,7 @@ export function BookMovieAddInTheaterBox({
           <Thead>
             <Tr>
               <Th>극장명(theater_number)</Th>
-              <Th>상영관(box_number)</Th>
+              <Th>상영관(theater_box.id)</Th>
               <Th>상영중인 영화(movie_id)</Th>
               <Th></Th>
             </Tr>
@@ -104,7 +104,9 @@ export function BookMovieAddInTheaterBox({
                 <Td>
                   {theaterBox.theaterLocation} ({theaterBox.theaterNumber})
                 </Td>
-                <Td>{theaterBox.boxNumber} 관</Td>
+                <Td>
+                  {theaterBox.boxNumber} 관 ({theaterBox.id})
+                </Td>
                 <Td>{theaterBox.movieTitle}</Td>
                 <Td>
                   <Button onClick={handleClickTheaterBox}>상영영화 추가</Button>
