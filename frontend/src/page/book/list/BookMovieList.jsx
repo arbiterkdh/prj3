@@ -16,6 +16,20 @@ export function BookMovieList({
   return (
     <Box>
       <Stack>
+        {onScreenList.length > 0 && (
+          <Box
+            color={"white"}
+            bgColor={"darkslategray"}
+            opacity={"0.9"}
+            h={"50px"}
+            fontSize={"larger"}
+            fontWeight={"600"}
+            textAlign={"center"}
+            alignContent={"center"}
+          >
+            상영중
+          </Box>
+        )}
         {onScreenList.map((movie) => (
           <Box key={movie.id}>
             <Input
@@ -32,6 +46,20 @@ export function BookMovieList({
             />
           </Box>
         ))}
+        {willScreenList.length > 0 && (
+          <Box
+            color={"white"}
+            bgColor={"darkslategray"}
+            opacity={"0.9"}
+            h={"50px"}
+            fontSize={"larger"}
+            fontWeight={"600"}
+            textAlign={"center"}
+            alignContent={"center"}
+          >
+            상영예정
+          </Box>
+        )}
         {willScreenList.map((movie) => (
           <Box key={movie.id}>
             <Input

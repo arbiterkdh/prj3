@@ -48,9 +48,11 @@ export function BookMovieAddInTheaterBox({
     axios.post("/api/theaterbox/add", {});
   }
 
+  function handleClickTheaterBoxTimeTable() {}
+
   return (
     <Box>
-      <Box mb={100}>
+      <Box my={"100px"}>
         <Heading>상영관에 영화 상영일정 작성</Heading>
         <Flex>
           <BorderSelect
@@ -86,42 +88,57 @@ export function BookMovieAddInTheaterBox({
           </BorderSelect>
           <Box w={"200%"}></Box>
         </Flex>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>극장명(theater_number)</Th>
-              <Th>상영관(theater_box.id)</Th>
-              <Th>영화(movie_id) 리스트</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {theaterBoxList.map((theaterBox, index) => (
-              <Tr key={index}>
-                <Td>
-                  {theaterBox.theaterLocation} ({theaterBox.theaterNumber})
-                </Td>
-                <Td>
-                  {theaterBox.boxNumber} 관 ({theaterBox.id})
-                </Td>
-                <Td>
-                  <Stack>
-                    {theaterBox.theaterBoxTimeTableList.map(
-                      (theaterBoxTimeTable, index) => (
-                        <Box key={index}>
-                          {index + 1 + ". " + theaterBoxTimeTable.movieTitle}
-                        </Box>
-                      ),
-                    )}
-                  </Stack>
-                </Td>
-                <Td>
-                  <Button onClick={handleClickTheaterBox}>상영영화 추가</Button>
-                </Td>
+        {isLocationSelected && (
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>극장명(theater_number)</Th>
+                <Th>상영관(theater_box.id)</Th>
+                <Th>영화(movie_id) 리스트</Th>
+                <Th></Th>
               </Tr>
-            ))}
-          </Tbody>
-        </Table>
+            </Thead>
+            <Tbody>
+              {theaterBoxList.map((theaterBox, index) => (
+                <Tr key={index}>
+                  <Td>
+                    {theaterBox.theaterLocation} ({theaterBox.theaterNumber})
+                  </Td>
+                  <Td>
+                    {theaterBox.boxNumber} 관 ({theaterBox.id})
+                  </Td>
+                  <Td>
+                    <Stack>
+                      {theaterBox.theaterBoxTimeTableList.map(
+                        (theaterBoxTimeTable, index) => (
+                          <Box key={index}>
+                            {index +
+                              1 +
+                              ". " +
+                              theaterBoxTimeTable.movieTitle +
+                              " (" +
+                              theaterBoxTimeTable.movieId +
+                              ")"}
+                          </Box>
+                        ),
+                      )}
+                    </Stack>
+                  </Td>
+                  <Td>
+                    <Flex>
+                      <Button onClick={handleClickTheaterBox}>
+                        상영영화 추가
+                      </Button>
+                      <Button onClick={handleClickTheaterBoxTimeTable}>
+                        영화 상영표 작성
+                      </Button>
+                    </Flex>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        )}
       </Box>
     </Box>
   );

@@ -75,6 +75,10 @@ INSERT INTO theater_box
     (box_number, theater_number)
 VALUES (3, 112);
 
+INSERT INTO theater_box
+    (box_number, theater_number)
+VALUES (1, 120);
+
 SELECT *
 FROM theater_box;
 
@@ -98,13 +102,27 @@ INSERT INTO theater_box_time_table
 VALUES (522, (SELECT id FROM theater_box WHERE theater_number = 112 AND box_number = 1),
         (SELECT running_time FROM movie WHERE id = 522) / 10 * 10 + 30);
 
+INSERT INTO theater_box_time_table
+    (movie_id, theater_box_id, time_interval)
+VALUES (520, (SELECT id FROM theater_box WHERE theater_number = 120 AND box_number = 1),
+        (SELECT running_time FROM movie WHERE id = 520) / 10 * 10 + 30);
+
+INSERT INTO theater_box_time_table
+    (movie_id, theater_box_id, time_interval)
+VALUES (521, (SELECT id FROM theater_box WHERE theater_number = 120 AND box_number = 1),
+        (SELECT running_time FROM movie WHERE id = 521) / 10 * 10 + 30);
+
+SELECT *
+FROM movie_location
+ORDER BY theater_number, movie_id;
+
 SELECT *
 FROM theater_box_time_table;
 
 SELECT ml.theater_number, ml.movie_id, m.title
 FROM movie_location ml
          JOIN movie m ON ml.movie_id = m.id
-WHERE ml.theater_number = 112
+WHERE ml.theater_number = 120
   AND m.start_date < CURRENT_DATE()
   AND DATE_ADD(m.start_date, INTERVAL 3 WEEK) >= CURRENT_DATE();
 
