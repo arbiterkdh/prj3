@@ -7,11 +7,24 @@ CREATE TABLE movie
     content      VARCHAR(1000) NOT NULL,
     genre        VARCHAR(50)   NOT NULL,
     running_time INT           NOT NULL,
-    rating       INT           NOT NULL,
+    rating       VARCHAR(20)   NOT NULL,
     start_date   DATE          NOT NULL,
     director     VARCHAR(50)   NOT NULL,
     actors       VARCHAR(50)   NOT NULL
 );
+
+ALTER TABLE movie
+    MODIFY rating VARCHAR(20) NOT NULL;
+
+ALTER TABLE movie
+    MODIFY director VARCHAR(100) NOT NULL;
+ALTER TABLE movie
+    MODIFY actors VARCHAR(100) NOT NULL;
+
+DESC movie;
+
+SELECT *
+FROM movie;
 
 CREATE TABLE movie_file
 (

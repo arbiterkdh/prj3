@@ -77,7 +77,7 @@ public class MovieService {
         if (movie.getRunningTime() == null || movie.getRunningTime() == 0) {
             return false;
         }
-        if (movie.getRating() == null || movie.getRating() == 0) {
+        if (movie.getRating() == null || movie.getRating().isBlank()) {
             return false;
         }
         if (movie.getStartDate() == null) {
@@ -160,7 +160,6 @@ public class MovieService {
 
     public Map<String, Object> get(Integer movieId, Authentication authentication) {
         Map<String, Object> result = new HashMap<>();
-        Integer memberId = Integer.valueOf(authentication.getName());
 
         // 무비 객체
         Movie movie = movieMapper.selectByMovieId(movieId);
@@ -176,7 +175,7 @@ public class MovieService {
         if (authentication == null) {
             like.put("like", false);
         } else {
-            int c = movieMapper.selectMovieLikeByMovieIdAndMemberId(movieId, memberId);
+            int c = movieMapper.selectMovieLikeByMovieIdAndMemberId(movieId, Integer.valueOf(authentication.getName()));
             like.put("like", c == 1);
         }
         like.put("count", movieMapper.countMovieLike(movieId));
