@@ -117,8 +117,8 @@ export function Navbar() {
             />
           )}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
-          {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}
-          {drawer === 3 && <TheaterDrawer setDrawer={setDrawer} />}
+          {drawer === 2 && <TheaterDrawer setDrawer={setDrawer} />}
+          {drawer === 3 && <BookDrawer setDrawer={setDrawer} />}
           {drawer === 4 && <PromoDrawer setDrawer={setDrawer} />}
         </Box>
       </Center>

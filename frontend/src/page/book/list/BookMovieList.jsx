@@ -38,7 +38,7 @@ export function BookMovieList({
                 cursor={"pointer"}
                 border={"none"}
                 value={movie.title}
-                bgColor={checkedMovieId === movie.id ? "lightgray" : ""}
+                bgColor={checkedMovieId === movie.id ? "whiteAlpha.800" : ""}
                 isDisabled={!movie.theaterNumber.includes(checkedTheaterNumber)}
                 onClick={() => {
                   setCheckedMovieId(movie.id);
@@ -68,7 +68,7 @@ export function BookMovieList({
                 cursor={"pointer"}
                 border={"none"}
                 value={movie.title}
-                bgColor={checkedMovieId === movie.id ? "lightgray" : ""}
+                bgColor={checkedMovieId === movie.id ? "whiteAlpha.800" : ""}
                 isDisabled={!movie.theaterNumber.includes(checkedTheaterNumber)}
                 onClick={() => {
                   setCheckedMovieId(movie.id);

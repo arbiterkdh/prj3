@@ -19,10 +19,8 @@ export const customTheme = extendTheme({
         // "user-select": "none",
         // 전역적으로 드래그 막고싶을 때 주석 해제하기
         textColor: "blackAlpha.900",
-        borderColor: "blackAlpha.900",
         _dark: {
           textColor: "whiteAlpha.800",
-          borderColor: "whiteAlpha.800",
         },
       },
     },
@@ -50,6 +48,7 @@ export const customTheme = extendTheme({
     },
     Heading: {
       baseStyle: {
+        mt: "10px",
         mb: "20px",
       },
       sizes: {

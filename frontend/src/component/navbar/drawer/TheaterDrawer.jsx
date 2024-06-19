@@ -6,7 +6,7 @@ import { Box, Center } from "@chakra-ui/react";
 export function TheaterDrawer({ setDrawer }) {
   return (
     <DrawerBorderBox
-      onMouseEnter={() => setDrawer(3)}
+      onMouseEnter={() => setDrawer(2)}
       onMouseLeave={() => setDrawer(0)}
     >
       <Center>

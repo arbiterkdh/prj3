@@ -42,7 +42,8 @@ export function BookTheaterList({
                 h={"50px"}
                 w={"100%"}
                 alignContent={"center"}
-                bgColor={city === isCityChecked ? "lightgray" : ""}
+                color={city === isCityChecked ? "whiteAlpha.900" : ""}
+                bgColor={city === isCityChecked ? "blackAlpha.600" : ""}
                 onClick={() => {
                   handleClick(city);
                   setIsCityChecked(city);
@@ -68,8 +69,11 @@ export function BookTheaterList({
               h={"40px"}
               alignContent={"center"}
               fontSize={"sm"}
+              color={
+                checkedTheaterNumber === theater.number ? "whiteAlpha.900" : ""
+              }
               bgColor={
-                checkedTheaterNumber === theater.number ? "lightgray" : ""
+                checkedTheaterNumber === theater.number ? "blackAlpha.600" : ""
               }
               onClick={() => {
                 setCheckedTheaterNumber(theater.number);
