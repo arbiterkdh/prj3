@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -57,23 +58,32 @@ public class BookService {
         List<Map<String, Object>> screenList = new ArrayList<>();
 
         for (Map<String, Object> map : mapList) {
-            List<Integer> theaterNumberList = bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id"));
+            List<Integer> theaterNumberList = null;
+            theaterNumberList = bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id"));
 
-            for (Integer theaterNumber : theaterNumberList) {
-                List<TheaterBox> theaterBoxList = theaterMapper.selectTheaterBoxByTheaterNumber(theaterNumber);
+            if (theaterNumberList != null) {
+                Map<String, Object> theaterList = new HashMap<>();
 
-                for (TheaterBox theaterBox : theaterBoxList) {
-                    List<TheaterBoxMovie> theaterBoxMovieList = new ArrayList<>();
+                for (Integer theaterNumber : theaterNumberList) {
+                    List<TheaterBox> theaterBoxList = theaterMapper.selectTheaterBoxByTheaterNumber(theaterNumber);
 
-                    TheaterBoxMovie theaterBoxMovie = theaterMapper.selectTheaterBoxMovieByTheaterBoxId(theaterBox.getId());
-                    theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+                    for (TheaterBox theaterBox : theaterBoxList) {
+                        List<TheaterBoxMovie> theaterBoxMovieList = theaterMapper.selectTheaterBoxMovieByTheaterBoxId(theaterBox.getId());
 
-                    theaterBoxMovieList.add(theaterBoxMovie);
-                    theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+                        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
+                            theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+                        }
+
+                        theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+                    }
+                    // 여기까지 오면 theaterBoxList 가 완성된 상태
+                    // (각 고유한 관에 -> 상영 영화에 -> 타임 테이블이 들어간 상태)
+                    theaterList.put(theaterNumber.toString(), theaterBoxList);
                 }
-
+                map.put("theaterList", theaterList);
+                // 이렇게 하면 각 movie 를 상영 할 수 있는 각 지점이 들어간 상태
             }
-            map.put("theaterNumberList", theaterNumberList);
+
             screenList.add(map);
         }
         return screenList;

@@ -4,9 +4,9 @@ const DrawerBorderBox = (props) => {
   return (
     <Box
       h={"35px"}
-      fontWeight={"600"}
+      alignContent={"center"}
       color={"whiteAlpha.900"}
-      bgColor={"darkslategray"}
+      bgColor={"#3E6969"}
       _dark={{ bgColor: "blackAlpha.600" }}
       {...props}
     />

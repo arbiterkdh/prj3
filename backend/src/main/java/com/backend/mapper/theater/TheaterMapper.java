@@ -58,5 +58,5 @@ public interface TheaterMapper {
             FROM theater_box_movie
             WHERE theater_box_id = #{theaterBoxId}
             """)
-    TheaterBoxMovie selectTheaterBoxMovieByTheaterBoxId(Integer theaterBoxId);
+    List<TheaterBoxMovie> selectTheaterBoxMovieByTheaterBoxId(Integer theaterBoxId);
 }

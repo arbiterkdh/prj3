@@ -28,7 +28,7 @@ export function Navbar() {
   }
 
   return (
-    <Box bgColor={"blackAlpha.50"}>
+    <Box _dark={{ bgColor: "#002827" }} bgColor={"blackAlpha.50"}>
       <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
@@ -111,7 +111,7 @@ export function Navbar() {
           {drawer === 0 && (
             <Box
               h={"35px"}
-              bgColor={"darkslategray"}
+              bgColor={"#3E6969"}
               _dark={{ bgColor: "blackAlpha.600" }}
             />
           )}
