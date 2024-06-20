@@ -30,13 +30,14 @@ public class PromotionController {
 
     @GetMapping("list")
     public Map<String, Object> listPromotion(@RequestParam(defaultValue = "1") Integer page,
-                                             @RequestParam(defaultValue = "") String type) {
+                                             @RequestParam(defaultValue = "") String type,
+                                             @RequestParam(defaultValue = "") String search) {
         if (type.equals("ended")) {
-            return promotionService.listEnded(page);
+            return promotionService.listEnded(page, search);
         } else if (type.equals("all")) {
-            return promotionService.listAll(page);
+            return promotionService.listAll(page, search);
         } else {
-            return promotionService.listExcludingEnded(page, type);
+            return promotionService.listExcludingEnded(page, type, search);
         }
     }
 

@@ -2,8 +2,10 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   Heading,
   Image,
+  Spacer,
   Spinner,
   Table,
   TableContainer,
@@ -24,6 +26,7 @@ import {
   faAnglesLeft,
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
+import PromoSearchBar from "../PromoSearchBar.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function PromoEnd() {
@@ -32,11 +35,13 @@ export function PromoEnd() {
   const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [promoSearch, setPromoSearch] = useState("");
 
   useEffect(() => {
     const currentPage = searchParams.get("page") || 1;
+    const query = promoSearch ? `&search=${promoSearch}` : "";
     axios
-      .get(`/api/promotion/list?page=${currentPage}&type=ended`)
+      .get(`/api/promotion/list?page=${currentPage}&type=ended${query}`)
       .then((res) => {
         setPromoList(res.data.promotionList);
         setPageInfo(res.data.pageInfo);
@@ -47,7 +52,7 @@ export function PromoEnd() {
       .finally(() => {
         setLoading(false);
       });
-  }, [searchParams]);
+  }, [searchParams, promoSearch]);
 
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -67,6 +72,10 @@ export function PromoEnd() {
     navigate(`/promotion/view/${promoId}`);
   }
 
+  const handleSearch = (searchTerm) => {
+    setPromoSearch(searchTerm);
+  };
+
   return (
     <Center>
       <CenterBox>
@@ -78,9 +87,13 @@ export function PromoEnd() {
             통해 확인하실 수 있습니다.
           </Text>
           <Box borderBottom={"2px solid black"} padding="20px" />
-          <Text fontWeight={"bold"} textAlign="left" mt={4} marginLeft="30px">
-            전체 {pageInfo.totalItems}건
-          </Text>
+          <Flex>
+            <Text fontWeight={"bold"} textAlign="left" mt={4} marginLeft="30px">
+              전체 {pageInfo.totalItems}건
+            </Text>
+            <Spacer />
+            <PromoSearchBar onSearch={handleSearch} />
+          </Flex>
           <Box border="1px solid #e2e8f0" borderRadius="8px" padding="20px">
             <TableContainer>
               <Table variant="simple">

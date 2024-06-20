@@ -67,9 +67,9 @@ public class PromotionService {
         return true;
     }
 
-    public Map<String, Object> listAll(Integer page) {
+    public Map<String, Object> listExcludingEnded(Integer page, String type, String search) {
         Map<String, Object> pageInfo = new HashMap<>();
-        Integer countAll = promotionMapper.countAll();
+        Integer countAll = promotionMapper.countAllExcludingEnded(type, search);
 
         Integer offset = (page - 1) * 9;
         Integer lastPageNumber = (countAll - 1) / 9 + 1;
@@ -90,8 +90,9 @@ public class PromotionService {
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
+        pageInfo.put("totalItems", countAll); // 전체 개수 추가
 
-        List<Promotion> promotions = promotionMapper.selectAllPaging(offset, 9);
+        List<Promotion> promotions = promotionMapper.selectAllPagingExcludingEnded(offset, 9, type, search);
         LocalDate now = LocalDate.now();
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
@@ -112,9 +113,9 @@ public class PromotionService {
         return Map.of("pageInfo", pageInfo, "promotionList", promotions);
     }
 
-    public Map<String, Object> listExcludingEnded(Integer page, String type) {
+    public Map<String, Object> listAll(Integer page, String search) {
         Map<String, Object> pageInfo = new HashMap<>();
-        Integer countAll = promotionMapper.countAllExcludingEnded(type);
+        Integer countAll = promotionMapper.countAll(search);
 
         Integer offset = (page - 1) * 9;
         Integer lastPageNumber = (countAll - 1) / 9 + 1;
@@ -135,9 +136,9 @@ public class PromotionService {
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
-        pageInfo.put("totalItems", countAll); // 전체 개수를 추가합니다.
+        pageInfo.put("totalItems", countAll); // 전체 개수 추가
 
-        List<Promotion> promotions = promotionMapper.selectAllPagingExcludingEnded(offset, 9, type);
+        List<Promotion> promotions = promotionMapper.selectAllPaging(offset, 9, search);
         LocalDate now = LocalDate.now();
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
@@ -158,9 +159,9 @@ public class PromotionService {
         return Map.of("pageInfo", pageInfo, "promotionList", promotions);
     }
 
-    public Map<String, Object> listEnded(Integer page) {
+    public Map<String, Object> listEnded(Integer page, String search) {
         Map<String, Object> pageInfo = new HashMap<>();
-        Integer countAll = promotionMapper.countAllEnded();
+        Integer countAll = promotionMapper.countAllEnded(search);
 
         Integer offset = (page - 1) * 9;
         Integer lastPageNumber = (countAll - 1) / 9 + 1;
@@ -181,9 +182,9 @@ public class PromotionService {
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
-        pageInfo.put("totalItems", countAll); // 전체 개수를 추가합니다.
+        pageInfo.put("totalItems", countAll); // 전체 개수 추가
 
-        List<Promotion> promotions = promotionMapper.selectAllPagingEnded(offset, 9);
+        List<Promotion> promotions = promotionMapper.selectAllPagingEnded(offset, 9, search);
         LocalDate now = LocalDate.now();
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());

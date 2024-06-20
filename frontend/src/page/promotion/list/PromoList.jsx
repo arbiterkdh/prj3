@@ -5,9 +5,11 @@ import {
   CardBody,
   CardFooter,
   Center,
+  Flex,
   Heading,
   Image,
   SimpleGrid,
+  Spacer,
   Spinner,
   Text,
 } from "@chakra-ui/react";
@@ -21,12 +23,14 @@ import {
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import PromoSearchBar from "../PromoSearchBar.jsx";
 
 export function PromoList({
   eventType: propEventType,
   eventStatusList: getEventStatus,
   maxItems,
   showTotalPosts = true,
+  showSearch = true,
 }) {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,6 +39,7 @@ export function PromoList({
   const { eventType: paramEventType } = useParams();
   const eventType = propEventType || paramEventType;
   const [searchParams] = useSearchParams();
+  const [promoSearch, setPromoSearch] = useState("");
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -43,12 +48,15 @@ export function PromoList({
 
   useEffect(() => {
     const currentPage = searchParams.get("page") || 1;
+    const query = promoSearch ? `&search=${promoSearch}` : "";
     if (getEventStatus) {
       setPromoList(getEventStatus);
       setLoading(false);
     } else {
       axios
-        .get(`/api/promotion/list?page=${currentPage}&type=${eventType}`)
+        .get(
+          `/api/promotion/list?page=${currentPage}&type=${eventType}${query}`,
+        )
         .then((res) => {
           setPromoList(res.data.promotionList);
           setPageInfo(res.data.pageInfo);
@@ -60,7 +68,7 @@ export function PromoList({
           setLoading(false);
         });
     }
-  }, [getEventStatus, searchParams, eventType]);
+  }, [getEventStatus, searchParams, eventType, promoSearch]);
 
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -78,17 +86,25 @@ export function PromoList({
     navigate(`/promotion/view/${promoId}`);
   }
 
+  const handleSearch = (searchTerm) => {
+    setPromoSearch(searchTerm);
+  };
+
   if (loading) {
     return <Spinner />;
   }
 
   return (
     <Box>
-      {showTotalPosts && (
-        <Text as={"b"} mt={4} marginLeft={"20px"}>
-          전체 {pageInfo.totalItems}건 {/* 전체 개수를 표시 */}
-        </Text>
-      )}
+      <Flex>
+        {showTotalPosts && (
+          <Text as={"b"} mt={4} marginLeft={"20px"}>
+            전체 {pageInfo.totalItems}건 {/* 전체 개수를 표시 */}
+          </Text>
+        )}
+        <Spacer />
+        {showSearch && <PromoSearchBar onSearch={handleSearch} />}
+      </Flex>
       <SimpleGrid
         spacing={3}
         templateColumns="repeat(auto-fill, minmax(250px, 1fr))"

@@ -42,6 +42,7 @@ export function PromoAll() {
         )}
         maxItems={3}
         showTotalPosts={false}
+        showSearch={false}
       />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
@@ -56,6 +57,7 @@ export function PromoAll() {
         )}
         maxItems={3}
         showTotalPosts={false}
+        showSearch={false}
       />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
@@ -72,6 +74,7 @@ export function PromoAll() {
         )}
         maxItems={3}
         showTotalPosts={false}
+        showSearch={false}
       />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
@@ -86,6 +89,7 @@ export function PromoAll() {
         )}
         maxItems={3}
         showTotalPosts={false}
+        showSearch={false}
       />
     </Box>
   );
