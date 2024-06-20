@@ -28,7 +28,7 @@ export function Navbar() {
   }
 
   return (
-    <Box>
+    <Box bgColor={"blackAlpha.50"}>
       <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
@@ -112,7 +112,7 @@ export function Navbar() {
             <Box
               h={"35px"}
               bgColor={"darkslategray"}
-              _dark={{ bgColor: "blackAlpha.700" }}
+              _dark={{ bgColor: "blackAlpha.600" }}
             />
           )}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}

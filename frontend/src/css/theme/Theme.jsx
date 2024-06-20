@@ -21,6 +21,7 @@ export const customTheme = extendTheme({
         textColor: "blackAlpha.900",
         _dark: {
           textColor: "whiteAlpha.800",
+          bgColor: "#112325",
         },
       },
     },

@@ -40,27 +40,40 @@ export function MovieHome() {
   }, [dailyBoxOffice]);
 
   return (
-    <Box align={"center"} overflow={"hidden"} bgColor={"blackAlpha.500"}>
+    <Box align={"center"} overflow={"hidden"}>
       <Image
-        h={"1280px"}
-        minWidth={"1920px"}
+        minWidth={"100%"}
+        minHeight={"10%"}
         position={"fixed"}
         src={
           "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccvtheaterbg.jpg"
         }
+        _dark={{
+          opacity: "0.7",
+        }}
         zIndex={-1}
       />
-      <Center bgColor="blackAlpha.800">
-        <CenterBox m={10} bgColor={"blackAlpha.900"} color={"whiteAlpha.900"}>
-          <Heading fontSize={"2rem"}>BOX OFFICE 순위</Heading>
+      <Center
+        mt={12}
+        bgColor={"blackAlpha.700"}
+        _dark={{ bgColor: "blackAlpha.600" }}
+      >
+        <CenterBox
+          bgColor={""}
+          color={"whiteAlpha.900"}
+          _dark={{ color: "whiteAlpha.800" }}
+        >
+          <Heading mt={-6} fontSize={"2rem"}>
+            BOX OFFICE 순위
+          </Heading>
           <Box>(오늘 {month + "월 " + day + "일 "}기준)</Box>
           {dailyBoxOffice.length > 0 ? (
             <GapFlex>
               {PosterUrlList.map((url, index) => (
-                <BookBox key={index} w={"300px"} h={"400px"}>
+                <BookBox key={index} w={"300px"} h={"400px"} border={"0px"}>
                   <Stack align={"center"}>
-                    <Image h={"350px"} src={url} />
-                    <Box fontWeight={600}>
+                    <Image h={"350px"} src={url} _dark={{ opacity: "0.8" }} />
+                    <Box fontWeight={600} fontSize={"1.05rem"}>
                       {index + 1}위. {dailyBoxOffice[index].movieNm}
                     </Box>
                   </Stack>

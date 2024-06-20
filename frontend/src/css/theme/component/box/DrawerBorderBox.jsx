@@ -7,7 +7,7 @@ const DrawerBorderBox = (props) => {
       fontWeight={"600"}
       color={"whiteAlpha.900"}
       bgColor={"darkslategray"}
-      _dark={{ bgColor: "blackAlpha.700" }}
+      _dark={{ bgColor: "blackAlpha.600" }}
       {...props}
     />
   );
