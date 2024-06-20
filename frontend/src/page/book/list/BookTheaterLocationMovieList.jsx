@@ -1,6 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { useEffect } from "react";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
+import BookTimeBox from "../../../css/theme/component/box/BookTimeBox.jsx";
 
 export function BookTheaterLocationMovieList({
   checkedTheaterNumber,
@@ -25,52 +26,52 @@ export function BookTheaterLocationMovieList({
     <Box h={"inherit"} overflowY={"scroll"}>
       {checkedTheaterNumber > 0 ? "" : "도시/지점을 선택해주세요."}
       <CursorBox m={0}>
-        {/*{onScreenList.map((movie, index) =>*/}
-        {/*  movie.theaterNumber.includes(checkedTheaterNumber) ? (*/}
-        {/*    <BookTimeBox*/}
-        {/*      key={index}*/}
-        {/*      display={*/}
-        {/*        movie.theaterNumber.includes(checkedTheaterNumber)*/}
-        {/*          ? checkedMovieId === movie.id*/}
-        {/*            ? "inherit"*/}
-        {/*            : checkedMovieId > 0*/}
-        {/*              ? "none"*/}
-        {/*              : "inherit"*/}
-        {/*          : "none"*/}
-        {/*      }*/}
-        {/*      onClick={() => handleBookDataClick("상영중")}*/}
-        {/*    >*/}
-        {/*      {movie.theaterNumber.includes(checkedTheaterNumber)*/}
-        {/*        ? `상영중 : ${movie.title}`*/}
-        {/*        : ""}*/}
-        {/*    </BookTimeBox>*/}
-        {/*  ) : null,*/}
-        {/*)}*/}
+        {onScreenList.map((movie, index) =>
+          movie.theaterNumberList.includes(checkedTheaterNumber) ? (
+            <BookTimeBox
+              key={index}
+              display={
+                movie.theaterNumberList.includes(checkedTheaterNumber)
+                  ? checkedMovieId === movie.id
+                    ? "inherit"
+                    : checkedMovieId > 0
+                      ? "none"
+                      : "inherit"
+                  : "none"
+              }
+              onClick={() => handleBookDataClick("상영중")}
+            >
+              {movie.theaterNumberList.includes(checkedTheaterNumber)
+                ? `상영중 : ${movie.title}`
+                : ""}
+            </BookTimeBox>
+          ) : null,
+        )}
       </CursorBox>
       <CursorBox m={0}>
-        {/*{willScreenList.map((movie, index) =>*/}
-        {/*  movie.theaterNumber.includes(checkedTheaterNumber) ? (*/}
-        {/*    <BookTimeBox*/}
-        {/*      key={index}*/}
-        {/*      display={*/}
-        {/*        movie.theaterNumber.includes(checkedTheaterNumber)*/}
-        {/*          ? checkedMovieId === movie.id*/}
-        {/*            ? "inherit"*/}
-        {/*            : checkedMovieId > 0*/}
-        {/*              ? "none"*/}
-        {/*              : "inherit"*/}
-        {/*          : "none"*/}
-        {/*      }*/}
-        {/*      onClick={() => {*/}
-        {/*        handleBookDataClick("예정작");*/}
-        {/*      }}*/}
-        {/*    >*/}
-        {/*      {movie.theaterNumber.includes(checkedTheaterNumber)*/}
-        {/*        ? `예정작 : ${movie.title}`*/}
-        {/*        : ""}*/}
-        {/*    </BookTimeBox>*/}
-        {/*  ) : null,*/}
-        {/*)}*/}
+        {willScreenList.map((movie, index) =>
+          movie.theaterNumberList.includes(checkedTheaterNumber) ? (
+            <BookTimeBox
+              key={index}
+              display={
+                movie.theaterNumberList.includes(checkedTheaterNumber)
+                  ? checkedMovieId === movie.id
+                    ? "inherit"
+                    : checkedMovieId > 0
+                      ? "none"
+                      : "inherit"
+                  : "none"
+              }
+              onClick={() => {
+                handleBookDataClick("예정작");
+              }}
+            >
+              {movie.theaterNumberList.includes(checkedTheaterNumber)
+                ? `예정작 : ${movie.title}`
+                : ""}
+            </BookTimeBox>
+          ) : null,
+        )}
       </CursorBox>
     </Box>
   );

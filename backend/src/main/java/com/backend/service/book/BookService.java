@@ -82,6 +82,7 @@ public class BookService {
                 }
                 map.put("theaterList", theaterList);
                 // 이렇게 하면 각 movie 를 상영 할 수 있는 각 지점이 들어간 상태
+                map.put("theaterNumberList", theaterNumberList);
             }
 
             screenList.add(map);
