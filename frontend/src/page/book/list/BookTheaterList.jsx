@@ -32,6 +32,10 @@ export function BookTheaterList({
     setIsCityChecked("");
   }
 
+  function handleClickTheater(theaterNumber) {
+    axios.get(`/api/theaterbox/${theaterNumber}`);
+  }
+
   return (
     <Flex h={"100%"}>
       <Box border={"1px solid"} w={"90%"} h={"600px"}>
@@ -82,6 +86,7 @@ export function BookTheaterList({
               }
               onClick={() => {
                 setCheckedTheaterNumber(theater.number);
+                handleClickTheater(theater.number);
               }}
             >
               {theater.location}

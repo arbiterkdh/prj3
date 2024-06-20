@@ -44,7 +44,9 @@ export function BookMovieList({
                     ? { bgColor: "blackAlpha.700" }
                     : { bgColor: "blackAlpha.50" }
                 }
-                isDisabled={!movie.theaterList[checkedTheaterNumber]}
+                isDisabled={
+                  !movie.theaterNumberList.includes(checkedTheaterNumber)
+                }
                 onClick={() => {
                   setCheckedMovieId(movie.id);
                 }}
@@ -74,7 +76,9 @@ export function BookMovieList({
                 border={"none"}
                 value={movie.title}
                 bgColor={checkedMovieId === movie.id ? "whiteAlpha.800" : ""}
-                isDisabled={!movie.theaterList[checkedTheaterNumber]}
+                isDisabled={
+                  !movie.theaterNumberList.includes(checkedTheaterNumber)
+                }
                 onClick={() => {
                   setCheckedMovieId(movie.id);
                 }}

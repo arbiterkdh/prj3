@@ -74,9 +74,9 @@ export function Book() {
       axios.get(`/api/book/willscreenlist/${selectedDay.slice(0, -2)}`),
     ]).then(([onScreenRes, willScreenRes]) => {
       setOnScreenList(onScreenRes.data);
-      setWillScreenList(willScreenRes.data);
+      // setWillScreenList(willScreenRes.data);
       console.log("onScreenRes.data", onScreenRes.data);
-      console.log("willScreenRes.data", willScreenRes.data);
+      // console.log("willScreenRes.data", willScreenRes.data);
     });
   }, [theaterNumberList, movieLocationAdd, selectedDay]);
 
