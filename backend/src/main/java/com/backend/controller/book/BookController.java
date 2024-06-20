@@ -74,7 +74,7 @@ public class BookController {
         List<TheaterBox> theaterBoxList = bookService.getTheaterBox(theaterNumber);
 
         for (TheaterBox theaterBox : theaterBoxList) {
-            theaterBox.setTheaterBoxTimeTableList(bookService.getTheaterBoxTimeTable(theaterBox));
+            theaterBox.setTheaterBoxMovieList(bookService.getTheaterBoxTimeTable(theaterBox));
         }
         return theaterBoxList;
     }

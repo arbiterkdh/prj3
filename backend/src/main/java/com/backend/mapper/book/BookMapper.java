@@ -1,9 +1,10 @@
 package com.backend.mapper.book;
 
+import com.backend.domain.book.BookPlaceTime;
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
-import com.backend.domain.theater.box.TheaterBoxTimeTable;
+import com.backend.domain.theater.box.TheaterBoxMovie;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
@@ -101,7 +102,7 @@ public interface BookMapper {
             FROM theater_box_movie tbm JOIN movie m ON tbm.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
-    List<TheaterBoxTimeTable> selectTheaterBoxTimeTableByTheaterBoxId(Integer id);
+    List<TheaterBoxMovie> selectTheaterBoxTimeTableByTheaterBoxId(Integer id);
 
     @Select("""
             SELECT *
@@ -117,4 +118,11 @@ public interface BookMapper {
             WHERE start_date > CURRENT_DATE()
             """)
     List<Movie> selectAllWillScreen();
+
+    @Select("""
+            SELECT *
+            FROM book_place_time
+            WHERE theater_box_movie_id = #{theaterBoxMovieId}
+            """)
+    List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieId(Integer theaterBoxMovieId);
 }

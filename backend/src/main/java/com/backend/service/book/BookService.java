@@ -3,7 +3,7 @@ package com.backend.service.book;
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
-import com.backend.domain.theater.box.TheaterBoxTimeTable;
+import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.theater.TheaterMapper;
@@ -60,9 +60,20 @@ public class BookService {
             List<Integer> theaterNumberList = bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id"));
 
             for (Integer theaterNumber : theaterNumberList) {
-                theaterMapper.selectTheaterBoxByTheaterNumber(theaterNumber);
-            }
+                List<TheaterBox> theaterBoxList = theaterMapper.selectTheaterBoxByTheaterNumber(theaterNumber);
 
+                for (TheaterBox theaterBox : theaterBoxList) {
+                    List<TheaterBoxMovie> theaterBoxMovieList = new ArrayList<>();
+
+                    TheaterBoxMovie theaterBoxMovie = theaterMapper.selectTheaterBoxMovieByTheaterBoxId(theaterBox.getId());
+                    theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+
+                    theaterBoxMovieList.add(theaterBoxMovie);
+                    theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+                }
+
+            }
+            map.put("theaterNumberList", theaterNumberList);
             screenList.add(map);
         }
         return screenList;
@@ -80,7 +91,7 @@ public class BookService {
         return bookMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
     }
 
-    public List<TheaterBoxTimeTable> getTheaterBoxTimeTable(TheaterBox theaterBox) {
+    public List<TheaterBoxMovie> getTheaterBoxTimeTable(TheaterBox theaterBox) {
         return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
     }
 

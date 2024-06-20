@@ -39,5 +39,19 @@ CREATE TABLE book_place_time
 
 DROP TABLE book_place_time;
 
+INSERT INTO book_place_time
+    (theater_box_movie_id, vacancy, date, time)
+VALUES (1, 176, CURRENT_DATE(), TIME('18:00:00'));
+
+INSERT INTO book_place_time
+    (theater_box_movie_id, vacancy, date, time)
+VALUES (1, 176, CURRENT_DATE(), TIME('15:00:00'));
+
+INSERT INTO book_place_time
+    (theater_box_movie_id, vacancy, date, time)
+VALUES (1, 176, CURRENT_DATE(), TIME('12:00:00'));
+
 SELECT *
 FROM book_place_time;
+
+DESC book_place_time;

@@ -2,6 +2,7 @@ package com.backend.mapper.theater;
 
 import com.backend.domain.theater.Theater;
 import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxMovie;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -46,7 +47,16 @@ public interface TheaterMapper {
     int deleteTheaterByNumber(Integer number);
 
     @Select("""
-            SELECT 
+            SELECT *
+            FROM theater_box
+            WHERE theater_number = #{theaterNumber}
             """)
     List<TheaterBox> selectTheaterBoxByTheaterNumber(Integer theaterNumber);
+
+    @Select("""
+            SELECT *
+            FROM theater_box_movie
+            WHERE theater_box_id = #{theaterBoxId}
+            """)
+    TheaterBoxMovie selectTheaterBoxMovieByTheaterBoxId(Integer theaterBoxId);
 }
