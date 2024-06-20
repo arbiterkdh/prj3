@@ -27,11 +27,11 @@ export function BookTheaterLocationMovieList({
       {checkedTheaterNumber > 0 ? "" : "도시/지점을 선택해주세요."}
       <CursorBox m={0}>
         {onScreenList.map((movie, index) =>
-          movie.theaterNumberList.includes(checkedTheaterNumber) ? (
+          movie.theaterList[checkedTheaterNumber] ? (
             <BookTimeBox
               key={index}
               display={
-                movie.theaterNumberList.includes(checkedTheaterNumber)
+                movie.theaterList[checkedTheaterNumber]
                   ? checkedMovieId === movie.id
                     ? "inherit"
                     : checkedMovieId > 0
@@ -41,20 +41,21 @@ export function BookTheaterLocationMovieList({
               }
               onClick={() => handleBookDataClick("상영중")}
             >
-              {movie.theaterNumberList.includes(checkedTheaterNumber)
+              {movie.theaterList[checkedTheaterNumber]
                 ? `상영중 : ${movie.title}`
                 : ""}
+              <Box></Box>
             </BookTimeBox>
           ) : null,
         )}
       </CursorBox>
       <CursorBox m={0}>
         {willScreenList.map((movie, index) =>
-          movie.theaterNumberList.includes(checkedTheaterNumber) ? (
+          movie.theaterList[checkedTheaterNumber] ? (
             <BookTimeBox
               key={index}
               display={
-                movie.theaterNumberList.includes(checkedTheaterNumber)
+                movie.theaterList[checkedTheaterNumber]
                   ? checkedMovieId === movie.id
                     ? "inherit"
                     : checkedMovieId > 0
@@ -66,7 +67,7 @@ export function BookTheaterLocationMovieList({
                 handleBookDataClick("예정작");
               }}
             >
-              {movie.theaterNumberList.includes(checkedTheaterNumber)
+              {movie.theaterList[checkedTheaterNumber]
                 ? `예정작 : ${movie.title}`
                 : ""}
             </BookTimeBox>

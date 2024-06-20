@@ -34,11 +34,12 @@ export function BookTheaterList({
 
   return (
     <Flex h={"100%"}>
-      <Box border={"1px solid"} w={"100%"} h={"600px"}>
+      <Box border={"1px solid"} w={"90%"} h={"600px"}>
         <Stack gap={0}>
           {cityList.map((city) => (
             <Flex key={city} alignItems={"center"} gap={1}>
               <CursorBox
+                p={1}
                 h={"50px"}
                 w={"100%"}
                 alignContent={"center"}

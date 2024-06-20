@@ -4,8 +4,8 @@ const CenterBox = (props) => {
   return (
     <Box
       width={"1024px"}
-      my={10}
-      p={6}
+      my={12}
+      p={5}
       alignItems={"center"}
       bgColor={"whiteAlpha.100"}
       {...props}

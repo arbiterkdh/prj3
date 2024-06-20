@@ -99,7 +99,7 @@ export function Book() {
         <OuterBookBox>
           <BookBox>영화 선택</BookBox>
           <BookBox>
-            <Select>
+            <Select borderRadius={"none"}>
               <option value={"예매순"}>예매순</option>
               <option value={"관객순"}>관객순</option>
               <option value={"예정작"}>예정작</option>
