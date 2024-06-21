@@ -10,6 +10,7 @@ export function PromoAll() {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageInfo, setPageInfo] = useState({});
+  const [promotions, setPromotions] = useState([]);
 
   useEffect(() => {
     axios.get(`/api/promotion/list?type=all`).then((res) => {
@@ -21,6 +22,21 @@ export function PromoAll() {
       setPageInfo(res.data.pageInfo);
       setLoading(false);
     });
+  }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:5173/api/promotions")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Fetched promotions:", data); // 데이터를 콘솔에 출력
+        setPromotions(data);
+      })
+      .catch((error) => console.error("Error fetching promotions:", error));
   }, []);
 
   if (loading) {
@@ -91,6 +107,10 @@ export function PromoAll() {
         showTotalPosts={false}
         showSearch={false}
       />
+      <div>
+        <h1>All Promotions</h1>
+        <PromoList promotions={promotions} maxItems={3} />
+      </div>
     </Box>
   );
 }
