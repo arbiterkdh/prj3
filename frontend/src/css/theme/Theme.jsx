@@ -118,6 +118,11 @@ export const customTheme = extendTheme({
     },
     Tabs: {
       baseStyle: {
+        tab: {
+          _dark: {
+            _selected: {},
+          },
+        },
         tablist: {
           mt: "20px",
           mb: "0px",

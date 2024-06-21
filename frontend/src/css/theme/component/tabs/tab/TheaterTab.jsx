@@ -4,7 +4,11 @@ const TheaterTab = (props) => {
   return (
     <Tab
       fontSize={"sm"}
-      _selected={{ color: "red.400", borderBottomColor: "red.400" }}
+      _selected={{
+        color: "red.400",
+        borderBottomColor: "red.400",
+        fontWeight: "bold",
+      }}
       _active={{ bgColor: "" }}
       {...props}
     />
