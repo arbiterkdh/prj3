@@ -12,7 +12,7 @@ public class Movie {
     private String content;
     private String genre;
     private Integer runningTime;
-    private Integer rating;
+    private String rating;
     private LocalDate startDate;
     private String director;
     private String actors;

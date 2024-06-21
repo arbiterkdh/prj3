@@ -76,7 +76,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
                 장르 : {movie.genre} / {movie.runningTime} 분
               </Text>
               <Divider orientation="vertical" />
-              <Text> 등급 : {movie.rating}세이상관람가 </Text>
+              <Text> 등급 : {movie.rating}</Text>
               <Divider orientation="vertical" />
               <Text> 개봉일 : {movie.startDate}</Text>
             </Flex>
