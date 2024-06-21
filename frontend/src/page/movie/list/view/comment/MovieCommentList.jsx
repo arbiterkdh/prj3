@@ -34,7 +34,11 @@ export function MovieCommentList({ movieId, isProcessing, setIsProcessing }) {
   }, [isProcessing, page]);
 
   if (commentList.length === 0) {
-    return <Box mb={12}>댓글이 없습니다. 댓글을 써보세요!</Box>;
+    return (
+      <Box fontWeight={"bold"} fontSize={"large"} mb={12}>
+        댓글이 없습니다. 댓글을 써보세요!
+      </Box>
+    );
   }
 
   const pageNumbers = [];

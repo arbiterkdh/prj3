@@ -26,7 +26,7 @@ public class MovieCommentController {
             commentService.addComment(comment, authentication);
             return ResponseEntity.ok().build();
         }
-    
+
         return ResponseEntity.badRequest().build();
     }
 
@@ -36,6 +36,7 @@ public class MovieCommentController {
     }
 
     @DeleteMapping("delete")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity delete(@RequestBody MovieComment comment, Authentication authentication) {
         if (commentService.hasAccess(comment, authentication)) {
             commentService.deleteComment(comment.getId());
@@ -45,6 +46,7 @@ public class MovieCommentController {
     }
 
     @PutMapping("edit")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity edit(@RequestBody MovieComment comment, Authentication authentication) {
         if (commentService.hasAccess(comment, authentication)) {
             commentService.editComment(comment);

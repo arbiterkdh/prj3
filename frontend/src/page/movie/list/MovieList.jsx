@@ -83,7 +83,7 @@ export function MovieList() {
         toast({
           status: "error",
           description: "로그인을 해주세요",
-          position: "top",
+          position: "bottom-right",
         });
       })
       .finally(() => setIsLikeProcessing(false));

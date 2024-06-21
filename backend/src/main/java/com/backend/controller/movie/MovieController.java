@@ -30,13 +30,10 @@ public class MovieController {
     String srcPrefix;
 
     @PostMapping("add")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity addMovie(Movie movie,
                                    String[] movieType,
                                    @RequestParam(value = "file[]") MultipartFile[] file) throws IOException {
-//        System.out.println("movie = " + movie);
-//        System.out.println("file = " + file);
-//        System.out.println("movieType = " + movieType[1]);
-
         if (movieService.validate(movie, movieType, file)) {
             movieService.addMovie(movie, movieType, file);
             return ResponseEntity.ok().build();
@@ -56,11 +53,13 @@ public class MovieController {
     }
 
     @DeleteMapping("delete/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public void delete(@PathVariable Integer id) {
         movieService.deleteMovie(id);
     }
 
     @PutMapping("edit")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public void edit(Movie movie, @RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
         movieService.editMovie(movie, file);
     }

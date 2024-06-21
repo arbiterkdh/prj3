@@ -55,8 +55,8 @@ export function MovieView() {
       .catch(() =>
         toast({
           status: "error",
-          description: "로그인 해주세요",
-          position: "top",
+          description: "로그인을 해주세요",
+          position: "bottom-right",
         }),
       );
   }
