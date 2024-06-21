@@ -24,4 +24,6 @@ public class Payment {
     private Integer quantity;
     private Integer totalPrice;
     private LocalDateTime orderDate;
+
+    private Integer productId;
 }

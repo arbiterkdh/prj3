@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MarginBox from "../../../../css/theme/component/box/MarginBox.jsx";
 import {
   Box,
@@ -20,7 +20,6 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -36,6 +35,7 @@ function ProductItemList({
   productList,
   onCartOpen,
   setProductId,
+  productId,
   setFileName,
   setName,
   name,
@@ -47,13 +47,12 @@ function ProductItemList({
   setImage,
   onDelOpen,
   onModifyOpen,
+  isPayOpen,
+  onPayOpen,
+  onPayClose,
 }) {
   const navigate = useNavigate();
-  const {
-    isOpen: isPayOpen,
-    onOpen: onPayOpen,
-    onClose: onPayClose,
-  } = useDisclosure();
+  const [product, setProduct] = useState();
 
   function handleModifyModal(id, fileName, name, price, stock, imgSrc) {
     setProductId(id);
@@ -88,7 +87,7 @@ function ProductItemList({
           maxWidth: "24%",
         }}
       >
-        <Card maxW="sm">
+        <Card maxW="sm" key={product.id}>
           <CardBody>
             <Image
               style={{
@@ -163,6 +162,8 @@ function ProductItemList({
                       setName(product.name);
                       setPrice(product.price);
                       setQuantity(product.quantity);
+                      setProduct(product);
+                      console.log(product);
                     }}
                   >
                     <FontAwesomeIcon icon={faCreditCard} />
@@ -215,7 +216,14 @@ function ProductItemList({
                   <br />
                   가격:{price}
                 </FormLabel>
-                <Payment />
+                <Payment
+                  name={name}
+                  quantity={quantity}
+                  price={price}
+                  productId={productId}
+                  isSinglePurchase={true}
+                  onPayClose={onPayClose}
+                />
               </FormControl>
             </ModalBody>
             <ModalFooter>

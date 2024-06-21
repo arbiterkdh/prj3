@@ -10,8 +10,8 @@ import java.util.List;
 public interface CartMapper {
 
     @Insert("""
-            INSERT INTO product_cart(name, product_id, price, quantity, fileName, member_number)
-            VALUES(#{name}, #{id}, #{price}, #{quantity}, #{fileName}, #{memberNumber} )
+            INSERT INTO product_cart(name, product_id, price, quantity, fileName, member_number,total_price)
+            VALUES(#{name}, #{id}, #{price}, #{quantity}, #{fileName}, #{memberNumber}, #{price})
             """)
     int addCart(ProductCart productCart);
 

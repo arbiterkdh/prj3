@@ -17,7 +17,7 @@ public class ProductOrder {
     private Integer memberNumber;
     private Integer totalPrice;
     private LocalDateTime regDate;
-    private LocalDateTime orderDate;
+    private String orderDate;
 
 
 }
