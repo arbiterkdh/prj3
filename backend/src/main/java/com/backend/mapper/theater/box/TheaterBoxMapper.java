@@ -1,6 +1,7 @@
 package com.backend.mapper.theater.box;
 
 import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxMovie;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,4 +15,12 @@ public interface TheaterBoxMapper {
             WHERE theater_number = #{theaterNumber}
             """)
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
+
+
+    @Select("""
+            SELECT *
+            FROM theater_box_movie
+            WHERE theater_box_id = #{theaterBoxId}
+            """)
+    List<TheaterBoxMovie> selectAllTheaterBoxMovieByTheaterBoxId(Integer theaterBoxId);
 }

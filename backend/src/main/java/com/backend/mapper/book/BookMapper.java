@@ -123,6 +123,23 @@ public interface BookMapper {
             SELECT *
             FROM book_place_time
             WHERE theater_box_movie_id = #{theaterBoxMovieId}
+            ORDER BY time
             """)
     List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieId(Integer theaterBoxMovieId);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM book_place_time bpt
+            JOIN theater_box_movie tbm ON bpt.theater_box_movie_id = tbm.id
+            JOIN theater_box tb ON tbm.theater_box_id = tb.id
+            WHERE theater_box_id = #{theaterBoxId}
+            """)
+    boolean countAllBookPlaceTimeByTheaterBoxId(Integer theaterBoxId);
+
+    @Select("""
+            SELECT tbm.movie_id
+            FROM theater_box tb JOIN theater_box_movie tbm ON tb.id = tbm.theater_box_id
+            WHERE tb.id = #{theaterBoxId}
+            """)
+    List<Integer> selectAllMovieIdByTheaterBoxId(Integer theaterBoxId);
 }

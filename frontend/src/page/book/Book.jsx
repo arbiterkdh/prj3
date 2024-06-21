@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Select, Stack } from "@chakra-ui/react";
+import { Box, Flex, Select, Stack } from "@chakra-ui/react";
 import BookBox from "../../css/theme/component/box/BookBox.jsx";
 import OuterBookBox from "../../css/theme/component/box/OuterBookBox.jsx";
 import { useEffect, useState } from "react";
@@ -21,6 +21,8 @@ export function Book() {
     setOnScreenList,
     willScreenList,
     setWillScreenList,
+    theaterBoxList,
+    setTheaterBoxList,
     movieLocationAdd,
     setBookProgress,
   } = useOutletContext();
@@ -94,6 +96,7 @@ export function Book() {
             setIsCityChecked={setIsCityChecked}
             checkedTheaterNumber={checkedTheaterNumber}
             setCheckedTheaterNumber={setCheckedTheaterNumber}
+            setTheaterBoxList={setTheaterBoxList}
           />
         </OuterBookBox>
         <OuterBookBox>
@@ -140,8 +143,8 @@ export function Book() {
               checkedMovieId={checkedMovieId}
               selectedDay={selectedDay}
               setSelectedDay={setSelectedDay}
+              theaterBoxList={theaterBoxList}
             />
-            <Button onClick={() => navigate("/book/theaterseat")}>예매</Button>
           </Box>
         </OuterBookBox>
       </Flex>

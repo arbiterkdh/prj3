@@ -1,6 +1,8 @@
 package com.backend.controller.theater.box;
 
 import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxMovie;
+import com.backend.service.book.BookService;
 import com.backend.service.theater.box.TheaterBoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.List;
 public class TheaterBoxController {
 
     private final TheaterBoxService theaterBoxService;
+    private final BookService bookService;
 
     @PostMapping("add")
     public TheaterBox addTheaterBox(@RequestBody TheaterBox theaterBox) {
@@ -23,6 +26,22 @@ public class TheaterBoxController {
     @GetMapping("{theaterNumber}")
     public List<TheaterBox> getTheaterBoxList(@PathVariable Integer theaterNumber) {
 
-        return theaterBoxService.getTheaterBoxList(theaterNumber);
+        List<TheaterBox> theaterBoxList = theaterBoxService.getTheaterBoxList(theaterNumber);
+        // 해당 극장의 상영관 집합 얻어오기.
+        for (TheaterBox theaterBox : theaterBoxList) {
+            List<TheaterBoxMovie> theaterBoxMovieList = theaterBoxService.getTheaterBoxMovieList(theaterBox.getId());
+            // 각 상영관의 상영영화 집합 얻어오기.
+
+            for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
+                theaterBoxMovie.setBookPlaceTimeList(bookService.getAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+            } // 각 상영영화의 타임 테이블 집합 얻어오기.
+
+            theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+            theaterBox.setBookPlaceTimeLeft(bookService.checkBookPlaceTimeLeftByTheaterBoxId(theaterBox.getId()));
+            theaterBox.setMovieIdList(bookService.getMovieIdListByTheaterBoxId(theaterBox.getId()));
+            // 각 상영관 객체에 데이터 집어넣기.
+        }
+
+        return theaterBoxList;
     }
 }

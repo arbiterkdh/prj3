@@ -18,6 +18,8 @@ export function BookHome() {
   const [onScreenList, setOnScreenList] = useState([]);
   const [willScreenList, setWillScreenList] = useState([]);
 
+  const [theaterBoxList, setTheaterBoxList] = useState([]);
+
   const [movieLocationAdd, setMovieLocationAdd] = useState([]);
 
   return (
@@ -68,6 +70,8 @@ export function BookHome() {
               movieList,
               setMovieList,
               onScreenList,
+              theaterBoxList,
+              setTheaterBoxList,
               setOnScreenList,
               willScreenList,
               setWillScreenList,

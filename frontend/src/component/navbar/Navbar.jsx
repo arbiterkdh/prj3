@@ -36,7 +36,13 @@ export function Navbar() {
             <GapFlex>
               {account.isLoggedIn() && (
                 <Flex>
-                  <Image alt={"profile"} src={account.picture} />
+                  <Image
+                    w={"33px"}
+                    h={"33px"}
+                    rounded={"full"}
+                    alt={"profile"}
+                    src={account.picture}
+                  />
                   <CursorBox>{account.nickName}님</CursorBox>
                   <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
                 </Flex>

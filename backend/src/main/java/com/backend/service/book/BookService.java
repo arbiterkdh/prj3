@@ -1,5 +1,6 @@
 package com.backend.service.book;
 
+import com.backend.domain.book.BookPlaceTime;
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
@@ -38,9 +39,9 @@ public class BookService {
         return bookMapper.selectAllMovieLocation();
     }
 
-    public List<Integer> getMovieIdByTheaterNumber(Integer number) {
+    public List<Integer> getMovieIdByTheaterNumber(Integer theaterNumber) {
 
-        return bookMapper.selectMovieIdByTheaterNumber(number);
+        return bookMapper.selectMovieIdByTheaterNumber(theaterNumber);
     }
 
     public List<Map<String, Object>> getOnScreenList(LocalDate date) {
@@ -55,37 +56,10 @@ public class BookService {
 
     private List<Map<String, Object>> getMaps(List<Map<String, Object>> mapList) {
         List<Map<String, Object>> screenList = new ArrayList<>();
-//        System.out.println("mapList = " + mapList);
 
         for (Map<String, Object> map : mapList) {
             List<Integer> theaterNumberList = bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id"));
 
-//            if (theaterNumberList != null) {
-//                Map<String, Object> theaterList = new HashMap<>();
-//
-//                for (Integer theaterNumber : theaterNumberList) {
-//                    List<TheaterBox> theaterBoxList = theaterMapper.selectTheaterBoxByTheaterNumber(theaterNumber);
-//                    // 각 지점 고유 number 에 속한 theaterBox 집합 구하기
-//                    System.out.println("theaterBoxList = " + theaterBoxList);
-//
-//                    for (TheaterBox theaterBox : theaterBoxList) {
-//                        List<TheaterBoxMovie> theaterBoxMovieList = theaterMapper.selectTheaterBoxMovieByTheaterBoxId(theaterBox.getId());
-//                        // 각 지점의 각 상영관에 속한 상영영화 집합 구하기
-//
-//                        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
-//                            theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
-////                            System.out.println("상영영화 스케쥴 확인" + bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
-//                        }
-//
-//                        theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
-//                    }
-//                    // 여기까지 오면 theaterBoxList 가 완성된 상태
-//                    // (각 고유한 관에 -> 상영 영화에 -> 타임 테이블이 들어간 상태)
-//                    theaterList.put(theaterNumber.toString(), theaterBoxList);
-//                }
-//                map.put("theaterList", theaterList);
-//                // 이렇게 하면 각 movie 를 상영 할 수 있는 각 지점이 들어간 상태
-//            }
             map.put("theaterNumberList", theaterNumberList);
             screenList.add(map);
         }
@@ -114,5 +88,17 @@ public class BookService {
 
     public List<Movie> getWillScreenList() {
         return bookMapper.selectAllWillScreen();
+    }
+
+    public List<BookPlaceTime> getAllBookPlaceTimeByTheaterBoxMovieId(Integer theaterBoxMovieId) {
+        return bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovieId);
+    }
+
+    public boolean checkBookPlaceTimeLeftByTheaterBoxId(Integer theaterBoxId) {
+        return bookMapper.countAllBookPlaceTimeByTheaterBoxId(theaterBoxId);
+    }
+
+    public List<Integer> getMovieIdListByTheaterBoxId(Integer theaterBoxId) {
+        return bookMapper.selectAllMovieIdByTheaterBoxId(theaterBoxId);
     }
 }

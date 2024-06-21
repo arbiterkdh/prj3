@@ -11,6 +11,7 @@ export function BookTheaterList({
   setIsCityChecked,
   checkedTheaterNumber,
   setCheckedTheaterNumber,
+  setTheaterBoxList,
 }) {
   useEffect(() => {
     if (theaterNumberList.length === 0) {
@@ -19,6 +20,7 @@ export function BookTheaterList({
       });
     }
     setCheckedTheaterNumber(0);
+    setTheaterBoxList([]);
   }, [isCityChecked]);
 
   function handleClick(city) {
@@ -33,7 +35,10 @@ export function BookTheaterList({
   }
 
   function handleClickTheater(theaterNumber) {
-    axios.get(`/api/theaterbox/${theaterNumber}`);
+    axios.get(`/api/theaterbox/${theaterNumber}`).then((res) => {
+      setTheaterBoxList(res.data);
+      console.log(res.data);
+    });
   }
 
   return (

@@ -15,4 +15,10 @@ public class TheaterBox {
     // 테이블 조인용
     private String theaterLocation;
     private List<TheaterBoxMovie> theaterBoxMovieList;
+
+    // 해당 상영관에 남은 타임테이블 조회
+    private boolean isBookPlaceTimeLeft;
+
+    // 해당 상영관에서 상영하는 영화 id 목록
+    private List<Integer> movieIdList;
 }
