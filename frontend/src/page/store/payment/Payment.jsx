@@ -24,7 +24,9 @@ function Payment({
     ? name
     : productCartList.length > 1
       ? `${productCartList[0].name} 외 ${productCartList.length - 1} 개`
-      : productCartList[0].name;
+      : productCartList.length === 1
+        ? productCartList[0].name
+        : "";
 
   let paymentAmount = isSinglePurchase ? price : totalSum;
 
@@ -151,11 +153,11 @@ function Payment({
         amount: paymentAmount,
         buyer_email: Login.email,
         buyer_name: Login.nickName,
-        buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
+        buyer_tel: "010-1234-5678",
         buyer_addr: "서울특별시 강남구 삼성동",
         buyer_postcode: "123-456",
         m_redirect_url: "{모바일에서 결제 완료 후 리디렉션 될 URL}",
-        escrow: true, //에스크로 결제인 경우 설정
+        escrow: true,
         vbank_due: "YYYYMMDD",
         bypass: {
           acceptmethod: "noeasypay",
@@ -181,6 +183,9 @@ function Payment({
               buyerEmail: rsp.buyer_email,
               memberNumber: Login.id,
               checkCartId,
+              productId,
+              quantity,
+              name,
             })
             .then((res) => {})
             .catch(() => {})
