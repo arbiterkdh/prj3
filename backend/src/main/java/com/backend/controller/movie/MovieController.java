@@ -5,6 +5,7 @@ import com.backend.service.movie.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,6 +66,7 @@ public class MovieController {
     }
 
     @PutMapping("like")
+    @PreAuthorize("isAuthenticated()")
     public Map<String, Object> like(@RequestBody Map<String, String> req, Authentication authentication) {
         return movieService.like(req, authentication);
     }

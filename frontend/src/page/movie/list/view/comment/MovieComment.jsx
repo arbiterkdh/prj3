@@ -7,7 +7,7 @@ export function MovieComment({ movieId, isProcessing, setIsProcessing }) {
   return (
     <Center>
       <CenterBox>
-        <Heading>댓글기능</Heading>
+        <Heading>실관람평</Heading>
         <Box>
           <MovieCommentWrite
             isProcessing={isProcessing}

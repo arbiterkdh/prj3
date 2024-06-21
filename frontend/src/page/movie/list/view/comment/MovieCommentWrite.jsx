@@ -1,9 +1,11 @@
 import { Box, Button, Flex, Textarea } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { LoginContext } from "../../../../../component/LoginProvider.jsx";
 
 export function MovieCommentWrite({ movieId, isProcessing, setIsProcessing }) {
   const [comment, setComment] = useState("");
+  const account = useContext(LoginContext);
 
   function handleCommentSubmit() {
     setIsProcessing(true);
@@ -27,7 +29,9 @@ export function MovieCommentWrite({ movieId, isProcessing, setIsProcessing }) {
         <Textarea
           border={"1px solid black"}
           resize={"none"}
-          placeholder={"댓글을 작성해 보세요"}
+          placeholder={
+            account.isLoggedIn() ? "댓글을 작성 해보세요" : "로그인을 해주세요"
+          }
           value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
