@@ -132,3 +132,14 @@ from payment p
               on po.payment_id = p.id
 where p.member_number = 9
   and p.id = 21;
+
+CREATE TABLE product_qna_comment
+(
+    id             INT PRIMARY KEY AUTO_INCREMENT,
+    content        VARCHAR(100) NOT NULL,
+    reg_date       DATETIME DEFAULT NOW(),
+    product_qna_id INT REFERENCES product_qna (id)
+);
+
+select *
+from product_qna_comment;

@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
 import axios from "axios";
 import AddQnAModal from "./AddQnAModal.jsx";
-import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
 import DeleteQnAModal from "./DeleteQnAModal.jsx";
 import ModifyQnAModal from "./ModifyQnAModal.jsx";
+import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
 
 function QnA({ productId, Login, listQnA, setListQnA }) {
   const [pageInfo, setPageInfo] = useState({});
+  const [idQnA, setIdQnA] = useState("");
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
   const [page, setPage] = useState(1);
@@ -108,6 +109,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
             setContentQnA(itemQnA.content);
             setTitleQnA(itemQnA.title);
           }}
+          style={{ cursor: "pointer" }}
         >
           {itemQnA.title}
         </Td>
@@ -132,6 +134,15 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
           )}
         </Td>
         <Td w={"10%"}>{itemQnA.regDate}</Td>
+
+        <ReadQnAContentModal
+          isQnAContentOpen={isQnAContentOpen}
+          onQnAContentClose={onQnAContentClose}
+          titleQnA={titleQnA}
+          contentQnA={contentQnA}
+          writerQnA={itemQnA.writer}
+          idQnA={itemQnA.id}
+        />
       </Tr>
     );
   };
@@ -152,12 +163,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
           </Box>
         </Td>
       </Tr>
-      <ReadQnAContentModal
-        isQnAContentOpen={isQnAContentOpen}
-        onQnAContentClose={onQnAContentClose}
-        titleQnA={titleQnA}
-        contentQnA={contentQnA}
-      />
+
       <AddQnAModal
         isQnAOpen={isQnAOpen}
         onQnAClose={onQnAClose}
