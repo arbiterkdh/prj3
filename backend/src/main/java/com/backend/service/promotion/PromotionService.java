@@ -39,7 +39,7 @@ public class PromotionService {
             for (MultipartFile file : files) {
                 promotionMapper.insertFileName(promotion.getId(), file.getOriginalFilename());
 
-                String key = String.format("prj3/%d/%s", promotion.getId(), file.getOriginalFilename());
+                String key = STR."prj3/promo\{promotion.getId()}/\{file.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -97,7 +97,7 @@ public class PromotionService {
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
             List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, srcPrefix + promotion.getId() + "/" + name))
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{promotion.getId()}/\{name}"))
                     .toList();
             promotion.setFileList(files);
 
@@ -143,7 +143,7 @@ public class PromotionService {
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
             List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, srcPrefix + promotion.getId() + "/" + name))
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{promotion.getId()}/\{name}"))
                     .toList();
             promotion.setFileList(files);
 
@@ -189,7 +189,7 @@ public class PromotionService {
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
             List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, srcPrefix + promotion.getId() + "/" + name))
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{promotion.getId()}/\{name}"))
                     .toList();
             promotion.setFileList(files);
 
@@ -210,7 +210,7 @@ public class PromotionService {
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         List<PromotionFile> files = fileNames.stream()
-                .map(name -> new PromotionFile(name, String.format("%s/%d/%s", srcPrefix, id, name)))
+                .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{id}/\{name}"))
                 .toList();
 
         promotion.setFileList(files);
@@ -231,7 +231,7 @@ public class PromotionService {
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         for (String fileName : fileNames) {
-            String key = String.format("prj3/%d/%s", id, fileName);
+            String key = STR."prj3/promo\{id}/\{fileName}";
             DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
@@ -245,7 +245,7 @@ public class PromotionService {
     public void modify(Promotion promotion, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
         if (removeFileList != null && removeFileList.size() > 0) {
             for (String fileName : removeFileList) {
-                String key = String.format("prj3/%d/%s", promotion.getId(), fileName);
+                String key = STR."prj3/promo\{promotion.getId()}/\{fileName}";
                 DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -262,7 +262,7 @@ public class PromotionService {
                 if (!fileNameList.contains(fileName)) {
                     promotionMapper.insertFileName(promotion.getId(), fileName);
                 }
-                String key = String.format("prj3/%d/%s", promotion.getId(), fileName);
+                String key = STR."prj3/promo\{promotion.getId()}/\{fileName}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
