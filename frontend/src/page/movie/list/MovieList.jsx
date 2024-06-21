@@ -21,8 +21,9 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
@@ -33,6 +34,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -43,6 +45,8 @@ export function MovieList() {
   const [isLikeProcessing, setIsLikeProcessing] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const toast = useToast();
+  const account = useContext(LoginContext);
 
   useEffect(() => {
     if (!isLikeProcessing) {
@@ -74,6 +78,13 @@ export function MovieList() {
     axios
       .put("/api/movie/like", {
         movieId: movieId,
+      })
+      .catch(() => {
+        toast({
+          status: "error",
+          description: "로그인을 해주세요",
+          position: "top",
+        });
       })
       .finally(() => setIsLikeProcessing(false));
   }
@@ -108,11 +119,13 @@ export function MovieList() {
   return (
     <Center>
       <CenterBox mb={10}>
-        <Box mt={"-50px"} mb={10} ml={"930px"}>
-          <Button colorScheme={"blue"} onClick={handleAddClick}>
-            추가
-          </Button>
-        </Box>
+        {account.isAdmin() && (
+          <Box mt={"-50px"} mb={10} ml={"930px"}>
+            <Button colorScheme={"blue"} onClick={handleAddClick}>
+              추가
+            </Button>
+          </Box>
+        )}
         <Tabs isFitted variant="enclosed">
           <TabList mb="1em">
             <Tab onClick={handleNowShowingMovieTab}>현재상영작</Tab>
@@ -151,7 +164,9 @@ export function MovieList() {
                         />
                       </Center>
                       <Stack mt="6" spacing="3">
-                        <Heading size="md">{movie.title}</Heading>
+                        <Heading lineHeight={1} noOfLines={1} size="md">
+                          {movie.title}
+                        </Heading>
                         <Text mt={-6}>개봉일 {movie.startDate}</Text>
                       </Stack>
                     </CardBody>
@@ -228,7 +243,9 @@ export function MovieList() {
                         />
                       </Center>
                       <Stack mt="6" spacing="3">
-                        <Heading size="md">{movie.title}</Heading>
+                        <Heading lineHeight={1} noOfLines={1} size="md">
+                          {movie.title}
+                        </Heading>
                         <Text mt={-6}>개봉일 {movie.startDate}</Text>
                       </Stack>
                     </CardBody>

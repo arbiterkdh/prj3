@@ -10,12 +10,14 @@ export function LoginProvider({ children }) {
   const [nickName, setNickName] = useState("");
   const [picture, setPicture] = useState("");
   const [email, setEmail] = useState("");
+  const [authority, setAuthority] = useState([]);
 
   // 카카오 기능들 모음 //
   const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
   const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
   const kakaoLogoutUri = "http://localhost:5173/oauth/kakao/logout";
   const [isKakaoLoggedIn, setIsKakaoLoggedIn] = useState(false);
+
   function kakaoInfo(id_token) {
     const payload = jwtDecode(id_token);
     // axios
@@ -31,6 +33,7 @@ export function LoginProvider({ children }) {
     setEmail(payload.email);
     setExpired(payload.exp);
   }
+
   // 카카오 기능들 모음 //
 
   useEffect(() => {
@@ -48,6 +51,10 @@ export function LoginProvider({ children }) {
     return id == param;
   }
 
+  function isAdmin() {
+    return authority.includes("admin");
+  }
+
   function login(token) {
     localStorage.setItem("token", token);
     const payload = jwtDecode(token);
@@ -56,6 +63,7 @@ export function LoginProvider({ children }) {
     setNickName(payload.nickName);
     setPicture(payload.picture);
     setEmail(payload.email);
+    setAuthority(payload.scope.split(" "));
   }
 
   function logout() {
@@ -79,6 +87,7 @@ export function LoginProvider({ children }) {
     setNickName("");
     setPicture("");
     setEmail("");
+    setAuthority([]);
   }
 
   return (
@@ -91,6 +100,7 @@ export function LoginProvider({ children }) {
         login,
         logout,
         hasAccess,
+        isAdmin,
         isLoggedIn,
         kakaoKey,
         kakaoUri,

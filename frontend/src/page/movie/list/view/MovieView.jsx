@@ -17,6 +17,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  useToast,
 } from "@chakra-ui/react";
 import { MovieInfo } from "./MovieInfo.jsx";
 import { MovieComment } from "./comment/MovieComment.jsx";
@@ -32,6 +33,7 @@ export function MovieView() {
     like: false,
     count: 0,
   });
+  const toast = useToast();
 
   useEffect(() => {
     axios
@@ -49,7 +51,14 @@ export function MovieView() {
       .put("/api/movie/like", {
         movieId: id,
       })
-      .then((res) => setLike(res.data));
+      .then((res) => setLike(res.data))
+      .catch(() =>
+        toast({
+          status: "error",
+          description: "로그인 해주세요",
+          position: "top",
+        }),
+      );
   }
 
   if (movie === null) {
