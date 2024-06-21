@@ -54,6 +54,7 @@ public class CartService {
                 cart.setFileName(product.getFileName());
                 cart.setQuantity(product.getQuantity());
                 cart.setMemberNumber(memberNumber);
+                cart.setTotalPrice(product.getPrice());
 
                 mapper.addCart(cart);
             }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import MarginBox from "../../../../css/theme/component/box/MarginBox.jsx";
 import {
   Box,
@@ -9,7 +9,15 @@ import {
   Center,
   Divider,
   Flex,
+  FormControl,
+  FormLabel,
   Image,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -21,21 +29,30 @@ import {
   faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import Payment from "../../payment/Payment.jsx";
 
 function ProductItemList({
   productList,
   onCartOpen,
   setProductId,
+  productId,
   setFileName,
   setName,
+  name,
   setPrice,
+  price,
   setStock,
   setQuantity,
+  quantity,
   setImage,
   onDelOpen,
   onModifyOpen,
+  isPayOpen,
+  onPayOpen,
+  onPayClose,
 }) {
   const navigate = useNavigate();
+  const [product, setProduct] = useState();
 
   function handleModifyModal(id, fileName, name, price, stock, imgSrc) {
     setProductId(id);
@@ -70,7 +87,7 @@ function ProductItemList({
           maxWidth: "24%",
         }}
       >
-        <Card maxW="sm">
+        <Card maxW="sm" key={product.id}>
           <CardBody>
             <Image
               style={{
@@ -136,7 +153,19 @@ function ProductItemList({
                 }}
               >
                 <Box>
-                  <Button variant="solid" colorScheme="blue">
+                  <Button
+                    variant="solid"
+                    colorScheme="blue"
+                    onClick={() => {
+                      onPayOpen();
+                      setProductId(product.id);
+                      setName(product.name);
+                      setPrice(product.price);
+                      setQuantity(product.quantity);
+                      setProduct(product);
+                      console.log(product);
+                    }}
+                  >
                     <FontAwesomeIcon icon={faCreditCard} />
                     <Text textIndent={"10px"}>구매</Text>
                   </Button>
@@ -173,6 +202,35 @@ function ProductItemList({
             )}
           </CardFooter>
         </Card>
+        <Modal isOpen={isPayOpen} onClose={onPayClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>알림</ModalHeader>
+            <ModalBody>
+              <FormControl>
+                <FormLabel>결제방식을 선택해주세요</FormLabel>
+                <FormLabel>
+                  상품명:{name}
+                  <br />
+                  수량:{quantity}
+                  <br />
+                  가격:{price}
+                </FormLabel>
+                <Payment
+                  name={name}
+                  quantity={quantity}
+                  price={price}
+                  productId={productId}
+                  isSinglePurchase={true}
+                  onPayClose={onPayClose}
+                />
+              </FormControl>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onPayClose}>취소</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     );
   };

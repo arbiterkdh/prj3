@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Service
@@ -19,25 +21,43 @@ public class PaymentService {
     private final ProductOrderMapper orderMapper;
     private final ProductMapper productMapper;
 
-    public void add(Payment payment) {
+    public int add(Payment payment) {
 
         mapper.add(payment);
 
-        for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+        if (payment.getCheckCartId() != null && !payment.getCheckCartId().isEmpty()) {
 
-            orderMapper.copyCartData(payment.getCheckCartId().get(i), payment.getId());
+            for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+
+                orderMapper.copyCartData(payment.getCheckCartId().get(i), payment.getId());
+            }
+
+            for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+
+                Integer getQuantity = cartMapper.getQuantity(payment.getCheckCartId().get(i));
+                Integer productId = cartMapper.getProductId(payment.getCheckCartId().get(i));
+                productMapper.updateStock(productId, getQuantity);
+            }
+
+            for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+
+                cartMapper.deleteCartByCheckCartId(payment.getCheckCartId().get(i));
+            }
+        } else {
+
+            System.out.println("payment.getBuyerDate() = " + payment.getBuyerDate());
+
+            orderMapper.addSinggleProductOrder(payment.getProductId(), payment.getQuantity(), payment.getId(), payment.getName(), payment.getAmount(), payment.getAmount(), payment.getMemberNumber());
+
+            productMapper.updateStock(payment.getProductId(), payment.getQuantity());
         }
 
-        for (int i = 0; i < payment.getCheckCartId().size(); i++) {
 
-            Integer getQuantity = cartMapper.getQuantity(payment.getCheckCartId().get(i));
-            Integer productId = cartMapper.getProductId(payment.getCheckCartId().get(i));
-            productMapper.updateStock(productId, getQuantity);
-        }
+        return payment.getId();
+    }
 
-        for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+    public List<Payment> getData(Integer memberNumber, Integer paymentId) {
 
-            cartMapper.deleteCartByCheckCartId(payment.getCheckCartId().get(i));
-        }
+        return mapper.getData(memberNumber, paymentId);
     }
 }

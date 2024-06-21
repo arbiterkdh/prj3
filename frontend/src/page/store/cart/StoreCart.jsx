@@ -55,6 +55,12 @@ export function StoreCart() {
     onClose: onModifyClose,
   } = useDisclosure();
 
+  const {
+    isOpen: isPayOpen,
+    onOpen: onPayOpen,
+    onClose: onPayClose,
+  } = useDisclosure();
+
   const Login = useContext(LoginContext);
 
   const updateQuantity = (productId, quantityItem) => {
@@ -279,6 +285,7 @@ export function StoreCart() {
           productCartList={productCartList}
           checkCartId={checkCartId()}
           isDisabled={isDisabled}
+          onPayClose={onPayClose}
         />
         <ModifyCartModal
           isModifyOpen={isModifyOpen}

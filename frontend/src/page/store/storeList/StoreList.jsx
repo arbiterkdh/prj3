@@ -60,6 +60,12 @@ export function StoreList() {
     onClose: onCartClose,
   } = useDisclosure();
 
+  const {
+    isOpen: isPayOpen,
+    onOpen: onPayOpen,
+    onClose: onPayClose,
+  } = useDisclosure();
+
   const productListRefresh = () => {
     axios
       .get(`/api/store/product/list/${menuTypeSelect}`, {
@@ -155,15 +161,22 @@ export function StoreList() {
           productList={productList}
           onCartOpen={onCartOpen}
           setProductId={setProductId}
+          productId={productId}
           setFileName={setFileName}
           setName={setName}
+          name={name}
           setPrice={setPrice}
+          price={price}
           setStock={setStock}
           setQuantity={setQuantity}
+          quantity={quantity}
           image={image}
           setImage={setImage}
           onDelOpen={onDelOpen}
           onModifyOpen={onModifyOpen}
+          isPayOpen={isPayOpen}
+          onPayOpen={onPayOpen}
+          onPayClose={onPayClose}
         />
 
         {pageInfo.prevPageNumber && (

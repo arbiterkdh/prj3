@@ -1,12 +1,24 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Button } from "@chakra-ui/react";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
+function Payment({
+  totalSum,
+  productCartList,
+  checkCartId,
+  isDisabled,
+  name,
+  quantity,
+  price,
+  productId,
+  isSinglePurchase,
+  onPayClose,
+}) {
   const Login = useContext(LoginContext);
   const navigate = useNavigate();
+  const [paymentId, setPaymentId] = useState(null);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -20,6 +32,8 @@ function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
   }, []);
 
   const onClickInicsis = () => {
+    onPayClose();
+
     const { IMP } = window;
     if (!IMP) return;
 
@@ -29,16 +43,26 @@ function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
       let minutes = today.getMinutes();
       let seconds = today.getSeconds();
       let milliseconds = today.getMilliseconds();
-      return `${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`;
+      return (
+        `order_no_ +${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`
+      );
     }
+
+    let paymentName = isSinglePurchase
+      ? name
+      : productCartList.length > 1
+        ? `${productCartList[0].name} 외 ${productCartList.length - 1} 개`
+        : productCartList[0].name;
+
+    let paymentAmount = isSinglePurchase ? price : totalSum;
 
     IMP.request_pay(
       {
         pg: "html5_inicis.INIpayTest",
         pay_method: "card",
-        merchant_uid: "order_no_" + makeMerchantUid(),
-        name: `${productCartList[0].name} 외 ${productCartList.length - 1} 개`,
-        amount: totalSum,
+        merchant_uid: makeMerchantUid(),
+        name: paymentName,
+        amount: paymentAmount,
         buyer_email: Login.email,
         buyer_name: Login.nickName,
         buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
@@ -60,30 +84,6 @@ function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
       function (rsp) {
         if (rsp.success) {
           console.log(rsp + "결제 성공");
-          const success = rsp.success;
-          const orderNumber = rsp.merchant_uid;
-          const status = rsp.status;
-          const amount = rsp.paid_amount;
-          const buyerName = rsp.buyer_name;
-          const buyerEmail = rsp.buyer_email;
-
-          console.log(
-            "success=" +
-              success +
-              ", orderNumber=" +
-              orderNumber +
-              ", status=" +
-              status +
-              ", amount= " +
-              amount +
-              ", buyerName=" +
-              buyerName +
-              ", buyerEmail=" +
-              buyerEmail +
-              ", member.no=" +
-              Login.id,
-          );
-
           axios
             .post("/api/store/payment/add", {
               success: rsp.success,
@@ -94,11 +94,20 @@ function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
               buyerEmail: rsp.buyer_email,
               memberNumber: Login.id,
               checkCartId,
+              productId,
+              quantity,
+              name,
             })
-            .then((res) => {})
+            .then((res) => {
+              const paymentId = res.data;
+              setPaymentId(paymentId);
+              console.log("payment id 값 " + paymentId);
+              navigate("/store/payment/payment-success", {
+                state: { paymentId },
+              });
+            })
             .catch(() => {})
             .finally(() => {});
-          navigate("/store/payment/payment-success");
         } else {
           console.log(rsp + "결제 실패");
           axios
@@ -159,29 +168,6 @@ function Payment({ totalSum, productCartList, checkCartId, isDisabled }) {
       function (rsp) {
         if (rsp.success) {
           console.log(rsp + "결제 성공");
-          const success = rsp.success;
-          const orderNumber = rsp.merchant_uid;
-          const status = rsp.status;
-          const amount = rsp.paid_amount;
-          const buyerName = rsp.buyer_name;
-          const buyerEmail = rsp.buyer_email;
-
-          console.log(
-            "success=" +
-              success +
-              ", orderNumber=" +
-              orderNumber +
-              ", status=" +
-              status +
-              ", amount= " +
-              amount +
-              ", buyerName=" +
-              buyerName +
-              ", buyerEmail=" +
-              buyerEmail +
-              ", member.no=" +
-              Login.id,
-          );
 
           axios
             .post("/api/store/payment/add", {

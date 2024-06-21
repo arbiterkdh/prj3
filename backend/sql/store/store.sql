@@ -94,6 +94,10 @@ CREATE TABLE product_order
     order_date    DATETIME DEFAULT NOW()
 );
 
+alter table product_order
+    modify column reg_date varchar(50) default 'no cart date single product';
+
+
 drop table payment;
 drop table product_cart;
 drop table product_order;
@@ -105,7 +109,26 @@ SELECT *
 FROM product_cart;
 
 select *
-from product_order;
+from product_order
+order by id desc;
+
 
 select *
-from payment;
+from payment
+order by id desc;
+
+
+select p.order_number,
+       p.amount,
+       p.buyer_name,
+       p.buyer_date,
+       po.name,
+       po.file_name,
+       po.quantity,
+       po.total_price,
+       po.order_date
+from payment p
+         join product_order po
+              on po.payment_id = p.id
+where p.member_number = 9
+  and p.id = 21;
