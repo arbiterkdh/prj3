@@ -6,7 +6,7 @@ import { Box, Center } from "@chakra-ui/react";
 export function BookDrawer({ setDrawer }) {
   return (
     <DrawerBorderBox
-      onMouseEnter={() => setDrawer(2)}
+      onMouseEnter={() => setDrawer(3)}
       onMouseLeave={() => setDrawer(0)}
     >
       <Center>

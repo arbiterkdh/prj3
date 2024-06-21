@@ -1,7 +1,8 @@
-import { Box } from "@chakra-ui/react";
-import { useEffect } from "react";
-import BookTimeBox from "../../../css/theme/component/box/BookTimeBox.jsx";
-import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
+import { Box, Flex, Heading, Stack } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
+import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function BookTheaterLocationMovieList({
   checkedTheaterNumber,
@@ -10,7 +11,12 @@ export function BookTheaterLocationMovieList({
   checkedMovieId,
   selectedDay,
   setSelectedDay,
+  theaterBoxList,
 }) {
+  const [timeTableRemain, setTimeTableRemain] = useState(0);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     // 체크한 날짜에 맞는 타임테이블 가져오기.
   }, [checkedTheaterNumber, selectedDay]);
@@ -24,51 +30,73 @@ export function BookTheaterLocationMovieList({
 
   return (
     <Box h={"inherit"} overflowY={"scroll"}>
-      {checkedTheaterNumber > 0 ? "" : "상영관을 선택해주세요."}
-      <CursorBox m={0}>
-        {onScreenList.map((movie, index) => (
-          <BookTimeBox
-            key={index}
-            display={
-              movie.theater_number.includes(checkedTheaterNumber)
-                ? checkedMovieId === movie.id
-                  ? "inherit"
-                  : checkedMovieId > 0
-                    ? "none"
-                    : "inherit"
-                : "none"
-            }
-            onClick={() => handleBookDataClick("상영중")}
-          >
-            {movie.theater_number.includes(checkedTheaterNumber)
-              ? `상영중 : ${movie.title}`
-              : ""}
-          </BookTimeBox>
-        ))}
-      </CursorBox>
-      <CursorBox m={0}>
-        {willScreenList.map((movie, index) => (
-          <BookTimeBox
-            key={index}
-            display={
-              movie.theater_number.includes(checkedTheaterNumber)
-                ? checkedMovieId === movie.id
-                  ? "inherit"
-                  : checkedMovieId > 0
-                    ? "none"
-                    : "inherit"
-                : "none"
-            }
-            onClick={() => {
-              handleBookDataClick("예정작");
-            }}
-          >
-            {movie.theater_number.includes(checkedTheaterNumber)
-              ? `예정작 : ${movie.title}`
-              : ""}
-          </BookTimeBox>
-        ))}
-      </CursorBox>
+      {theaterBoxList.length > 0 && (
+        <Box>
+          {theaterBoxList.map((theaterBox, index) => (
+            <Box key={index} minHeight={"200px"} mb={2}>
+              {theaterBox.movieIdList.includes(checkedMovieId) && (
+                <Stack>
+                  <Box
+                    p={1}
+                    color={"whiteAlpha.900"}
+                    bgColor={"darkslategray"}
+                    fontSize={"1rem"}
+                    display={theaterBox.bookPlaceTimeLeft ? "" : "none"}
+                  >
+                    {theaterBox.boxNumber} 관
+                  </Box>
+                  <MarginBox>
+                    {theaterBox.theaterBoxMovieList.map(
+                      (theaterBoxMovie, index) => (
+                        <Box key={index} p={1}>
+                          {theaterBoxMovie.movieId === checkedMovieId && (
+                            <Box>
+                              {theaterBoxMovie.bookPlaceTimeList.length > 0 && (
+                                <Heading>{theaterBoxMovie.movieTitle}</Heading>
+                              )}
+                              <GapFlex>
+                                {theaterBoxMovie.bookPlaceTimeList.map(
+                                  (bookPlaceTime, index) => (
+                                    <Flex
+                                      key={index}
+                                      h={"80px"}
+                                      onClick={() =>
+                                        navigate("/book/theaterseat")
+                                      }
+                                    >
+                                      <Stack
+                                        p={2}
+                                        w={"100px"}
+                                        bgColor={"blackAlpha.200"}
+                                        fontWeight={"bold"}
+                                        cursor={"pointer"}
+                                        justifyContent={"space-evenly"}
+                                      >
+                                        <Box fontSize={"11px"}>
+                                          상영시작:{" "}
+                                          {bookPlaceTime.time.slice(0, -3)}
+                                        </Box>
+                                        <Box fontSize={"small"}>
+                                          좌석: {bookPlaceTime.vacancy}/
+                                          {theaterBox.capacity}
+                                        </Box>
+                                      </Stack>
+                                    </Flex>
+                                  ),
+                                )}
+                              </GapFlex>
+                            </Box>
+                          )}
+                        </Box>
+                      ),
+                    )}
+                  </MarginBox>
+                </Stack>
+              )}
+            </Box>
+          ))}
+        </Box>
+      )}
     </Box>
   );
 }

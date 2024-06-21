@@ -1,9 +1,13 @@
 package com.backend.service.book;
 
+import com.backend.domain.book.BookPlaceTime;
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
+import com.backend.domain.theater.box.TheaterBox;
+import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
+import com.backend.mapper.theater.TheaterMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +23,7 @@ import java.util.Map;
 public class BookService {
     private final BookMapper bookMapper;
     private final MovieMapper movieMapper;
+    private final TheaterMapper theaterMapper;
 
     public List<Movie> getMovieList() {
         return movieMapper.selectAllMovie();
@@ -34,35 +39,66 @@ public class BookService {
         return bookMapper.selectAllMovieLocation();
     }
 
-    public List<Integer> getMovieIdByTheaterNumber(Integer number) {
+    public List<Integer> getMovieIdByTheaterNumber(Integer theaterNumber) {
 
-        return bookMapper.selectMovieIdByTheaterNumber(number);
+        return bookMapper.selectMovieIdByTheaterNumber(theaterNumber);
     }
 
-    public List<Map<String, Object>> getOnScreenList() {
-        List<Map<String, Object>> mapList = bookMapper.selectAllOnScreenByDate();
+    public List<Map<String, Object>> getOnScreenList(LocalDate date) {
+        List<Map<String, Object>> mapList = bookMapper.selectAllOnScreenByDate(date);
         return getMaps(mapList);
     }
 
-    public List<Map<String, Object>> getWillScreenList() {
-        List<Map<String, Object>> mapList = bookMapper.selectAllWillScreenByDate();
+    public List<Map<String, Object>> getWillScreenList(LocalDate date) {
+        List<Map<String, Object>> mapList = bookMapper.selectAllWillScreenByDate(date);
         return getMaps(mapList);
     }
 
     private List<Map<String, Object>> getMaps(List<Map<String, Object>> mapList) {
         List<Map<String, Object>> screenList = new ArrayList<>();
+
         for (Map<String, Object> map : mapList) {
-            map.put("theater_number", bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id")));
+            List<Integer> theaterNumberList = bookMapper.selectAllTheaterNumberByMovieId((Integer) map.get("id"));
+
+            map.put("theaterNumberList", theaterNumberList);
             screenList.add(map);
         }
         return screenList;
     }
 
-    public Integer getDayOfOneWeekAgo() {
-        return bookMapper.selectDayOfOneWeekAgo();
+    public Integer getDayOfWeek() {
+        return bookMapper.selectDayOfWeek();
     }
 
     public List<LocalDate> getBookPeriodList() {
         return bookMapper.selectAllBookPeriodListByDate();
+    }
+
+    public List<TheaterBox> getTheaterBox(Integer theaterNumber) {
+        return bookMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
+    }
+
+    public List<TheaterBoxMovie> getTheaterBoxTimeTable(TheaterBox theaterBox) {
+        return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
+    }
+
+    public List<Movie> getOnScreenList() {
+        return bookMapper.selectAllOnscreen();
+    }
+
+    public List<Movie> getWillScreenList() {
+        return bookMapper.selectAllWillScreen();
+    }
+
+    public List<BookPlaceTime> getAllBookPlaceTimeByTheaterBoxMovieId(Integer theaterBoxMovieId) {
+        return bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovieId);
+    }
+
+    public boolean checkBookPlaceTimeLeftByTheaterBoxId(Integer theaterBoxId) {
+        return bookMapper.countAllBookPlaceTimeByTheaterBoxId(theaterBoxId);
+    }
+
+    public List<Integer> getMovieIdListByTheaterBoxId(Integer theaterBoxId) {
+        return bookMapper.selectAllMovieIdByTheaterBoxId(theaterBoxId);
     }
 }

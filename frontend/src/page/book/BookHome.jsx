@@ -3,9 +3,10 @@ import { Box, Center, Flex, Heading } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 import BookStack from "../../css/theme/component/stack/BookStack.jsx";
 import OuterBookStack from "../../css/theme/component/stack/OuterBookStack.jsx";
-import { BookMovieLocationAdd } from "./add/BookMovieLocationAdd.jsx";
+import { BookMovieLocationAdd } from "./manage/BookMovieLocationAdd.jsx";
 import { useState } from "react";
 import LargeFontBox from "../../css/theme/component/box/LargeFontBox.jsx";
+import { BookMovieAddInTheaterBox } from "./manage/BookMovieAddInTheaterBox.jsx";
 
 export function BookHome() {
   const [bookProgress, setBookProgress] = useState(1);
@@ -17,38 +18,44 @@ export function BookHome() {
   const [onScreenList, setOnScreenList] = useState([]);
   const [willScreenList, setWillScreenList] = useState([]);
 
+  const [theaterBoxList, setTheaterBoxList] = useState([]);
+
   const [movieLocationAdd, setMovieLocationAdd] = useState([]);
 
   return (
     <Center>
       <CenterBox>
         <Heading>빠른예매</Heading>
-        <Flex border={"1px solid black"}>
+        <Flex border={"1px solid"}>
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack
               bgColor={bookProgress === 1 ? "red.500" : ""}
-              color={bookProgress === 1 ? "white" : "black"}
+              _dark={bookProgress === 1 ? { bgColor: "red.700" } : {}}
+              color={bookProgress === 1 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>01</LargeFontBox>
               <Box>상영시간</Box>
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 2 ? "red.500" : ""}
-              color={bookProgress === 2 ? "white" : "black"}
+              _dark={bookProgress === 2 ? { bgColor: "red.700" } : {}}
+              color={bookProgress === 2 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>02</LargeFontBox>
               <Box>인원/좌석</Box>
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 3 ? "red.500" : ""}
-              color={bookProgress === 3 ? "white" : "black"}
+              _dark={bookProgress === 3 ? { bgColor: "red.700" } : {}}
+              color={bookProgress === 3 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>03</LargeFontBox>
               <Box>결제</Box>
             </OuterBookStack>
             <OuterBookStack
               bgColor={bookProgress === 4 ? "red.500" : ""}
-              color={bookProgress === 4 ? "white" : "black"}
+              _dark={bookProgress === 4 ? { bgColor: "red.700" } : {}}
+              color={bookProgress === 4 ? "whiteAlpha.900" : ""}
             >
               <LargeFontBox>04</LargeFontBox>
               <Box>결제완료</Box>
@@ -63,6 +70,8 @@ export function BookHome() {
               movieList,
               setMovieList,
               onScreenList,
+              theaterBoxList,
+              setTheaterBoxList,
               setOnScreenList,
               willScreenList,
               setWillScreenList,
@@ -76,6 +85,11 @@ export function BookHome() {
           setMovieLocationAdd={setMovieLocationAdd}
           movieList={movieList}
           setMovieList={setMovieList}
+          onScreenList={onScreenList}
+          willScreenList={willScreenList}
+        />
+        <BookMovieAddInTheaterBox
+          cityList={cityList}
           onScreenList={onScreenList}
           willScreenList={willScreenList}
         />

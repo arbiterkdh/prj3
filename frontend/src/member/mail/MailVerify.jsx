@@ -94,7 +94,7 @@ export function MailVerify() {
           />
           <Box fontSize={"2xl"}>@</Box>
           <Select
-            border={"1px solid black"}
+            border={"1px solid"}
             onChange={(e) => {
               setSelected(e.target.value);
             }}

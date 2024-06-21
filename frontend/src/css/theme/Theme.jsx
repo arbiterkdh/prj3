@@ -18,7 +18,11 @@ export const customTheme = extendTheme({
         // "-khtml-user-select": "none",
         // "user-select": "none",
         // 전역적으로 드래그 막고싶을 때 주석 해제하기
-        _dark: {},
+        textColor: "blackAlpha.900",
+        _dark: {
+          textColor: "whiteAlpha.800",
+          bgColor: "#112325",
+        },
       },
     },
   },
@@ -45,6 +49,7 @@ export const customTheme = extendTheme({
     },
     Heading: {
       baseStyle: {
+        mt: "10px",
         mb: "20px",
       },
       sizes: {

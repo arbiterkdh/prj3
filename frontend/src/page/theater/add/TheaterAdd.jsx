@@ -61,7 +61,7 @@ export function TheaterAdd({ setCityName, cityList, setIsModifying }) {
       <GapFlex>
         <Select
           placeholder={"선택"}
-          border={"1px solid black"}
+          border={"1px solid"}
           borderRadius={"none"}
           onChange={(e) => setCity(e.target.value)}
         >

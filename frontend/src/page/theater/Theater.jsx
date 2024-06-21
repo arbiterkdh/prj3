@@ -56,10 +56,10 @@ export function Theater() {
         <Box>
           <Heading>극장 이벤트</Heading>
           <Flex>
-            <Box w={"50%"} h={"240px"} border={"1px solid black"}>
+            <Box w={"50%"} h={"240px"} border={"1px solid"}>
               이벤트1
             </Box>
-            <Box w={"50%"} h={"240px"} border={"1px solid black"}>
+            <Box w={"50%"} h={"240px"} border={"1px solid"}>
               이벤트2
             </Box>
           </Flex>

@@ -28,15 +28,21 @@ export function Navbar() {
   }
 
   return (
-    <Box>
-      <Center borderBottom={"2px solid darkslategray"}>
+    <Box _dark={{ bgColor: "#002827" }} bgColor={"blackAlpha.50"}>
+      <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
             <CursorBox>고객센터</CursorBox>
             <GapFlex>
               {account.isLoggedIn() && (
                 <Flex>
-                  <Image alt={"profile"} src={account.picture} />
+                  <Image
+                    w={"33px"}
+                    h={"33px"}
+                    rounded={"full"}
+                    alt={"profile"}
+                    src={account.picture}
+                  />
                   <CursorBox>{account.nickName}님</CursorBox>
                   <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
                 </Flex>
@@ -109,11 +115,15 @@ export function Navbar() {
       <Center>
         <Box w={"100%"}>
           {drawer === 0 && (
-            <Box h={"33px"} bgColor={"darkslategray"} opacity={"0.9"} />
+            <Box
+              h={"35px"}
+              bgColor={"#3E6969"}
+              _dark={{ bgColor: "blackAlpha.600" }}
+            />
           )}
           {drawer === 1 && <MovieDrawer setDrawer={setDrawer} />}
-          {drawer === 2 && <BookDrawer setDrawer={setDrawer} />}
-          {drawer === 3 && <TheaterDrawer setDrawer={setDrawer} />}
+          {drawer === 2 && <TheaterDrawer setDrawer={setDrawer} />}
+          {drawer === 3 && <BookDrawer setDrawer={setDrawer} />}
           {drawer === 4 && <PromoDrawer setDrawer={setDrawer} />}
         </Box>
       </Center>

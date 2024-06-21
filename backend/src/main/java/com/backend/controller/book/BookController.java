@@ -2,13 +2,16 @@ package com.backend.controller.book;
 
 import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
+import com.backend.domain.theater.box.TheaterBox;
 import com.backend.service.book.BookService;
+import com.backend.service.theater.TheaterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,17 +22,32 @@ import java.util.Map;
 public class BookController {
 
     private final BookService bookService;
+    private final TheaterService theaterService;
 
-    @GetMapping("onscreenlist")
-    public List<Map<String, Object>> getOnScreenList() {
-
+    @GetMapping("onscreenlist/all")
+    public List<Movie> getOnScreenListAll() {
         return bookService.getOnScreenList();
     }
 
-    @GetMapping("willscreenlist")
-    public List<Map<String, Object>> getWillScreenList() {
-
+    @GetMapping("willscreenlist/all")
+    public List<Movie> getWillScreenListAll() {
         return bookService.getWillScreenList();
+    }
+
+    @GetMapping("onscreenlist/{selectedDay}")
+    public List<Map<String, Object>> getOnScreenList(@PathVariable String selectedDay) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(selectedDay, formatter);
+
+        return bookService.getOnScreenList(date);
+    }
+
+    @GetMapping("willscreenlist/{selectedDay}")
+    public List<Map<String, Object>> getWillScreenList(@PathVariable String selectedDay) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(selectedDay, formatter);
+
+        return bookService.getWillScreenList(date);
     }
 
     @GetMapping("list")
@@ -51,27 +69,23 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
+    @GetMapping("movielocation")
+    public List<TheaterBox> getTheaterBox(@RequestParam("theaternumber") Integer theaterNumber) {
+        List<TheaterBox> theaterBoxList = bookService.getTheaterBox(theaterNumber);
+
+        for (TheaterBox theaterBox : theaterBoxList) {
+            theaterBox.setTheaterBoxMovieList(bookService.getTheaterBoxTimeTable(theaterBox));
+        }
+        return theaterBoxList;
+    }
+
     @GetMapping("date")
     public Map<String, Object> getDate() {
-        LocalDate today = LocalDate.now();
-        Integer dayOfOneWeekAgo = bookService.getDayOfOneWeekAgo();
-        String dayOfOneWeekAgoInKorean = switch (dayOfOneWeekAgo) {
-            case 1 -> "일";
-            case 2 -> "월";
-            case 3 -> "화";
-            case 4 -> "수";
-            case 5 -> "목";
-            case 6 -> "금";
-            case 7 -> "토";
-            default -> "";
-        };
-
+        Integer dayOfWeek = bookService.getDayOfWeek();
         List<LocalDate> bookPeriodList = bookService.getBookPeriodList();
 
         Map<String, Object> map = new HashMap<>();
-        map.put("today", today);
-        map.put("dayOfOneWeekAgo", dayOfOneWeekAgo);
-        map.put("dayOfOneWeekAgoInKorean", dayOfOneWeekAgoInKorean);
+        map.put("dayOfWeek", dayOfWeek);
         map.put("bookPeriodList", bookPeriodList);
 
         return map;

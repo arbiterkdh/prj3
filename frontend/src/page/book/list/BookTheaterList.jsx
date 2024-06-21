@@ -11,6 +11,7 @@ export function BookTheaterList({
   setIsCityChecked,
   checkedTheaterNumber,
   setCheckedTheaterNumber,
+  setTheaterBoxList,
 }) {
   useEffect(() => {
     if (theaterNumberList.length === 0) {
@@ -19,6 +20,7 @@ export function BookTheaterList({
       });
     }
     setCheckedTheaterNumber(0);
+    setTheaterBoxList([]);
   }, [isCityChecked]);
 
   function handleClick(city) {
@@ -32,17 +34,28 @@ export function BookTheaterList({
     setIsCityChecked("");
   }
 
+  function handleClickTheater(theaterNumber) {
+    axios.get(`/api/theaterbox/${theaterNumber}`).then((res) => {
+      setTheaterBoxList(res.data);
+      console.log(res.data);
+    });
+  }
+
   return (
     <Flex h={"100%"}>
-      <Box border={"1px solid black"} w={"100%"} h={"600px"}>
+      <Box border={"1px solid"} w={"90%"} h={"600px"}>
         <Stack gap={0}>
           {cityList.map((city) => (
             <Flex key={city} alignItems={"center"} gap={1}>
               <CursorBox
+                p={1}
                 h={"50px"}
                 w={"100%"}
                 alignContent={"center"}
-                bgColor={city === isCityChecked ? "lightgray" : ""}
+                bgColor={city === isCityChecked ? "blackAlpha.400" : ""}
+                _dark={
+                  city === isCityChecked ? { bgColor: "blackAlpha.800" } : {}
+                }
                 onClick={() => {
                   handleClick(city);
                   setIsCityChecked(city);
@@ -55,7 +68,7 @@ export function BookTheaterList({
         </Stack>
       </Box>
       <Box
-        border={"1px solid black"}
+        border={"1px solid"}
         w={"100%"}
         h={"600px"}
         overflow={"scroll"}
@@ -65,14 +78,20 @@ export function BookTheaterList({
           <Flex key={theater.number} alignItems={"center"} gap={2}>
             <CursorBox
               w={"100%"}
-              h={"40px"}
+              h={"45px"}
               alignContent={"center"}
               fontSize={"sm"}
               bgColor={
-                checkedTheaterNumber === theater.number ? "lightgray" : ""
+                checkedTheaterNumber === theater.number ? "blackAlpha.400" : ""
+              }
+              _dark={
+                checkedTheaterNumber === theater.number
+                  ? { bgColor: "blackAlpha.800" }
+                  : {}
               }
               onClick={() => {
                 setCheckedTheaterNumber(theater.number);
+                handleClickTheater(theater.number);
               }}
             >
               {theater.location}

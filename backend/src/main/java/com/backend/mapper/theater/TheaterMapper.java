@@ -43,4 +43,5 @@ public interface TheaterMapper {
             WHERE number = #{number}
             """)
     int deleteTheaterByNumber(Integer number);
+
 }

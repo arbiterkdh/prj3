@@ -28,30 +28,30 @@ FROM movie
 WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
   AND start_date > NOW();
 
-
-CREATE TABLE book_movie_state
+CREATE TABLE book_place_time
 (
-    id               INT PRIMARY KEY AUTO_INCREMENT,
-    movie_id         INT REFERENCES movie (id),
-    running_time     INT  NOT NULL,
-    movie_start_date DATE NOT NULL,
-    book_start_date  DATE NOT NULL,
-    book_end_date    DATE NOT NULL
+    id                   INT PRIMARY KEY AUTO_INCREMENT,
+    theater_box_movie_id INT REFERENCES theater_box_movie (id),
+    vacancy              INT  NOT NULL DEFAULT 176,
+    date                 DATE NOT NULL,
+    time                 TIME NOT NULL
 );
 
-SELECT *
-FROM book_movie_state;
+DROP TABLE book_place_time;
+
+INSERT INTO book_place_time
+    (theater_box_movie_id, vacancy, date, time)
+VALUES (1, 176, CURRENT_DATE(), TIME('18:00:00'));
+
+INSERT INTO book_place_time
+    (theater_box_movie_id, vacancy, date, time)
+VALUES (1, 176, CURRENT_DATE(), TIME('15:00:00'));
+
+INSERT INTO book_place_time
+    (theater_box_movie_id, vacancy, date, time)
+VALUES (1, 176, CURRENT_DATE(), TIME('12:00:00'));
 
 SELECT *
-FROM movie;
+FROM book_place_time;
 
-DESC movie;
-
-INSERT INTO book_movie_state (movie_id, running_time, movie_start_date, book_start_date, book_end_date)
-VALUES (519, 120, '2024-06-05', DATE_SUB('2024-06-05', INTERVAL 10 DAY), DATE_ADD('2024-06-05', INTERVAL 30 DAY));
-
-DROP TABLE book_movie_state;
-
-
-
-
+DESC book_place_time;

@@ -91,13 +91,14 @@ export function TheaterList({
   }
 
   return (
-    <Box w={"100%"} border={"1px solid black"}>
+    <Box w={"100%"} border={"1px solid"}>
       <Flex width={"100%"} mb={4}>
         {cityList.map((city) => (
           <TheaterListBox
             key={city}
             bgColor={checkedCity === city ? "red.500" : ""}
-            color={checkedCity === city ? "white" : ""}
+            _dark={checkedCity === city ? { bgColor: "red.700" } : {}}
+            color={checkedCity === city ? "whiteAlpha.900" : ""}
             fontWeight={checkedCity === city ? "600" : ""}
             onClick={() => handleClick(city)}
           >

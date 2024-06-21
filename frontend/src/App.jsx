@@ -44,7 +44,6 @@ const exceptionHost = [
 // axios interceptor 설정
 axios.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
-  console.log(config.url);
   const isExceptionHost = exceptionHost.some((item) =>
     config.url.startsWith(item),
   );
