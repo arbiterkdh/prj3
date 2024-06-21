@@ -39,11 +39,11 @@ export function MovieModify() {
 
   useEffect(() => {
     axios.get(`/api/movie/${id}`).then((res) => {
-      const parts = res.data.movieImageFile.split("/");
+      const parts = res.data.movie.movieImageFile.split("/");
       const lastword = parts[parts.length - 1];
       console.log(lastword);
-      setMovie(res.data);
-      setMovieTypes(res.data.type);
+      setMovie(res.data.movie);
+      setMovieTypes(res.data.movie.type);
       if (lastword === "null") {
         setFileName("");
       } else {
@@ -199,9 +199,8 @@ export function MovieModify() {
               <FormControl>
                 <FormLabel>관람등급</FormLabel>
                 <Input
-                  type={"number"}
                   defaultValue={movie.rating}
-                  placeholder={"예) 12세 이상이면 '12' 입력"}
+                  placeholder={"예) 18세관람가(청소년관람불가)"}
                   onChange={(e) =>
                     setMovie({ ...movie, rating: e.target.value })
                   }

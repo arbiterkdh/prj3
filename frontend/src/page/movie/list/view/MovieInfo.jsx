@@ -18,10 +18,13 @@ import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MovieComment } from "./comment/MovieComment.jsx";
+import { useContext } from "react";
+import { LoginContext } from "../../../../component/LoginProvider.jsx";
 
 export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const navigate = useNavigate();
+  const account = useContext(LoginContext);
 
   if (Object.entries(movie).length === 0) {
     return null;
@@ -81,18 +84,20 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
               <Text> 개봉일 : {movie.startDate}</Text>
             </Flex>
           </Box>
-          <Box>
+          <Box mb={10}>
             <Text> 출연진 : {movie.actors}</Text>
           </Box>
         </Stack>
-        <Flex justifyContent={"flex-end"} mb={"50px"}>
-          <Button onClick={handleModifyClick} colorScheme={"blue"}>
-            수정
-          </Button>
-          <Button onClick={onOpen} colorScheme={"red"}>
-            삭제
-          </Button>
-        </Flex>
+        {account.isAdmin() && (
+          <Flex justifyContent={"flex-end"} mb={"50px"}>
+            <Button onClick={handleModifyClick} colorScheme={"blue"}>
+              수정
+            </Button>
+            <Button onClick={onOpen} colorScheme={"red"}>
+              삭제
+            </Button>
+          </Flex>
+        )}
         <Divider />
         <MovieComment
           movieId={movie.id}

@@ -22,7 +22,7 @@ export function MovieCommentEdit({
         toast({
           status: "success",
           description: "댓글이 수정 되었습니다.",
-          position: "bottom",
+          position: "bottom-right",
         });
       })
       .catch(() => {})
@@ -42,18 +42,14 @@ export function MovieCommentEdit({
         />
       </Box>
       <Box>
-        <Box>
-          <Button onClick={() => setIsEditing(false)}>취소</Button>
-        </Box>
-        <Box marginTop={-2}>
-          <Button
-            isLoading={isProcessing}
-            onClick={handleModifyComment}
-            colorScheme={"blue"}
-          >
-            수정
-          </Button>
-        </Box>
+        <Button onClick={() => setIsEditing(false)}>취소</Button>
+        <Button
+          isLoading={isProcessing}
+          onClick={handleModifyComment}
+          colorScheme={"blue"}
+        >
+          수정
+        </Button>
       </Box>
     </Flex>
   );
