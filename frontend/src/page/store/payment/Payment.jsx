@@ -24,7 +24,9 @@ function Payment({
     ? name
     : productCartList.length > 1
       ? `${productCartList[0].name} 외 ${productCartList.length - 1} 개`
-      : `${productCartList[0].name}`;
+      : productCartList.length === 1
+        ? productCartList[0].name
+        : "";
 
   let paymentAmount = isSinglePurchase ? price : totalSum;
 
