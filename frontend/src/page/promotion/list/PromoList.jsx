@@ -1,25 +1,45 @@
-import { useNavigate, useParams } from "react-router-dom";
 import {
   Box,
   Button,
   Card,
   CardBody,
   CardFooter,
+  Center,
+  Flex,
   Heading,
   Image,
   SimpleGrid,
+  Spacer,
   Spinner,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import PromoSearchBar from "../PromoSearchBar.jsx";
 
-export function PromoList({ eventType: propEventType, maxItems }) {
+export function PromoList({
+  eventType: propEventType,
+  eventStatusList: getEventStatus,
+  maxItems,
+  showTotalPosts = true,
+  showSearch = true,
+}) {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
   const { eventType: paramEventType } = useParams();
   const eventType = propEventType || paramEventType;
+  const [searchParams] = useSearchParams();
+  const [promoSearch, setPromoSearch] = useState("");
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -27,24 +47,37 @@ export function PromoList({ eventType: propEventType, maxItems }) {
   };
 
   useEffect(() => {
-    axios
-      .get("/api/promotion/list")
-      .then((res) => {
-        console.log(res.data); // 디버깅용 로그
-        setPromoList(res.data);
-      })
-      .catch((error) => {
-        console.error("프로모션 데이터 가져오기 에러:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    const currentPage = searchParams.get("page") || 1;
+    const query = promoSearch ? `&search=${promoSearch}` : "";
+    if (getEventStatus) {
+      setPromoList(getEventStatus);
+      setLoading(false);
+    } else {
+      axios
+        .get(
+          `/api/promotion/list?page=${currentPage}&type=${eventType}${query}`,
+        )
+        .then((res) => {
+          setPromoList(res.data.promotionList);
+          setPageInfo(res.data.pageInfo);
+        })
+        .catch((error) => {
+          console.error("프로모션 데이터 가져오기 에러:", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [getEventStatus, searchParams, eventType, promoSearch]);
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
+  }
 
   const filteredPromoList = eventType
     ? promoList.filter((promo) => promo.eventType === eventType)
     : promoList;
-
   const displayedPromos = maxItems
     ? filteredPromoList.slice(0, maxItems)
     : filteredPromoList;
@@ -53,12 +86,25 @@ export function PromoList({ eventType: propEventType, maxItems }) {
     navigate(`/promotion/view/${promoId}`);
   }
 
+  const handleSearch = (searchTerm) => {
+    setPromoSearch(searchTerm);
+  };
+
   if (loading) {
     return <Spinner />;
   }
 
   return (
     <Box>
+      <Flex>
+        {showTotalPosts && (
+          <Text as={"b"} mt={4} marginLeft={"20px"}>
+            전체 {pageInfo.totalItems}건 {/* 전체 개수를 표시 */}
+          </Text>
+        )}
+        <Spacer />
+        {showSearch && <PromoSearchBar onSearch={handleSearch} />}
+      </Flex>
       <SimpleGrid
         spacing={3}
         templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
@@ -73,7 +119,7 @@ export function PromoList({ eventType: propEventType, maxItems }) {
                   </Box>
                 )}
               </Box>
-              <Box flex={1}>
+              <Box margin={3} flex={1}>
                 <Heading as="b" mb={2}>
                   {promo.title}
                 </Heading>
@@ -91,6 +137,61 @@ export function PromoList({ eventType: propEventType, maxItems }) {
           </Card>
         ))}
       </SimpleGrid>
+      <Box>
+        <Center>
+          {pageInfo.prevPageNumber && (
+            <>
+              <Button
+                onClick={() => navigate(`/promotion/${eventType}?page=1`)}
+              >
+                <FontAwesomeIcon icon={faAnglesLeft} />
+              </Button>
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/promotion/${eventType}?page=${pageInfo.prevPageNumber}`,
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </Button>
+            </>
+          )}
+          {pageNumbers.map((pageNumber) => (
+            <Button
+              key={pageNumber}
+              onClick={() =>
+                navigate(`/promotion/${eventType}?page=${pageNumber}`)
+              }
+              isActive={pageNumber === parseInt(searchParams.get("page"), 10)}
+            >
+              {pageNumber}
+            </Button>
+          ))}
+          {pageInfo.nextPageNumber && (
+            <>
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/promotion/${eventType}?page=${pageInfo.nextPageNumber}`,
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faAngleRight} />
+              </Button>
+              <Button
+                onClick={() =>
+                  navigate(
+                    `/promotion/${eventType}?page=${pageInfo.lastPageNumber}`,
+                  )
+                }
+              >
+                <FontAwesomeIcon icon={faAnglesRight} />
+              </Button>
+            </>
+          )}
+        </Center>
+      </Box>
     </Box>
   );
 }

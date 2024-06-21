@@ -1,6 +1,5 @@
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 import { Box, Button, Center, Heading } from "@chakra-ui/react";
-import DrawerBorderBox from "../../css/theme/component/box/DrawerBorderBox.jsx";
 import PGridItem from "../../css/theme/component/grid/PGridItem.jsx";
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +10,7 @@ export function PromoNavbar({ children }) {
     <Center>
       <CenterBox>
         <Heading>EVENT</Heading>
-        <DrawerBorderBox />
+        <Box borderBottom={"2px solid black"} />
         <Box display="flex" justifyContent="space-between" width="100%">
           <Box display="flex" gap={20} flexWrap="nowrap">
             <PGridItem onClick={() => navigate("/promotion/all")}>
@@ -56,11 +55,11 @@ export function PromoNavbar({ children }) {
               onClick={() => navigate("/promotion/eventEnd")}
               size="sm"
             >
-              종료된 이벤트
+              종료 이벤트
             </Button>
           </Box>
         </Box>
-        <DrawerBorderBox style={{ borderBottom: "1px solid lightgray" }} />
+        <Box borderBottom={"1px solid lightgray"} marginBottom={5} />
         {children}
       </CenterBox>
     </Center>

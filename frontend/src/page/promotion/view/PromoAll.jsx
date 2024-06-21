@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Spinner } from "@chakra-ui/react";
 import { PromoList } from "../list/PromoList.jsx";
 import ShowMoreButton from "../../../css/theme/component/button/ShowMoreButton.jsx";
 import { useNavigate } from "react-router-dom";
@@ -8,27 +8,57 @@ import axios from "axios";
 export function PromoAll() {
   const navigate = useNavigate();
   const [promoList, setPromoList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pageInfo, setPageInfo] = useState({});
 
   useEffect(() => {
-    axios.get(`/api/promotion/list`).then((res) => setPromoList(res.data));
+    axios.get(`/api/promotion/list?type=all`).then((res) => {
+      const now = new Date();
+      const activePromos = res.data.promotionList.filter(
+        (promo) => new Date(promo.eventEndDate) >= now,
+      );
+      setPromoList(activePromos);
+      setPageInfo(res.data.pageInfo);
+      setLoading(false);
+    });
   }, []);
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
+        <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="25px">
           영화
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/movie")} />
       </Box>
-      <PromoList eventType={"영화"} maxItems={3} />
+      <PromoList
+        eventType={"movie"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "movie",
+        )}
+        maxItems={3}
+        showTotalPosts={false}
+        showSearch={false}
+      />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           극장
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/theater")} />
       </Box>
-      <PromoList eventType={"극장"} maxItems={3} />
+      <PromoList
+        eventType={"theater"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "theater",
+        )}
+        maxItems={3}
+        showTotalPosts={false}
+        showSearch={false}
+      />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           멤버십
@@ -37,14 +67,30 @@ export function PromoAll() {
           buttonOnclick={() => navigate("/promotion/membership")}
         />
       </Box>
-      <PromoList eventType={"멤버십"} maxItems={3} />
+      <PromoList
+        eventType={"membership"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "membership",
+        )}
+        maxItems={3}
+        showTotalPosts={false}
+        showSearch={false}
+      />
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
           제휴/할인
         </Heading>
         <ShowMoreButton buttonOnclick={() => navigate("/promotion/discount")} />
       </Box>
-      <PromoList eventType={"제휴/할인"} maxItems={3} />
+      <PromoList
+        eventType={"discount"}
+        eventStatusList={promoList.filter(
+          (promo) => promo.eventType === "discount",
+        )}
+        maxItems={3}
+        showTotalPosts={false}
+        showSearch={false}
+      />
     </Box>
   );
 }

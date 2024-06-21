@@ -42,7 +42,7 @@ export function PromoModify() {
 
   function handleModifyClick() {
     axios
-      .put("/api/promotion/modify", {
+      .putForm("/api/promotion/modify", {
         id: promo.id,
         title: promo.title,
         eventType: promo.eventType,
@@ -145,10 +145,10 @@ export function PromoModify() {
               }
               placeholder="이벤트 타입을 선택하세요."
             >
-              <option value="영화">영화</option>
-              <option value="극장">극장</option>
-              <option value="멤버십">멤버십</option>
-              <option value="제휴/할인">제휴/할인</option>
+              <option value="movie">영화</option>
+              <option value="theater">극장</option>
+              <option value="membership">멤버십</option>
+              <option value="discount">제휴/할인</option>
             </Select>
           </FormControl>
         </Box>

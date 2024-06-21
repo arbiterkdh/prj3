@@ -7,7 +7,7 @@ CREATE TABLE promo
     eventType      VARCHAR(50)   NOT NULL,
     eventStartDate DATE          NOT NULL,
     eventEndDate   DATE          NOT NULL,
-    content        VARCHAR(1000) NOT NULL
+    content        VARCHAR(1000) NULL
 );
 
 CREATE TABLE promo_file
@@ -27,3 +27,15 @@ SELECT *
 FROM promo_file;
 
 SELECT * FROM promo_file WHERE promo_id = 29;
+
+DROP TABLE IF EXISTS promo_file;
+DROP TABLE IF EXISTS promo;
+
+INSERT INTO promo
+(title, eventType, eventStartDate, eventEndDate, content)
+SELECT title,
+       eventType,
+       eventStartDate,
+       eventEndDate,
+       content
+FROM promo;
