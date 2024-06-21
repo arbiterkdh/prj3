@@ -39,7 +39,7 @@ public class PromotionService {
             for (MultipartFile file : files) {
                 promotionMapper.insertFileName(promotion.getId(), file.getOriginalFilename());
 
-                String key = STR."prj3/promo\{promotion.getId()}/\{file.getOriginalFilename()}";
+                String key = STR."prj3/promo/\{promotion.getId()}/\{file.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -97,7 +97,7 @@ public class PromotionService {
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
             List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{promotion.getId()}/\{name}"))
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
                     .toList();
             promotion.setFileList(files);
 
@@ -143,7 +143,7 @@ public class PromotionService {
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
             List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{promotion.getId()}/\{name}"))
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
                     .toList();
             promotion.setFileList(files);
 
@@ -189,7 +189,7 @@ public class PromotionService {
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
             List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{promotion.getId()}/\{name}"))
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
                     .toList();
             promotion.setFileList(files);
 
@@ -205,12 +205,36 @@ public class PromotionService {
         return Map.of("pageInfo", pageInfo, "promotionList", promotions);
     }
 
+    public Map<String, Object> listAllWithoutPaging(String search) {
+        List<Promotion> promotions = promotionMapper.selectAllWithoutPaging(search);
+        Map<String, Object> response = new HashMap<>();
+        LocalDate now = LocalDate.now();
+        for (Promotion promotion : promotions) {
+            List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
+            List<PromotionFile> files = fileNames.stream()
+                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
+                    .toList();
+            promotion.setFileList(files);
+
+            if (promotion.getEventEndDate().isBefore(now)) {
+                promotion.setEventStatus("종료 이벤트");
+            } else if (promotion.getEventStartDate().isAfter(now)) {
+                promotion.setEventStatus("예정 이벤트");
+            } else {
+                promotion.setEventStatus("진행중인 이벤트");
+            }
+        }
+        response.put("promotionList", promotions);
+        response.put("totalItems", promotions.size());
+        return response;
+    }
+
     public Promotion get(Integer id) {
         Promotion promotion = promotionMapper.selectById(id);
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         List<PromotionFile> files = fileNames.stream()
-                .map(name -> new PromotionFile(name, STR."\{srcPrefix}\{id}/\{name}"))
+                .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{id}/\{name}"))
                 .toList();
 
         promotion.setFileList(files);
@@ -231,7 +255,7 @@ public class PromotionService {
         List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
 
         for (String fileName : fileNames) {
-            String key = STR."prj3/promo\{id}/\{fileName}";
+            String key = STR."prj3/promo/\{id}/\{fileName}";
             DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                     .bucket(bucketName)
                     .key(key)
@@ -245,7 +269,7 @@ public class PromotionService {
     public void modify(Promotion promotion, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
         if (removeFileList != null && removeFileList.size() > 0) {
             for (String fileName : removeFileList) {
-                String key = STR."prj3/promo\{promotion.getId()}/\{fileName}";
+                String key = STR."prj3/promo/\{promotion.getId()}/\{fileName}";
                 DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -262,7 +286,7 @@ public class PromotionService {
                 if (!fileNameList.contains(fileName)) {
                     promotionMapper.insertFileName(promotion.getId(), fileName);
                 }
-                String key = STR."prj3/promo\{promotion.getId()}/\{fileName}";
+                String key = STR."prj3/promo/\{promotion.getId()}/\{fileName}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)

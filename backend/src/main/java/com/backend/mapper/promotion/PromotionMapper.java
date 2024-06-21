@@ -71,7 +71,7 @@ public interface PromotionMapper {
             WHERE promo_id=#{promoId}
               AND name=#{fileName}
             """)
-    int deleteFileByPromoIdAndName(@Param("promoId") Integer promoId, @Param("fileName") String fileName);
+    int deleteFileByPromoIdAndName(Integer promoId, String fileName);
 
     @Select("""
             SELECT COUNT(*)
@@ -80,7 +80,7 @@ public interface PromotionMapper {
             AND eventType = #{type}
             AND (title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%'))
             """)
-    Integer countAllExcludingEnded(@Param("type") String type, @Param("search") String search);
+    Integer countAllExcludingEnded(String type, String search);
 
     @Select("""
             SELECT *
@@ -91,7 +91,7 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPagingExcludingEnded(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("type") String type, @Param("search") String search);
+    List<Promotion> selectAllPagingExcludingEnded(Integer offset, Integer pageSize, String type, String search);
 
     @Select("""
             SELECT COUNT(*)
@@ -99,7 +99,7 @@ public interface PromotionMapper {
             WHERE eventEndDate < CURRENT_DATE
             AND (title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%'))
             """)
-    Integer countAllEnded(@Param("search") String search);
+    Integer countAllEnded(String search);
 
     @Select("""
             SELECT *
@@ -109,14 +109,14 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPagingEnded(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("search") String search);
+    List<Promotion> selectAllPagingEnded(Integer offset, Integer pageSize, String search);
 
     @Select("""
             SELECT COUNT(*)
             FROM promo
             WHERE title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%')
             """)
-    Integer countAll(@Param("search") String search);
+    Integer countAll(String search);
 
     @Select("""
             SELECT *
@@ -125,5 +125,14 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPaging(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("search") String search);
+    List<Promotion> selectAllPaging(Integer offset, Integer pageSize, String search);
+
+    @Select("""
+        SELECT *
+        FROM promo
+        WHERE title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%')
+        ORDER BY id DESC
+        """)
+    List<Promotion> selectAllWithoutPaging(String search);
 }
+

@@ -41,6 +41,12 @@ public class PromotionController {
         }
     }
 
+    @GetMapping("list-all")
+    public Map<String, Object> listAllWithoutPaging(@RequestParam(defaultValue = "") String search) {
+        return promotionService.listAllWithoutPaging(search);
+    }
+
+
     @GetMapping("{id}")
     public ResponseEntity getPromotion(@PathVariable Integer id) {
         Promotion promotion = promotionService.get(id);
