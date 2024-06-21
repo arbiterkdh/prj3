@@ -20,6 +20,14 @@ function Payment({
   const navigate = useNavigate();
   const [paymentId, setPaymentId] = useState(null);
 
+  let paymentName = isSinglePurchase
+    ? name
+    : productCartList.length > 1
+      ? `${productCartList[0].name} 외 ${productCartList.length - 1} 개`
+      : productCartList[0].name;
+
+  let paymentAmount = isSinglePurchase ? price : totalSum;
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://cdn.iamport.kr/v1/iamport.js";
@@ -47,14 +55,6 @@ function Payment({
         `order_no_ +${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`
       );
     }
-
-    let paymentName = isSinglePurchase
-      ? name
-      : productCartList.length > 1
-        ? `${productCartList[0].name} 외 ${productCartList.length - 1} 개`
-        : productCartList[0].name;
-
-    let paymentAmount = isSinglePurchase ? price : totalSum;
 
     IMP.request_pay(
       {
@@ -128,6 +128,8 @@ function Payment({
   };
 
   const onClickKakaopay = () => {
+    onPayClose();
+
     const { IMP } = window;
     if (!IMP) return;
 
@@ -145,8 +147,8 @@ function Payment({
         pg: "kakaopay",
         pay_method: "card",
         merchant_uid: "order_no_" + makeMerchantUid(),
-        name: `${productCartList[0].name} 외 ${productCartList.length - 1} 개`,
-        amount: totalSum,
+        name: paymentName,
+        amount: paymentAmount,
         buyer_email: Login.email,
         buyer_name: Login.nickName,
         buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
