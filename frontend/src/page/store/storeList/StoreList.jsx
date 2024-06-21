@@ -4,6 +4,7 @@ import {
   Center,
   Flex,
   Heading,
+  Image,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -94,6 +95,13 @@ export function StoreList() {
   return (
     <Center>
       <CenterBox mb={10}>
+        <Box>
+          <Image
+            src={
+              "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/store/popcorn-1095657_1280.jpg"
+            }
+          ></Image>
+        </Box>
         <Flex>
           <Box w={"50%"}>
             <Flex alignItems={"center"}>
