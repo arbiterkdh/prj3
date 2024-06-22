@@ -3,6 +3,11 @@ import {
   Button,
   Flex,
   Heading,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
   Stack,
   Table,
   Tbody,
@@ -10,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
 import { useEffect, useState } from "react";
@@ -20,6 +26,8 @@ export function BookMovieAddInTheaterBox({
   onScreenList,
   willScreenList,
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const [isCitySelected, setIsCitySelected] = useState("");
   const [isLocationSelected, setIsLocationSelected] = useState("");
   const [theaterNumber, setTheaterNumber] = useState(0);
@@ -44,7 +52,20 @@ export function BookMovieAddInTheaterBox({
       });
   }
 
-  function handleClickTheaterBoxTimeTable() {}
+  function handleClickTheaterBoxTimeTable() {
+    return (
+      <Box>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHead></ModalHead>
+            <ModalBody></ModalBody>
+            <ModalFooter></ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -101,15 +122,15 @@ export function BookMovieAddInTheaterBox({
                   </Td>
                   <Td>
                     <Stack>
-                      {theaterBox.theaterBoxTimeTableList.map(
-                        (theaterBoxTimeTable, index) => (
+                      {theaterBox.theaterBoxMovieList.map(
+                        (theaterBoxMovie, index) => (
                           <Box key={index}>
                             {index +
                               1 +
                               ". " +
-                              theaterBoxTimeTable.movieTitle +
+                              theaterBoxMovie.movieTitle +
                               " (" +
-                              theaterBoxTimeTable.movieId +
+                              theaterBoxMovie.movieId +
                               ")"}
                           </Box>
                         ),
@@ -117,7 +138,12 @@ export function BookMovieAddInTheaterBox({
                     </Stack>
                   </Td>
                   <Td>
-                    <Button onClick={handleClickTheaterBoxTimeTable}>
+                    <Button
+                      onClick={() => {
+                        onOpen();
+                        handleClickTheaterBoxTimeTable();
+                      }}
+                    >
                       영화 상영표 작성
                     </Button>
                   </Td>
