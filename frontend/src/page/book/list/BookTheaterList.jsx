@@ -77,6 +77,7 @@ export function BookTheaterList({
         {theaterNumberList.map((theater) => (
           <Flex key={theater.number} alignItems={"center"} gap={2}>
             <CursorBox
+              p={1}
               w={"100%"}
               h={"45px"}
               alignContent={"center"}
