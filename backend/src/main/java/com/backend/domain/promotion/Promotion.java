@@ -13,7 +13,7 @@ public class Promotion {
     private LocalDate eventStartDate;
     private LocalDate eventEndDate;
     private String content;
-
+    private Boolean isRecommended;
     private List<PromotionFile> fileList;
     private String eventStatus;
 }

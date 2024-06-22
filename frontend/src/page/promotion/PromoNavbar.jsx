@@ -26,7 +26,12 @@ export function PromoNavbar() {
   return (
     <Center>
       <CenterBox>
-        <Heading>EVENT</Heading>
+        <Heading
+          onClick={() => navigate("/promotion/all")}
+          style={{ cursor: "pointer" }}
+        >
+          진행중인 이벤트
+        </Heading>
         <Box borderBottom={"2px solid black"} />
         <Box display="flex" justifyContent="space-between" width="100%" mb={4}>
           <Tabs

@@ -10,6 +10,7 @@ export function PromoAll() {
   const navigate = useNavigate();
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [recommendedList, setRecommendedList] = useState([]);
 
   useEffect(() => {
     const fetchAllPromotions = async () => {
@@ -27,7 +28,17 @@ export function PromoAll() {
       }
     };
 
+    const fetchRecommendedPromotions = async () => {
+      try {
+        const { data } = await axios.get(`/api/promotion/recommendations`);
+        setRecommendedList(data.recommendations);
+      } catch (error) {
+        console.error("Error fetching recommended promotions:", error);
+      }
+    };
+
     fetchAllPromotions();
+    fetchRecommendedPromotions();
   }, []);
 
   if (loading) {
@@ -60,7 +71,7 @@ export function PromoAll() {
   return (
     <Box>
       <Heading>추천 이벤트</Heading>
-      <PromoCarousel promoList={promoList} />
+      <PromoCarousel promoList={recommendedList} />
       {renderPromoSection("영화", "movie")}
       {renderPromoSection("극장", "theater")}
       {renderPromoSection("멤버십", "membership")}

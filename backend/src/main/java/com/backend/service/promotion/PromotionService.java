@@ -183,4 +183,27 @@ public class PromotionService {
         }
         promotionMapper.update(promotion);
     }
+
+    public void updateRecommendation(Integer id, boolean isRecommended) {
+        promotionMapper.updateRecommendation(id, isRecommended);
+    }
+
+    public List<Promotion> getRecommendedPromotions() {
+        List<Promotion> promotions = promotionMapper.selectRecommendedPromotions();
+        setPromotionFiles(promotions);
+        return promotions;
+    }
+
+    public void addRecommendation(Integer id) {
+        Promotion promotion = promotionMapper.selectById(id);
+        if (promotion.getIsRecommended()) {
+            throw new IllegalStateException("이미 추천 이벤트에 추가되었습니다.");
+        }
+        promotionMapper.updateRecommendation(id, true);
+    }
+
+    // 추천 이벤트에서 삭제하는 메서드 추가
+    public void removeRecommendation(Integer id) {
+        promotionMapper.updateRecommendation(id, false);
+    }
 }

@@ -65,6 +65,50 @@ export function PromoView() {
     }
   };
 
+  const handleAddRecommendation = async () => {
+    try {
+      await axios.put(`/api/promotion/${promoId}/add-recommendation`);
+      toast({
+        status: "success",
+        description: `${promoId}번 게시물이 추천 이벤트로 추가되었습니다.`,
+        position: "top",
+      });
+      navigate("/promotion/all");
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        toast({
+          status: "warning",
+          description: "이미 추천 이벤트에 추가되었습니다.",
+          position: "top",
+        });
+      } else {
+        toast({
+          status: "error",
+          description: `${promoId}번 게시물 추천 이벤트 추가 중 오류가 발생하였습니다.`,
+          position: "top",
+        });
+      }
+    }
+  };
+
+  const handleRemoveRecommendation = async () => {
+    try {
+      await axios.put(`/api/promotion/${promoId}/remove-recommendation`);
+      toast({
+        status: "success",
+        description: `${promoId}번 게시물이 추천 이벤트에서 삭제되었습니다.`,
+        position: "top",
+      });
+      navigate("/promotion/all");
+    } catch {
+      toast({
+        status: "error",
+        description: `${promoId}번 게시물 추천 이벤트 삭제 중 오류가 발생하였습니다.`,
+        position: "top",
+      });
+    }
+  };
+
   if (!promo) {
     return <Spinner />;
   }
@@ -104,6 +148,12 @@ export function PromoView() {
       </Button>
       <Button colorScheme={"red"} onClick={onOpen}>
         삭제
+      </Button>
+      <Button colorScheme={"blue"} onClick={handleAddRecommendation}>
+        추천 이벤트 추가
+      </Button>
+      <Button colorScheme={"yellow"} onClick={handleRemoveRecommendation}>
+        추천 이벤트 삭제
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>

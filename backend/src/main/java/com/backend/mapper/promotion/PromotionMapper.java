@@ -10,8 +10,8 @@ public interface PromotionMapper {
 
     @Insert("""
             INSERT INTO promo
-            (id, title, eventType, eventStartDate, eventEndDate, content)
-            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content})
+            (id, title, eventType, eventStartDate, eventEndDate, content, isRecommended)
+            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertPromo(Promotion promotion);
@@ -42,7 +42,8 @@ public interface PromotionMapper {
                 eventType = #{eventType},
                 eventStartDate = #{eventStartDate},
                 eventEndDate = #{eventEndDate},
-                content = #{content}
+                content = #{content},
+                isRecommended = #{isRecommended}
             WHERE id = #{id}
             """)
     int update(Promotion promotion);
@@ -134,4 +135,18 @@ public interface PromotionMapper {
         ORDER BY id DESC
         """)
     List<Promotion> selectAllWithoutPaging(String search);
+
+    @Update("""
+            UPDATE promo
+            SET isRecommended = #{isRecommended}
+            WHERE id = #{id}
+            """)
+    void updateRecommendation(Integer id, boolean isRecommended);
+
+    @Select("""
+            SELECT *
+            FROM promo
+            WHERE isRecommended = true
+            """)
+    List<Promotion> selectRecommendedPromotions();
 }

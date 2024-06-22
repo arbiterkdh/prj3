@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import { Box, Image } from "@chakra-ui/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SampleNextArrow = ({ className, style, onClick }) => {
   return (
@@ -24,7 +24,7 @@ const SampleNextArrow = ({ className, style, onClick }) => {
       }}
       onClick={onClick}
     >
-      <FontAwesomeIcon icon={faArrowRight} style={{ color: "white" }} />
+      <i className="fas fa-chevron-right" style={{ color: "white" }}></i>
     </div>
   );
 };
@@ -47,12 +47,28 @@ const SamplePrevArrow = ({ className, style, onClick }) => {
       }}
       onClick={onClick}
     >
-      <FontAwesomeIcon icon={faArrowLeft} style={{ color: "white" }} />
+      <i className="fas fa-chevron-left" style={{ color: "white" }}></i>
     </div>
   );
 };
 
-const PromoCarousel = ({ promoList }) => {
+const PromoCarousel = () => {
+  const [recommendedPromos, setRecommendedPromos] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchRecommendedPromos = async () => {
+      try {
+        const { data } = await axios.get("/api/promotion/recommendations");
+        setRecommendedPromos(data);
+      } catch (error) {
+        console.error("Error fetching recommended promotions:", error);
+      }
+    };
+
+    fetchRecommendedPromos();
+  }, []);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -67,11 +83,15 @@ const PromoCarousel = ({ promoList }) => {
 
   return (
     <Slider {...settings}>
-      {promoList.map((promo) => (
-        <Box key={promo.id}>
+      {recommendedPromos.map((promo) => (
+        <Box
+          key={promo.id}
+          onClick={() => navigate(`/promotion/view/${promo.id}`)}
+        >
           <Image
-            src={promo.fileList?.length > 0 ? promo.fileList[0].src : ""}
+            src={promo.fileList[0]?.src}
             alt={promo.title}
+            cursor="pointer"
           />
         </Box>
       ))}

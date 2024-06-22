@@ -39,3 +39,5 @@ SELECT title,
        eventEndDate,
        content
 FROM promo;
+
+ALTER TABLE promo ADD COLUMN isRecommended BOOLEAN DEFAULT FALSE;

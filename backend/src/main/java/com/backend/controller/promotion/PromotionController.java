@@ -3,6 +3,7 @@ package com.backend.controller.promotion;
 import com.backend.domain.promotion.Promotion;
 import com.backend.service.promotion.PromotionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,5 +65,27 @@ public class PromotionController {
         } else {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PutMapping("{id}/add-recommendation")
+    public ResponseEntity addRecommendation(@PathVariable Integer id) {
+        try {
+            promotionService.addRecommendation(id);
+            return ResponseEntity.ok().build();
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("{id}/remove-recommendation")
+    public ResponseEntity removeRecommendation(@PathVariable Integer id) {
+        promotionService.updateRecommendation(id, false);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("recommendations")
+    public ResponseEntity<List<Promotion>> getRecommendations() {
+        List<Promotion> recommendedPromotions = promotionService.getRecommendedPromotions();
+        return ResponseEntity.ok(recommendedPromotions);
     }
 }
