@@ -59,6 +59,12 @@ public class PromotionController {
     public ResponseEntity modifyPromotion(Promotion promotion,
                                           @RequestParam(value = "removeFileList[]", required = false) List<String> removeFileList,
                                           @RequestParam(value = "addFileList[]", required = false) MultipartFile[] addFileList) throws IOException {
+        Promotion existingPromotion = promotionService.get(promotion.getId());
+        if (existingPromotion == null) {
+            return ResponseEntity.notFound().build();
+        }
+        promotion.setIsRecommended(existingPromotion.getIsRecommended());
+
         if (promotionService.validate(promotion)) {
             promotionService.modify(promotion, removeFileList, addFileList);
             return ResponseEntity.ok().build();
