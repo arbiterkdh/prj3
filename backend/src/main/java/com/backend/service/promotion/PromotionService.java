@@ -52,47 +52,57 @@ public class PromotionService {
     }
 
     public boolean validate(Promotion promotion) {
-        if (promotion.getTitle() == null || promotion.getTitle().isBlank()) {
-            return false;
-        }
-        if (promotion.getEventType() == null) {
-            return false;
-        }
-        if (promotion.getEventStartDate() == null) {
-            return false;
-        }
-        if (promotion.getEventEndDate() == null) {
-            return false;
-        }
-        return true;
+        return promotion.getTitle() != null && !promotion.getTitle().isBlank() &&
+                promotion.getEventType() != null &&
+                promotion.getEventStartDate() != null &&
+                promotion.getEventEndDate() != null;
     }
 
-    public Map<String, Object> listExcludingEnded(Integer page, String type, String search) {
+    public Map<String, Object> listPromotions(Integer page, String type, String search) {
         Map<String, Object> pageInfo = new HashMap<>();
-        Integer countAll = promotionMapper.countAllExcludingEnded(type, search);
+        Integer countAll;
+        List<Promotion> promotions;
 
-        Integer offset = (page - 1) * 9;
+        if (type.equals("ended")) {
+            countAll = promotionMapper.countAllEnded(search);
+            promotions = promotionMapper.selectAllPagingEnded(calculateOffset(page), 9, search);
+        } else if (type.equals("all")) {
+            countAll = promotionMapper.countAll(search);
+            promotions = promotionMapper.selectAllPaging(calculateOffset(page), 9, search);
+        } else {
+            countAll = promotionMapper.countAllExcludingEnded(type, search);
+            promotions = promotionMapper.selectAllPagingExcludingEnded(calculateOffset(page), 9, type, search);
+        }
+
+        setPageInfo(pageInfo, page, countAll);
+        setPromotionFiles(promotions);
+
+        return Map.of("pageInfo", pageInfo, "promotionList", promotions);
+    }
+
+    private void setPageInfo(Map<String, Object> pageInfo, Integer page, Integer countAll) {
         Integer lastPageNumber = (countAll - 1) / 9 + 1;
         Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
-        Integer rightPageNumber = leftPageNumber + 9;
-        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
-        leftPageNumber = Math.max(rightPageNumber - 9, 1);
-        Integer prevPageNumber = leftPageNumber - 1;
-        Integer nextPageNumber = rightPageNumber + 1;
+        Integer rightPageNumber = Math.min(leftPageNumber + 9, lastPageNumber);
 
-        if (prevPageNumber > 0) {
-            pageInfo.put("prevPageNumber", prevPageNumber);
+        if (leftPageNumber > 1) {
+            pageInfo.put("prevPageNumber", leftPageNumber - 1);
         }
-        if (nextPageNumber <= lastPageNumber) {
-            pageInfo.put("nextPageNumber", nextPageNumber);
+        if (rightPageNumber < lastPageNumber) {
+            pageInfo.put("nextPageNumber", rightPageNumber + 1);
         }
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
-        pageInfo.put("totalItems", countAll); // 전체 개수 추가
+        pageInfo.put("totalItems", countAll);
+    }
 
-        List<Promotion> promotions = promotionMapper.selectAllPagingExcludingEnded(offset, 9, type, search);
+    private Integer calculateOffset(Integer page) {
+        return (page - 1) * 9;
+    }
+
+    private void setPromotionFiles(List<Promotion> promotions) {
         LocalDate now = LocalDate.now();
         for (Promotion promotion : promotions) {
             List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
@@ -109,145 +119,20 @@ public class PromotionService {
                 promotion.setEventStatus("진행중인 이벤트");
             }
         }
-
-        return Map.of("pageInfo", pageInfo, "promotionList", promotions);
-    }
-
-    public Map<String, Object> listAll(Integer page, String search) {
-        Map<String, Object> pageInfo = new HashMap<>();
-        Integer countAll = promotionMapper.countAll(search);
-
-        Integer offset = (page - 1) * 9;
-        Integer lastPageNumber = (countAll - 1) / 9 + 1;
-        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
-        Integer rightPageNumber = leftPageNumber + 9;
-        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
-        leftPageNumber = Math.max(rightPageNumber - 9, 1);
-        Integer prevPageNumber = leftPageNumber - 1;
-        Integer nextPageNumber = rightPageNumber + 1;
-
-        if (prevPageNumber > 0) {
-            pageInfo.put("prevPageNumber", prevPageNumber);
-        }
-        if (nextPageNumber <= lastPageNumber) {
-            pageInfo.put("nextPageNumber", nextPageNumber);
-        }
-        pageInfo.put("currentPageNumber", page);
-        pageInfo.put("lastPageNumber", lastPageNumber);
-        pageInfo.put("leftPageNumber", leftPageNumber);
-        pageInfo.put("rightPageNumber", rightPageNumber);
-        pageInfo.put("totalItems", countAll); // 전체 개수 추가
-
-        List<Promotion> promotions = promotionMapper.selectAllPaging(offset, 9, search);
-        LocalDate now = LocalDate.now();
-        for (Promotion promotion : promotions) {
-            List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
-            List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
-                    .toList();
-            promotion.setFileList(files);
-
-            if (promotion.getEventEndDate().isBefore(now)) {
-                promotion.setEventStatus("종료 이벤트");
-            } else if (promotion.getEventStartDate().isAfter(now)) {
-                promotion.setEventStatus("예정 이벤트");
-            } else {
-                promotion.setEventStatus("진행중인 이벤트");
-            }
-        }
-
-        return Map.of("pageInfo", pageInfo, "promotionList", promotions);
-    }
-
-    public Map<String, Object> listEnded(Integer page, String search) {
-        Map<String, Object> pageInfo = new HashMap<>();
-        Integer countAll = promotionMapper.countAllEnded(search);
-
-        Integer offset = (page - 1) * 9;
-        Integer lastPageNumber = (countAll - 1) / 9 + 1;
-        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
-        Integer rightPageNumber = leftPageNumber + 9;
-        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
-        leftPageNumber = Math.max(rightPageNumber - 9, 1);
-        Integer prevPageNumber = leftPageNumber - 1;
-        Integer nextPageNumber = rightPageNumber + 1;
-
-        if (prevPageNumber > 0) {
-            pageInfo.put("prevPageNumber", prevPageNumber);
-        }
-        if (nextPageNumber <= lastPageNumber) {
-            pageInfo.put("nextPageNumber", nextPageNumber);
-        }
-        pageInfo.put("currentPageNumber", page);
-        pageInfo.put("lastPageNumber", lastPageNumber);
-        pageInfo.put("leftPageNumber", leftPageNumber);
-        pageInfo.put("rightPageNumber", rightPageNumber);
-        pageInfo.put("totalItems", countAll); // 전체 개수 추가
-
-        List<Promotion> promotions = promotionMapper.selectAllPagingEnded(offset, 9, search);
-        LocalDate now = LocalDate.now();
-        for (Promotion promotion : promotions) {
-            List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
-            List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
-                    .toList();
-            promotion.setFileList(files);
-
-            if (promotion.getEventEndDate().isBefore(now)) {
-                promotion.setEventStatus("종료 이벤트");
-            } else if (promotion.getEventStartDate().isAfter(now)) {
-                promotion.setEventStatus("예정 이벤트");
-            } else {
-                promotion.setEventStatus("진행중인 이벤트");
-            }
-        }
-
-        return Map.of("pageInfo", pageInfo, "promotionList", promotions);
     }
 
     public Map<String, Object> listAllWithoutPaging(String search) {
         List<Promotion> promotions = promotionMapper.selectAllWithoutPaging(search);
-        Map<String, Object> response = new HashMap<>();
-        LocalDate now = LocalDate.now();
-        for (Promotion promotion : promotions) {
-            List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
-            List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
-                    .toList();
-            promotion.setFileList(files);
-
-            if (promotion.getEventEndDate().isBefore(now)) {
-                promotion.setEventStatus("종료 이벤트");
-            } else if (promotion.getEventStartDate().isAfter(now)) {
-                promotion.setEventStatus("예정 이벤트");
-            } else {
-                promotion.setEventStatus("진행중인 이벤트");
-            }
-        }
-        response.put("promotionList", promotions);
-        response.put("totalItems", promotions.size());
-        return response;
+        setPromotionFiles(promotions);
+        return Map.of("promotionList", promotions, "totalItems", promotions.size());
     }
 
     public Promotion get(Integer id) {
         Promotion promotion = promotionMapper.selectById(id);
-        List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
-
-        List<PromotionFile> files = fileNames.stream()
-                .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{id}/\{name}"))
-                .toList();
-
-        promotion.setFileList(files);
-
-        LocalDate now = LocalDate.now();
-        if (promotion.getEventEndDate().isBefore(now)) {
-            promotion.setEventStatus("종료 이벤트");
-        } else if (promotion.getEventStartDate().isAfter(now)) {
-            promotion.setEventStatus("예정 이벤트");
-        } else {
-            promotion.setEventStatus("진행중인 이벤트");
+        if (promotion == null) {
+            return null;
         }
-
+        setPromotionFiles(List.of(promotion));
         return promotion;
     }
 
@@ -267,7 +152,7 @@ public class PromotionService {
     }
 
     public void modify(Promotion promotion, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
-        if (removeFileList != null && removeFileList.size() > 0) {
+        if (removeFileList != null && !removeFileList.isEmpty()) {
             for (String fileName : removeFileList) {
                 String key = STR."prj3/promo/\{promotion.getId()}/\{fileName}";
                 DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()

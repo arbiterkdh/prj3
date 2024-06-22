@@ -20,17 +20,18 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export function PromoView() {
   const { promoId } = useParams();
-  const [promo, setPromo] = useState("");
+  const [promo, setPromo] = useState(null);
   const toast = useToast();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   useEffect(() => {
-    axios
-      .get(`/api/promotion/${promoId}`)
-      .then((res) => setPromo(res.data))
-      .catch((err) => {
-        if (err.response.status === 404) {
+    const fetchPromotion = async () => {
+      try {
+        const { data } = await axios.get(`/api/promotion/${promoId}`);
+        setPromo(data);
+      } catch (err) {
+        if (err.response?.status === 404) {
           toast({
             status: "info",
             description: "해당 게시물이 존재하지 않습니다.",
@@ -38,38 +39,33 @@ export function PromoView() {
           });
           navigate("/promotion");
         }
-      });
+      }
+    };
+
+    fetchPromotion();
   }, [promoId, navigate, toast]);
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
+  const handleRemove = async () => {
+    try {
+      await axios.delete(`/api/promotion/${promoId}`);
+      toast({
+        status: "success",
+        description: `${promoId}번 게시물이 삭제되었습니다.`,
+        position: "top",
+      });
+      navigate("/promotion");
+    } catch {
+      toast({
+        status: "error",
+        description: `${promoId}번 게시물 삭제 중 오류가 발생하였습니다.`,
+        position: "top",
+      });
+    } finally {
+      onClose();
+    }
   };
 
-  function handleClickRemove() {
-    axios
-      .delete(`/api/promotion/${promoId}`)
-      .then(() => {
-        toast({
-          status: "success",
-          description: `${promoId}번 게시물이 삭제되었습니다.`,
-          position: "top",
-        });
-        navigate("/promotion");
-      })
-      .catch(() => {
-        toast({
-          status: "error",
-          description: `${promoId}번 게시물 삭제 중 오류가 발생하였습니다.`,
-          position: "top",
-        });
-      })
-      .finally(() => {
-        onClose();
-      });
-  }
-
-  if (promo === null) {
+  if (!promo) {
     return <Spinner />;
   }
 
@@ -81,8 +77,9 @@ export function PromoView() {
           <strong>이벤트 타입 |</strong> {promo.eventType}
         </Text>
         <Text>
-          <strong>기간 |</strong> {formatDate(promo.eventStartDate)} ~{" "}
-          {formatDate(promo.eventEndDate)}
+          <strong>기간 |</strong>{" "}
+          {new Date(promo.eventStartDate).toLocaleDateString()} ~{" "}
+          {new Date(promo.eventEndDate).toLocaleDateString()}
         </Text>
         <Text>
           <strong>이벤트 상태 |</strong> {promo.eventStatus}
@@ -90,12 +87,11 @@ export function PromoView() {
       </Box>
       <Box m={1} borderBottom={"1px solid black"} />
       <Box mt={4}>
-        {promo.fileList &&
-          promo.fileList.slice(1).map((file) => (
-            <Box key={file.name}>
-              <Image src={file.src} />
-            </Box>
-          ))}
+        {promo.fileList?.slice(1).map((file) => (
+          <Box key={file.name}>
+            <Image src={file.src} />
+          </Box>
+        ))}
       </Box>
       <Box mt={4}>
         <Text>{promo.content}</Text>
@@ -117,7 +113,7 @@ export function PromoView() {
           <ModalBody>삭제하시겠습니까?</ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>취소</Button>
-            <Button colorScheme={"red"} onClick={handleClickRemove}>
+            <Button colorScheme={"red"} onClick={handleRemove}>
               확인
             </Button>
           </ModalFooter>
