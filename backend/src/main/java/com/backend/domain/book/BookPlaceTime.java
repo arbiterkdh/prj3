@@ -2,14 +2,13 @@ package com.backend.domain.book;
 
 import lombok.Data;
 
-import java.sql.Time;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class BookPlaceTime {
     private Integer id;
     private Integer theaterBoxMovieId;
     private Integer vacancy;
-    private LocalDate date;
-    private Time time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
 }

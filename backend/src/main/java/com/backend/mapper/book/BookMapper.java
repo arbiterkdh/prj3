@@ -98,7 +98,7 @@ public interface BookMapper {
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
 
     @Select("""
-            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, tbm.time_interval, m.title as movieTitle
+            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, tbm.time_interval, m.title as movieTitle, m.start_date
             FROM theater_box_movie tbm JOIN movie m ON tbm.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
@@ -123,7 +123,7 @@ public interface BookMapper {
             SELECT *
             FROM book_place_time
             WHERE theater_box_movie_id = #{theaterBoxMovieId}
-            ORDER BY time
+            ORDER BY start_time
             """)
     List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieId(Integer theaterBoxMovieId);
 

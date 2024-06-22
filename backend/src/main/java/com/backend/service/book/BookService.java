@@ -79,7 +79,13 @@ public class BookService {
     }
 
     public List<TheaterBoxMovie> getTheaterBoxTimeTable(TheaterBox theaterBox) {
-        return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
+        List<TheaterBoxMovie> theaterBoxMovieList = bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
+
+        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
+            theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+        }
+
+        return theaterBoxMovieList;
     }
 
     public List<Movie> getOnScreenList() {
@@ -100,5 +106,9 @@ public class BookService {
 
     public List<Integer> getMovieIdListByTheaterBoxId(Integer theaterBoxId) {
         return bookMapper.selectAllMovieIdByTheaterBoxId(theaterBoxId);
+    }
+
+    public Movie getMovie(Integer movieId) {
+        return movieMapper.selectByMovieId(movieId);
     }
 }

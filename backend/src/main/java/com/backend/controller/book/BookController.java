@@ -55,6 +55,10 @@ public class BookController {
         return bookService.getMovieIdByTheaterNumber(number);
     }
 
+    @GetMapping("movie/{movieId}")
+    public Movie getMovieById(@PathVariable Integer movieId) {
+        return bookService.getMovie(movieId);
+    }
 
     @GetMapping("movie/list")
     public List<Movie> getMovies() {

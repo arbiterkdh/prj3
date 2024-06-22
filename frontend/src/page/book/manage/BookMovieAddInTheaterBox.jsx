@@ -3,11 +3,6 @@ import {
   Button,
   Flex,
   Heading,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
   Stack,
   Table,
   Tbody,
@@ -18,8 +13,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
+import { BookTheaterBoxTimeTableManagementComponent } from "./BookTheaterBoxTimeTableManagementComponent.jsx";
 
 export function BookMovieAddInTheaterBox({
   cityList,
@@ -35,7 +31,9 @@ export function BookMovieAddInTheaterBox({
 
   const [theaterBoxList, setTheaterBoxList] = useState([]);
 
-  useEffect(() => {}, [theaterBoxList]);
+  const [theaterBox, setTheaterBox] = useState([]);
+
+  const [modal, setModal] = useState(false);
 
   function handleCitySelect(city) {
     axios.get(`/api/theater/list?city=${city}`).then((res) => {
@@ -48,23 +46,7 @@ export function BookMovieAddInTheaterBox({
       .get(`/api/book/movielocation?theaternumber=${theaterNumber}`)
       .then((res) => {
         setTheaterBoxList(res.data);
-        console.log(res.data);
       });
-  }
-
-  function handleClickTheaterBoxTimeTable() {
-    return (
-      <Box>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHead></ModalHead>
-            <ModalBody></ModalBody>
-            <ModalFooter></ModalFooter>
-          </ModalContent>
-        </Modal>
-      </Box>
-    );
   }
 
   return (
@@ -111,37 +93,35 @@ export function BookMovieAddInTheaterBox({
               <Tr>
                 <Th>상영관(theater_box.id)</Th>
                 <Th>영화(movie_id) 리스트</Th>
-                <Th></Th>
+                <Th w={"30%"}></Th>
               </Tr>
             </Thead>
             <Tbody>
-              {theaterBoxList.map((theaterBox, index) => (
+              {theaterBoxList.map((box, index) => (
                 <Tr key={index}>
                   <Td>
-                    {theaterBox.boxNumber} 관 ({theaterBox.id})
+                    {box.boxNumber} 관 ({box.id})
                   </Td>
                   <Td>
                     <Stack>
-                      {theaterBox.theaterBoxMovieList.map(
-                        (theaterBoxMovie, index) => (
-                          <Box key={index}>
-                            {index +
-                              1 +
-                              ". " +
-                              theaterBoxMovie.movieTitle +
-                              " (" +
-                              theaterBoxMovie.movieId +
-                              ")"}
-                          </Box>
-                        ),
-                      )}
+                      {box.theaterBoxMovieList.map((theaterBoxMovie, index) => (
+                        <Box key={index}>
+                          {index +
+                            1 +
+                            ". " +
+                            theaterBoxMovie.movieTitle +
+                            " (" +
+                            theaterBoxMovie.movieId +
+                            ")"}
+                        </Box>
+                      ))}
                     </Stack>
                   </Td>
                   <Td>
                     <Button
                       onClick={() => {
+                        setTheaterBox(box);
                         onOpen();
-                        handleClickTheaterBoxTimeTable();
                       }}
                     >
                       영화 상영표 작성
@@ -153,6 +133,12 @@ export function BookMovieAddInTheaterBox({
           </Table>
         )}
       </Box>
+      <BookTheaterBoxTimeTableManagementComponent
+        theaterBox={theaterBox}
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      />
     </Box>
   );
 }
