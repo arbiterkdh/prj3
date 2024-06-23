@@ -28,15 +28,6 @@ FROM movie
 WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
   AND start_date > NOW();
 
-# CREATE TABLE book_place_time
-# (
-#     id                   INT PRIMARY KEY AUTO_INCREMENT,
-#     theater_box_movie_id INT REFERENCES theater_box_movie (id),
-#     vacancy              INT  NOT NULL DEFAULT 176,
-#     date                 DATE NOT NULL,
-#     time                 TIME NOT NULL
-# );
-
 CREATE TABLE book_place_time
 (
     id                   INT PRIMARY KEY AUTO_INCREMENT,
@@ -49,7 +40,18 @@ CREATE TABLE book_place_time
 DROP TABLE book_place_time;
 
 SELECT *
-FROM book_place_time;
+FROM book_place_time
+ORDER BY id DESC;
+
+SELECT *
+FROM book_place_time
+WHERE theater_box_movie_id = 1
+  AND start_time = '2024-06-23 08:00';
+
+SELECT *
+FROM movie;
+SELECT *
+FROM theater_box_movie;
 
 DELETE
 FROM book_place_time;

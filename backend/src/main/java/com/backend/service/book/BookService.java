@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -110,5 +112,14 @@ public class BookService {
 
     public Movie getMovie(Integer movieId) {
         return movieMapper.selectByMovieId(movieId);
+    }
+
+    public BookPlaceTime addBookPlaceTime(Map<String, Object> requestBody) {
+        return bookMapper.addBookPlaceTime(
+                (Integer) requestBody.get("theaterBoxMovieId"),
+                (Integer) requestBody.get("movieId"),
+                LocalDateTime.parse(
+                        (String) requestBody.get("startTime"),
+                        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm")));
     }
 }

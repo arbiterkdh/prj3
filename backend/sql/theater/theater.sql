@@ -56,6 +56,9 @@ CREATE TABLE theater_box_movie
     time_interval  INT NOT NULL
 );
 
+ALTER TABLE theater_box_movie
+    DROP COLUMN time_interval;
+
 DROP TABLE theater_box_movie;
 
 SELECT *

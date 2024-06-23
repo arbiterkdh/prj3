@@ -28,6 +28,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
   theaterBox,
 }) {
   const [selectedMovieId, setSelectedMovieId] = useState(0);
+  const [selectedTheaterBoxMovieId, setSelectedTheaterBoxMovieId] = useState(0);
   const [selectedDate, setSelectedDate] = useState(undefined);
   const [timeInput, setTimeInput] = useState("08:00");
   const [startDateValue, setStartDateValue] = useState(undefined);
@@ -35,7 +36,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
 
   useEffect(() => {
     let dateArray = [];
-    if (startDateValue !== undefined) {
+    if (startDateValue) {
       for (let i = 0; i < 21; i++) {
         let date = new Date(
           startDateValue.getFullYear(),
@@ -54,9 +55,24 @@ export function BookTheaterBoxTimeTableManagementComponent({
       }
       setDateList(dateArray);
     }
-  }, [isOpen, startDateValue]);
+    if (startDateValue === "") {
+      setDateList([]);
+    }
+  }, [isOpen, startDateValue, selectedDate, selectedMovieId]);
+
+  function handleClickAddBookPlaceTime() {
+    axios.post("/api/book/bookplacetime/add", {
+      theaterBoxMovieId: selectedTheaterBoxMovieId,
+      movieId: selectedMovieId,
+      startTime: selectedDate + "T" + timeInput,
+    });
+  }
 
   function handleSelectMovieOption(movieId) {
+    if (!movieId) {
+      setStartDateValue("");
+      return;
+    }
     if (movieId) {
       axios.get(`api/book/movie/${movieId}`).then((res) => {
         setStartDateValue(new Date(res.data.startDate));
@@ -117,15 +133,22 @@ export function BookTheaterBoxTimeTableManagementComponent({
                 <BorderSelect
                   w={"300px"}
                   placeholder={"영화"}
-                  value={selectedMovieId}
                   onChange={(e) => {
-                    setSelectedMovieId(e.target.value);
-                    handleSelectMovieOption(e.target.value);
+                    let values = e.target.value.split("\\");
+                    setSelectedMovieId(Number(values[0]));
+                    setSelectedTheaterBoxMovieId(Number(values[1]));
+                    setSelectedDate("");
+                    handleSelectMovieOption(values[0]);
                   }}
                 >
                   {theaterBox.theaterBoxMovieList.map(
                     (theaterBoxMovie, index) => (
-                      <option key={index} value={theaterBoxMovie.movieId}>
+                      <option
+                        key={index}
+                        value={
+                          theaterBoxMovie.movieId + "\\" + theaterBoxMovie.id
+                        }
+                      >
                         {theaterBoxMovie.movieTitle}
                       </option>
                     ),
@@ -178,7 +201,12 @@ export function BookTheaterBoxTimeTableManagementComponent({
                   }}
                 />
 
-                <Button alignContent={"center"} textAlign={"center"}>
+                <Button
+                  alignContent={"center"}
+                  textAlign={"center"}
+                  isDisabled={!selectedDate || !selectedMovieId}
+                  onClick={handleClickAddBookPlaceTime}
+                >
                   일정 추가
                 </Button>
               </Flex>
@@ -206,12 +234,19 @@ export function BookTheaterBoxTimeTableManagementComponent({
                             <Tr
                               key={index}
                               display={
-                                selectedDate === undefined ||
-                                selectedDate === "" ||
-                                bookPlaceTime.startTime.slice(0, 10) ===
-                                  selectedDate
+                                selectedMovieId === 0
                                   ? "block"
-                                  : "none"
+                                  : selectedMovieId ===
+                                        theaterBoxMovie.movieId &&
+                                      (selectedDate === undefined ||
+                                        selectedDate === "")
+                                    ? "block"
+                                    : selectedMovieId ===
+                                          theaterBoxMovie.movieId &&
+                                        bookPlaceTime.startTime.slice(0, 10) ===
+                                          selectedDate
+                                      ? "block"
+                                      : "none"
                               }
                             >
                               <Td w={"280px"}>{theaterBoxMovie.movieTitle}</Td>

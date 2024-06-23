@@ -24,6 +24,7 @@ public class BookController {
     private final BookService bookService;
     private final TheaterService theaterService;
 
+
     @GetMapping("onscreenlist/all")
     public List<Movie> getOnScreenListAll() {
         return bookService.getOnScreenList();
@@ -93,5 +94,12 @@ public class BookController {
         map.put("bookPeriodList", bookPeriodList);
 
         return map;
+    }
+
+    @PostMapping("bookplacetime/add")
+    public void addBookPlaceTime(@RequestBody Map<String, Object> requestBody) {
+        bookService.addBookPlaceTime(requestBody);
+
+
     }
 }

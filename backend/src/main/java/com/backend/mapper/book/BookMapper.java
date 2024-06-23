@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +99,7 @@ public interface BookMapper {
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
 
     @Select("""
-            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, tbm.time_interval, m.title as movieTitle, m.start_date
+            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, m.title as movieTitle, m.start_date
             FROM theater_box_movie tbm JOIN movie m ON tbm.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
@@ -142,4 +143,18 @@ public interface BookMapper {
             WHERE tb.id = #{theaterBoxId}
             """)
     List<Integer> selectAllMovieIdByTheaterBoxId(Integer theaterBoxId);
+
+    @Insert("""
+            INSERT INTO book_place_time
+            (theater_box_movie_id, start_time, end_time)
+            VALUES (#{theaterBoxMovieId}, #{startTime},
+                    DATE_ADD(#{startTime},
+                        INTERVAL CEIL((
+                            SELECT m.running_time
+                            FROM movie m
+                            WHERE m.id = #{movieId}) / 10) * 10 + 10
+                        MINUTE ))
+            """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    BookPlaceTime addBookPlaceTime(Integer theaterBoxMovieId, Integer movieId, LocalDateTime startTime);
 }
