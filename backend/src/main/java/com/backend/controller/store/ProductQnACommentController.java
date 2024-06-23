@@ -6,6 +6,8 @@ import com.backend.service.store.ProductQnACommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/store/qna/comment")
@@ -20,13 +22,10 @@ public class ProductQnACommentController {
     }
 
     @GetMapping("/read/{idQnA}")
-    public ProductQnAComment readProductQnAComment(@PathVariable Integer idQnA) {
+    public List<ProductQnAComment> readProductQnAComment(@PathVariable Integer idQnA) {
 
-
-        ProductQnAComment comment = service.readQnAComment(idQnA);
+        List<ProductQnAComment> comment = service.readQnAComment(idQnA);
 
         return comment;
-
     }
-
 }

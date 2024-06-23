@@ -11,4 +11,5 @@ public class ProductQnAComment {
     private String content;
     private LocalDateTime regDate;
     private Integer productQnAId;
+    private Boolean isAdmin;
 }

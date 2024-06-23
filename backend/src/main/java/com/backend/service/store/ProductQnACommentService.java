@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class ProductQnACommentService {
         mapper.addQnAComment(qnAComment);
     }
 
-    public ProductQnAComment readQnAComment(Integer idQnA) {
+    public List<ProductQnAComment> readQnAComment(Integer idQnA) {
 
         return mapper.readQnAComment(idQnA);
     }

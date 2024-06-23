@@ -27,19 +27,33 @@ function ReadQnAContentModal({
 }) {
   const Login = useContext(LoginContext);
   const [answerComment, setAnswerComment] = useState("");
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [refreshQnAComment, setRefreshQnAComment] = useState(0);
   const toast = useToast();
 
-  function handleAddAnswerComment() {
+  function handleAddAnswerComment(isAdmin) {
     console.log("answerComment :" + answerComment);
     console.log("idQnA :" + idQnA);
+    console.log("isAdmin :" + isAdmin);
+
     axios
       .post("/api/store/qna/comment/add", {
         productQnAId: idQnA,
         content: answerComment,
+        isAdmin,
       })
-      .then(() => {})
+      .then(() => {
+        toast({
+          status: "success",
+          description: "작성 완료",
+          position: "bottom",
+        });
+        setRefreshQnAComment(refreshQnAComment + 1);
+      })
       .catch(() => {})
-      .finally(() => {});
+      .finally(() => {
+        setAnswerComment("");
+      });
   }
 
   return (
@@ -56,7 +70,7 @@ function ReadQnAContentModal({
           <hr />
           <FormControl>
             <FormLabel>답변 내용</FormLabel>
-            <QnAComment idQnA={idQnA} />
+            <QnAComment idQnA={idQnA} refreshQnAComment={refreshQnAComment} />
 
             {Login.nickName === writerQnA && (
               <>
@@ -65,11 +79,15 @@ function ReadQnAContentModal({
                   <Textarea
                     placeholder={"추가 문의글을 작성하세요"}
                     resize={"none"}
-                    onChange={(e) => setAnswerComment(e.target.value)}
+                    value={answerComment}
+                    onChange={(e) => {
+                      setAnswerComment(e.target.value);
+                      setIsAdmin(false);
+                    }}
                   />
                   <Button
                     onClick={() => {
-                      handleAddAnswerComment();
+                      handleAddAnswerComment(isAdmin);
                     }}
                   >
                     확인
@@ -77,20 +95,22 @@ function ReadQnAContentModal({
                 </Flex>
               </>
             )}
-            {Login.nickName === "admin" && (
+            {Login.nickName === "생존코딩" && (
               <>
                 <FormLabel>답글 작성</FormLabel>
                 <Flex>
                   <Textarea
                     placeholder={"답글을 작성하세요"}
                     resize={"none"}
-                    onChange={(e) => setAnswerComment(e.target.value)}
+                    value={answerComment}
+                    onChange={(e) => {
+                      setAnswerComment(e.target.value);
+                      setIsAdmin(true);
+                    }}
                   />
                   <Button
                     onClick={() => {
-                      handleAddAnswerComment();
-                      console.log("answerComment :" + answerComment);
-                      console.log("idQnA :" + idQnA);
+                      handleAddAnswerComment(isAdmin);
                     }}
                   >
                     확인
@@ -103,8 +123,7 @@ function ReadQnAContentModal({
         <hr />
         <ModalFooter>
           <Flex>
-            <Button>확인</Button>
-            <Button onClick={onQnAContentClose}>취소</Button>
+            <Button onClick={onQnAContentClose}>확인</Button>
           </Flex>
         </ModalFooter>
       </ModalContent>

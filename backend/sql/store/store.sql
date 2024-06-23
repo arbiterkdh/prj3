@@ -138,8 +138,30 @@ CREATE TABLE product_qna_comment
     id             INT PRIMARY KEY AUTO_INCREMENT,
     content        VARCHAR(100) NOT NULL,
     reg_date       DATETIME DEFAULT NOW(),
-    product_qna_id INT REFERENCES product_qna (id)
+    product_qna_id INT REFERENCES product_qna (id),
+    is_admin       BOOLEAN
 );
 
 select *
+from product_qna
+where id = 4;
+
+select *
 from product_qna_comment;
+
+drop table product_qna_comment;
+
+select *
+from product_qna pq
+         left join product_qna_comment pqc
+                   on pq.id = pqc.product_qna_id
+where pqc.product_qna_id is null;
+
+
+select pq.*
+from product_qna pq
+         left join product_qna_comment pqc
+                   on pq.id = pqc.product_qna_id and is_admin = true
+where pqc.product_qna_id is null;
+
+

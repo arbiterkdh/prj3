@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Text } from "@chakra-ui/react";
+import axios from "axios";
 
-export function QnAComment({ idQnA }) {
-  const [qnAComment, setQnAComment] = useState({});
+export function QnAComment({ idQnA, refreshQnAComment }) {
+  const [qnAComment, setQnAComment] = useState([]);
   useEffect(() => {
     axios
       .get(`/api/store/qna/comment/read/${idQnA}`)
       .then((res) => {
         setQnAComment(res.data);
       })
-      .catch(() => {})
-      .finally(() => {});
-  }, [idQnA]);
+      .catch((err) => {
+        console.error("Failed to fetch QnA comments:", err);
+      });
+  }, [idQnA, refreshQnAComment]);
 
-  // if (qnAComment == null) {
-  //   return <Spinner />;
-  // }
-  return <Text>{qnAComment.content}</Text>;
+  return (
+    <>
+      {qnAComment.map((qnAItem, index) => (
+        <Text key={qnAItem.id} color={qnAItem.isAdmin ? "red" : "black"}>
+          {index !== 0 && qnAItem.isAdmin && "\u00A0\u00A0"}
+          {qnAItem.isAdmin
+            ? `관리자: ${qnAItem.content}`
+            : `작성자: ${qnAItem.content}`}
+        </Text>
+      ))}
+    </>
+  );
 }
