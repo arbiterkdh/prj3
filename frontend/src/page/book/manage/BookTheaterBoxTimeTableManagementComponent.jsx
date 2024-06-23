@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   Flex,
-  HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,8 +10,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  PinInput,
-  PinInputField,
   Table,
   Tbody,
   Td,
@@ -31,13 +29,12 @@ export function BookTheaterBoxTimeTableManagementComponent({
 }) {
   const [selectedMovieId, setSelectedMovieId] = useState(0);
   const [selectedDate, setSelectedDate] = useState(undefined);
-  const [timeInput, setTimeInput] = useState(undefined);
+  const [timeInput, setTimeInput] = useState("00:00");
   const [startDateValue, setStartDateValue] = useState(undefined);
   const [dateList, setDateList] = useState([]);
 
   useEffect(() => {
     let dateArray = [];
-
     if (startDateValue !== undefined) {
       for (let i = 0; i < 21; i++) {
         let date = new Date(
@@ -111,19 +108,65 @@ export function BookTheaterBoxTimeTableManagementComponent({
                     </option>
                   ))}
                 </BorderSelect>
-                <Box w={"200px"} border={"1px solid"}>
-                  <HStack>
-                    <PinInput defaultValue="0800">
-                      <PinInputField />
-                      <PinInputField />
-                      <Box w={0} border={0}>
-                        :
-                      </Box>
-                      <PinInputField />
-                      <PinInputField />
-                    </PinInput>
-                  </HStack>
-                </Box>
+                <Input
+                  w={"150px"}
+                  type={"time"}
+                  value={timeInput}
+                  step={600}
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                  onWheel={(e) => {
+                    let time = timeInput.split(":");
+                    let hour = Number(time[0]);
+                    let minutes = Number(time[1]);
+
+                    if (e.deltaY > 0) {
+                      // 휠 내릴때
+                      if (minutes === 10) {
+                        if (hour >= 10) {
+                          setTimeInput(hour + ":00");
+                        } else {
+                          setTimeInput("0" + hour + ":00");
+                        }
+                      } else if (minutes === 0) {
+                        if (hour === 0) {
+                          setTimeInput("23:50");
+                        } else if (hour <= 10) {
+                          setTimeInput("0" + (hour - 1) + ":50");
+                        } else {
+                          setTimeInput(hour - 1 + ":50");
+                        }
+                      } else {
+                        if (hour < 10) {
+                          setTimeInput("0" + hour + ":" + (minutes - 10));
+                        } else {
+                          setTimeInput(hour + ":" + (minutes - 10));
+                        }
+                      }
+                    } else {
+                      // 휠 올릴때
+                      if (minutes === 50) {
+                        if (hour === 23) {
+                          setTimeInput("00:00");
+                        } else if (hour < 9) {
+                          setTimeInput("0" + (hour + 1) + ":00");
+                        } else {
+                          setTimeInput(hour + 1 + ":00");
+                        }
+                      } else {
+                        if (hour < 10) {
+                          setTimeInput("0" + hour + ":" + (minutes + 10));
+                        } else {
+                          setTimeInput(hour + ":" + (minutes + 10));
+                        }
+                      }
+                    }
+                  }}
+                  onChange={(e) => {
+                    setTimeInput(e.target.value);
+                  }}
+                />
 
                 <Button alignContent={"center"} textAlign={"center"}>
                   일정 추가
