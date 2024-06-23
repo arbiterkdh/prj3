@@ -8,7 +8,6 @@ import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
 
 function QnA({ productId, Login, listQnA, setListQnA }) {
   const [pageInfo, setPageInfo] = useState({});
-  const [idQnA, setIdQnA] = useState("");
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
   const [page, setPage] = useState(1);

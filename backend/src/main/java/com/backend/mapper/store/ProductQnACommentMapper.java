@@ -6,13 +6,15 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface ProductQnACommentMapper {
 
 
     @Insert("""
-            INSERT INTO product_qna_comment(content, product_qna_id)
-            VALUES(#{content}, #{productQnAId})
+            INSERT INTO product_qna_comment(content, product_qna_id, is_admin)
+            VALUES(#{content}, #{productQnAId}, #{isAdmin})
             """)
     int addQnAComment(ProductQnAComment qnAComment);
 
@@ -21,5 +23,5 @@ public interface ProductQnACommentMapper {
             FROM product_qna_comment
             WHERE product_qna_id = #{idQnA}
             """)
-    ProductQnAComment readQnAComment(Integer idQnA);
+    List<ProductQnAComment> readQnAComment(Integer idQnA);
 }
