@@ -29,7 +29,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
 }) {
   const [selectedMovieId, setSelectedMovieId] = useState(0);
   const [selectedDate, setSelectedDate] = useState(undefined);
-  const [timeInput, setTimeInput] = useState("00:00");
+  const [timeInput, setTimeInput] = useState("08:00");
   const [startDateValue, setStartDateValue] = useState(undefined);
   const [dateList, setDateList] = useState([]);
 
@@ -62,6 +62,43 @@ export function BookTheaterBoxTimeTableManagementComponent({
         setStartDateValue(new Date(res.data.startDate));
       });
     }
+  }
+
+  function handleWheel(e) {
+    let time = timeInput.split(":");
+    let hour = Number(time[0]);
+    let minutes = Number(time[1]);
+
+    let newTime;
+    if (e.deltaY > 0) {
+      // 휠 내릴때
+      newTime = handleTimeChange(hour, minutes, -10);
+    } else {
+      // 휠 올릴때
+      newTime = handleTimeChange(hour, minutes, 10);
+    }
+
+    setTimeInput(newTime);
+  }
+
+  function handleTimeChange(hour, minutes, deltaMinutes) {
+    minutes += deltaMinutes;
+
+    if (minutes < 0) {
+      minutes = 60 + minutes;
+      hour--;
+    } else if (minutes >= 60) {
+      minutes = minutes - 60;
+      hour++;
+    }
+
+    if (hour < 8) {
+      hour = 23;
+    } else if (hour > 23) {
+      hour = 8;
+    }
+
+    return `${hour.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
   }
 
   return (
@@ -113,58 +150,31 @@ export function BookTheaterBoxTimeTableManagementComponent({
                   type={"time"}
                   value={timeInput}
                   step={600}
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
-                  onWheel={(e) => {
-                    let time = timeInput.split(":");
+                  onClick={(e) => e.preventDefault()}
+                  onWheel={handleWheel}
+                  onChange={(e) => {
+                    let prevTime = timeInput.split(":");
+                    let prevMinutes = Number(prevTime[1]);
+
+                    let time = e.target.value.split(":");
                     let hour = Number(time[0]);
                     let minutes = Number(time[1]);
 
-                    if (e.deltaY > 0) {
-                      // 휠 내릴때
-                      if (minutes === 10) {
-                        if (hour >= 10) {
-                          setTimeInput(hour + ":00");
-                        } else {
-                          setTimeInput("0" + hour + ":00");
-                        }
-                      } else if (minutes === 0) {
-                        if (hour === 0) {
-                          setTimeInput("23:50");
-                        } else if (hour <= 10) {
-                          setTimeInput("0" + (hour - 1) + ":50");
-                        } else {
-                          setTimeInput(hour - 1 + ":50");
-                        }
-                      } else {
-                        if (hour < 10) {
-                          setTimeInput("0" + hour + ":" + (minutes - 10));
-                        } else {
-                          setTimeInput(hour + ":" + (minutes - 10));
-                        }
-                      }
-                    } else {
-                      // 휠 올릴때
-                      if (minutes === 50) {
-                        if (hour === 23) {
-                          setTimeInput("00:00");
-                        } else if (hour < 9) {
-                          setTimeInput("0" + (hour + 1) + ":00");
-                        } else {
-                          setTimeInput(hour + 1 + ":00");
-                        }
-                      } else {
-                        if (hour < 10) {
-                          setTimeInput("0" + hour + ":" + (minutes + 10));
-                        } else {
-                          setTimeInput(hour + ":" + (minutes + 10));
-                        }
-                      }
+                    if (minutes === 0 && prevMinutes === 50) {
+                      hour++;
+                    } else if (minutes === 50 && prevMinutes === 0) {
+                      hour--;
                     }
-                  }}
-                  onChange={(e) => {
-                    setTimeInput(e.target.value);
+
+                    if (hour > 23 || hour === 0) {
+                      hour = 8;
+                    } else if (hour < 8) {
+                      hour = 23;
+                    }
+
+                    setTimeInput(
+                      `${hour.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`,
+                    );
                   }}
                 />
 
