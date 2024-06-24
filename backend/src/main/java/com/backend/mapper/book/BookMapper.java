@@ -51,7 +51,7 @@ public interface BookMapper {
     @Select("""
             SELECT id, title, running_time, rating, start_date
             FROM movie
-            WHERE DATE_ADD(start_date, INTERVAL 3 WEEK) >= #{date}
+            WHERE DATE_ADD(start_date, INTERVAL 20 DAY) >= #{date}
               AND start_date <= #{date}
               AND start_date <= NOW()
             """)
@@ -83,7 +83,7 @@ public interface BookMapper {
                 UNION ALL
                 SELECT DATE_ADD(Date, INTERVAL 1 DAY)
                 FROM DateRange
-                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 3 WEEK)
+                WHERE Date < DATE_ADD(CURRENT_DATE(), INTERVAL 20 DAY)
             )
             SELECT Date
             FROM DateRange;
@@ -109,7 +109,7 @@ public interface BookMapper {
             SELECT *
             FROM movie
             WHERE start_date <= CURRENT_DATE()
-              AND DATE_ADD(start_date, INTERVAL 3 WEEK) > CURRENT_DATE()
+              AND DATE_ADD(start_date, INTERVAL 20 DAY) > CURRENT_DATE()
             """)
     List<Movie> selectAllOnscreen();
 

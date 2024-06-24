@@ -37,7 +37,6 @@ export function BookTheaterList({
   function handleClickTheater(theaterNumber) {
     axios.get(`/api/theaterbox/list/${theaterNumber}`).then((res) => {
       setTheaterBoxList(res.data);
-      console.log(res.data);
     });
   }
 

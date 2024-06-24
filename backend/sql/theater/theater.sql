@@ -116,6 +116,7 @@ INSERT INTO theater_box_movie
 VALUES (521, (SELECT id FROM theater_box WHERE theater_number = 120 AND box_number = 1),
         (SELECT running_time FROM movie WHERE id = 521) / 10 * 10 + 30);
 
+
 SELECT *
 FROM movie_location
 ORDER BY theater_number, movie_id;
