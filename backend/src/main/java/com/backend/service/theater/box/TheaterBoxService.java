@@ -7,6 +7,8 @@ import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.theater.TheaterMapper;
 import com.backend.mapper.theater.box.TheaterBoxMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,5 +67,14 @@ public class TheaterBoxService {
         }
 
         return null;
+    }
+
+    public ResponseEntity add(TheaterBoxMovie theaterBoxMovie) {
+        int count = theaterBoxMapper.checkConflict(theaterBoxMovie);
+        if (count > 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        boolean result = theaterBoxMapper.insertTheaterBoxMovie(theaterBoxMovie) > 0;
+        return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 }

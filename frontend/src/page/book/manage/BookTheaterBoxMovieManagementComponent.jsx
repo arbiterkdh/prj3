@@ -15,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
@@ -23,16 +24,50 @@ import axios from "axios";
 
 export function BookTheaterBoxMovieManagementComponent({
   theaterBox,
+  setTheaterBox,
   theaterBoxManageIsOpen,
   theaterBoxManageOnOpen,
   theaterBoxManageOnClose,
+  isAdding,
+  setIsAdding,
 }) {
   const [selectedMovieId, setSelectedMovieId] = useState(0);
+  const [selectedMovieTitle, setSelectedMovieTitle] = useState("");
 
-  useEffect(() => {}, []);
+  const toast = useToast();
+
+  useEffect(() => {
+    if (theaterBox.id !== undefined && isAdding) {
+      axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
+        setTheaterBox(res.data);
+      });
+    }
+  }, [isAdding]);
 
   function handleClickAddTheaterBoxMovie() {
-    axios.post("/api/theaterbox/theaterboxmovie/add", { setSelectedMovieId });
+    setIsAdding(true);
+    axios
+      .post("/api/theaterbox/theaterboxmovie/add", {
+        movieId: selectedMovieId,
+        theaterBoxId: theaterBox.id,
+      })
+      .then((res) => {
+        toast({
+          status: "success",
+          description: `"${selectedMovieTitle}" 이(가) 상영 목록에 추가되었습니다.`,
+          position: "bottom-right",
+        });
+      })
+      .catch((err) => {
+        if (err.response.status === 409) {
+          toast({
+            status: "warning",
+            description: "이미 상영중인 영화입니다.",
+            position: "bottom-right",
+          });
+        }
+      })
+      .finally(() => setIsAdding(false));
   }
 
   return (
@@ -55,11 +90,16 @@ export function BookTheaterBoxMovieManagementComponent({
                 <BorderSelect
                   placeholder={"상영 가능 목록"}
                   w={"250px"}
-                  onChange={(e) => setSelectedMovieId(e.target.value)}
+                  value={selectedMovieId}
+                  onChange={(e) => {
+                    let selected = e.target.value.split("\\");
+                    setSelectedMovieId(selected[0]);
+                    setSelectedMovieTitle(selected[1]);
+                  }}
                 >
                   {theaterBox.movieList &&
                     theaterBox.movieList.map((movie, index) => (
-                      <option key={index} value={movie.id}>
+                      <option key={index} value={movie.id + "\\" + movie.title}>
                         {movie.title}
                       </option>
                     ))}
@@ -80,9 +120,9 @@ export function BookTheaterBoxMovieManagementComponent({
                 <Table>
                   <Thead>
                     <Tr>
-                      <Th w={"35%"}>영화명</Th>
-                      <Th w={"20%"}>장르</Th>
-                      <Th w={"18%"}>개봉일</Th>
+                      <Th w={"33%"}>영화명</Th>
+                      <Th w={"24%"}>장르</Th>
+                      <Th w={"17%"}>개봉일</Th>
                       <Th>러닝타임</Th>
                       <Th>관리</Th>
                     </Tr>
@@ -96,8 +136,8 @@ export function BookTheaterBoxMovieManagementComponent({
                           (theaterBoxMovie, index) => (
                             <Tr key={index} h={"30px"}>
                               <Td w={"35%"}>{theaterBoxMovie.movieTitle}</Td>
-                              <Td w={"20%"}>{theaterBoxMovie.genre}</Td>
-                              <Td w={"21%"}>{theaterBoxMovie.startDate}</Td>
+                              <Td w={"26%"}>{theaterBoxMovie.genre}</Td>
+                              <Td w={"22%"}>{theaterBoxMovie.startDate}</Td>
                               <Td>{theaterBoxMovie.runningTime}</Td>
                               <Td>
                                 <Button size={"xs"}>삭제</Button>

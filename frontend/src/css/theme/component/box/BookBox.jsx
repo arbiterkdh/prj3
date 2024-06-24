@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 
-const BookBox = (props) => {
+function BookBox(props) {
   return (
     <Box
       border={"1px solid"}
@@ -13,6 +13,6 @@ const BookBox = (props) => {
       {...props}
     />
   );
-};
+}
 
 export default BookBox;

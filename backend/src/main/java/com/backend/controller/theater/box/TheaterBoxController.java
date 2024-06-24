@@ -5,6 +5,7 @@ import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.service.book.BookService;
 import com.backend.service.theater.box.TheaterBoxService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class TheaterBoxController {
     }
 
     @PostMapping("theaterboxmovie/add")
-    public TheaterBoxMovie addTheaterBoxMovie(@RequestBody TheaterBoxMovie theaterBoxMovie) {
-        return null;
+    public ResponseEntity addTheaterBoxMovie(@RequestBody TheaterBoxMovie theaterBoxMovie) {
+        return theaterBoxService.add(theaterBoxMovie);
     }
 
     @GetMapping("onscreenlist")

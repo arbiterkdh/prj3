@@ -11,7 +11,6 @@ public class TheaterBoxMovie {
     private Integer id;
     private Integer movieId;
     private Integer theaterBoxId;
-    private boolean canScreen;
 
     // 테이블 조인용
     private String movieTitle;

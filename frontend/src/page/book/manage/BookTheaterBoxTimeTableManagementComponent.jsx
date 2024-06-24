@@ -45,6 +45,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
     if (theaterBox.id !== undefined && isAdding) {
       axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
         setTheaterBox(res.data);
+        console.log(res.data);
       });
     }
 
