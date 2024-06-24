@@ -176,3 +176,28 @@ where pqc.product_qna_id is null;
 SELECT *, CHAR_LENGTH(qr_code) AS length
 FROM payment
 order by buyer_date desc;
+
+select p.order_number, p.buyer_date, p.amount, p.qr_code, po.name, po.quantity, po.price
+from payment p
+         join product_order po
+              on po.payment_id = p.id
+where p.buyer_name = '계영'
+group by order_date
+order by order_date desc;
+
+SELECT po.name,
+       po.quantity,
+       po.order_date,
+       COUNT(*)            AS order_count,
+       SUM(po.total_price) AS total_sales
+FROM product_order po
+         JOIN payment p ON po.payment_id = p.id
+WHERE p.member_number = 9
+GROUP BY po.order_date
+ORDER BY po.order_date DESC;
+
+
+SELECT po.*, DATE(order_date) AS order_date, COUNT(*) AS order_count, SUM(total_price) AS total_sales
+FROM product_order po
+GROUP BY DATE(order_date)
+ORDER BY order_date desc;

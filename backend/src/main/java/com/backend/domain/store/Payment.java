@@ -23,6 +23,7 @@ public class Payment {
     private String name;
     private Integer quantity;
     private Integer totalPrice;
+    private Integer price;
     private LocalDateTime orderDate;
 
     private Integer productId;

@@ -1,12 +1,14 @@
 package com.backend.controller.member;
 
 import com.backend.domain.member.Member;
+import com.backend.domain.store.Payment;
 import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,4 +40,25 @@ public class MemberController {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @GetMapping("mypage/{nickName}")
+    public Member myPageMemberInfo(@PathVariable String nickName) {
+
+        System.out.println("nickName =" + nickName);
+
+        return service.get(nickName);
+    }
+
+    @PutMapping("mypage/updatePassword")
+    public void updatePassword(@RequestBody Member member) {
+
+        service.updatePassword(member);
+    }
+
+    @GetMapping("mypage/paymentResult/{nickName}")
+    public List<Payment> paymentResult(@PathVariable String nickName) {
+
+        return service.paymentResult(nickName);
+    }
+
 }

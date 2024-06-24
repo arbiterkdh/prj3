@@ -34,6 +34,8 @@ import { PromoTheater } from "./page/promotion/view/PromoTheater.jsx";
 import { PromoMembership } from "./page/promotion/view/PromoMembership.jsx";
 import { PromoDiscount } from "./page/promotion/view/PromoDiscount.jsx";
 import PaymentSuccess from "./page/store/payment/PaymentSuccess.jsx";
+import { MemberMyPage } from "./member/MemberMyPage.jsx";
+import MemberUpdate from "./member/MemberUpdate.jsx";
 
 const exceptionHost = [
   "http://www.kobis.or.kr",
@@ -64,6 +66,8 @@ const router = createBrowserRouter([
       { index: true, element: <MovieHome /> },
       { path: "verify", element: <MailVerify /> },
       { path: "signup", element: <MemberSignup /> },
+      { path: "mypage", element: <MemberMyPage /> },
+      { path: "update", element: <MemberUpdate /> },
       {
         path: "oauth",
         element: <Oauth />,
