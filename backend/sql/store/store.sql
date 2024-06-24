@@ -173,3 +173,6 @@ from product_qna pq
 where pqc.product_qna_id is null;
 
 
+SELECT *, CHAR_LENGTH(qr_code) AS length
+FROM payment
+order by buyer_date desc;

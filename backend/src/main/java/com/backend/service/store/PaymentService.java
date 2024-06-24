@@ -53,8 +53,6 @@ public class PaymentService {
             }
         } else {
 
-            System.out.println("payment.getBuyerDate() = " + payment.getBuyerDate());
-
             orderMapper.addSinggleProductOrder(payment.getProductId(), payment.getQuantity(), payment.getId(), payment.getName(), payment.getAmount(), payment.getAmount(), payment.getMemberNumber());
 
             productMapper.updateStock(payment.getProductId(), payment.getQuantity());

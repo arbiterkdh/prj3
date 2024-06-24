@@ -33,9 +33,12 @@ public class QrService {
         int height = 200;
 
         Gson gson = GsonConfig.createGson();
-        String newProductOrder = gson.toJson(payment);
 
-        BitMatrix bitMatrix = new MultiFormatWriter().encode(newProductOrder, BarcodeFormat.QR_CODE, width, height);
+        String newPayment = gson.toJson(payment);
+
+        System.out.println("newPayment = " + newPayment);
+
+        BitMatrix bitMatrix = new MultiFormatWriter().encode(newPayment, BarcodeFormat.QR_CODE, width, height);
 
         BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
 

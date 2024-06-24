@@ -38,10 +38,6 @@ function PaymentSuccess() {
   return (
     <Center>
       <CenterBox>
-        <img
-          src={`data:image/png;base64,${paymentData.qrCode}`}
-          alt="QR Code"
-        />
         <Text mb={3}>결제 완료되었습니다</Text>
         {paymentData.length > 0 && (
           <>
@@ -63,6 +59,14 @@ function PaymentSuccess() {
                       <Td>{data.name}</Td>
                       <Td>{data.quantity}</Td>
                       <Td>{data.totalPrice}</Td>
+                      <Td>
+                        <img
+                          src={`data:image/png;base64,${data.qrCode}`}
+                          alt="QR Code"
+                          width={"200px"}
+                          height={"200px"}
+                        />
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
