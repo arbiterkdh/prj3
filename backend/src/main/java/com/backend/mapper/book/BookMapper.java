@@ -174,4 +174,15 @@ public interface BookMapper {
             AND DATE(start_time) = #{selectedDate}
             """)
     List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDate(Integer theaterBoxMovieId, LocalDate selectedDate);
+
+    @Select("""
+            SELECT bpt.book_place_time_id, bpt.theater_box_movie_id, bpt.vacancy, bpt.start_time, bpt.end_time
+            FROM book_place_time bpt
+                JOIN theater_box_movie tbm ON bpt.theater_box_movie_id = tbm.id
+                JOIN movie m ON tbm.movie_id = m.id
+            WHERE theater_box_movie_id = #{theaterBoxMovieId}
+            AND DATE(start_time) = #{selectedDate}
+            AND m.id = #{movieId}
+            """)
+    List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDateAndMovieId(Integer theaterBoxMovieId, LocalDate selectedDate, Integer movieId);
 }

@@ -56,6 +56,8 @@ public class TheaterBoxService {
 
                 if (movieId == null) {
                     theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieIdAndDate(theaterBoxMovie.getId(), selectedDate));
+                } else {
+                    theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieIdAndDateAndMovieId(theaterBox.getId(), selectedDate, movieId));
                 }
             }
 
