@@ -38,6 +38,10 @@ function PaymentSuccess() {
   return (
     <Center>
       <CenterBox>
+        <img
+          src={`data:image/png;base64,${paymentData.qrCode}`}
+          alt="QR Code"
+        />
         <Text mb={3}>결제 완료되었습니다</Text>
         {paymentData.length > 0 && (
           <>

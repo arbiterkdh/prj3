@@ -1,7 +1,7 @@
 package com.backend.service.store;
 
 
-import com.backend.domain.store.ProductOrder;
+import com.backend.domain.store.Payment;
 import com.backend.mapper.store.QrMapper;
 import com.backend.service.store.util.GsonConfig;
 import com.google.gson.Gson;
@@ -26,14 +26,14 @@ public class QrService {
     private final QrMapper mapper;
 
 
-    public Object create(ProductOrder productOrder) throws Exception {
+    public Object create(Payment payment) throws Exception {
 
 
         int width = 200;
         int height = 200;
 
         Gson gson = GsonConfig.createGson();
-        String newProductOrder = gson.toJson(productOrder);
+        String newProductOrder = gson.toJson(payment);
 
         BitMatrix bitMatrix = new MultiFormatWriter().encode(newProductOrder, BarcodeFormat.QR_CODE, width, height);
 

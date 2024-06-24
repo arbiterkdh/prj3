@@ -21,15 +21,23 @@ public class PaymentService {
     private final ProductOrderMapper orderMapper;
     private final ProductMapper productMapper;
 
-    public int add(Payment payment) {
+    private final QrService qrService;
+
+    public int add(Payment payment) throws Exception {
+
+        Object qrCode = qrService.create(payment);
+
+        payment.setQrCode(qrCode);
 
         mapper.add(payment);
+
 
         if (payment.getCheckCartId() != null && !payment.getCheckCartId().isEmpty()) {
 
             for (int i = 0; i < payment.getCheckCartId().size(); i++) {
 
                 orderMapper.copyCartData(payment.getCheckCartId().get(i), payment.getId());
+
             }
 
             for (int i = 0; i < payment.getCheckCartId().size(); i++) {

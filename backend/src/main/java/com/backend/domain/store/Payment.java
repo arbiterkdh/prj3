@@ -26,4 +26,7 @@ public class Payment {
     private LocalDateTime orderDate;
 
     private Integer productId;
+
+
+    private Object qrCode;
 }

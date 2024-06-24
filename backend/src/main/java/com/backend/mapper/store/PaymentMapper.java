@@ -13,8 +13,8 @@ public interface PaymentMapper {
 
 
     @Insert("""
-            INSERT INTO payment(order_number, status, amount, buyer_name, buyer_email, success, member_number)
-            VALUES(#{orderNumber}, #{status}, #{amount}, #{buyerName}, #{buyerEmail}, #{success}, #{memberNumber})
+            INSERT INTO payment(order_number, status, amount, buyer_name, buyer_email, success, member_number, qr_code)
+            VALUES(#{orderNumber}, #{status}, #{amount}, #{buyerName}, #{buyerEmail}, #{success}, #{memberNumber}, #{qrCode})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int add(Payment payment);
@@ -31,6 +31,7 @@ public interface PaymentMapper {
                    p.amount,
                    p.buyer_name,
                    p.buyer_date,
+                   p.qr_code,
                    po.name as name,
                    po.quantity as quantity,
                    po.total_price as totalPrice,

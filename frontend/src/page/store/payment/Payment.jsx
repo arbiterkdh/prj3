@@ -54,7 +54,7 @@ function Payment({
       let seconds = today.getSeconds();
       let milliseconds = today.getMilliseconds();
       return (
-        `order_no_ +${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`
+        `order_no_${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`
       );
     }
 

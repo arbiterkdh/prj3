@@ -16,7 +16,7 @@ public class PaymentController {
     private final PaymentService service;
 
     @PostMapping("/add")
-    public int addPayment(@RequestBody Payment payment) {
+    public int addPayment(@RequestBody Payment payment) throws Exception {
 
         int paymentId = service.add(payment);
 

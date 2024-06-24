@@ -78,6 +78,11 @@ CREATE TABLE payment
     success       BOOLEAN,
     member_number INT REFERENCES member (number)
 );
+ALTER TABLE payment
+    ADD COLUMN qr_code VARCHAR(200);
+
+ALTER TABLE payment
+    MODIFY COLUMN qr_code TEXT;
 
 CREATE TABLE product_order
 (
@@ -93,7 +98,6 @@ CREATE TABLE product_order
     total_price   INT,
     order_date    DATETIME DEFAULT NOW()
 );
-
 alter table product_order
     modify column reg_date varchar(50) default 'no cart date single product';
 
@@ -114,7 +118,12 @@ order by id desc;
 
 
 select *
-from payment;
+from payment
+order by buyer_date desc;
+
+select payment.qr_code
+from payment
+order by id desc;
 
 
 select p.order_number,
