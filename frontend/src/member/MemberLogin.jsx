@@ -21,7 +21,7 @@ import MarginBox from "../css/theme/component/box/MarginBox.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CursorBox from "../css/theme/component/box/CursorBox.jsx";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -45,6 +45,31 @@ export function MemberLogin() {
 
   const navigate = useNavigate();
   const toast = useToast();
+
+  const [movieImages, setMovieImages] = useState([]);
+  const [adImage, setAdImage] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("/api/movie/list")
+      .then((res) => {
+        const images = res.data.movieList.map(
+          (movieItem) => movieItem.movieImageFile,
+        );
+        console.log("image" + images);
+        setMovieImages(images);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (isOpen && movieImages.length > 0) {
+      const randomImage =
+        movieImages[Math.floor(Math.random() * movieImages.length)];
+      setAdImage(randomImage);
+    }
+  }, [isOpen, movieImages]);
 
   function handleLogin() {
     axios
@@ -185,7 +210,9 @@ export function MemberLogin() {
               </ModalFooter>
             </MarginBox>
             <MarginBox border={"1px solid"} w={"50%"} h={"95%"}>
-              광고
+              <Image src={adImage} w={"100%"} h={"95%"} />
+              {/*<Image src="https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/movie/782/수퍼 소닉2.jpg" />*/}
+              {/*<Image src="https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/movie/785/서울의봄.jpg" />*/}
             </MarginBox>
           </Flex>
         </ModalContent>

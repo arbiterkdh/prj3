@@ -201,3 +201,6 @@ SELECT po.*, DATE(order_date) AS order_date, COUNT(*) AS order_count, SUM(total_
 FROM product_order po
 GROUP BY DATE(order_date)
 ORDER BY order_date desc;
+
+SELECT *
+FROM movie_file;
