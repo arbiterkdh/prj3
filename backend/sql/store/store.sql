@@ -114,8 +114,7 @@ order by id desc;
 
 
 select *
-from payment
-order by id desc;
+from payment;
 
 
 select p.order_number,

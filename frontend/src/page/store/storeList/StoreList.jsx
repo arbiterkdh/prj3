@@ -40,6 +40,7 @@ export function StoreList() {
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
+  const [qrCode, setQrCode] = useState("");
   const navigate = useNavigate();
 
   const {
@@ -85,6 +86,16 @@ export function StoreList() {
     productListRefresh();
   }, [menuTypeSelect, page]);
 
+  useEffect(() => {
+    axios
+      .get("/api/store/qr/read")
+      .then((res) => {
+        setQrCode(res.data);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
+
   const pageNumbers = [];
 
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -97,6 +108,12 @@ export function StoreList() {
         <Flex>
           <Box w={"50%"}>
             <Flex alignItems={"center"}>
+              {/*<Box>*/}
+              {/*  <Heading>Test</Heading>*/}
+              {/*{qrCode && (*/}
+              <img src={`data:image/png;base64,${qrCode}`} alt="QR Code" />
+              {/*)}*/}
+              {/*</Box>*/}
               <Heading>상품 리스트</Heading>
               <Text color={"red"} onClick={() => navigate("cart")}>
                 {" "}
