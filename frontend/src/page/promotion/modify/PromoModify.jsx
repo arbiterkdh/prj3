@@ -92,7 +92,7 @@ export function PromoModify() {
       }
     }
     fileNameList.push(
-      <li>
+      <li key={addFile.name}>
         {addFile.name}
         {duplicate && <Badge colorScheme="red">override</Badge>}
       </li>,
@@ -210,6 +210,7 @@ export function PromoModify() {
               onChange={(e) => setAddFileList(e.target.files)}
             />
           </FormControl>
+          <ul>{fileNameList}</ul>
         </Box>
         <Box>
           <FormControl>

@@ -1,11 +1,15 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import { PromoNavbar } from "./PromoNavbar.jsx";
 import { Box } from "@chakra-ui/react";
 
 export function Promo() {
   const location = useLocation();
+  const { id } = useParams();
+
   const excludeNavbarPaths = [
     "/promotion/eventResult",
+    "/promotion/eventResult/add",
+    `/promotion/eventResult/modify/${id}`,
     "/promotion/eventEnd",
     "/promotion/eventUpcoming",
   ];

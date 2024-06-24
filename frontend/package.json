@@ -29,7 +29,9 @@
     "react-dom": "^18.2.0",
     "react-focus-lock": "^2.12.1",
     "react-responsive": "^10.0.0",
-    "react-router-dom": "^6.23.1"
+    "react-router-dom": "^6.23.1",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

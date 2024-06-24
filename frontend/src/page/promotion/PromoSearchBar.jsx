@@ -10,17 +10,24 @@ const PromoSearchBar = ({ onSearch }) => {
     onSearch(promoSearch);
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   return (
     <Box display="flex">
       <Input
         borderColor={"black"}
         width={"auto"}
         variant="outline"
-        placeholder="검색어를 입력해 주세요."
+        placeholder="제목을 입력해 주세요."
         value={promoSearch}
         onChange={(e) => setPromoSearch(e.target.value)}
+        onKeyDown={handleKeyDown} // Add onKeyDown event
       />
-      <Button onClick={handleSearch} ml={2}>
+      <Button onClick={handleSearch}>
         <FontAwesomeIcon icon={faMagnifyingGlass} />
       </Button>
     </Box>

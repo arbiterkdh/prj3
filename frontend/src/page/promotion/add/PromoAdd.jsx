@@ -23,136 +23,114 @@ export function PromoAdd() {
   const toast = useToast();
   const navigate = useNavigate();
 
-  function handleAddEvent() {
+  const handleAddEvent = async () => {
     setLoading(true);
-    axios
-      .postForm("/api/promotion/add", {
+    try {
+      await axios.postForm("/api/promotion/add", {
         title,
         content,
         eventType,
         eventStartDate,
         eventEndDate,
         files,
-      })
-      .then((res) => {
+      });
+      toast({
+        status: "success",
+        description: "새 글이 등록되었습니다.",
+        position: "top",
+      });
+      navigate("/promotion");
+    } catch (e) {
+      if (e.response?.status === 400) {
         toast({
-          status: "success",
-          description: "새 글이 등록되었습니다.",
+          status: "error",
+          description: "등록되지 않았습니다. 입력한 내용을 확인하세요.",
           position: "top",
         });
-        navigate("/promotion");
-      })
-      .catch((e) => {
-        const code = e.response.status;
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        if (code === 400) {
-          toast({
-            status: "error",
-            description: "등록되지 않았습니다. 입력한 내용을 확인하세요.",
-            position: "top",
-          });
-        }
-      })
-      .finally(() => setLoading(false));
-  }
-
-  let disableSaveButton = false;
-
-  if (title.trim().length === 0) {
-    disableSaveButton = true;
-  }
-  if (!eventType) {
-    disableSaveButton = true;
-  }
-  if (!eventStartDate) {
-    disableSaveButton = true;
-  }
-  if (!eventEndDate) {
-    disableSaveButton = true;
-  }
-  if (files.length === 0) {
-    disableSaveButton = true;
-  }
-
-  const fileNameList = [];
-  for (let i = 0; i < files.length; i++) {
-    fileNameList.push(<li key={i}>{files[i].name}</li>);
-  }
+  const disableSaveButton =
+    !title.trim() ||
+    !eventType ||
+    !eventStartDate ||
+    !eventEndDate ||
+    files.length === 0;
 
   return (
     <Box>
-      <Box>
-        <FormControl>
-          <FormLabel>이벤트 제목</FormLabel>
-          <Input
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="제목을 입력하세요."
-          />
-        </FormControl>
-      </Box>
-      <Box>
-        <FormControl>
-          <FormLabel>이벤트 타입</FormLabel>
-          <Select
-            onChange={(e) => setEventType(e.target.value)}
-            placeholder="이벤트 타입을 선택하세요."
-            value={eventType}
-          >
-            <option value="movie">영화</option>
-            <option value="theater">극장</option>
-            <option value="membership">멤버십</option>
-            <option value="discount">제휴/할인</option>
-          </Select>
-        </FormControl>
-      </Box>
-      <Box>
-        <FormControl>
-          <FormLabel>시작일</FormLabel>
-          <Input
-            type={"date"}
-            onChange={(e) => setEventStartDate(e.target.value)}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>종료일</FormLabel>
-          <Input
-            type={"date"}
-            onChange={(e) => setEventEndDate(e.target.value)}
-          />
-        </FormControl>
-      </Box>
-      <Box>
-        <FormControl>
-          <FormLabel>사진파일</FormLabel>
-          <Input
-            multiple
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFiles(e.target.files)}
-          />
-        </FormControl>
-      </Box>
-      <Box>
-        <ul>{fileNameList}</ul>
-      </Box>
-      <Box>
-        <FormControl>
-          <FormLabel>이벤트 설명</FormLabel>
-          <Textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="설명을 입력하세요."
-          />
-        </FormControl>
-        <Button
-          colorScheme="teal"
-          isLoading={loading}
-          isDisabled={disableSaveButton}
-          onClick={handleAddEvent}
+      <FormControl>
+        <FormLabel>이벤트 제목</FormLabel>
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="제목을 입력하세요."
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>이벤트 타입</FormLabel>
+        <Select
+          value={eventType}
+          onChange={(e) => setEventType(e.target.value)}
+          placeholder="이벤트 타입을 선택하세요."
         >
-          저장
-        </Button>
+          <option value="movie">영화</option>
+          <option value="theater">극장</option>
+          <option value="membership">멤버십</option>
+          <option value="discount">제휴/할인</option>
+        </Select>
+      </FormControl>
+      <FormControl>
+        <FormLabel>시작일</FormLabel>
+        <Input
+          type={"date"}
+          value={eventStartDate}
+          onChange={(e) => setEventStartDate(e.target.value)}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>종료일</FormLabel>
+        <Input
+          type={"date"}
+          value={eventEndDate}
+          onChange={(e) => setEventEndDate(e.target.value)}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>사진파일</FormLabel>
+        <Input
+          multiple
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFiles(Array.from(e.target.files))}
+        />
+      </FormControl>
+      <Box>
+        <ul>
+          {Array.from(files).map((file, index) => (
+            <li key={index}>{file.name}</li>
+          ))}
+        </ul>
       </Box>
+      <FormControl>
+        <FormLabel>이벤트 설명</FormLabel>
+        <Textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="설명을 입력하세요."
+        />
+      </FormControl>
+      <Button
+        colorScheme="teal"
+        isLoading={loading}
+        isDisabled={disableSaveButton}
+        onClick={handleAddEvent}
+      >
+        저장
+      </Button>
     </Box>
   );
 }

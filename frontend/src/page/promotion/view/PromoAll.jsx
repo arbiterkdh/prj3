@@ -4,93 +4,78 @@ import ShowMoreButton from "../../../css/theme/component/button/ShowMoreButton.j
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import PromoCarousel from "../PromoCarousel.jsx";
 
 export function PromoAll() {
   const navigate = useNavigate();
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [pageInfo, setPageInfo] = useState({});
+  const [recommendedList, setRecommendedList] = useState([]);
 
   useEffect(() => {
-    axios.get(`/api/promotion/list?type=all`).then((res) => {
-      const now = new Date();
-      const activePromos = res.data.promotionList.filter(
-        (promo) => new Date(promo.eventEndDate) >= now,
-      );
-      setPromoList(activePromos);
-      setPageInfo(res.data.pageInfo);
-      setLoading(false);
-    });
+    const fetchAllPromotions = async () => {
+      try {
+        const { data } = await axios.get(`/api/promotion/list-all`);
+        const now = new Date();
+        const activePromos = data.promotionList.filter(
+          (promo) => new Date(promo.eventEndDate) >= now,
+        );
+        setPromoList(activePromos);
+      } catch (error) {
+        console.error("Error fetching promotions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchRecommendedPromotions = async () => {
+      try {
+        const { data } = await axios.get(`/api/promotion/recommendations`);
+        setRecommendedList(data.recommendations);
+      } catch (error) {
+        console.error("Error fetching recommended promotions:", error);
+      }
+    };
+
+    fetchAllPromotions();
+    fetchRecommendedPromotions();
   }, []);
 
   if (loading) {
     return <Spinner />;
   }
 
-  return (
+  const renderPromoSection = (title, eventType) => (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="25px">
-          영화
-        </Heading>
-        <ShowMoreButton buttonOnclick={() => navigate("/promotion/movie")} />
-      </Box>
-      <PromoList
-        eventType={"movie"}
-        eventStatusList={promoList.filter(
-          (promo) => promo.eventType === "movie",
-        )}
-        maxItems={3}
-        showTotalPosts={false}
-        showSearch={false}
-      />
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
-          극장
-        </Heading>
-        <ShowMoreButton buttonOnclick={() => navigate("/promotion/theater")} />
-      </Box>
-      <PromoList
-        eventType={"theater"}
-        eventStatusList={promoList.filter(
-          (promo) => promo.eventType === "theater",
-        )}
-        maxItems={3}
-        showTotalPosts={false}
-        showSearch={false}
-      />
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
-          멤버십
+          {title}
         </Heading>
         <ShowMoreButton
-          buttonOnclick={() => navigate("/promotion/membership")}
+          buttonOnclick={() => navigate(`/promotion/${eventType}`)}
         />
       </Box>
       <PromoList
-        eventType={"membership"}
+        eventType={eventType}
         eventStatusList={promoList.filter(
-          (promo) => promo.eventType === "membership",
+          (promo) => promo.eventType === eventType,
         )}
         maxItems={3}
         showTotalPosts={false}
         showSearch={false}
+        showPagination={false}
       />
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading style={{ whiteSpace: "nowrap" }} fontSize="25px">
-          제휴/할인
-        </Heading>
-        <ShowMoreButton buttonOnclick={() => navigate("/promotion/discount")} />
-      </Box>
-      <PromoList
-        eventType={"discount"}
-        eventStatusList={promoList.filter(
-          (promo) => promo.eventType === "discount",
-        )}
-        maxItems={3}
-        showTotalPosts={false}
-        showSearch={false}
-      />
+    </Box>
+  );
+
+  return (
+    <Box>
+      <Heading>추천 이벤트</Heading>
+      <PromoCarousel promoList={recommendedList} />
+      {renderPromoSection("영화", "movie")}
+      {renderPromoSection("극장", "theater")}
+      {renderPromoSection("멤버십", "membership")}
+      {renderPromoSection("제휴/할인", "discount")}
     </Box>
   );
 }

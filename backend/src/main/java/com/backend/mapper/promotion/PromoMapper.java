@@ -1,40 +1,40 @@
 package com.backend.mapper.promotion;
 
-import com.backend.domain.promotion.Promotion;
+import com.backend.domain.promotion.Promo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
-public interface PromotionMapper {
+public interface PromoMapper {
 
     @Insert("""
             INSERT INTO promo
-            (id, title, eventType, eventStartDate, eventEndDate, content)
-            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content})
+            (id, title, eventType, eventStartDate, eventEndDate, content, isRecommended)
+            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    int insertPromo(Promotion promotion);
+    int insertPromo(Promo promo);
 
     @Select("""
             SELECT *
             FROM promo
             ORDER BY id DESC
             """)
-    List<Promotion> selectList();
+    List<Promo> selectList();
 
     @Select("""
             SELECT *
             FROM promo
             WHERE id = #{id}
             """)
-    Promotion selectById(Integer id);
+    Promo selectById(int id);
 
     @Delete("""
             DELETE FROM promo
             WHERE id = #{id}
             """)
-    int deleteById(Integer id);
+    int deleteById(int id);
 
     @Update("""
             UPDATE promo
@@ -42,36 +42,37 @@ public interface PromotionMapper {
                 eventType = #{eventType},
                 eventStartDate = #{eventStartDate},
                 eventEndDate = #{eventEndDate},
-                content = #{content}
+                content = #{content},
+                isRecommended = #{isRecommended}
             WHERE id = #{id}
             """)
-    int update(Promotion promotion);
+    int update(Promo promo);
 
     @Insert("""
             INSERT INTO promo_file (promo_id, name)
             VALUES (#{promoId}, #{name})
             """)
-    int insertFileName(Integer promoId, String name);
+    int insertFileName(int promoId, String name);
 
     @Select("""
             SELECT name
             FROM promo_file
             WHERE promo_id=#{promoId}
             """)
-    List<String> selectFileNameByPromoId(Integer promoId);
+    List<String> selectFileNameByPromoId(int promoId);
 
     @Delete("""
             DELETE FROM promo_file
             WHERE promo_id=#{promoId}
             """)
-    int deleteFileByPromoId(Integer promoId);
+    int deleteFileByPromoId(int promoId);
 
     @Delete("""
             DELETE FROM promo_file
             WHERE promo_id=#{promoId}
               AND name=#{fileName}
             """)
-    int deleteFileByPromoIdAndName(@Param("promoId") Integer promoId, @Param("fileName") String fileName);
+    int deleteFileByPromoIdAndName(int promoId, String fileName);
 
     @Select("""
             SELECT COUNT(*)
@@ -80,7 +81,7 @@ public interface PromotionMapper {
             AND eventType = #{type}
             AND (title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%'))
             """)
-    Integer countAllExcludingEnded(@Param("type") String type, @Param("search") String search);
+    int countAllExcludingEnded(String type, String search);
 
     @Select("""
             SELECT *
@@ -91,7 +92,7 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPagingExcludingEnded(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("type") String type, @Param("search") String search);
+    List<Promo> selectAllPagingExcludingEnded(int offset, int pageSize, String type, String search);
 
     @Select("""
             SELECT COUNT(*)
@@ -99,7 +100,7 @@ public interface PromotionMapper {
             WHERE eventEndDate < CURRENT_DATE
             AND (title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%'))
             """)
-    Integer countAllEnded(@Param("search") String search);
+    int countAllEnded(String search);
 
     @Select("""
             SELECT *
@@ -109,14 +110,14 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPagingEnded(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("search") String search);
+    List<Promo> selectAllPagingEnded(int offset, int pageSize, String search);
 
     @Select("""
             SELECT COUNT(*)
             FROM promo
             WHERE title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%')
             """)
-    Integer countAll(@Param("search") String search);
+    int countAll(String search);
 
     @Select("""
             SELECT *
@@ -125,5 +126,27 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPaging(@Param("offset") Integer offset, @Param("pageSize") Integer pageSize, @Param("search") String search);
+    List<Promo> selectAllPaging(int offset, int pageSize, String search);
+
+    @Select("""
+            SELECT *
+            FROM promo
+            WHERE title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%')
+            ORDER BY id DESC
+            """)
+    List<Promo> selectAllWithoutPaging(String search);
+
+    @Update("""
+            UPDATE promo
+            SET isRecommended = #{isRecommended}
+            WHERE id = #{id}
+            """)
+    void updateRecommendation(Integer id, boolean isRecommended);
+
+    @Select("""
+            SELECT *
+            FROM promo
+            WHERE isRecommended = true
+            """)
+    List<Promo> selectRecommendedPromotions();
 }
