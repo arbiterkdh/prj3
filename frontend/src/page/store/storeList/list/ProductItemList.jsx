@@ -88,7 +88,12 @@ function ProductItemList({
           maxWidth: "24%",
         }}
       >
-        <Card maxW="sm" key={product.id} borderRadius={0}>
+        <Card
+          maxW="sm"
+          key={product.id}
+          borderRadius={0}
+          _dark={{ bgColor: "darkslategray", opacity: "0.9" }}
+        >
           <CardBody>
             <Image
               style={{
@@ -103,7 +108,13 @@ function ProductItemList({
               <Center>
                 <Box w={"100%"}>
                   <Flex alignItems={"center"} justifyContent={"center"}>
-                    <Text fontSize={"1.3rem"}>{product.name}</Text>
+                    <Text
+                      _dark={{ color: "whiteAlpha.900" }}
+                      fontWeight={"800"}
+                      fontSize={"1.3rem"}
+                    >
+                      {product.name}
+                    </Text>
                   </Flex>
                 </Box>
 
@@ -144,7 +155,8 @@ function ProductItemList({
               >
                 <Box>
                   <Button
-                    size={"sm"}
+                    p={3}
+                    size={"lg"}
                     variant="solid"
                     colorScheme="blue"
                     onClick={() => {
@@ -163,7 +175,8 @@ function ProductItemList({
                 </Box>
                 <Box>
                   <Button
-                    size={"sm"}
+                    p={3}
+                    size={"lg"}
                     variant="solid"
                     colorScheme="red"
                     onClick={() => {
@@ -180,8 +193,9 @@ function ProductItemList({
                   </Button>
                 </Box>
 
-                <Flex align={"center"}>
+                <Stack align={"center"} gap={"1px"}>
                   <Button
+                    p={0}
                     m={"1px"}
                     color={"red"}
                     size={"xs"}
@@ -198,9 +212,14 @@ function ProductItemList({
                     }}
                   >
                     {" "}
-                    <FontAwesomeIcon icon={faWrench} cursor={"pointer"} />
+                    <FontAwesomeIcon
+                      icon={faWrench}
+                      size={"sm"}
+                      cursor={"pointer"}
+                    />
                   </Button>
                   <Button
+                    p={0}
                     m={"1px"}
                     size={"xs"}
                     onClick={() => {
@@ -210,7 +229,7 @@ function ProductItemList({
                   >
                     <FontAwesomeIcon icon={faX} />
                   </Button>
-                </Flex>
+                </Stack>
               </Flex>
             )}
           </CardFooter>
