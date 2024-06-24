@@ -23,6 +23,12 @@ public class TheaterBoxController {
         return null;
     }
 
+    @GetMapping("onscreenlist")
+    public List<TheaterBox> getOnscreenListByDateAndTheaterNumber(@RequestParam String date, @RequestParam Integer theaterNumber) {
+//        theaterBoxService
+        return null;
+    }
+
     @GetMapping("list/{theaterNumber}")
     public List<TheaterBox> getTheaterBoxList(@PathVariable Integer theaterNumber) {
 

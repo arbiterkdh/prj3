@@ -17,10 +17,14 @@ export function BookTheaterLocationMovieList({
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`/api/theaterbox/list/${selectedDay.slice(0, -2)}`)
-      .then((res) => {});
-    // 체크한 날짜에 맞는 타임테이블 가져오기.
+    if (checkedTheaterNumber && selectedDay) {
+      axios
+        .get(
+          `/api/theaterbox/onscreenlist?date=${selectedDay.slice(0, -2)}&theaterNumber=${checkedTheaterNumber}`,
+        )
+        .then((res) => {});
+      // 체크한 날짜에 맞는 타임테이블 가져오기.
+    }
   }, [checkedTheaterNumber, selectedDay]);
 
   // 영화 시작시간 아침 9시
