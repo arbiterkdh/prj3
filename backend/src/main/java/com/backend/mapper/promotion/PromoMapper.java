@@ -1,12 +1,12 @@
 package com.backend.mapper.promotion;
 
-import com.backend.domain.promotion.Promotion;
+import com.backend.domain.promotion.Promo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
-public interface PromotionMapper {
+public interface PromoMapper {
 
     @Insert("""
             INSERT INTO promo
@@ -14,21 +14,21 @@ public interface PromotionMapper {
             VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
-    int insertPromo(Promotion promotion);
+    int insertPromo(Promo promo);
 
     @Select("""
             SELECT *
             FROM promo
             ORDER BY id DESC
             """)
-    List<Promotion> selectList();
+    List<Promo> selectList();
 
     @Select("""
             SELECT *
             FROM promo
             WHERE id = #{id}
             """)
-    Promotion selectById(int id);
+    Promo selectById(int id);
 
     @Delete("""
             DELETE FROM promo
@@ -46,7 +46,7 @@ public interface PromotionMapper {
                 isRecommended = #{isRecommended}
             WHERE id = #{id}
             """)
-    int update(Promotion promotion);
+    int update(Promo promo);
 
     @Insert("""
             INSERT INTO promo_file (promo_id, name)
@@ -92,7 +92,7 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPagingExcludingEnded(int offset, int pageSize, String type, String search);
+    List<Promo> selectAllPagingExcludingEnded(int offset, int pageSize, String type, String search);
 
     @Select("""
             SELECT COUNT(*)
@@ -110,7 +110,7 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPagingEnded(int offset, int pageSize, String search);
+    List<Promo> selectAllPagingEnded(int offset, int pageSize, String search);
 
     @Select("""
             SELECT COUNT(*)
@@ -126,15 +126,15 @@ public interface PromotionMapper {
             ORDER BY id DESC
             LIMIT #{offset}, #{pageSize}
             """)
-    List<Promotion> selectAllPaging(int offset, int pageSize, String search);
+    List<Promo> selectAllPaging(int offset, int pageSize, String search);
 
     @Select("""
-        SELECT *
-        FROM promo
-        WHERE title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%')
-        ORDER BY id DESC
-        """)
-    List<Promotion> selectAllWithoutPaging(String search);
+            SELECT *
+            FROM promo
+            WHERE title LIKE CONCAT('%', #{search}, '%') OR content LIKE CONCAT('%', #{search}, '%')
+            ORDER BY id DESC
+            """)
+    List<Promo> selectAllWithoutPaging(String search);
 
     @Update("""
             UPDATE promo
@@ -148,5 +148,5 @@ public interface PromotionMapper {
             FROM promo
             WHERE isRecommended = true
             """)
-    List<Promotion> selectRecommendedPromotions();
+    List<Promo> selectRecommendedPromotions();
 }

@@ -1,7 +1,7 @@
 package com.backend.service.promotion;
 
-import com.backend.domain.promotion.PromotionResult;
-import com.backend.mapper.promotion.PromotionResultMapper;
+import com.backend.domain.promotion.PromoResult;
+import com.backend.mapper.promotion.PromoResultMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,24 +17,24 @@ import java.util.Map;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PromotionResultService {
-    private final PromotionResultMapper promotionResultMapper;
+public class PromoResultService {
+    private final PromoResultMapper promoResultMapper;
     private final ObjectMapper objectMapper;
 
-    public void addPromoResult(PromotionResult promotionResult) {
+    public void addPromoResult(PromoResult promoResult) {
         try {
-            String winnersJson = objectMapper.writeValueAsString(promotionResult.getWinners());
-            promotionResult.setWinnersJson(winnersJson);
-            promotionResultMapper.insertPromotionResult(promotionResult);
+            String winnersJson = objectMapper.writeValueAsString(promoResult.getWinners());
+            promoResult.setWinnersJson(winnersJson);
+            promoResultMapper.insertPromotionResult(promoResult);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize winners list", e);
         }
     }
 
     public Map<String, Object> getPromoResults(int page, int pageSize) {
-        int totalItems = promotionResultMapper.countPromotionResults();
+        int totalItems = promoResultMapper.countPromotionResults();
         int offset = (page - 1) * pageSize;
-        List<PromotionResult> results = promotionResultMapper.selectPromotionResults(offset, pageSize);
+        List<PromoResult> results = promoResultMapper.selectPromotionResults(offset, pageSize);
         results.forEach(result -> deserializeWinners(result));
 
         Map<String, Object> response = new HashMap<>();
@@ -44,24 +44,24 @@ public class PromotionResultService {
         return response;
     }
 
-    public PromotionResult getPromoResultByPromotionId(int promotionId) {
-        PromotionResult result = promotionResultMapper.selectPromotionResultByPromotionId(promotionId);
+    public PromoResult getPromoResultByPromotionId(int promotionId) {
+        PromoResult result = promoResultMapper.selectPromotionResultByPromotionId(promotionId);
         if (result != null) {
             deserializeWinners(result);
         }
         return result;
     }
 
-    public void updatePromoResult(int id, PromotionResult promotionResult) {
+    public void updatePromoResult(int id, PromoResult promoResult) {
         try {
-            String winnersJson = objectMapper.writeValueAsString(promotionResult.getWinners());
-            promotionResult.setWinnersJson(winnersJson);
-            int rowsAffected = promotionResultMapper.updatePromotionResult(id, promotionResult);
+            String winnersJson = objectMapper.writeValueAsString(promoResult.getWinners());
+            promoResult.setWinnersJson(winnersJson);
+            int rowsAffected = promoResultMapper.updatePromotionResult(id, promoResult);
             if (rowsAffected == 0) {
                 throw new RuntimeException("Update failed, no rows affected.");
             }
             // 업데이트 후 결과 확인 로그 추가
-            PromotionResult updatedResult = promotionResultMapper.selectPromotionResultById(id);
+            PromoResult updatedResult = promoResultMapper.selectPromotionResultById(id);
             System.out.println("Updated Promotion Result from DB: " + updatedResult);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize winners list", e);
@@ -69,7 +69,7 @@ public class PromotionResultService {
     }
 
     public void deletePromoResult(int id) {
-        promotionResultMapper.deletePromotionResult(id);
+        promoResultMapper.deletePromotionResult(id);
     }
 
     private Map<String, Object> createPageInfo(int page, int countAll, int pageSize) {
@@ -93,9 +93,9 @@ public class PromotionResultService {
         return pageInfo;
     }
 
-    private void deserializeWinners(PromotionResult result) {
+    private void deserializeWinners(PromoResult result) {
         try {
-            List<PromotionResult.Winner> winners = objectMapper.readValue(result.getWinnersJson(), new TypeReference<List<PromotionResult.Winner>>() {
+            List<PromoResult.Winner> winners = objectMapper.readValue(result.getWinnersJson(), new TypeReference<List<PromoResult.Winner>>() {
             });
             result.setWinners(winners);
         } catch (IOException e) {

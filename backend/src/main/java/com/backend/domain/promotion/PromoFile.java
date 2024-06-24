@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PromotionFile {
+public class PromoFile {
     private String name;
     private String src;
 }

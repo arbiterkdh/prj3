@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class PromotionResult {
+public class PromoResult {
     private Integer id;
     private Integer promotionId; // promotion 테이블의 id를 참조
     private LocalDate announcementDate;

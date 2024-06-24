@@ -1,8 +1,8 @@
 package com.backend.service.promotion;
 
-import com.backend.domain.promotion.Promotion;
-import com.backend.domain.promotion.PromotionFile;
-import com.backend.mapper.promotion.PromotionMapper;
+import com.backend.domain.promotion.Promo;
+import com.backend.domain.promotion.PromoFile;
+import com.backend.mapper.promotion.PromoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,8 @@ import java.util.Map;
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
-public class PromotionService {
-    private final PromotionMapper promotionMapper;
+public class PromoService {
+    private final PromoMapper promoMapper;
     final S3Client s3Client;
 
     @Value("${aws.s3.bucket.name}")
@@ -33,13 +33,13 @@ public class PromotionService {
     @Value("${image.src.prefix}")
     String srcPrefix;
 
-    public void addPromo(Promotion promotion, MultipartFile[] files) throws IOException {
-        promotionMapper.insertPromo(promotion);
+    public void addPromo(Promo promo, MultipartFile[] files) throws IOException {
+        promoMapper.insertPromo(promo);
         if (files != null) {
             for (MultipartFile file : files) {
-                promotionMapper.insertFileName(promotion.getId(), file.getOriginalFilename());
+                promoMapper.insertFileName(promo.getId(), file.getOriginalFilename());
 
-                String key = STR."prj3/promo/\{promotion.getId()}/\{file.getOriginalFilename()}";
+                String key = STR."prj3/promo/\{promo.getId()}/\{file.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -51,33 +51,33 @@ public class PromotionService {
         }
     }
 
-    public boolean validate(Promotion promotion) {
-        return promotion.getTitle() != null && !promotion.getTitle().isBlank() &&
-                promotion.getEventType() != null &&
-                promotion.getEventStartDate() != null &&
-                promotion.getEventEndDate() != null;
+    public boolean validate(Promo promo) {
+        return promo.getTitle() != null && !promo.getTitle().isBlank() &&
+                promo.getEventType() != null &&
+                promo.getEventStartDate() != null &&
+                promo.getEventEndDate() != null;
     }
 
-    public Map<String, Object> listPromotions(Integer page, String type, String search) {
+    public Map<String, Object> listPromo(Integer page, String type, String search) {
         Map<String, Object> pageInfo = new HashMap<>();
         Integer countAll;
-        List<Promotion> promotions;
+        List<Promo> promos;
 
         if (type.equals("ended")) {
-            countAll = promotionMapper.countAllEnded(search);
-            promotions = promotionMapper.selectAllPagingEnded(calculateOffset(page), 9, search);
+            countAll = promoMapper.countAllEnded(search);
+            promos = promoMapper.selectAllPagingEnded(calculateOffset(page), 9, search);
         } else if (type.equals("all")) {
-            countAll = promotionMapper.countAll(search);
-            promotions = promotionMapper.selectAllPaging(calculateOffset(page), 9, search);
+            countAll = promoMapper.countAll(search);
+            promos = promoMapper.selectAllPaging(calculateOffset(page), 9, search);
         } else {
-            countAll = promotionMapper.countAllExcludingEnded(type, search);
-            promotions = promotionMapper.selectAllPagingExcludingEnded(calculateOffset(page), 9, type, search);
+            countAll = promoMapper.countAllExcludingEnded(type, search);
+            promos = promoMapper.selectAllPagingExcludingEnded(calculateOffset(page), 9, type, search);
         }
 
         setPageInfo(pageInfo, page, countAll);
-        setPromotionFiles(promotions);
+        setPromotionFiles(promos);
 
-        return Map.of("pageInfo", pageInfo, "promotionList", promotions);
+        return Map.of("pageInfo", pageInfo, "promotionList", promos);
     }
 
     private void setPageInfo(Map<String, Object> pageInfo, Integer page, Integer countAll) {
@@ -102,42 +102,42 @@ public class PromotionService {
         return (page - 1) * 9;
     }
 
-    private void setPromotionFiles(List<Promotion> promotions) {
+    private void setPromotionFiles(List<Promo> promos) {
         LocalDate now = LocalDate.now();
-        for (Promotion promotion : promotions) {
-            List<String> fileNames = promotionMapper.selectFileNameByPromoId(promotion.getId());
-            List<PromotionFile> files = fileNames.stream()
-                    .map(name -> new PromotionFile(name, STR."\{srcPrefix}/promo/\{promotion.getId()}/\{name}"))
+        for (Promo promo : promos) {
+            List<String> fileNames = promoMapper.selectFileNameByPromoId(promo.getId());
+            List<PromoFile> files = fileNames.stream()
+                    .map(name -> new PromoFile(name, STR."\{srcPrefix}/promo/\{promo.getId()}/\{name}"))
                     .toList();
-            promotion.setFileList(files);
+            promo.setFileList(files);
 
-            if (promotion.getEventEndDate().isBefore(now)) {
-                promotion.setEventStatus("종료 이벤트");
-            } else if (promotion.getEventStartDate().isAfter(now)) {
-                promotion.setEventStatus("예정 이벤트");
+            if (promo.getEventEndDate().isBefore(now)) {
+                promo.setEventStatus("종료 이벤트");
+            } else if (promo.getEventStartDate().isAfter(now)) {
+                promo.setEventStatus("예정 이벤트");
             } else {
-                promotion.setEventStatus("진행중인 이벤트");
+                promo.setEventStatus("진행중인 이벤트");
             }
         }
     }
 
     public Map<String, Object> listAllWithoutPaging(String search) {
-        List<Promotion> promotions = promotionMapper.selectAllWithoutPaging(search);
-        setPromotionFiles(promotions);
-        return Map.of("promotionList", promotions, "totalItems", promotions.size());
+        List<Promo> promos = promoMapper.selectAllWithoutPaging(search);
+        setPromotionFiles(promos);
+        return Map.of("promotionList", promos, "totalItems", promos.size());
     }
 
-    public Promotion get(Integer id) {
-        Promotion promotion = promotionMapper.selectById(id);
-        if (promotion == null) {
+    public Promo get(Integer id) {
+        Promo promo = promoMapper.selectById(id);
+        if (promo == null) {
             return null;
         }
-        setPromotionFiles(List.of(promotion));
-        return promotion;
+        setPromotionFiles(List.of(promo));
+        return promo;
     }
 
-    public void remove(Integer id) {
-        List<String> fileNames = promotionMapper.selectFileNameByPromoId(id);
+    public void promoRemove(Integer id) {
+        List<String> fileNames = promoMapper.selectFileNameByPromoId(id);
 
         for (String fileName : fileNames) {
             String key = STR."prj3/promo/\{id}/\{fileName}";
@@ -147,31 +147,31 @@ public class PromotionService {
                     .build();
             s3Client.deleteObject(objectRequest);
         }
-        promotionMapper.deleteFileByPromoId(id);
-        promotionMapper.deleteById(id);
+        promoMapper.deleteFileByPromoId(id);
+        promoMapper.deleteById(id);
     }
 
-    public void modify(Promotion promotion, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
+    public void modify(Promo promo, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
         if (removeFileList != null && !removeFileList.isEmpty()) {
             for (String fileName : removeFileList) {
-                String key = STR."prj3/promo/\{promotion.getId()}/\{fileName}";
+                String key = STR."prj3/promo/\{promo.getId()}/\{fileName}";
                 DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
                         .build();
                 s3Client.deleteObject(objectRequest);
 
-                promotionMapper.deleteFileByPromoIdAndName(promotion.getId(), fileName);
+                promoMapper.deleteFileByPromoIdAndName(promo.getId(), fileName);
             }
         }
         if (addFileList != null && addFileList.length > 0) {
-            List<String> fileNameList = promotionMapper.selectFileNameByPromoId(promotion.getId());
+            List<String> fileNameList = promoMapper.selectFileNameByPromoId(promo.getId());
             for (MultipartFile file : addFileList) {
                 String fileName = file.getOriginalFilename();
                 if (!fileNameList.contains(fileName)) {
-                    promotionMapper.insertFileName(promotion.getId(), fileName);
+                    promoMapper.insertFileName(promo.getId(), fileName);
                 }
-                String key = STR."prj3/promo/\{promotion.getId()}/\{fileName}";
+                String key = STR."prj3/promo/\{promo.getId()}/\{fileName}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
@@ -181,29 +181,29 @@ public class PromotionService {
                 s3Client.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
             }
         }
-        promotionMapper.update(promotion);
+        promoMapper.update(promo);
     }
 
     public void updateRecommendation(Integer id, boolean isRecommended) {
-        promotionMapper.updateRecommendation(id, isRecommended);
+        promoMapper.updateRecommendation(id, isRecommended);
     }
 
-    public List<Promotion> getRecommendedPromotions() {
-        List<Promotion> promotions = promotionMapper.selectRecommendedPromotions();
-        setPromotionFiles(promotions);
-        return promotions;
+    public List<Promo> getRecommendedPromotions() {
+        List<Promo> promos = promoMapper.selectRecommendedPromotions();
+        setPromotionFiles(promos);
+        return promos;
     }
 
     public void addRecommendation(Integer id) {
-        Promotion promotion = promotionMapper.selectById(id);
-        if (promotion.getIsRecommended()) {
+        Promo promo = promoMapper.selectById(id);
+        if (promo.getIsRecommended()) {
             throw new IllegalStateException("이미 추천 이벤트에 추가되었습니다.");
         }
-        promotionMapper.updateRecommendation(id, true);
+        promoMapper.updateRecommendation(id, true);
     }
 
     // 추천 이벤트에서 삭제하는 메서드 추가
     public void removeRecommendation(Integer id) {
-        promotionMapper.updateRecommendation(id, false);
+        promoMapper.updateRecommendation(id, false);
     }
 }

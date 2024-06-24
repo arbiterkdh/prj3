@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class Promotion {
+public class Promo {
     private Integer id;
     private String title;
     private String eventType;
@@ -14,6 +14,6 @@ public class Promotion {
     private LocalDate eventEndDate;
     private String content;
     private Boolean isRecommended;
-    private List<PromotionFile> fileList;
+    private List<PromoFile> fileList;
     private String eventStatus;
 }
