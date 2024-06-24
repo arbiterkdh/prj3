@@ -16,5 +16,7 @@ public class TheaterBoxMovie {
     // 테이블 조인용
     private String movieTitle;
     private LocalDate startDate;
+    private Integer runningTime;
+    private String genre;
     private List<BookPlaceTime> bookPlaceTimeList;
 }

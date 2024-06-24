@@ -99,7 +99,7 @@ public interface BookMapper {
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
 
     @Select("""
-            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, m.title as movieTitle, m.start_date
+            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, m.title as movieTitle, m.start_date, m.genre, m.running_time
             FROM theater_box_movie tbm JOIN movie m ON tbm.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
@@ -185,4 +185,12 @@ public interface BookMapper {
             AND m.id = #{movieId}
             """)
     List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDateAndMovieId(Integer theaterBoxMovieId, LocalDate selectedDate, Integer movieId);
+
+    @Select("""
+            SELECT m.id, m.title, m.running_time, m.start_date, m.genre, m.rating
+            FROM theater_box tb JOIN movie_location ml ON tb.theater_number = ml.theater_number
+                                JOIN movie m ON ml.movie_id = m.id
+            WHERE tb.id = #{theaterBoxId}
+            """)
+    List<Movie> selectAllMovieByTheaterBoxId(Integer theaterBoxId);
 }

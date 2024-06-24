@@ -16,6 +16,7 @@ import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
 import { useState } from "react";
 import axios from "axios";
 import { BookTheaterBoxTimeTableManagementComponent } from "./BookTheaterBoxTimeTableManagementComponent.jsx";
+import { BookTheaterBoxMovieManagementComponent } from "./BookTheaterBoxMovieManagementComponent.jsx";
 
 export function BookMovieAddInTheaterBox({
   cityList,
@@ -23,6 +24,11 @@ export function BookMovieAddInTheaterBox({
   willScreenList,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: theaterBoxManageIsOpen,
+    onOpen: theaterBoxManageOnOpen,
+    onClose: theaterBoxOnClose,
+  } = useDisclosure();
 
   const [isCitySelected, setIsCitySelected] = useState("");
   const [isLocationSelected, setIsLocationSelected] = useState("");
@@ -47,6 +53,11 @@ export function BookMovieAddInTheaterBox({
       .then((res) => {
         setTheaterBoxList(res.data);
       });
+  }
+
+  function handleClickAddTheaterBoxMovie(box) {
+    setTheaterBox(box);
+    theaterBoxManageOnOpen();
   }
 
   return (
@@ -118,14 +129,21 @@ export function BookMovieAddInTheaterBox({
                     </Stack>
                   </Td>
                   <Td>
-                    <Button
-                      onClick={() => {
-                        setTheaterBox(box);
-                        onOpen();
-                      }}
-                    >
-                      영화 상영표 작성
-                    </Button>
+                    <Flex>
+                      <Button
+                        onClick={() => handleClickAddTheaterBoxMovie(box)}
+                      >
+                        영화 추가/삭제
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setTheaterBox(box);
+                          onOpen();
+                        }}
+                      >
+                        상영표 작성
+                      </Button>
+                    </Flex>
                   </Td>
                 </Tr>
               ))}
@@ -133,6 +151,12 @@ export function BookMovieAddInTheaterBox({
           </Table>
         )}
       </Box>
+      <BookTheaterBoxMovieManagementComponent
+        theaterBox={theaterBox}
+        theaterBoxManageIsOpen={theaterBoxManageIsOpen}
+        theaterBoxManageOnOpen={theaterBoxManageOnOpen}
+        theaterBoxManageOnClose={theaterBoxOnClose}
+      />
       <BookTheaterBoxTimeTableManagementComponent
         theaterBox={theaterBox}
         setTheaterBox={setTheaterBox}

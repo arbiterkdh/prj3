@@ -23,6 +23,11 @@ public class TheaterBoxController {
         return null;
     }
 
+    @PostMapping("theaterboxmovie/add")
+    public TheaterBoxMovie addTheaterBoxMovie(@RequestBody TheaterBoxMovie theaterBoxMovie) {
+        return null;
+    }
+
     @GetMapping("onscreenlist")
     public List<TheaterBox> getOnscreenListByDateAndTheaterNumberAndMovieId(
             @RequestParam String date,

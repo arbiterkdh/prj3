@@ -167,7 +167,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
           <ModalOverlay />
           <ModalContent minW={"800px"} h={"600px"}>
             <ModalCloseButton />
-            <ModalHeader>
+            <ModalHeader mt={"10px"}>
               {theaterBox.theaterLocation}점 {theaterBox.boxNumber} 관 상영표
               작성
             </ModalHeader>
@@ -263,7 +263,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
                 </Button>
               </Flex>
 
-              <Box mt={"20px"} fontSize={"16px"}>
+              <Box fontWeight={"600"} mx={"5px"} mt={"45px"} fontSize={"16px"}>
                 상영 테이블
               </Box>
               <Table>

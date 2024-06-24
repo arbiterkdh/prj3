@@ -131,4 +131,12 @@ public class BookService {
         int result = bookMapper.addBookPlaceTime(theaterBoxMovieId, movieId, startTime);
         return ResponseEntity.ok().build();
     }
+
+    public List<Integer> getMovieIdListByTheaterNumber(Integer theaterNumber) {
+        return bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber);
+    }
+
+    public List<Movie> getMovieListByTheaterBoxId(Integer theaterBoxId) {
+        return bookMapper.selectAllMovieByTheaterBoxId(theaterBoxId);
+    }
 }
