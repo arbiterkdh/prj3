@@ -97,9 +97,7 @@ public class BookController {
     }
 
     @PostMapping("bookplacetime/add")
-    public void addBookPlaceTime(@RequestBody Map<String, Object> requestBody) {
-        bookService.addBookPlaceTime(requestBody);
-
-
+    public ResponseEntity addBookPlaceTime(@RequestBody Map<String, Object> requestBody) {
+        return bookService.addBookPlaceTime(requestBody);
     }
 }

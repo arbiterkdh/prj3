@@ -16,6 +16,7 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
 import { useEffect, useState } from "react";
@@ -33,6 +34,8 @@ export function BookTheaterBoxTimeTableManagementComponent({
   const [timeInput, setTimeInput] = useState("08:00");
   const [startDateValue, setStartDateValue] = useState(undefined);
   const [dateList, setDateList] = useState([]);
+
+  const toast = useToast();
 
   useEffect(() => {
     let dateArray = [];
@@ -61,11 +64,28 @@ export function BookTheaterBoxTimeTableManagementComponent({
   }, [isOpen, startDateValue, selectedDate, selectedMovieId]);
 
   function handleClickAddBookPlaceTime() {
-    axios.post("/api/book/bookplacetime/add", {
-      theaterBoxMovieId: selectedTheaterBoxMovieId,
-      movieId: selectedMovieId,
-      startTime: selectedDate + "T" + timeInput,
-    });
+    axios
+      .post("/api/book/bookplacetime/add", {
+        theaterBoxMovieId: selectedTheaterBoxMovieId,
+        movieId: selectedMovieId,
+        startTime: selectedDate + "T" + timeInput,
+      })
+      .then((res) => {
+        toast({
+          status: "success",
+          description: "상영 일정이 추가되었습니다.",
+          position: "bottom-right",
+        });
+      })
+      .catch((err) => {
+        if (err.status.value === 409) {
+          toast({
+            status: "warning",
+            description: "기존 상영 일정과 겹칩니다.",
+            position: "bottom-right",
+          });
+        }
+      });
   }
 
   function handleSelectMovieOption(movieId) {

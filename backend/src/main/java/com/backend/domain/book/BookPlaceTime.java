@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class BookPlaceTime {
-    private Integer id;
+    private Integer bookPlaceTimeId;
     private Integer theaterBoxMovieId;
     private Integer vacancy;
     private LocalDateTime startTime;
