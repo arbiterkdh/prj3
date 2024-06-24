@@ -45,7 +45,7 @@ public class BookService {
 
     public List<Integer> getMovieIdByTheaterNumber(Integer theaterNumber) {
 
-        return bookMapper.selectMovieIdByTheaterNumber(theaterNumber);
+        return bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber);
     }
 
     public List<Map<String, Object>> getOnScreenList(LocalDate date) {

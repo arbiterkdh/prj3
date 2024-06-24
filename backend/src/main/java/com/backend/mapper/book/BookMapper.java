@@ -46,7 +46,7 @@ public interface BookMapper {
             FROM movie_location
             WHERE theater_number = #{theaterNumber}
             """)
-    List<Integer> selectMovieIdByTheaterNumber(Integer theaterNumber);
+    List<Integer> selectAllMovieIdByTheaterNumber(Integer theaterNumber);
 
     @Select("""
             SELECT id, title, running_time, rating, start_date
@@ -166,4 +166,12 @@ public interface BookMapper {
             OR end_time BETWEEN DATE_SUB(#{startTime}, INTERVAL 9 MINUTE) AND #{endTime}
             """)
     int checkTimeConflict(Integer theaterBoxMovieId, LocalDateTime startTime, LocalDateTime endTime);
+
+    @Select("""
+            SELECT *
+            FROM book_place_time
+            WHERE theater_box_movie_id = #{theaterBoxMovieId}
+            AND DATE(start_time) = #{selectedDate}
+            """)
+    List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDate(Integer theaterBoxMovieId, LocalDate selectedDate);
 }

@@ -94,6 +94,7 @@ export function MailVerify() {
           />
           <Box fontSize={"2xl"}>@</Box>
           <Select
+            borderRadius={0}
             border={"1px solid"}
             onChange={(e) => {
               setSelected(e.target.value);
@@ -132,6 +133,11 @@ export function MailVerify() {
           verifiedAddress={verifiedEmail}
           setVerifiedAddress={setVerifiedEmail}
         />
+        <Box w={"985px"} mt={10} mb={3} align={"center"}>
+          <Box w={"960px"} h={"180px"} border={"1px solid"}>
+            광고
+          </Box>
+        </Box>
       </CenterBox>
     </Center>
   );

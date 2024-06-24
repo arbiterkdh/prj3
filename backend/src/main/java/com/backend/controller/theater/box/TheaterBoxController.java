@@ -24,9 +24,12 @@ public class TheaterBoxController {
     }
 
     @GetMapping("onscreenlist")
-    public List<TheaterBox> getOnscreenListByDateAndTheaterNumber(@RequestParam String date, @RequestParam Integer theaterNumber) {
-//        theaterBoxService
-        return null;
+    public List<TheaterBox> getOnscreenListByDateAndTheaterNumberAndMovieId(
+            @RequestParam String date,
+            @RequestParam Integer theaterNumber,
+            @RequestParam(required = false) Integer movieId) {
+
+        return theaterBoxService.getOnscreenListByDateAndTheaterNumberAndMovieId(date, theaterNumber, movieId);
     }
 
     @GetMapping("list/{theaterNumber}")
