@@ -153,7 +153,7 @@ export function StoreList() {
           </StoreMenuCursorBox>
         </Flex>
 
-        <Box>
+        <Box mb={3}>
           <hr />
         </Box>
 

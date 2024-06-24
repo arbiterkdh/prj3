@@ -30,6 +30,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import Payment from "../../payment/Payment.jsx";
+import GapFlex from "../../../../css/theme/component/flex/GapFlex.jsx";
 
 function ProductItemList({
   productList,
@@ -87,57 +88,46 @@ function ProductItemList({
           maxWidth: "24%",
         }}
       >
-        <Card maxW="sm" key={product.id}>
+        <Card maxW="sm" key={product.id} borderRadius={0}>
           <CardBody>
             <Image
               style={{
                 width: "100%",
-                height: "250px",
+                height: "200px",
               }}
               src={product.image.src}
-              borderRadius="lg"
+              borderRadius="2xl"
               onClick={() => handleProductView(product.id)}
             />
-            <Stack mt="6" spacing="3">
+            <Stack mt="3" spacing="0">
               <Center>
                 <Box w={"100%"}>
-                  <Flex alignItems={"center"} justifyContent={"center"} gap={3}>
+                  <Flex alignItems={"center"} justifyContent={"center"}>
                     <Text fontSize={"1.3rem"}>{product.name}</Text>
-                    <Text
-                      color={"red"}
-                      onClick={() => {
-                        handleModifyModal(
-                          product.id,
-                          product.fileName,
-                          product.name,
-                          product.price,
-                          product.stock,
-                          product.image.src,
-                        );
-                        console.log("name:" + product.fileName);
-                      }}
-                    >
-                      {" "}
-                      <FontAwesomeIcon
-                        icon={faWrench}
-                        fontSize={"1.2rem"}
-                        cursor={"pointer"}
-                      />
-                    </Text>
                   </Flex>
                 </Box>
 
                 <Text>{product.content}</Text>
               </Center>
               <Center>
-                <Flex justifyContent={"center"} gap={3} alignItems={"center"}>
+                <Stack justifyContent={"center"} gap={2} alignItems={"center"}>
+                  <GapFlex>
+                    <Box fontSize={"xs"}>({product.stock}개 남음)</Box>
+                  </GapFlex>
                   <Box>
-                    <Text color="blue.600" fontSize="2xl">
-                      {product.price}원
-                    </Text>
+                    <Flex
+                      color="blue.700"
+                      _dark={{ color: "blue.400" }}
+                      fontSize="xl"
+                      justifyContent={"space-between"}
+                    >
+                      <Box w={"100px"} textAlign={"right"}>
+                        {product.price}
+                      </Box>
+                      <Box w={"5%"}>원</Box>
+                    </Flex>
                   </Box>
-                  <Box>{product.stock}개 남음</Box>
-                </Flex>
+                </Stack>
               </Center>
             </Stack>
           </CardBody>
@@ -154,6 +144,7 @@ function ProductItemList({
               >
                 <Box>
                   <Button
+                    size={"sm"}
                     variant="solid"
                     colorScheme="blue"
                     onClick={() => {
@@ -172,6 +163,7 @@ function ProductItemList({
                 </Box>
                 <Box>
                   <Button
+                    size={"sm"}
                     variant="solid"
                     colorScheme="red"
                     onClick={() => {
@@ -188,8 +180,29 @@ function ProductItemList({
                   </Button>
                 </Box>
 
-                <Box>
+                <Flex align={"center"}>
                   <Button
+                    m={"1px"}
+                    color={"red"}
+                    size={"xs"}
+                    onClick={() => {
+                      handleModifyModal(
+                        product.id,
+                        product.fileName,
+                        product.name,
+                        product.price,
+                        product.stock,
+                        product.image.src,
+                      );
+                      console.log("name:" + product.fileName);
+                    }}
+                  >
+                    {" "}
+                    <FontAwesomeIcon icon={faWrench} cursor={"pointer"} />
+                  </Button>
+                  <Button
+                    m={"1px"}
+                    size={"xs"}
                     onClick={() => {
                       onDelOpen();
                       setProductId(product.id);
@@ -197,7 +210,7 @@ function ProductItemList({
                   >
                     <FontAwesomeIcon icon={faX} />
                   </Button>
-                </Box>
+                </Flex>
               </Flex>
             )}
           </CardFooter>
