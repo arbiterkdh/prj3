@@ -9,7 +9,8 @@ CREATE TABLE promo
     eventEndDate   DATE          NOT NULL,
     content        VARCHAR(1000) NULL
 );
-ALTER TABLE promo ADD COLUMN isRecommended BOOLEAN DEFAULT FALSE;
+ALTER TABLE promo
+    ADD COLUMN isRecommended BOOLEAN DEFAULT FALSE;
 
 CREATE TABLE promo_file
 (
@@ -20,11 +21,11 @@ CREATE TABLE promo_file
 
 CREATE TABLE promotion_result
 (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    promotion_id INT NOT NULL,
+    id                INT AUTO_INCREMENT PRIMARY KEY,
+    promotion_id      INT  NOT NULL,
     announcement_date DATE NOT NULL,
-    winners TEXT NOT NULL,
-    CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo(id)
+    winners           TEXT NOT NULL,
+    CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo (id)
 );
 
 DESC promo;
@@ -39,10 +40,20 @@ SELECT *
 FROM promotion_result;
 
 INSERT INTO promo
-(title, eventType, eventStartDate, eventEndDate, content)
+    (title, eventType, eventStartDate, eventEndDate, content)
 SELECT title,
        eventType,
        eventStartDate,
        eventEndDate,
        content
 FROM promo;
+
+SELECT *
+FROM promotion_result
+WHERE promotion_result.promotion_id = 132;
+
+UPDATE promotion_result
+SET promotion_id      = 132,
+    announcement_date = '2024-06-28',
+    winners           = '[{"email":"123@123","name":"123"}]'
+WHERE id = 132;

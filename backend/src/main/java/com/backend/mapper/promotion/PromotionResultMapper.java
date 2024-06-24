@@ -15,7 +15,7 @@ public interface PromotionResultMapper {
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
-                   p.eventType, p.title as eventName
+                   p.eventType as eventType, p.title as eventName
             FROM promotion_result pr
             JOIN promo p ON pr.promotion_id = p.id
             LIMIT #{offset}, #{pageSize}
@@ -37,17 +37,23 @@ public interface PromotionResultMapper {
                    p.eventType, p.title as eventName
             FROM promotion_result pr
             JOIN promo p ON pr.promotion_id = p.id
-            WHERE pr.id = #{id}
+            WHERE pr.promotion_id = #{promotionId}
             """)
-    PromotionResult selectPromotionResultById(Integer id);
+    PromotionResult selectPromotionResultByPromotionId(Integer promotionId);
 
     @Update("""
             UPDATE promotion_result
             SET promotion_id = #{promotionResult.promotionId},
                 announcement_date = #{promotionResult.announcementDate},
                 winners = #{promotionResult.winnersJson}
+            WHERE promotion_id = #{id}
+            """)
+    int updatePromotionResult(int id, PromotionResult promotionResult);
+
+    @Select("""
+            SELECT *
+            FROM promotion_result
             WHERE id = #{id}
             """)
-    int updatePromotionResult(Integer id, PromotionResult promotionResult);
-
+    PromotionResult selectPromotionResultById(int id);
 }

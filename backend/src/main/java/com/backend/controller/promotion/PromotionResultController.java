@@ -29,9 +29,9 @@ public class PromotionResultController {
         return ResponseEntity.ok(results);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PromotionResult> getPromoResultById(@PathVariable Integer id) {
-        PromotionResult result = promotionResultService.getPromoResultById(id);
+    @GetMapping("/{promotionId}")
+    public ResponseEntity<PromotionResult> getPromoResultByPromotionId(@PathVariable Integer promotionId) {
+        PromotionResult result = promotionResultService.getPromoResultByPromotionId(promotionId);
         return ResponseEntity.ok(result);
     }
 
@@ -46,5 +46,4 @@ public class PromotionResultController {
         promotionResultService.deletePromoResult(id);
         return ResponseEntity.ok().build();
     }
-
 }

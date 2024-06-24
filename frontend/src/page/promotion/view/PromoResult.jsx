@@ -7,9 +7,6 @@ import {
   Center,
   Flex,
   Heading,
-  Input,
-  InputGroup,
-  InputRightElement,
   Modal,
   ModalBody,
   ModalContent,
@@ -27,9 +24,9 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import PromoPagination from "../PromoPagination.jsx";
+import PromoSearchBar from "../PromoSearchBar.jsx";
 
 export function PromoResult() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,11 +44,10 @@ export function PromoResult() {
         const response = await axios.get(
           `/api/promotion/eventResult?page=${currentPage}`,
         );
-        console.log("이벤트 결과 응답:", response.data); // 응답 데이터 확인
         setEventResults(response.data.results);
         setPageInfo(response.data.pageInfo);
       } catch (error) {
-        console.error("Failed to fetch event results", error);
+        console.error("당첨자 발표를 가져오는데 실패했습니다.", error);
       }
     };
 
@@ -78,7 +74,7 @@ export function PromoResult() {
         totalItems: prevPageInfo.totalItems - 1,
       }));
     } catch (error) {
-      console.error("Failed to delete event result", error);
+      console.error("당첨자 발표를 삭제하는데 실패했습니다.", error);
     }
   };
 
@@ -133,14 +129,7 @@ export function PromoResult() {
               전체 {pageInfo.totalItems}건
             </Text>
             <Spacer />
-            <InputGroup size="sm" width="200px" mr={5}>
-              <Input
-                placeholder="검색어를 입력해 주세요."
-                value={searchQuery}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
-              <InputRightElement children={<SearchIcon color="gray.300" />} />
-            </InputGroup>
+            <PromoSearchBar onSearch={handleSearch} />
           </Flex>
           <Box border="1px solid #e2e8f0" borderRadius="8px" padding="10px">
             <TableContainer>
@@ -200,7 +189,7 @@ export function PromoResult() {
                     ))
                   ) : (
                     <Tr>
-                      <Td colSpan={7}>데이터가 없습니다.</Td>
+                      <Td colSpan={7}>해당 당첨자 발표가 없습니다.</Td>
                     </Tr>
                   )}
                 </Tbody>

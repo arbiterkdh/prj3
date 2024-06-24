@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Center,
   Flex,
   Heading,
@@ -20,14 +19,8 @@ import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faAnglesLeft,
-  faAnglesRight,
-} from "@fortawesome/free-solid-svg-icons";
 import PromoSearchBar from "../PromoSearchBar.jsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PromoPagination from "../PromoPagination.jsx";
 
 export function PromoEnd() {
   const [promoList, setPromoList] = useState([]);
@@ -80,7 +73,9 @@ export function PromoEnd() {
     <Center>
       <CenterBox>
         <Box width="100%" textAlign="center">
-          <Heading>종료 이벤트</Heading>
+          <Heading cursor={"pointer"} onClick={() => navigate("")}>
+            종료 이벤트
+          </Heading>
           <Box height="30px" />
           <Text>
             -응모하신 이벤트의 당첨 여부는 당첨자발표의 나의 응모결과 확인을
@@ -134,63 +129,7 @@ export function PromoEnd() {
               </Table>
             </TableContainer>
           </Box>
-          <Box>
-            <Center>
-              {pageInfo.prevPageNumber && (
-                <>
-                  <Button
-                    onClick={() => navigate(`/promotion/eventEnd?page=1`)}
-                  >
-                    <FontAwesomeIcon icon={faAnglesLeft} />
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      navigate(
-                        `/promotion/eventEnd?page=${pageInfo.prevPageNumber}`,
-                      )
-                    }
-                  >
-                    <FontAwesomeIcon icon={faAngleLeft} />
-                  </Button>
-                </>
-              )}
-              {pageNumbers.map((pageNumber) => (
-                <Button
-                  onClick={() =>
-                    navigate(`/promotion/eventEnd?page=${pageNumber}`)
-                  }
-                  key={pageNumber}
-                  colorScheme={
-                    pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
-                  }
-                >
-                  {pageNumber}
-                </Button>
-              ))}
-              {pageInfo.nextPageNumber && (
-                <>
-                  <Button
-                    onClick={() =>
-                      navigate(
-                        `/promotion/eventEnd?page=${pageInfo.nextPageNumber}`,
-                      )
-                    }
-                  >
-                    <FontAwesomeIcon icon={faAngleRight} />
-                  </Button>
-                  <Button
-                    onClick={() =>
-                      navigate(
-                        `/promotion/eventEnd?page=${pageInfo.lastPageNumber}`,
-                      )
-                    }
-                  >
-                    <FontAwesomeIcon icon={faAnglesRight} />
-                  </Button>
-                </>
-              )}
-            </Center>
-          </Box>
+          <PromoPagination pageInfo={pageInfo} eventType="eventEnd" />
         </Box>
       </CenterBox>
     </Center>

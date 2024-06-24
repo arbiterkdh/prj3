@@ -50,6 +50,19 @@ export function PromoResultAdd() {
     fetchPromotions();
   }, []);
 
+  const handlePromotionChange = (promotionId) => {
+    const selectedPromo = promotions.find(
+      (promo) => promo.id === parseInt(promotionId),
+    );
+    if (selectedPromo) {
+      setPromotionId(promotionId);
+      setAnnouncementDate(selectedPromo.eventEndDate);
+    } else {
+      setPromotionId("");
+      setAnnouncementDate("");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const selectedPromo = promotions.find(
@@ -129,7 +142,7 @@ export function PromoResultAdd() {
                 <Select
                   placeholder="프로모션을 선택하세요"
                   value={promotionId}
-                  onChange={(e) => setPromotionId(e.target.value)}
+                  onChange={(e) => handlePromotionChange(e.target.value)}
                 >
                   {filteredPromotions.map((promo) => (
                     <option key={promo.id} value={promo.id}>
