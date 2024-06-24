@@ -44,4 +44,9 @@ public class TheaterBoxController {
 
         return theaterBoxList;
     }
+
+    @GetMapping("theaterBox/{theaterBoxId}")
+    public TheaterBox getTheaterBox(@PathVariable Integer theaterBoxId) {
+        return theaterBoxService.getTheaterBox(theaterBoxId);
+    }
 }

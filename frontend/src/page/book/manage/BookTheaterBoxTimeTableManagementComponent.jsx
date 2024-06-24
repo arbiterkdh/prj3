@@ -27,6 +27,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
   onOpen,
   onClose,
   theaterBox,
+  setIsAdding,
 }) {
   const [selectedMovieId, setSelectedMovieId] = useState(0);
   const [selectedTheaterBoxMovieId, setSelectedTheaterBoxMovieId] = useState(0);
@@ -64,6 +65,8 @@ export function BookTheaterBoxTimeTableManagementComponent({
   }, [isOpen, startDateValue, selectedDate, selectedMovieId]);
 
   function handleClickAddBookPlaceTime() {
+    setIsAdding(true);
+
     axios
       .post("/api/book/bookplacetime/add", {
         theaterBoxMovieId: selectedTheaterBoxMovieId,
@@ -76,16 +79,18 @@ export function BookTheaterBoxTimeTableManagementComponent({
           description: "상영 일정이 추가되었습니다.",
           position: "bottom-right",
         });
+        axios.get(`/api/book/theaterBox/${theaterBox.id}`).then((res) => {});
       })
       .catch((err) => {
-        if (err.status.value === 409) {
+        if (err.response.status === 409) {
           toast({
-            status: "warning",
+            status: "error",
             description: "기존 상영 일정과 겹칩니다.",
             position: "bottom-right",
           });
         }
-      });
+      })
+      .finally(() => setIsAdding(false));
   }
 
   function handleSelectMovieOption(movieId) {
@@ -189,6 +194,8 @@ export function BookTheaterBoxTimeTableManagementComponent({
                   ))}
                 </BorderSelect>
                 <Input
+                  max={"23:50"}
+                  min={"08:00"}
                   w={"150px"}
                   type={"time"}
                   value={timeInput}
@@ -202,6 +209,13 @@ export function BookTheaterBoxTimeTableManagementComponent({
                     let time = e.target.value.split(":");
                     let hour = Number(time[0]);
                     let minutes = Number(time[1]);
+                    if (minutes % 10 !== 0) {
+                      if (minutes < 6) {
+                        minutes *= 10;
+                      } else {
+                        minutes = 0;
+                      }
+                    }
 
                     if (minutes === 0 && prevMinutes === 50) {
                       hour++;

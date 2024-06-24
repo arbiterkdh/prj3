@@ -31,4 +31,8 @@ public class TheaterBoxService {
 
         return theaterBoxMovieList;
     }
+
+    public TheaterBox getTheaterBox(Integer theaterBoxId) {
+        return theaterBoxMapper.selectTheaterBox(theaterBoxId);
+    }
 }
