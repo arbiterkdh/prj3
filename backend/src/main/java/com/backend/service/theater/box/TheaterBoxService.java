@@ -1,5 +1,6 @@
 package com.backend.service.theater.box;
 
+import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
 import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.mapper.book.BookMapper;
@@ -76,5 +77,9 @@ public class TheaterBoxService {
         }
         boolean result = theaterBoxMapper.insertTheaterBoxMovie(theaterBoxMovie) > 0;
         return result ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    public List<Movie> getMovieListByTheaterBoxId(Integer theaterBoxId) {
+        return theaterBoxMapper.selectAllMovieByTheaterBoxId(theaterBoxId);
     }
 }

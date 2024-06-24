@@ -136,7 +136,5 @@ public class BookService {
         return bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber);
     }
 
-    public List<Movie> getMovieListByTheaterBoxId(Integer theaterBoxId) {
-        return bookMapper.selectAllMovieByTheaterBoxId(theaterBoxId);
-    }
+
 }
