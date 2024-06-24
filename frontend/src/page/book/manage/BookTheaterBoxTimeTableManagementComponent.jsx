@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Table,
   Tbody,
   Td,
@@ -27,6 +28,8 @@ export function BookTheaterBoxTimeTableManagementComponent({
   onOpen,
   onClose,
   theaterBox,
+  setTheaterBox,
+  isAdding,
   setIsAdding,
 }) {
   const [selectedMovieId, setSelectedMovieId] = useState(0);
@@ -39,6 +42,12 @@ export function BookTheaterBoxTimeTableManagementComponent({
   const toast = useToast();
 
   useEffect(() => {
+    if (theaterBox.id !== undefined && isAdding) {
+      axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
+        setTheaterBox(res.data);
+      });
+    }
+
     let dateArray = [];
     if (startDateValue) {
       for (let i = 0; i < 21; i++) {
@@ -62,7 +71,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
     if (startDateValue === "") {
       setDateList([]);
     }
-  }, [isOpen, startDateValue, selectedDate, selectedMovieId]);
+  }, [isOpen, startDateValue, selectedDate, selectedMovieId, isAdding]);
 
   function handleClickAddBookPlaceTime() {
     setIsAdding(true);
@@ -79,7 +88,6 @@ export function BookTheaterBoxTimeTableManagementComponent({
           description: "상영 일정이 추가되었습니다.",
           position: "bottom-right",
         });
-        axios.get(`/api/book/theaterBox/${theaterBox.id}`).then((res) => {});
       })
       .catch((err) => {
         if (err.response.status === 409) {
@@ -145,7 +153,17 @@ export function BookTheaterBoxTimeTableManagementComponent({
   return (
     <Box>
       {theaterBox.theaterBoxMovieList !== undefined ? (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal
+          isOpen={isOpen}
+          onClose={() => {
+            onClose();
+            setSelectedMovieId(0);
+            setSelectedTheaterBoxMovieId(0);
+            setSelectedDate("");
+            setTimeInput("08:00");
+          }}
+          isCentered
+        >
           <ModalOverlay />
           <ModalContent minW={"800px"} h={"600px"}>
             <ModalCloseButton />
@@ -259,49 +277,57 @@ export function BookTheaterBoxTimeTableManagementComponent({
                 </Thead>
               </Table>
               <Box h={"320px"} overflow={"scroll"} border={"1px solid"}>
-                <Table>
-                  {theaterBox.theaterBoxMovieList.map(
-                    (theaterBoxMovie, index) => (
-                      <Tbody key={index}>
-                        {theaterBoxMovie.bookPlaceTimeList.map(
-                          (bookPlaceTime, index) => (
-                            <Tr
-                              key={index}
-                              display={
-                                selectedMovieId === 0
-                                  ? "block"
-                                  : selectedMovieId ===
-                                        theaterBoxMovie.movieId &&
-                                      (selectedDate === undefined ||
-                                        selectedDate === "")
+                {!isAdding ? (
+                  <Table>
+                    {theaterBox.theaterBoxMovieList.map(
+                      (theaterBoxMovie, index) => (
+                        <Tbody key={index}>
+                          {theaterBoxMovie.bookPlaceTimeList.map(
+                            (bookPlaceTime, index) => (
+                              <Tr
+                                key={index}
+                                display={
+                                  selectedMovieId === 0
                                     ? "block"
                                     : selectedMovieId ===
                                           theaterBoxMovie.movieId &&
-                                        bookPlaceTime.startTime.slice(0, 10) ===
-                                          selectedDate
+                                        (selectedDate === undefined ||
+                                          selectedDate === "")
                                       ? "block"
-                                      : "none"
-                              }
-                            >
-                              <Td w={"280px"}>{theaterBoxMovie.movieTitle}</Td>
-                              <Td w={"22%"}>
-                                {bookPlaceTime.startTime.slice(0, 10)}
-                              </Td>
-                              <Td w={"24%"}>
-                                {bookPlaceTime.startTime.slice(11, 16) +
-                                  "~" +
-                                  bookPlaceTime.endTime.slice(11, 16)}
-                              </Td>
-                              <Td>
-                                <Button size={"xs"}>수정</Button>
-                              </Td>
-                            </Tr>
-                          ),
-                        )}
-                      </Tbody>
-                    ),
-                  )}
-                </Table>
+                                      : selectedMovieId ===
+                                            theaterBoxMovie.movieId &&
+                                          bookPlaceTime.startTime.slice(
+                                            0,
+                                            10,
+                                          ) === selectedDate
+                                        ? "block"
+                                        : "none"
+                                }
+                              >
+                                <Td w={"280px"}>
+                                  {theaterBoxMovie.movieTitle}
+                                </Td>
+                                <Td w={"22%"}>
+                                  {bookPlaceTime.startTime.slice(0, 10)}
+                                </Td>
+                                <Td w={"24%"}>
+                                  {bookPlaceTime.startTime.slice(11, 16) +
+                                    "~" +
+                                    bookPlaceTime.endTime.slice(11, 16)}
+                                </Td>
+                                <Td>
+                                  <Button size={"xs"}>수정</Button>
+                                </Td>
+                              </Tr>
+                            ),
+                          )}
+                        </Tbody>
+                      ),
+                    )}
+                  </Table>
+                ) : (
+                  <Spinner />
+                )}
               </Box>
             </ModalBody>
             <ModalFooter></ModalFooter>

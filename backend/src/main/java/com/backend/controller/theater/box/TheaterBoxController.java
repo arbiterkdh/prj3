@@ -23,7 +23,7 @@ public class TheaterBoxController {
         return null;
     }
 
-    @GetMapping("{theaterNumber}")
+    @GetMapping("list/{theaterNumber}")
     public List<TheaterBox> getTheaterBoxList(@PathVariable Integer theaterNumber) {
 
         List<TheaterBox> theaterBoxList = theaterBoxService.getTheaterBoxList(theaterNumber);
@@ -45,8 +45,20 @@ public class TheaterBoxController {
         return theaterBoxList;
     }
 
-    @GetMapping("theaterBox/{theaterBoxId}")
+    @GetMapping("{theaterBoxId}")
     public TheaterBox getTheaterBox(@PathVariable Integer theaterBoxId) {
-        return theaterBoxService.getTheaterBox(theaterBoxId);
+        TheaterBox theaterBox = theaterBoxService.getTheaterBox(theaterBoxId);
+        List<TheaterBoxMovie> theaterBoxMovieList = theaterBoxService.getTheaterBoxMovieList(theaterBoxId);
+
+        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
+            theaterBoxMovie.setBookPlaceTimeList(bookService.getAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+        }
+
+        theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+        theaterBox.setBookPlaceTimeLeft(bookService.checkBookPlaceTimeLeftByTheaterBoxId(theaterBoxId));
+        theaterBox.setMovieIdList(bookService.getMovieIdListByTheaterBoxId(theaterBoxId));
+
+        return theaterBox;
+
     }
 }
