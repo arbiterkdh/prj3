@@ -30,28 +30,44 @@ WHERE DATE_SUB(start_date, INTERVAL 1 MONTH) <= NOW()
 
 CREATE TABLE book_place_time
 (
-    id                   INT PRIMARY KEY AUTO_INCREMENT,
+    book_place_time_id   INT PRIMARY KEY AUTO_INCREMENT,
     theater_box_movie_id INT REFERENCES theater_box_movie (id),
-    vacancy              INT  NOT NULL DEFAULT 176,
-    date                 DATE NOT NULL,
-    time                 TIME NOT NULL
+    vacancy              INT      NOT NULL DEFAULT 176,
+    start_time           DATETIME NOT NULL,
+    end_time             DATETIME NOT NULL
 );
+
+ALTER TABLE book_place_time
+    CHANGE id book_place_time_id INT;
+
+ALTER TABLE book_place_time
+    MODIFY COLUMN book_place_time_id INT AUTO_INCREMENT;
 
 DROP TABLE book_place_time;
 
-INSERT INTO book_place_time
-    (theater_box_movie_id, vacancy, date, time)
-VALUES (1, 176, CURRENT_DATE(), TIME('18:00:00'));
-
-INSERT INTO book_place_time
-    (theater_box_movie_id, vacancy, date, time)
-VALUES (1, 176, CURRENT_DATE(), TIME('15:00:00'));
-
-INSERT INTO book_place_time
-    (theater_box_movie_id, vacancy, date, time)
-VALUES (1, 176, CURRENT_DATE(), TIME('12:00:00'));
+SELECT *
+FROM book_place_time
+ORDER BY book_place_time_id DESC;
 
 SELECT *
+FROM book_place_time
+WHERE theater_box_movie_id = 1
+  AND start_time = '2024-06-23 08:00';
+
+DELETE
 FROM book_place_time;
 
 DESC book_place_time;
+
+SELECT *
+FROM mail;
+
+SELECT *
+FROM member;
+
+SELECT m.id, tbm.id, tbm.theater_box_id, m.running_time, m.start_date, tb.capacity
+FROM movie m
+         JOIN theater_box_movie tbm ON m.id = tbm.movie_id
+         JOIN theater_box tb ON tbm.theater_box_id = tb.id
+WHERE m.start_date <= CURDATE() + INTERVAL 3 WEEK
+  AND m.start_date >= CURDATE() - INTERVAL 3 WEEK;

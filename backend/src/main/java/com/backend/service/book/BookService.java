@@ -9,10 +9,14 @@ import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.theater.TheaterMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +83,13 @@ public class BookService {
     }
 
     public List<TheaterBoxMovie> getTheaterBoxTimeTable(TheaterBox theaterBox) {
-        return bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
+        List<TheaterBoxMovie> theaterBoxMovieList = bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBox.getId());
+
+        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
+            theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+        }
+
+        return theaterBoxMovieList;
     }
 
     public List<Movie> getOnScreenList() {
@@ -100,5 +110,25 @@ public class BookService {
 
     public List<Integer> getMovieIdListByTheaterBoxId(Integer theaterBoxId) {
         return bookMapper.selectAllMovieIdByTheaterBoxId(theaterBoxId);
+    }
+
+    public Movie getMovie(Integer movieId) {
+        return movieMapper.selectByMovieId(movieId);
+    }
+
+    public ResponseEntity addBookPlaceTime(Map<String, Object> requestBody) {
+        Integer theaterBoxMovieId = (Integer) requestBody.get("theaterBoxMovieId");
+        Integer movieId = (Integer) requestBody.get("movieId");
+        Integer runningTime = movieMapper.selectByMovieId(movieId).getRunningTime();
+        LocalDateTime startTime = LocalDateTime.parse((String) requestBody.get("startTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
+        LocalDateTime endTime = startTime.plusMinutes((int) (Math.ceil(((double) runningTime) / 10) * 10 + 10));
+        // 추가하기 전 시갑 겹치는 것 체크
+        int count = bookMapper.checkTimeConflict(theaterBoxMovieId, startTime, endTime);
+        if (count > 0) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+        int result = bookMapper.addBookPlaceTime(theaterBoxMovieId, movieId, startTime);
+        return ResponseEntity.ok().build();
     }
 }

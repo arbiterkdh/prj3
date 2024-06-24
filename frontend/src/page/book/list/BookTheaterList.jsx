@@ -35,9 +35,8 @@ export function BookTheaterList({
   }
 
   function handleClickTheater(theaterNumber) {
-    axios.get(`/api/theaterbox/${theaterNumber}`).then((res) => {
+    axios.get(`/api/theaterbox/list/${theaterNumber}`).then((res) => {
       setTheaterBoxList(res.data);
-      console.log(res.data);
     });
   }
 
@@ -77,6 +76,7 @@ export function BookTheaterList({
         {theaterNumberList.map((theater) => (
           <Flex key={theater.number} alignItems={"center"} gap={2}>
             <CursorBox
+              p={1}
               w={"100%"}
               h={"45px"}
               alignContent={"center"}

@@ -5,7 +5,6 @@ import {
   Heading,
   Image,
   Stack,
-  Tab,
   TabList,
   TabPanels,
   Tabs,
@@ -14,7 +13,8 @@ import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import TheaterTabPanel from "../../../../css/theme/component/tabs/tabpanels/tabpanel/TheaterTabPanel.jsx";
 import AngledButton from "../../../../css/theme/component/button/AngledButton.jsx";
-import TheaterTab from "../../../../css/theme/component/tabs/tablist/tab/TheaterTab.jsx";
+import TheaterTab from "../../../../css/theme/component/tabs/tab/TheaterTab.jsx";
+import TheaterTab2 from "../../../../css/theme/component/tabs/tab/TheaterTab2.jsx";
 
 export function TheaterLocation() {
   const location = useLocation();
@@ -29,17 +29,15 @@ export function TheaterLocation() {
     <Center>
       <Box w={"100%"} justifyContent={"center"} align={"center"}>
         <Image
+          w={"inherit"}
+          position={"absolute"}
+          h={"165px"}
+          zIndex={-1}
           src={
             "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/theater/main/theatermain.jpg"
           }
-          zIndex={-1}
         />
-        <Stack
-          mt={"-190px"}
-          w={"100%"}
-          bgColor={"blackAlpha.900"}
-          align={"center"}
-        >
+        <Stack w={"100%"} align={"center"}>
           <Tabs isFitted w={"1000px"}>
             <TabList color={"whiteAlpha.900"} mt={"35px"}>
               <TheaterTab>서울</TheaterTab>
@@ -67,9 +65,9 @@ export function TheaterLocation() {
         </Stack>
         <Tabs isFitted variant="enclosed" w={"1000px"}>
           <TabList mb="1em">
-            <Tab>극장정보</Tab>
-            <Tab>상영시간표</Tab>
-            <Tab>관람료</Tab>
+            <TheaterTab2>극장정보</TheaterTab2>
+            <TheaterTab2>상영시간표</TheaterTab2>
+            <TheaterTab2>관람료</TheaterTab2>
           </TabList>
           <TabPanels align={"left"}>
             <TheaterTabPanel>극장정보</TheaterTabPanel>

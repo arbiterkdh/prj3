@@ -56,6 +56,9 @@ CREATE TABLE theater_box_movie
     time_interval  INT NOT NULL
 );
 
+ALTER TABLE theater_box_movie
+    DROP COLUMN time_interval;
+
 DROP TABLE theater_box_movie;
 
 SELECT *
@@ -112,6 +115,7 @@ INSERT INTO theater_box_movie
     (movie_id, theater_box_id, time_interval)
 VALUES (521, (SELECT id FROM theater_box WHERE theater_number = 120 AND box_number = 1),
         (SELECT running_time FROM movie WHERE id = 521) / 10 * 10 + 30);
+
 
 SELECT *
 FROM movie_location

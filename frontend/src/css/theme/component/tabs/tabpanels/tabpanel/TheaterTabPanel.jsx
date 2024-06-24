@@ -5,7 +5,7 @@ const TheaterTabPanel = (props) => {
     <TabPanel
       h={"1200px"}
       border={"1px solid lightgray"}
-      _dark={{ border: "1px solid gray" }}
+      _dark={{ border: "1px solid lightgray" }}
       mt={"-17px"}
       mb={"100px"}
       {...props}

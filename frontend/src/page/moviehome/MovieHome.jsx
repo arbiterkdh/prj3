@@ -43,7 +43,7 @@ export function MovieHome() {
     <Box align={"center"} overflow={"hidden"}>
       <Image
         minWidth={"100%"}
-        minHeight={"10%"}
+        minHeight={"86%"}
         position={"fixed"}
         src={
           "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccvtheaterbg.jpg"

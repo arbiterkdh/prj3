@@ -24,6 +24,7 @@ public class BookController {
     private final BookService bookService;
     private final TheaterService theaterService;
 
+
     @GetMapping("onscreenlist/all")
     public List<Movie> getOnScreenListAll() {
         return bookService.getOnScreenList();
@@ -55,6 +56,10 @@ public class BookController {
         return bookService.getMovieIdByTheaterNumber(number);
     }
 
+    @GetMapping("movie/{movieId}")
+    public Movie getMovieById(@PathVariable Integer movieId) {
+        return bookService.getMovie(movieId);
+    }
 
     @GetMapping("movie/list")
     public List<Movie> getMovies() {
@@ -89,5 +94,10 @@ public class BookController {
         map.put("bookPeriodList", bookPeriodList);
 
         return map;
+    }
+
+    @PostMapping("bookplacetime/add")
+    public ResponseEntity addBookPlaceTime(@RequestBody Map<String, Object> requestBody) {
+        return bookService.addBookPlaceTime(requestBody);
     }
 }

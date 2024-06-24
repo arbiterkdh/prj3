@@ -77,8 +77,6 @@ export function Book() {
     ]).then(([onScreenRes, willScreenRes]) => {
       setOnScreenList(onScreenRes.data);
       // setWillScreenList(willScreenRes.data);
-      console.log("onScreenRes.data", onScreenRes.data);
-      // console.log("willScreenRes.data", willScreenRes.data);
     });
   }, [theaterNumberList, movieLocationAdd, selectedDay]);
 
