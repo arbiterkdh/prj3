@@ -8,7 +8,7 @@ const StoreMenuCursorBox = (props) => {
       m={1}
       w={"25%"}
       _hover={{
-        bgColor: "green.200",
+        bgColor: "#c5302f",
         color: "white",
       }}
       {...props}
