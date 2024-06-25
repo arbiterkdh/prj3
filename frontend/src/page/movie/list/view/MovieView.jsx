@@ -106,7 +106,14 @@ export function MovieView() {
                   borderBottom={"1px solid #e8eaed"}
                   _selected={{
                     border: "1px solid #e8eaed",
-                    borderBottom: "none",
+                    borderBottom: "1px solid #FEFEFE",
+                  }}
+                  _dark={{
+                    _selected: {
+                      color: "white",
+                      border: "1px solid lightgray",
+                      borderBottom: "1px solid #1F3032",
+                    },
                   }}
                 >
                   주요정보
@@ -115,7 +122,14 @@ export function MovieView() {
                   borderBottom={"1px solid #e8eaed"}
                   _selected={{
                     border: "1px solid #e8eaed",
-                    borderBottom: "none",
+                    borderBottom: "1px solid #FEFEFE",
+                  }}
+                  _dark={{
+                    _selected: {
+                      color: "white",
+                      border: "1px solid lightgray",
+                      borderBottom: "1px solid #1F3032",
+                    },
                   }}
                 >
                   실관람평
