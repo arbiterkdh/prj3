@@ -46,7 +46,7 @@ public interface BookMapper {
             FROM movie_location
             WHERE theater_number = #{theaterNumber}
             """)
-    List<Integer> selectMovieIdByTheaterNumber(Integer theaterNumber);
+    List<Integer> selectAllMovieIdByTheaterNumber(Integer theaterNumber);
 
     @Select("""
             SELECT id, title, running_time, rating, start_date
@@ -99,7 +99,7 @@ public interface BookMapper {
     List<TheaterBox> selectAllTheaterBoxByTheaterNumber(Integer theaterNumber);
 
     @Select("""
-            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, m.title as movieTitle, m.start_date
+            SELECT tbm.id, tbm.movie_id, tbm.theater_box_id, m.title as movieTitle, m.start_date, m.genre, m.running_time
             FROM theater_box_movie tbm JOIN movie m ON tbm.movie_id = m.id
             WHERE theater_box_id = #{id}
             """)
@@ -166,4 +166,23 @@ public interface BookMapper {
             OR end_time BETWEEN DATE_SUB(#{startTime}, INTERVAL 9 MINUTE) AND #{endTime}
             """)
     int checkTimeConflict(Integer theaterBoxMovieId, LocalDateTime startTime, LocalDateTime endTime);
+
+    @Select("""
+            SELECT *
+            FROM book_place_time
+            WHERE theater_box_movie_id = #{theaterBoxMovieId}
+            AND DATE(start_time) = #{selectedDate}
+            """)
+    List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDate(Integer theaterBoxMovieId, LocalDate selectedDate);
+
+    @Select("""
+            SELECT bpt.book_place_time_id, bpt.theater_box_movie_id, bpt.vacancy, bpt.start_time, bpt.end_time
+            FROM book_place_time bpt
+                JOIN theater_box_movie tbm ON bpt.theater_box_movie_id = tbm.id
+                JOIN movie m ON tbm.movie_id = m.id
+            WHERE theater_box_movie_id = #{theaterBoxMovieId}
+            AND DATE(start_time) = #{selectedDate}
+            AND m.id = #{movieId}
+            """)
+    List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDateAndMovieId(Integer theaterBoxMovieId, LocalDate selectedDate, Integer movieId);
 }

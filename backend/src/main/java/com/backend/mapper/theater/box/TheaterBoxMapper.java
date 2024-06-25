@@ -1,8 +1,11 @@
 package com.backend.mapper.theater.box;
 
+import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
 import com.backend.domain.theater.box.TheaterBoxMovie;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -30,4 +33,28 @@ public interface TheaterBoxMapper {
             WHERE id = #{theaterBoxId}
             """)
     TheaterBox selectTheaterBox(Integer theaterBoxId);
+
+    @Insert("""
+            INSERT INTO theater_box_movie
+            (movie_id, theater_box_id)
+            VALUES (#{movieId}, #{theaterBoxId})
+            """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    int insertTheaterBoxMovie(TheaterBoxMovie theaterBoxMovie);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM theater_box_movie
+            WHERE theater_box_id = #{theaterBoxId}
+            AND movie_id = #{movieId}
+            """)
+    int checkConflict(TheaterBoxMovie theaterBoxMovie);
+
+    @Select("""
+            SELECT m.id, m.title, m.running_time, m.start_date, m.genre, m.rating
+            FROM theater_box tb JOIN movie_location ml ON tb.theater_number = ml.theater_number
+                                JOIN movie m ON ml.movie_id = m.id
+            WHERE tb.id = #{theaterBoxId}
+            """)
+    List<Movie> selectAllMovieByTheaterBoxId(Integer theaterBoxId);
 }

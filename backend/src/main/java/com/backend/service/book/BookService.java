@@ -45,7 +45,7 @@ public class BookService {
 
     public List<Integer> getMovieIdByTheaterNumber(Integer theaterNumber) {
 
-        return bookMapper.selectMovieIdByTheaterNumber(theaterNumber);
+        return bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber);
     }
 
     public List<Map<String, Object>> getOnScreenList(LocalDate date) {
@@ -131,4 +131,10 @@ public class BookService {
         int result = bookMapper.addBookPlaceTime(theaterBoxMovieId, movieId, startTime);
         return ResponseEntity.ok().build();
     }
+
+    public List<Integer> getMovieIdListByTheaterNumber(Integer theaterNumber) {
+        return bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber);
+    }
+
+
 }

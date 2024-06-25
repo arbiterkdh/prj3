@@ -44,4 +44,10 @@ public interface TheaterMapper {
             """)
     int deleteTheaterByNumber(Integer number);
 
+    @Select("""
+            SELECT *
+            FROM theater
+            WHERE number = #{theaterNumber}
+            """)
+    Theater selectTheaterByTheaterNumber(Integer theaterNumber);
 }

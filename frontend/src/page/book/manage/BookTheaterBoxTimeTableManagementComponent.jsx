@@ -167,7 +167,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
           <ModalOverlay />
           <ModalContent minW={"800px"} h={"600px"}>
             <ModalCloseButton />
-            <ModalHeader>
+            <ModalHeader mt={"10px"}>
               {theaterBox.theaterLocation}점 {theaterBox.boxNumber} 관 상영표
               작성
             </ModalHeader>
@@ -198,7 +198,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
                   )}
                 </BorderSelect>
                 <BorderSelect
-                  w={"130px"}
+                  w={"160px"}
                   placeholder={"날짜"}
                   value={selectedDate}
                   onChange={(e) => {
@@ -214,7 +214,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
                 <Input
                   max={"23:50"}
                   min={"08:00"}
-                  w={"150px"}
+                  w={"160px"}
                   type={"time"}
                   value={timeInput}
                   step={600}
@@ -263,7 +263,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
                 </Button>
               </Flex>
 
-              <Box mt={"20px"} fontSize={"16px"}>
+              <Box fontWeight={"600"} mx={"5px"} mt={"45px"} fontSize={"16px"}>
                 상영 테이블
               </Box>
               <Table>
@@ -282,45 +282,46 @@ export function BookTheaterBoxTimeTableManagementComponent({
                     {theaterBox.theaterBoxMovieList.map(
                       (theaterBoxMovie, index) => (
                         <Tbody key={index}>
-                          {theaterBoxMovie.bookPlaceTimeList.map(
-                            (bookPlaceTime, index) => (
-                              <Tr
-                                key={index}
-                                display={
-                                  selectedMovieId === 0
-                                    ? "block"
-                                    : selectedMovieId ===
-                                          theaterBoxMovie.movieId &&
-                                        (selectedDate === undefined ||
-                                          selectedDate === "")
+                          {theaterBoxMovie.bookPlaceTimeList &&
+                            theaterBoxMovie.bookPlaceTimeList.map(
+                              (bookPlaceTime, index) => (
+                                <Tr
+                                  key={index}
+                                  display={
+                                    selectedMovieId === 0
                                       ? "block"
                                       : selectedMovieId ===
                                             theaterBoxMovie.movieId &&
-                                          bookPlaceTime.startTime.slice(
-                                            0,
-                                            10,
-                                          ) === selectedDate
+                                          (selectedDate === undefined ||
+                                            selectedDate === "")
                                         ? "block"
-                                        : "none"
-                                }
-                              >
-                                <Td w={"280px"}>
-                                  {theaterBoxMovie.movieTitle}
-                                </Td>
-                                <Td w={"22%"}>
-                                  {bookPlaceTime.startTime.slice(0, 10)}
-                                </Td>
-                                <Td w={"24%"}>
-                                  {bookPlaceTime.startTime.slice(11, 16) +
-                                    "~" +
-                                    bookPlaceTime.endTime.slice(11, 16)}
-                                </Td>
-                                <Td>
-                                  <Button size={"xs"}>수정</Button>
-                                </Td>
-                              </Tr>
-                            ),
-                          )}
+                                        : selectedMovieId ===
+                                              theaterBoxMovie.movieId &&
+                                            bookPlaceTime.startTime.slice(
+                                              0,
+                                              10,
+                                            ) === selectedDate
+                                          ? "block"
+                                          : "none"
+                                  }
+                                >
+                                  <Td w={"280px"}>
+                                    {theaterBoxMovie.movieTitle}
+                                  </Td>
+                                  <Td w={"22%"}>
+                                    {bookPlaceTime.startTime.slice(0, 10)}
+                                  </Td>
+                                  <Td w={"24%"}>
+                                    {bookPlaceTime.startTime.slice(11, 16) +
+                                      "~" +
+                                      bookPlaceTime.endTime.slice(11, 16)}
+                                  </Td>
+                                  <Td>
+                                    <Button size={"xs"}>수정</Button>
+                                  </Td>
+                                </Tr>
+                              ),
+                            )}
                         </Tbody>
                       ),
                     )}

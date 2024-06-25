@@ -1,5 +1,6 @@
 package com.backend.domain.theater.box;
 
+import com.backend.domain.movie.Movie;
 import lombok.Data;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public class TheaterBox {
 
     // 해당 상영관에서 상영하는 영화 id 목록
     private List<Integer> movieIdList;
+
+    // 해당 상영관에서 상영 가능한 영화 목록
+    private List<Movie> movieList;
 }

@@ -92,6 +92,7 @@ export const customTheme = extendTheme({
           _focus: { border: "2px solid gray" },
           _dark: {},
         },
+        icon: {},
       },
       defaultProps: {
         variant: "custom",
