@@ -63,7 +63,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
               {movie.content}
             </p>
           </Box>
-          <Divider />
+          <Divider border={"1px solid lightgray"} />
           <Box mt={10}>
             <Flex>
               <Text mr={2}>상영타입 : </Text>
@@ -97,7 +97,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
             </Button>
           </Flex>
         )}
-        <Divider color={"#DFE5E5"} />
+        <Divider border={"1px solid lightgray"} />
         <MovieComment
           movieId={movie.id}
           isProcessing={isProcessing}

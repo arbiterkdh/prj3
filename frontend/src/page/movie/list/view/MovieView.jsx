@@ -103,9 +103,9 @@ export function MovieView() {
             <Tabs isFitted variant={"enclosed"}>
               <TabList mb="1em" borderBottom={"none"}>
                 <Tab
-                  borderBottom={"1px solid #e8eaed"}
+                  borderBottom={"1px solid lightgray"}
                   _selected={{
-                    border: "1px solid #e8eaed",
+                    border: "1px solid lightgray",
                     borderBottom: "1px solid #FEFEFE",
                   }}
                   _dark={{
@@ -119,9 +119,9 @@ export function MovieView() {
                   주요정보
                 </Tab>
                 <Tab
-                  borderBottom={"1px solid #e8eaed"}
+                  borderBottom={"1px solid lightgray"}
                   _selected={{
-                    border: "1px solid #e8eaed",
+                    border: "1px solid lightgray",
                     borderBottom: "1px solid #FEFEFE",
                   }}
                   _dark={{
@@ -143,7 +143,7 @@ export function MovieView() {
                     setIsProcessing={setIsProcessing}
                   />
                 </TabPanel>
-                <TabPanel>
+                <TabPanel mt={"-30px"}>
                   <MovieComment
                     movieId={id}
                     isProcessing={isProcessing}
