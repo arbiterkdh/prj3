@@ -70,7 +70,7 @@ export function MovieView() {
     <Center>
       <CenterBox>
         <Stack>
-          <Flex>
+          <Flex mb={"20px"}>
             <Stack justify={"space-between"}>
               <Heading mt={"20px"} fontSize={"5xl"} textAlign={"center"}>
                 {movie.title}
@@ -136,7 +136,7 @@ export function MovieView() {
                 </Tab>
               </TabList>
               <TabPanels>
-                <TabPanel mb={"-60px"}>
+                <TabPanel>
                   <MovieInfo
                     movie={movie}
                     isProcessing={isProcessing}
