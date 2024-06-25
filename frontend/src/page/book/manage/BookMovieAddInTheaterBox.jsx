@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { BookTheaterBoxTimeTableManagementComponent } from "./BookTheaterBoxTimeTableManagementComponent.jsx";
 import { BookTheaterBoxMovieManagementComponent } from "./BookTheaterBoxMovieManagementComponent.jsx";
@@ -40,6 +40,12 @@ export function BookMovieAddInTheaterBox({
   const [theaterBox, setTheaterBox] = useState([]);
 
   const [isAdding, setIsAdding] = useState(false);
+
+  useEffect(() => {
+    if (theaterNumber) {
+      handleLocationSelect();
+    }
+  }, [theaterBoxOnClose]);
 
   function handleCitySelect(city) {
     axios.get(`/api/theater/list?city=${city}`).then((res) => {

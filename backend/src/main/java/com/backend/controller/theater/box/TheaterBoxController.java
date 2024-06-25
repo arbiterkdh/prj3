@@ -3,6 +3,7 @@ package com.backend.controller.theater.box;
 import com.backend.domain.theater.box.TheaterBox;
 import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.service.book.BookService;
+import com.backend.service.theater.TheaterService;
 import com.backend.service.theater.box.TheaterBoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 public class TheaterBoxController {
 
     private final TheaterBoxService theaterBoxService;
+    private final TheaterService theaterService;
     private final BookService bookService;
 
     @PostMapping("add")
@@ -63,15 +65,11 @@ public class TheaterBoxController {
     @GetMapping("{theaterBoxId}")
     public TheaterBox getTheaterBox(@PathVariable Integer theaterBoxId) {
         TheaterBox theaterBox = theaterBoxService.getTheaterBox(theaterBoxId);
-        List<TheaterBoxMovie> theaterBoxMovieList = theaterBoxService.getTheaterBoxMovieList(theaterBoxId);
 
-        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
-            theaterBoxMovie.setBookPlaceTimeList(bookService.getAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
-        }
-
-        theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+        theaterBox.setTheaterLocation(theaterService.getTheaterByNumber(theaterBox.getTheaterNumber()).getLocation());
         theaterBox.setBookPlaceTimeLeft(bookService.checkBookPlaceTimeLeftByTheaterBoxId(theaterBoxId));
         theaterBox.setMovieIdList(bookService.getMovieIdListByTheaterBoxId(theaterBoxId));
+        theaterBox.setMovieList(theaterBoxService.getMovieListByTheaterBoxId(theaterBoxId));
 
         return theaterBox;
 

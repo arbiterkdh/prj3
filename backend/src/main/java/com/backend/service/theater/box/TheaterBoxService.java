@@ -34,7 +34,7 @@ public class TheaterBoxService {
         List<TheaterBoxMovie> theaterBoxMovieList = theaterBoxMapper.selectAllTheaterBoxMovieByTheaterBoxId(theaterBoxId);
         for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
             theaterBoxMovie.setMovieTitle(movieMapper.selectByMovieId(theaterBoxMovie.getMovieId()).getTitle());
-            // 프론트에서 출력할 때 써먹게 영화 id 로 제목 추출해서 집어넣기.
+            theaterBoxMovie.setStartDate(movieMapper.selectByMovieId(theaterBoxMovie.getMovieId()).getStartDate());
         }
 
         return theaterBoxMovieList;
@@ -42,7 +42,11 @@ public class TheaterBoxService {
 
 
     public TheaterBox getTheaterBox(Integer theaterBoxId) {
-        return theaterBoxMapper.selectTheaterBox(theaterBoxId);
+        TheaterBox theaterBox = theaterBoxMapper.selectTheaterBox(theaterBoxId);
+        List<TheaterBoxMovie> theaterBoxMovieList = bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBoxId);
+
+        theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+        return theaterBox;
     }
 
     public List<TheaterBox> getOnscreenListByDateAndTheaterNumberAndMovieId(String date, Integer theaterNumber, Integer movieId) {

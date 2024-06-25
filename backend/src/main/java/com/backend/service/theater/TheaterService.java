@@ -14,6 +14,7 @@ import java.util.List;
 public class TheaterService {
 
     private final TheaterMapper mapper;
+    private final TheaterMapper theaterMapper;
 
     public List<Theater> get(String city) {
 
@@ -38,5 +39,9 @@ public class TheaterService {
 
     public void delete(Integer number) {
         mapper.deleteTheaterByNumber(number);
+    }
+
+    public Theater getTheaterByNumber(Integer theaterNumber) {
+        return theaterMapper.selectTheaterByTheaterNumber(theaterNumber);
     }
 }

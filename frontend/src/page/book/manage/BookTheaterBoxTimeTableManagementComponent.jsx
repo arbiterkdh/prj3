@@ -282,45 +282,46 @@ export function BookTheaterBoxTimeTableManagementComponent({
                     {theaterBox.theaterBoxMovieList.map(
                       (theaterBoxMovie, index) => (
                         <Tbody key={index}>
-                          {theaterBoxMovie.bookPlaceTimeList.map(
-                            (bookPlaceTime, index) => (
-                              <Tr
-                                key={index}
-                                display={
-                                  selectedMovieId === 0
-                                    ? "block"
-                                    : selectedMovieId ===
-                                          theaterBoxMovie.movieId &&
-                                        (selectedDate === undefined ||
-                                          selectedDate === "")
+                          {theaterBoxMovie.bookPlaceTimeList &&
+                            theaterBoxMovie.bookPlaceTimeList.map(
+                              (bookPlaceTime, index) => (
+                                <Tr
+                                  key={index}
+                                  display={
+                                    selectedMovieId === 0
                                       ? "block"
                                       : selectedMovieId ===
                                             theaterBoxMovie.movieId &&
-                                          bookPlaceTime.startTime.slice(
-                                            0,
-                                            10,
-                                          ) === selectedDate
+                                          (selectedDate === undefined ||
+                                            selectedDate === "")
                                         ? "block"
-                                        : "none"
-                                }
-                              >
-                                <Td w={"280px"}>
-                                  {theaterBoxMovie.movieTitle}
-                                </Td>
-                                <Td w={"22%"}>
-                                  {bookPlaceTime.startTime.slice(0, 10)}
-                                </Td>
-                                <Td w={"24%"}>
-                                  {bookPlaceTime.startTime.slice(11, 16) +
-                                    "~" +
-                                    bookPlaceTime.endTime.slice(11, 16)}
-                                </Td>
-                                <Td>
-                                  <Button size={"xs"}>수정</Button>
-                                </Td>
-                              </Tr>
-                            ),
-                          )}
+                                        : selectedMovieId ===
+                                              theaterBoxMovie.movieId &&
+                                            bookPlaceTime.startTime.slice(
+                                              0,
+                                              10,
+                                            ) === selectedDate
+                                          ? "block"
+                                          : "none"
+                                  }
+                                >
+                                  <Td w={"280px"}>
+                                    {theaterBoxMovie.movieTitle}
+                                  </Td>
+                                  <Td w={"22%"}>
+                                    {bookPlaceTime.startTime.slice(0, 10)}
+                                  </Td>
+                                  <Td w={"24%"}>
+                                    {bookPlaceTime.startTime.slice(11, 16) +
+                                      "~" +
+                                      bookPlaceTime.endTime.slice(11, 16)}
+                                  </Td>
+                                  <Td>
+                                    <Button size={"xs"}>수정</Button>
+                                  </Td>
+                                </Tr>
+                              ),
+                            )}
                         </Tbody>
                       ),
                     )}

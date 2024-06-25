@@ -41,6 +41,7 @@ export function BookTheaterBoxMovieManagementComponent({
       console.log(theaterBox);
       axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
         setTheaterBox(res.data);
+        console.log(res.data);
       });
     }
   }, [isAdding]);
