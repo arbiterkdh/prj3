@@ -59,6 +59,7 @@ export function MovieHome() {
         _dark={{ bgColor: "blackAlpha.600" }}
       >
         <CenterBox
+          border={"none"}
           bgColor={""}
           color={"whiteAlpha.900"}
           _dark={{ color: "whiteAlpha.800" }}

@@ -13,6 +13,22 @@ export function BookTheaterLocationMovieList({
   setSelectedDay,
   theaterBoxList,
 }) {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month =
+    date.getMonth() + 1 < 10
+      ? "0" + (date.getMonth() + 1)
+      : date.getMonth() + 1;
+  const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+  const hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+  const minute =
+    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+  const second =
+    date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+  const now = new Date(
+    `${year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second}`,
+  );
+
   const [theaterBoxListFilteredByDate, setTheaterBoxListFilteredByDate] =
     useState([]);
 
@@ -62,38 +78,75 @@ export function BookTheaterLocationMovieList({
                   (theaterBoxMovie, index) => (
                     <Box key={index}>
                       {theaterBoxMovie.bookPlaceTimeList.length > 0 && (
-                        <Box>
+                        <Box
+                          display={
+                            !checkedMovieId
+                              ? "block"
+                              : theaterBoxMovie.movieId === checkedMovieId
+                                ? "block"
+                                : "none"
+                          }
+                        >
                           <Heading p={3} mt={5} mb={0}>
                             {theaterBoxMovie.movieTitle}
                           </Heading>
                           <Flex wrap={"wrap"} p={1}>
                             {theaterBoxMovie.bookPlaceTimeList.map(
                               (bookPlaceTime, index) => (
-                                <MarginBox
-                                  key={index}
-                                  bgColor={"blackAlpha.100"}
-                                  my={"6px"}
-                                  p={"7px"}
-                                  h={"60px"}
-                                  align={"center"}
-                                  alignContent={"center"}
-                                  cursor={"pointer"}
-                                  _hover={{
-                                    bgColor: "blackAlpha.300",
-                                  }}
-                                >
-                                  <Box fontSize={"xs"}>
-                                    시간:
-                                    {" " +
-                                      bookPlaceTime.startTime.slice(11, 16)}
-                                    ~{bookPlaceTime.endTime.slice(11, 16)}
-                                  </Box>
-                                  <Box fontSize={"sm"}>
-                                    좌석:
-                                    {" " + bookPlaceTime.vacancy}/
-                                    {theaterBoxFilteredByDate.capacity}
-                                  </Box>
-                                </MarginBox>
+                                <Box key={index}>
+                                  {now.getTime() <
+                                  new Date(
+                                    `${bookPlaceTime.startTime}`,
+                                  ).getTime() ? (
+                                    <MarginBox
+                                      bgColor={"blackAlpha.100"}
+                                      my={"6px"}
+                                      p={"7px"}
+                                      h={"60px"}
+                                      align={"center"}
+                                      alignContent={"center"}
+                                      cursor={"pointer"}
+                                      _hover={{
+                                        bgColor: "blackAlpha.300",
+                                      }}
+                                    >
+                                      <Box fontSize={"xs"}>
+                                        시간:
+                                        {" " +
+                                          bookPlaceTime.startTime.slice(11, 16)}
+                                        ~{bookPlaceTime.endTime.slice(11, 16)}
+                                      </Box>
+                                      <Box fontSize={"xs"}>
+                                        남은좌석:
+                                        {" " + bookPlaceTime.vacancy}/
+                                        {theaterBoxFilteredByDate.capacity}
+                                      </Box>
+                                    </MarginBox>
+                                  ) : (
+                                    <MarginBox
+                                      bgColor={"blackAlpha.100"}
+                                      opacity={"0.3"}
+                                      my={"6px"}
+                                      p={"7px"}
+                                      h={"60px"}
+                                      align={"center"}
+                                      alignContent={"center"}
+                                      cursor={"default"}
+                                    >
+                                      <Box fontSize={"xs"}>
+                                        시간:
+                                        {" " +
+                                          bookPlaceTime.startTime.slice(11, 16)}
+                                        ~{bookPlaceTime.endTime.slice(11, 16)}
+                                      </Box>
+                                      <Box fontSize={"xs"}>
+                                        남은좌석:
+                                        {" " + bookPlaceTime.vacancy}/
+                                        {theaterBoxFilteredByDate.capacity}
+                                      </Box>
+                                    </MarginBox>
+                                  )}
+                                </Box>
                               ),
                             )}
                           </Flex>
