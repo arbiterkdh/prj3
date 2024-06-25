@@ -90,7 +90,7 @@ export const customTheme = extendTheme({
           _disabled: {
             cursor: "default",
           },
-          _focus: { border: "2px solid gray" },
+          _focus: { border: "1px solid gray" },
           _dark: {},
         },
         icon: {},

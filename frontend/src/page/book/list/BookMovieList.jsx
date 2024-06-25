@@ -39,10 +39,20 @@ export function BookMovieList({
                 border={"none"}
                 value={movie.title}
                 bgColor={checkedMovieId === movie.id ? "blackAlpha.200" : ""}
+                _hover={
+                  checkedMovieId === movie.id
+                    ? {}
+                    : {
+                        bgColor: "blackAlpha.200",
+                      }
+                }
                 _dark={
                   checkedMovieId === movie.id
                     ? { bgColor: "blackAlpha.500" }
-                    : { bgColor: "blackAlpha.50" }
+                    : {
+                        bgColor: "blackAlpha.50",
+                        _hover: { bgColor: "blackAlpha.400" },
+                      }
                 }
                 isDisabled={
                   !movie.theaterNumberList.includes(checkedTheaterNumber)

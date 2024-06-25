@@ -162,8 +162,7 @@ public interface BookMapper {
     @Select("""
             SELECT COUNT(*)
             FROM book_place_time
-            WHERE theater_box_movie_id = #{theaterBoxMovieId}
-            AND start_time BETWEEN #{startTime} AND DATE_ADD(#{endTime}, INTERVAL 9 MINUTE)
+            WHERE start_time BETWEEN #{startTime} AND DATE_ADD(#{endTime}, INTERVAL 9 MINUTE)
             OR end_time BETWEEN DATE_SUB(#{startTime}, INTERVAL 9 MINUTE) AND #{endTime}
             """)
     int checkTimeConflict(Integer theaterBoxMovieId, LocalDateTime startTime, LocalDateTime endTime);

@@ -84,7 +84,11 @@ export function Book() {
     <Stack w={"100%"} h={"500px"}>
       <Flex>
         <OuterBookBox>
-          <BookBox borderTop={"none"} fontWeight={"600"}>
+          <BookBox
+            borderTop={"none"}
+            borderBottom={"1px solid"}
+            fontWeight={"600"}
+          >
             상영 도시/지점명
           </BookBox>
           <BookBox borderY={"none"}></BookBox>

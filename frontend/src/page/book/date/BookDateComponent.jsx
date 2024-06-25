@@ -118,8 +118,10 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                       selectedDay === day
                         ? {}
                         : {
-                            bgColor: "red.500",
-                            color: "whiteAlpha.900",
+                            color: "red.500",
+                            _dark: {
+                              color: "red.600",
+                            },
                           }
                     }
                   >

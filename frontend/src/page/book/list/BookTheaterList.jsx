@@ -57,6 +57,14 @@ export function BookTheaterList({
                 w={"100%"}
                 alignContent={"center"}
                 bgColor={city === isCityChecked ? "blackAlpha.200" : ""}
+                _hover={
+                  city === isCityChecked
+                    ? {}
+                    : {
+                        bgColor: "blackAlpha.300",
+                        _dark: { bgColor: "blackAlpha.400" },
+                      }
+                }
                 _dark={
                   city === isCityChecked ? { bgColor: "blackAlpha.500" } : {}
                 }
@@ -89,6 +97,16 @@ export function BookTheaterList({
               fontSize={"sm"}
               bgColor={
                 checkedTheaterNumber === theater.number ? "blackAlpha.200" : ""
+              }
+              _hover={
+                checkedTheaterNumber === theater.number
+                  ? {}
+                  : {
+                      bgColor: "blackAlpha.300",
+                      _dark: {
+                        bgColor: "blackAlpha.400",
+                      },
+                    }
               }
               _dark={
                 checkedTheaterNumber === theater.number
