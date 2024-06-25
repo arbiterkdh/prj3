@@ -144,7 +144,6 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
           )}
         </Td>
         <Td w={"10%"}>{itemQnA.regDate}</Td>
-
         <ReadQnAContentModal
           isQnAContentOpen={isQnAContentOpen}
           onQnAContentClose={onQnAContentClose}
