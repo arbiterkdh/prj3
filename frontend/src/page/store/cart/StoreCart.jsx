@@ -103,7 +103,7 @@ export function StoreCart() {
         toast({
           status: "success",
           description: "삭제 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         setProductCartList((cartList) =>
           cartList.filter((item) => item.productId !== productId),

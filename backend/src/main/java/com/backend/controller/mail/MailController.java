@@ -43,4 +43,22 @@ public class MailController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
+
+    @PostMapping("useCheck")
+    public ResponseEntity useCheckMail(@RequestBody Mail mail) {
+
+        boolean isNormalForm = mail.getAddress().matches("^[a-zA-Z0-9\\-_]+@[a-zA-Z0-9-]+\\.[a-zA-Z]+$");
+        if (!isNormalForm) {
+            System.out.println("validate error");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if (memberService.hasEmail(mail.getAddress())) {
+            System.out.println("correct");
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        }
+        // CONFLICT 는 409 번, 이미 사용중인 이메일.
+        return ResponseEntity.ok().build();
+    }
 }

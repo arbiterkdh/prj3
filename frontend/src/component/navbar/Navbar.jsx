@@ -43,6 +43,9 @@ export function Navbar() {
                     alt={"profile"}
                     src={account.picture}
                   />
+                  <CursorBox onClick={() => navigate("mypage")}>
+                    마이페이지
+                  </CursorBox>
                   <CursorBox>{account.nickName}님</CursorBox>
                   <CursorBox onClick={handleLogout}>로그아웃</CursorBox>
                 </Flex>

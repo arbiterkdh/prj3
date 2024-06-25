@@ -1,6 +1,7 @@
 package com.backend.service.member;
 
 import com.backend.domain.member.Member;
+import com.backend.domain.store.Payment;
 import com.backend.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -68,5 +69,17 @@ public class MemberService {
 
     public Member get(String nickName) {
         return mapper.selectByNickName(nickName);
+    }
+
+    public void updatePassword(Member member) {
+
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+
+        mapper.updatePassword(member);
+    }
+
+    public List<Payment> paymentResult(String nickName) {
+
+        return mapper.paymentResult(nickName);
     }
 }
