@@ -49,7 +49,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
 
   const ListQnA = ({ listQnA }) => {
     return (
-      <Box>
+      <>
         {listQnA.length > 0 ? (
           <>
             {listQnA.map((itemQnA) => (
@@ -65,37 +65,41 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
                     </Button>
                   </>
                 )}
+                {pageNumbers.map(
+                  (pageNumber) =>
+                    pageNumber !== 0 && (
+                      <Button
+                        onClick={() => setPage(pageNumber)}
+                        key={pageNumber}
+                        colorScheme={
+                          pageNumber === pageInfo.currentPage ? "blue" : "gray"
+                        }
+                      >
+                        {pageNumber}
+                      </Button>
+                    ),
+                )}
+                {pageInfo.nextPageNumber && (
+                  <>
+                    <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                      다음
+                    </Button>
+                    <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
+                      맨끝
+                    </Button>
+                  </>
+                )}
               </Td>
             </Tr>
-            {pageNumbers.map(
-              (pageNumber) =>
-                pageNumber !== 0 && (
-                  <Button
-                    onClick={() => setPage(pageNumber)}
-                    key={pageNumber}
-                    colorScheme={
-                      pageNumber === pageInfo.currentPage ? "blue" : "gray"
-                    }
-                  >
-                    {pageNumber}
-                  </Button>
-                ),
-            )}
-            {pageInfo.nextPageNumber && (
-              <>
-                <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-                  다음
-                </Button>
-                <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
-                  맨끝
-                </Button>
-              </>
-            )}
           </>
         ) : (
-          <Text>댓글이 없습니다</Text>
+          <Tr>
+            <Td colSpan={3}>
+              <Text>댓글이 없습니다</Text>
+            </Td>
+          </Tr>
         )}
-      </Box>
+      </>
     );
   };
 
@@ -155,11 +159,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
 
   return (
     <>
-      <Tr>
-        <Td colSpan={3}>
-          <ListQnA listQnA={listQnA} />
-        </Td>
-      </Tr>
+      <ListQnA listQnA={listQnA} />
       <Tr>
         <Td colSpan={3}>
           <Box w={"100%"}>
