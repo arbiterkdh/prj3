@@ -7,7 +7,12 @@ const CenterBox = (props) => {
       my={12}
       p={5}
       alignItems={"center"}
-      bgColor={"whiteAlpha.100"}
+      border={"1px solid #DFE5E5"}
+      bgColor={"whiteAlpha.900"}
+      _dark={{
+        border: "1px solid #193635",
+        bgColor: "whiteAlpha.100",
+      }}
       {...props}
     />
   );

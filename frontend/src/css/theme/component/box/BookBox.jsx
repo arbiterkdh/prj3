@@ -4,6 +4,7 @@ function BookBox(props) {
   return (
     <Box
       border={"1px solid"}
+      borderCollape={"collapse"}
       fontSize={"lg"}
       w={"100%"}
       h={"50px"}
