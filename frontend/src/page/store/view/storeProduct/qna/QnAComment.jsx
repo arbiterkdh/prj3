@@ -18,7 +18,11 @@ export function QnAComment({ idQnA, refreshQnAComment }) {
   return (
     <>
       {qnAComment.map((qnAItem, index) => (
-        <Text key={qnAItem.id} color={qnAItem.isAdmin ? "red" : "black"}>
+        <Text
+          key={qnAItem.id}
+          color={qnAItem.isAdmin ? "red" : "black"}
+          _dark={{ color: qnAItem.isAdmin ? "red" : "white" }}
+        >
           {index !== 0 && qnAItem.isAdmin && "\u00A0\u00A0"}
           {qnAItem.isAdmin
             ? `관리자: ${qnAItem.content}`

@@ -1,7 +1,6 @@
 package com.backend.service.member;
 
 import com.backend.domain.member.Member;
-import com.backend.domain.store.Payment;
 import com.backend.mapper.member.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -78,8 +77,33 @@ public class MemberService {
         mapper.updatePassword(member);
     }
 
-    public List<Payment> paymentResult(String nickName) {
+    public Map<String, Object> paymentResult(String nickName, Integer page) {
 
-        return mapper.paymentResult(nickName);
+        Integer offset = (page - 1) * 10;
+
+        Map pageInfo = new HashMap();
+
+        Integer totalCount = mapper.totalCount(nickName);
+        Integer lastPageNumber = (totalCount - 1) / 10 + 1;
+        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
+        Integer rightPageNumber = leftPageNumber + 9;
+
+        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
+
+        Integer prevPageNumber = leftPageNumber - 1;
+        Integer nextPageNumber = rightPageNumber + 1;
+
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
+        pageInfo.put("currentPageNumber", page);
+        pageInfo.put("leftPageNumber", leftPageNumber);
+        pageInfo.put("rightPageNumber", rightPageNumber);
+
+        return Map.of("paymentResult", mapper.paymentResult(nickName, offset)
+                , "pageInfo", pageInfo);
     }
 }

@@ -111,7 +111,8 @@ export function StoreList() {
           <Box w={"50%"} textAlign={"right"}>
             <Button
               onClick={() => navigate("/store/add")}
-              colorScheme={"green"}
+              bgColor={"#e73426"}
+              color={"white"}
             >
               상품등록
             </Button>

@@ -33,7 +33,9 @@ function DeleteQnAModal({ itemQnAId, listQnARefresh }) {
     <>
       <Popover>
         <PopoverTrigger>
-          <Badge colorScheme={"red"}>삭제</Badge>
+          <Badge bgColor={"#e73426"} color={"white"} cursor={"pointer"}>
+            삭제
+          </Badge>
         </PopoverTrigger>
         <PopoverContent>
           <PopoverHeader fontWeight="semibold">

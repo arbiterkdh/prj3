@@ -1,14 +1,12 @@
 package com.backend.controller.member;
 
 import com.backend.domain.member.Member;
-import com.backend.domain.store.Payment;
 import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -56,9 +54,10 @@ public class MemberController {
     }
 
     @GetMapping("mypage/paymentResult/{nickName}")
-    public List<Payment> paymentResult(@PathVariable String nickName) {
+    public Map<String, Object> paymentResult(@PathVariable String nickName, @RequestParam(value = "page", defaultValue = "1") Integer page) {
 
-        return service.paymentResult(nickName);
+        System.out.println("page = " + page);
+        return service.paymentResult(nickName, page);
     }
 
 }

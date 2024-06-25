@@ -140,6 +140,9 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     setCommentId(commentItem.id);
                     onDeleteOpen();
                   }}
+                  cursor={"pointer"}
+                  bgColor={"#e73426"}
+                  color={"white"}
                 >
                   삭제
                 </Badge>
@@ -149,6 +152,9 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     setCommentContent(commentItem.content);
                     setCommentId(commentItem.id);
                   }}
+                  cursor={"pointer"}
+                  bgColor={"green.500"}
+                  color={"white"}
                 >
                   수정
                 </Badge>
