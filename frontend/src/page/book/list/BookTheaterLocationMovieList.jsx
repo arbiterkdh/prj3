@@ -51,7 +51,8 @@ export function BookTheaterLocationMovieList({
   // 영화 시작시간 아침 9시
   // 영화 마감시간 밤 12시
 
-  function handleBookDataClick(state) {
+  function handleBookDataClick(bookPlaceTime) {
+    navigate(`/book/theaterseat`, { state: { bookPlaceTime } });
     // 예매 데이터 클릭 처리
   }
 
@@ -61,9 +62,8 @@ export function BookTheaterLocationMovieList({
         theaterBoxListFilteredByDate.map((theaterBoxFilteredByDate, index) => (
           <Box key={index}>
             {theaterBoxFilteredByDate.bookPlaceTimeLeft && (
-              <Box>
+              <Box minH={"300px"}>
                 <Box
-                  m={0}
                   color={"whiteAlpha.900"}
                   bgColor={"darkslategray"}
                   opacity={"0.9"}
@@ -94,14 +94,12 @@ export function BookTheaterLocationMovieList({
                             {theaterBoxMovie.bookPlaceTimeList.map(
                               (bookPlaceTime, index) => (
                                 <Box key={index}>
-                                  {now.getTime() <
-                                  new Date(
-                                    `${bookPlaceTime.startTime}`,
-                                  ).getTime() ? (
+                                  {now <
+                                  new Date(`${bookPlaceTime.startTime}`) ? (
                                     <MarginBox
                                       bgColor={"blackAlpha.100"}
                                       my={"6px"}
-                                      p={"7px"}
+                                      p={"5px"}
                                       h={"60px"}
                                       align={"center"}
                                       alignContent={"center"}
@@ -109,6 +107,9 @@ export function BookTheaterLocationMovieList({
                                       _hover={{
                                         bgColor: "blackAlpha.300",
                                       }}
+                                      onClick={() =>
+                                        handleBookDataClick(bookPlaceTime)
+                                      }
                                     >
                                       <Box fontSize={"xs"}>
                                         시간:
@@ -127,7 +128,7 @@ export function BookTheaterLocationMovieList({
                                       bgColor={"blackAlpha.100"}
                                       opacity={"0.3"}
                                       my={"6px"}
-                                      p={"7px"}
+                                      p={"5px"}
                                       h={"60px"}
                                       align={"center"}
                                       alignContent={"center"}

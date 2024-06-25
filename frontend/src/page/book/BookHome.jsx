@@ -41,6 +41,7 @@ export function BookHome() {
               bgColor={bookProgress === 2 ? "red.500" : ""}
               _dark={bookProgress === 2 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 2 ? "whiteAlpha.900" : ""}
+              border={bookProgress === 2 ? "none" : ""}
             >
               <LargeFontBox>02</LargeFontBox>
               <Box>인원/좌석</Box>
@@ -49,6 +50,7 @@ export function BookHome() {
               bgColor={bookProgress === 3 ? "red.500" : ""}
               _dark={bookProgress === 3 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 3 ? "whiteAlpha.900" : ""}
+              border={bookProgress === 3 ? "none" : ""}
             >
               <LargeFontBox>03</LargeFontBox>
               <Box>결제</Box>
@@ -58,6 +60,7 @@ export function BookHome() {
               bgColor={bookProgress === 4 ? "red.500" : ""}
               _dark={bookProgress === 4 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 4 ? "whiteAlpha.900" : ""}
+              border={bookProgress === 4 ? "none" : ""}
             >
               <LargeFontBox>04</LargeFontBox>
               <Box>결제완료</Box>
@@ -82,19 +85,23 @@ export function BookHome() {
             }}
           />
         </Flex>
-        <BookMovieLocationAdd
-          cityList={cityList}
-          setMovieLocationAdd={setMovieLocationAdd}
-          movieList={movieList}
-          setMovieList={setMovieList}
-          onScreenList={onScreenList}
-          willScreenList={willScreenList}
-        />
-        <BookMovieAddInTheaterBox
-          cityList={cityList}
-          onScreenList={onScreenList}
-          willScreenList={willScreenList}
-        />
+        {bookProgress === 1 && (
+          <Box>
+            <BookMovieLocationAdd
+              cityList={cityList}
+              setMovieLocationAdd={setMovieLocationAdd}
+              movieList={movieList}
+              setMovieList={setMovieList}
+              onScreenList={onScreenList}
+              willScreenList={willScreenList}
+            />
+            <BookMovieAddInTheaterBox
+              cityList={cityList}
+              onScreenList={onScreenList}
+              willScreenList={willScreenList}
+            />
+          </Box>
+        )}
       </CenterBox>
     </Center>
   );

@@ -5,6 +5,7 @@ const CenterBox = (props) => {
     <Box
       width={"1024px"}
       my={12}
+      mb={"200px"}
       p={5}
       alignItems={"center"}
       border={"1px solid #DFE5E5"}
