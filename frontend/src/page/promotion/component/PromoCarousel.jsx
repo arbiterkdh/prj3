@@ -113,11 +113,25 @@ const PromoCarousel = () => {
             )
           )}
           <Box p={2}>
-            <Flex justifyContent="space-between" alignItems="center">
-              <Text fontWeight="bold" mt={2} isTruncated>
+            <Flex alignItems="center">
+              <Text
+                fontWeight="bold"
+                isTruncated
+                maxWidth="calc(100% - 150px)"
+                display="inline-block"
+                whiteSpace="nowrap"
+                overflow="hidden"
+                textOverflow="ellipsis"
+              >
                 {promo.title}
               </Text>
-              <Text fontSize="sm" color="gray.500">
+              <Text
+                fontSize="sm"
+                color="gray.500"
+                whiteSpace="nowrap"
+                display="inline-block"
+                marginLeft="auto"
+              >
                 {formatDate(promo.eventStartDate)} ~{" "}
                 {formatDate(promo.eventEndDate)}
               </Text>
