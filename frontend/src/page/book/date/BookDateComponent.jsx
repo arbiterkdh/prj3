@@ -73,7 +73,11 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
         <Spinner />
       ) : (
         <Box>
-          <BookBox>
+          <BookBox
+            border={"none"}
+            borderLeft={"1px solid"}
+            borderBottom={"1px solid"}
+          >
             {"기준일: " +
               selectedDay.split("-")[0] +
               "년 " +
@@ -85,11 +89,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
               ")"}
           </BookBox>
 
-          <Flex
-            align={"center"}
-            borderLeft={"1px solid"}
-            borderRight={"1px solid"}
-          >
+          <Flex align={"center"} borderLeft={"1px solid"}>
             <ArrowLeftIcon onClick={handleClickLeft} cursor={"pointer"} />
             <Box
               w={"320px"}

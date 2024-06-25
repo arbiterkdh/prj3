@@ -26,12 +26,13 @@ export function BookHome() {
     <Center>
       <CenterBox>
         <Heading>빠른예매</Heading>
-        <Flex border={"1px solid"}>
+        <Flex border={"2px solid"}>
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack
               bgColor={bookProgress === 1 ? "red.500" : ""}
               _dark={bookProgress === 1 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 1 ? "whiteAlpha.900" : ""}
+              border={bookProgress === 1 ? "none" : ""}
             >
               <LargeFontBox>01</LargeFontBox>
               <Box>상영시간</Box>
@@ -53,6 +54,7 @@ export function BookHome() {
               <Box>결제</Box>
             </OuterBookStack>
             <OuterBookStack
+              borderBottom={"none"}
               bgColor={bookProgress === 4 ? "red.500" : ""}
               _dark={bookProgress === 4 ? { bgColor: "red.700" } : {}}
               color={bookProgress === 4 ? "whiteAlpha.900" : ""}

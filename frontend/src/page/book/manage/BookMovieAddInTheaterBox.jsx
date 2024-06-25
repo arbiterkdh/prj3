@@ -117,7 +117,7 @@ export function BookMovieAddInTheaterBox({
             </Table>
             <Box border={"1px solid"} h={"300px"} overflow={"scroll"}>
               <Table>
-                <Tbody bgColor={"blackAlpha.50"}>
+                <Tbody>
                   {theaterBoxList.map((box, index) => (
                     <Tr key={index}>
                       <Td w={"37%"}>

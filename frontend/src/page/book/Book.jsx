@@ -84,8 +84,8 @@ export function Book() {
     <Stack w={"100%"} h={"500px"}>
       <Flex>
         <OuterBookBox>
-          <BookBox>상영 도시/지점명</BookBox>
-          <BookBox></BookBox>
+          <BookBox borderTop={"none"}>상영 도시/지점명</BookBox>
+          <BookBox borderY={"none"}></BookBox>
           <BookTheaterList
             cityList={cityList}
             theaterNumberList={theaterNumberList}
@@ -98,20 +98,17 @@ export function Book() {
           />
         </OuterBookBox>
         <OuterBookBox>
-          <BookBox>영화 선택</BookBox>
-          <BookBox>
+          <BookBox border={"none"} borderBottom={"1px solid"}>
+            영화 선택
+          </BookBox>
+          <BookBox border={"none"}>
             <Select borderRadius={"none"}>
               <option value={"예매순"}>예매순</option>
               <option value={"관객순"}>관객순</option>
               <option value={"예정작"}>예정작</option>
             </Select>
           </BookBox>
-          <Box
-            h={"600px"}
-            overflow={"scroll"}
-            overflowX={"unset"}
-            border={"1px solid"}
-          >
+          <Box h={"600px"} overflow={"scroll"} overflowX={"unset"}>
             <BookMovieList
               checkedTheaterNumber={checkedTheaterNumber}
               movieLocationAdd={movieLocationAdd}
@@ -133,7 +130,7 @@ export function Book() {
             selectedDay={selectedDay}
             setSelectedDay={setSelectedDay}
           />
-          <Box h={"550px"} border={"1px solid"}>
+          <Box h={"550px"} borderLeft={"1px solid"} borderTop={"1px solid"}>
             <BookTheaterLocationMovieList
               checkedTheaterNumber={checkedTheaterNumber}
               onScreenList={onScreenList}

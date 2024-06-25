@@ -42,7 +42,12 @@ export function BookTheaterList({
 
   return (
     <Flex h={"100%"}>
-      <Box border={"1px solid"} w={"90%"} h={"600px"}>
+      <Box
+        borderTop={"1px solid"}
+        borderLeft={"1px solid"}
+        w={"90%"}
+        h={"600px"}
+      >
         <Stack gap={0}>
           {cityList.map((city) => (
             <Flex key={city} alignItems={"center"} gap={1}>
@@ -51,9 +56,9 @@ export function BookTheaterList({
                 h={"50px"}
                 w={"100%"}
                 alignContent={"center"}
-                bgColor={city === isCityChecked ? "blackAlpha.400" : ""}
+                bgColor={city === isCityChecked ? "blackAlpha.200" : ""}
                 _dark={
-                  city === isCityChecked ? { bgColor: "blackAlpha.800" } : {}
+                  city === isCityChecked ? { bgColor: "blackAlpha.500" } : {}
                 }
                 onClick={() => {
                   handleClick(city);
@@ -68,6 +73,7 @@ export function BookTheaterList({
       </Box>
       <Box
         border={"1px solid"}
+        borderBottom={"none"}
         w={"100%"}
         h={"600px"}
         overflow={"scroll"}
@@ -82,11 +88,11 @@ export function BookTheaterList({
               alignContent={"center"}
               fontSize={"sm"}
               bgColor={
-                checkedTheaterNumber === theater.number ? "blackAlpha.400" : ""
+                checkedTheaterNumber === theater.number ? "blackAlpha.200" : ""
               }
               _dark={
                 checkedTheaterNumber === theater.number
-                  ? { bgColor: "blackAlpha.800" }
+                  ? { bgColor: "blackAlpha.500" }
                   : {}
               }
               onClick={() => {

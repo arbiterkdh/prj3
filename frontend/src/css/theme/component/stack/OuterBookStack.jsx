@@ -5,7 +5,8 @@ const OuterBookStack = (props) => {
     <Stack
       w={"100px"}
       h={"100%"}
-      border={"1px solid"}
+      borderY={"1px solid"}
+      borderRight={"1px solid"}
       justifyContent={"center"}
       alignItems={"center"}
       {...props}

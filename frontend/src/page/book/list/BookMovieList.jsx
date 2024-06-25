@@ -38,10 +38,10 @@ export function BookMovieList({
                 cursor={"pointer"}
                 border={"none"}
                 value={movie.title}
-                bgColor={checkedMovieId === movie.id ? "blackAlpha.400" : ""}
+                bgColor={checkedMovieId === movie.id ? "blackAlpha.200" : ""}
                 _dark={
                   checkedMovieId === movie.id
-                    ? { bgColor: "blackAlpha.700" }
+                    ? { bgColor: "blackAlpha.500" }
                     : { bgColor: "blackAlpha.50" }
                 }
                 isDisabled={
