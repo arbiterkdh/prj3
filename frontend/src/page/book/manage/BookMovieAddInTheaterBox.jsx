@@ -41,11 +41,7 @@ export function BookMovieAddInTheaterBox({
 
   const [isAdding, setIsAdding] = useState(false);
 
-  useEffect(() => {
-    if (theaterNumber) {
-      handleLocationSelect();
-    }
-  }, [theaterBoxOnClose]);
+  useEffect(() => {}, [theaterBoxOnClose, isAdding]);
 
   function handleCitySelect(city) {
     axios.get(`/api/theater/list?city=${city}`).then((res) => {

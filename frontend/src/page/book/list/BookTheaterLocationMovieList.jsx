@@ -22,7 +22,9 @@ export function BookTheaterLocationMovieList({
         .get(
           `/api/theaterbox/onscreenlist?date=${selectedDay.slice(0, -2)}&theaterNumber=${checkedTheaterNumber}`,
         )
-        .then((res) => {});
+        .then((res) => {
+          console.log(res.data);
+        });
       // 체크한 날짜에 맞는 타임테이블 가져오기.
     }
   }, [checkedTheaterNumber, selectedDay]);

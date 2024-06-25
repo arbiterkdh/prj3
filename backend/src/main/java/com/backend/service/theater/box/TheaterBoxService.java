@@ -52,6 +52,7 @@ public class TheaterBoxService {
     public List<TheaterBox> getOnscreenListByDateAndTheaterNumberAndMovieId(String date, Integer theaterNumber, Integer movieId) {
         List<TheaterBox> theaterBoxList = theaterBoxMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
         LocalDate selectedDate = LocalDate.parse(date);
+        System.out.println("selectedDate = " + selectedDate);
 
         for (TheaterBox theaterBox : theaterBoxList) {
             theaterBox.setMovieIdList(bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber));

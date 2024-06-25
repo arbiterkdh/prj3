@@ -4,6 +4,7 @@ import com.backend.domain.book.MovieLocation;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.box.TheaterBox;
 import com.backend.service.book.BookService;
+import com.backend.service.theater.TheaterService;
 import com.backend.service.theater.box.TheaterBoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class BookController {
 
     private final BookService bookService;
+    private final TheaterService theaterService;
     private final TheaterBoxService theaterBoxService;
 
     @GetMapping("onscreenlist/all")
@@ -78,7 +80,9 @@ public class BookController {
         List<TheaterBox> theaterBoxList = bookService.getTheaterBox(theaterNumber);
 
         for (TheaterBox theaterBox : theaterBoxList) {
+            theaterBox.setTheaterLocation(theaterService.getTheaterByNumber(theaterBox.getTheaterNumber()).getLocation());
             theaterBox.setTheaterBoxMovieList(bookService.getTheaterBoxTimeTable(theaterBox));
+            theaterBox.setMovieIdList(bookService.getMovieIdListByTheaterBoxId(theaterBox.getId()));
             theaterBox.setMovieList(theaterBoxService.getMovieListByTheaterBoxId(theaterBox.getId()));
             // 상영 가능한 영화를 싹 끌고옴.
         }

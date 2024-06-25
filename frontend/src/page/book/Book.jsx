@@ -108,7 +108,12 @@ export function Book() {
               <option value={"예정작"}>예정작</option>
             </Select>
           </BookBox>
-          <Box h={"600px"} overflow={"scroll"} overflowX={"unset"}>
+          <Box
+            h={"600px"}
+            overflow={"scroll"}
+            overflowX={"unset"}
+            borderTop={"1px solid"}
+          >
             <BookMovieList
               checkedTheaterNumber={checkedTheaterNumber}
               movieLocationAdd={movieLocationAdd}

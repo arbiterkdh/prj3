@@ -38,10 +38,8 @@ export function BookTheaterBoxMovieManagementComponent({
 
   useEffect(() => {
     if (theaterBox.id !== undefined && isAdding) {
-      console.log(theaterBox);
       axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
         setTheaterBox(res.data);
-        console.log(res.data);
       });
     }
   }, [isAdding]);
