@@ -1,10 +1,10 @@
 import { Box, Heading, Spinner } from "@chakra-ui/react";
-import { PromoList } from "../list/PromoList.jsx";
-import ShowMoreButton from "../../../css/theme/component/button/ShowMoreButton.jsx";
+import { PromoList } from "../../list/PromoList.jsx";
+import ShowMoreButton from "../../../../css/theme/component/button/ShowMoreButton.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import PromoCarousel from "../PromoCarousel.jsx";
+import PromoCarousel from "../../component/PromoCarousel.jsx";
 
 export function PromoAll() {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export function PromoAll() {
   }
 
   const renderPromoSection = (title, eventType) => (
-    <Box>
+    <Box mb={50}>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="25px">
           {title}
@@ -60,7 +60,7 @@ export function PromoAll() {
         eventStatusList={promoList.filter(
           (promo) => promo.eventType === eventType,
         )}
-        maxItems={3}
+        maxItems={4}
         showTotalPosts={false}
         showSearch={false}
         showPagination={false}
@@ -70,8 +70,11 @@ export function PromoAll() {
 
   return (
     <Box>
+      <Box mb={50} />
       <Heading>추천 이벤트</Heading>
-      <PromoCarousel promoList={recommendedList} />
+      <Box mb={50}>
+        <PromoCarousel promoList={recommendedList} />
+      </Box>
       {renderPromoSection("영화", "movie")}
       {renderPromoSection("극장", "theater")}
       {renderPromoSection("멤버십", "membership")}

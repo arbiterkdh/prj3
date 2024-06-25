@@ -21,77 +21,67 @@ export function PromoNavbar() {
       "/promotion/theater": 2,
       "/promotion/membership": 3,
       "/promotion/discount": 4,
-    }[location.pathname] || 0;
+    }[location.pathname.split("?")[0]] || 0;
+
+  const handleTabClick = (path) => {
+    if (location.pathname !== path) {
+      navigate(path); // 기본 경로로 이동
+    } else {
+      navigate(path, { replace: true }); // 강제로 기본 경로로 이동
+    }
+  };
 
   return (
     <Center>
       <CenterBox>
-        <Heading
-          onClick={() => navigate("/promotion/all")}
-          style={{ cursor: "pointer" }}
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          mb={4}
         >
-          진행중인 이벤트
-        </Heading>
-        <Box borderBottom={"2px solid black"} />
-        <Box display="flex" justifyContent="space-between" width="100%" mb={4}>
-          <Tabs
-            variant="unstyled"
-            display="flex"
-            alignItems="center"
-            width="100%"
-            index={tabIndex}
-            onChange={(index) => {
-              const paths = [
-                "/promotion/all",
-                "/promotion/movie",
-                "/promotion/theater",
-                "/promotion/membership",
-                "/promotion/discount",
-              ];
-              navigate(paths[index]);
-            }}
+          <Heading
+            onClick={() => navigate("/promotion/all")}
+            style={{ cursor: "pointer" }}
           >
-            <TabList display="flex" alignItems="center">
-              <Tab _selected={{ color: "white", bg: "blue.500" }}>전체</Tab>
-              <Tab _selected={{ color: "white", bg: "blue.500" }}>영화</Tab>
-              <Tab _selected={{ color: "white", bg: "blue.500" }}>극장</Tab>
-              <Tab _selected={{ color: "white", bg: "blue.500" }}>멤버십</Tab>
-              <Tab _selected={{ color: "white", bg: "blue.500" }}>
-                제휴/할인
-              </Tab>
-            </TabList>
-            <Box ml="auto" display="flex" gap={2}>
-              <Button
-                bg={"green"}
-                color={"white"}
-                _hover={{ bg: "darkred" }}
-                onClick={() => navigate("/promotion/add")}
-                size="sm"
-              >
-                새글작성
-              </Button>
-              <Button
-                bg={"red"}
-                color={"white"}
-                _hover={{ bg: "darkred" }}
-                onClick={() => navigate("/promotion/eventResult")}
-                size="sm"
-              >
-                당첨자 발표
-              </Button>
-              <Button
-                bg={"red"}
-                color={"white"}
-                _hover={{ bg: "darkred" }}
-                onClick={() => navigate("/promotion/eventEnd")}
-                size="sm"
-              >
-                종료 이벤트
-              </Button>
-            </Box>
-          </Tabs>
+            진행중인 이벤트
+          </Heading>
+          <Box display="flex" gap={2}>
+            <Button
+              bg={"green"}
+              color={"white"}
+              _hover={{ bg: "darkred" }}
+              onClick={() => navigate("/promotion/add")}
+              size="sm"
+            >
+              새글작성
+            </Button>
+          </Box>
         </Box>
-        <Box borderBottom={"1px solid lightgray"} marginBottom={5} />
+        <Tabs
+          isFitted
+          variant="enclosed"
+          width="100%"
+          index={tabIndex}
+          onChange={(index) => {
+            const paths = [
+              "/promotion/all",
+              "/promotion/movie",
+              "/promotion/theater",
+              "/promotion/membership",
+              "/promotion/discount",
+            ];
+            handleTabClick(paths[index]);
+          }}
+        >
+          <TabList mb="2em">
+            <Tab>전체</Tab>
+            <Tab>영화</Tab>
+            <Tab>극장</Tab>
+            <Tab>멤버십</Tab>
+            <Tab>제휴/할인</Tab>
+          </TabList>
+        </Tabs>
         <Outlet />
       </CenterBox>
     </Center>

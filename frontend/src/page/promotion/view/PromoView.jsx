@@ -1,6 +1,8 @@
 import {
   Box,
   Button,
+  Center,
+  Flex,
   Heading,
   Image,
   Modal,
@@ -17,6 +19,8 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import PromoeventTypeLabels from "../component/PromoeventTypeLabels.jsx";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 
 export function PromoView() {
   const { promoId } = useParams();
@@ -100,7 +104,7 @@ export function PromoView() {
         position: "top",
       });
       navigate("/promotion/all");
-    } catch {
+    } catch (error) {
       toast({
         status: "error",
         description: `${promoId}번 게시물 추천 이벤트 삭제 중 오류가 발생하였습니다.`,
@@ -109,66 +113,81 @@ export function PromoView() {
     }
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString)
+      .toLocaleDateString("ko-KR", options)
+      .replace(/\.$/, "");
+  };
+
   if (!promo) {
     return <Spinner />;
   }
 
   return (
-    <Box>
-      <Heading>{promo.title}</Heading>
-      <Box>
-        <Text>
-          <strong>이벤트 타입 |</strong> {promo.eventType}
-        </Text>
-        <Text>
-          <strong>기간 |</strong>{" "}
-          {new Date(promo.eventStartDate).toLocaleDateString()} ~{" "}
-          {new Date(promo.eventEndDate).toLocaleDateString()}
-        </Text>
-        <Text>
-          <strong>이벤트 상태 |</strong> {promo.eventStatus}
-        </Text>
-      </Box>
-      <Box m={1} borderBottom={"1px solid black"} />
-      <Box mt={4}>
-        {promo.fileList?.slice(1).map((file) => (
-          <Box key={file.name}>
-            <Image src={file.src} />
+    <Center>
+      <CenterBox>
+        <Box>
+          <Heading>{promo.title}</Heading>
+          <Box>
+            <Flex justifyContent="space-between" alignItems="center" mt={4}>
+              <Text>
+                <strong>기간 |</strong> {formatDate(promo.eventStartDate)} ~{" "}
+                {formatDate(promo.eventEndDate)}
+              </Text>
+              <Text color="gray.500">
+                <PromoeventTypeLabels eventType={promo.eventType} />
+              </Text>
+            </Flex>
           </Box>
-        ))}
-      </Box>
-      <Box mt={4}>
-        <Text>{promo.content}</Text>
-      </Box>
-      <Button
-        colorScheme={"purple"}
-        onClick={() => navigate(`/promotion/modify/${promo.id}`)}
-      >
-        수정
-      </Button>
-      <Button colorScheme={"red"} onClick={onOpen}>
-        삭제
-      </Button>
-      <Button colorScheme={"blue"} onClick={handleAddRecommendation}>
-        추천 이벤트 추가
-      </Button>
-      <Button colorScheme={"yellow"} onClick={handleRemoveRecommendation}>
-        추천 이벤트 삭제
-      </Button>
+          <Box m={1} borderBottom={"1px solid black"} />
+          <Box mt={4}>
+            {promo.isRecommended === true
+              ? promo.fileList?.slice(2).map((file) => (
+                  <Box key={file.name}>
+                    <Image src={file.src} />
+                  </Box>
+                ))
+              : promo.fileList?.slice(1).map((file) => (
+                  <Box key={file.name}>
+                    <Image src={file.src} />
+                  </Box>
+                ))}
+          </Box>
+          <Box mt={4}>
+            <Text>{promo.content}</Text>
+          </Box>
+          <Button
+            colorScheme={"purple"}
+            onClick={() => navigate(`/promotion/modify/${promo.id}`)}
+          >
+            수정
+          </Button>
+          <Button colorScheme={"red"} onClick={onOpen}>
+            삭제
+          </Button>
+          <Button colorScheme={"blue"} onClick={handleAddRecommendation}>
+            추천 이벤트 추가
+          </Button>
+          <Button colorScheme={"yellow"} onClick={handleRemoveRecommendation}>
+            추천 이벤트 삭제
+          </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader></ModalHeader>
-          <ModalBody>삭제하시겠습니까?</ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>취소</Button>
-            <Button colorScheme={"red"} onClick={handleRemove}>
-              확인
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader></ModalHeader>
+              <ModalBody>삭제하시겠습니까?</ModalBody>
+              <ModalFooter>
+                <Button onClick={onClose}>취소</Button>
+                <Button colorScheme={"red"} onClick={handleRemove}>
+                  확인
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </Box>
+      </CenterBox>
+    </Center>
   );
 }

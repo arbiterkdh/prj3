@@ -28,11 +28,11 @@ import { PromoModify } from "./page/promotion/modify/PromoModify.jsx";
 import { PromoView } from "./page/promotion/view/PromoView.jsx"; // axios interceptor 설정
 import { TheaterSeatList } from "./page/book/theater/TheaterSeatList.jsx";
 import { BookHome } from "./page/book/BookHome.jsx";
-import { PromoAll } from "./page/promotion/view/PromoAll.jsx";
-import { PromoMovie } from "./page/promotion/view/PromoMovie.jsx";
-import { PromoTheater } from "./page/promotion/view/PromoTheater.jsx";
-import { PromoMembership } from "./page/promotion/view/PromoMembership.jsx";
-import { PromoDiscount } from "./page/promotion/view/PromoDiscount.jsx";
+import { PromoAll } from "./page/promotion/view/type/PromoAll.jsx";
+import { PromoMovie } from "./page/promotion/view/type/PromoMovie.jsx";
+import { PromoTheater } from "./page/promotion/view/type/PromoTheater.jsx";
+import { PromoMembership } from "./page/promotion/view/type/PromoMembership.jsx";
+import { PromoDiscount } from "./page/promotion/view/type/PromoDiscount.jsx";
 import PaymentSuccess from "./page/store/payment/PaymentSuccess.jsx";
 import { MemberMyPage } from "./member/MemberMyPage.jsx";
 import MemberUpdate from "./member/MemberUpdate.jsx";
