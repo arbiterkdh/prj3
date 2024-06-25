@@ -92,7 +92,6 @@ export function BookTheaterBoxMovieManagementComponent({
                 <BorderSelect
                   placeholder={"상영 가능 목록"}
                   w={"250px"}
-                  value={selectedMovieId}
                   onChange={(e) => {
                     let selected = e.target.value.split("\\");
                     setSelectedMovieId(selected[0]);

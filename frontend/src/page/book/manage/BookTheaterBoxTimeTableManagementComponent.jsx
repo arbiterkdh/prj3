@@ -198,7 +198,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
                   )}
                 </BorderSelect>
                 <BorderSelect
-                  w={"130px"}
+                  w={"160px"}
                   placeholder={"날짜"}
                   value={selectedDate}
                   onChange={(e) => {
@@ -214,7 +214,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
                 <Input
                   max={"23:50"}
                   min={"08:00"}
-                  w={"150px"}
+                  w={"160px"}
                   type={"time"}
                   value={timeInput}
                   step={600}
