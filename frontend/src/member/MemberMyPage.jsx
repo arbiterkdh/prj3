@@ -31,6 +31,7 @@ import axios from "axios";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
+import { useLocation } from "react-router-dom";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -46,25 +47,32 @@ export function MemberMyPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
-  useEffect(() => {
-    axios
-      .get(`/api/member/mypage/${account.nickName}`)
-      .then((res) => {
-        setMember(res.data);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, [account]);
+  const location = useLocation();
+  const { nickName } = location.state;
 
   useEffect(() => {
-    axios
-      .get(`/api/member/mypage/paymentResult/${account.nickName}`)
-      .then((res) => {
-        setPaymentResult(res.data);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, [account]);
+    if (nickName) {
+      axios
+        .get(`/api/member/mypage/${nickName}`)
+        .then((res) => {
+          setMember(res.data);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [nickName]);
+
+  useEffect(() => {
+    if (nickName) {
+      axios
+        .get(`/api/member/mypage/paymentResult/${nickName}`)
+        .then((res) => {
+          setPaymentResult(res.data);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [nickName]);
 
   function handleClick() {
     axios

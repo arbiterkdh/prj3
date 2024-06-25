@@ -43,7 +43,15 @@ export function Navbar() {
                     alt={"profile"}
                     src={account.picture}
                   />
-                  <CursorBox onClick={() => navigate("mypage")}>
+                  {/*<CursorBox onClick={() => navigate("mypage")}>*/}
+                  <CursorBox
+                    onClick={() => {
+                      navigate("mypage", {
+                        state: { nickName: account.nickName },
+                      });
+                      console.log("account.nickName:" + account.nickName);
+                    }}
+                  >
                     마이페이지
                   </CursorBox>
                   <CursorBox>{account.nickName}님</CursorBox>
