@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Flex,
   Heading,
   Image,
   Modal,
@@ -17,6 +18,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import PromoeventTypeLabels from "../component/PromoeventTypeLabels.jsx";
 
 export function PromoView() {
   const { promoId } = useParams();
@@ -109,6 +111,13 @@ export function PromoView() {
     }
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString)
+      .toLocaleDateString("ko-KR", options)
+      .replace(/\.$/, "");
+  };
+
   if (!promo) {
     return <Spinner />;
   }
@@ -117,17 +126,15 @@ export function PromoView() {
     <Box>
       <Heading>{promo.title}</Heading>
       <Box>
-        <Text>
-          <strong>이벤트 타입 |</strong> {promo.eventType}
-        </Text>
-        <Text>
-          <strong>기간 |</strong>{" "}
-          {new Date(promo.eventStartDate).toLocaleDateString()} ~{" "}
-          {new Date(promo.eventEndDate).toLocaleDateString()}
-        </Text>
-        <Text>
-          <strong>이벤트 상태 |</strong> {promo.eventStatus}
-        </Text>
+        <Flex justifyContent="space-between" alignItems="center" mt={4}>
+          <Text>
+            <strong>기간 |</strong> {formatDate(promo.eventStartDate)} ~{" "}
+            {formatDate(promo.eventEndDate)}
+          </Text>
+          <Text color="gray.500">
+            <PromoeventTypeLabels eventType={promo.eventType} />
+          </Text>
+        </Flex>
       </Box>
       <Box m={1} borderBottom={"1px solid black"} />
       <Box mt={4}>

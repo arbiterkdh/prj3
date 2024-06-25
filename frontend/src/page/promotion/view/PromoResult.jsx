@@ -25,24 +25,25 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
-import PromoPagination from "../PromoPagination.jsx";
-import PromoSearchBar from "../PromoSearchBar.jsx";
+import PromoPagination from "../component/PromoPagination.jsx";
+import PromoSearchBar from "../component/PromoSearchBar.jsx";
+import EventTypeLabel from "../component/PromoeventTypeLabels.jsx";
 
 export function PromoResult() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [eventResults, setEventResults] = useState([]);
   const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page"), 10) || 1;
+  const searchQuery = searchParams.get("search") || "";
 
   useEffect(() => {
     const fetchEventResults = async () => {
       try {
         const response = await axios.get(
-          `/api/promotion/eventResult?page=${currentPage}`,
+          `/api/promotion/eventResult?page=${currentPage}&search=${searchQuery}`,
         );
         setEventResults(response.data.results);
         setPageInfo(response.data.pageInfo);
@@ -52,7 +53,7 @@ export function PromoResult() {
     };
 
     fetchEventResults();
-  }, [currentPage]);
+  }, [currentPage, searchQuery]);
 
   const handleResultClick = (event) => {
     setSelectedEvent(event);
@@ -87,7 +88,7 @@ export function PromoResult() {
   };
 
   const handleSearch = (query) => {
-    setSearchQuery(query);
+    setSearchParams({ page: 1, search: query });
   };
 
   const filteredResults = eventResults.filter(
@@ -153,7 +154,9 @@ export function PromoResult() {
                           {index + 1}
                         </Td>
                         <Td onClick={() => handleRowClick(event.promotionId)}>
-                          <Text>{event.eventType}</Text>
+                          <Text>
+                            <EventTypeLabel eventType={event.eventType} />
+                          </Text>
                         </Td>
                         <Td onClick={() => handleRowClick(event.promotionId)}>
                           {event.eventName}
@@ -189,7 +192,9 @@ export function PromoResult() {
                     ))
                   ) : (
                     <Tr>
-                      <Td colSpan={7}>해당 당첨자 발표가 없습니다.</Td>
+                      <Td colSpan={7} textAlign="center">
+                        해당 당첨자 발표가 없습니다.
+                      </Td>
                     </Tr>
                   )}
                 </Tbody>

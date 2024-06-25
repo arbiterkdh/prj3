@@ -62,26 +62,27 @@ public class PromoService {
         Map<String, Object> pageInfo = new HashMap<>();
         Integer countAll;
         List<Promo> promos;
+        int itemsPerPage = 12; // 페이지당 아이템 수를 12로 변경
 
         if (type.equals("ended")) {
             countAll = promoMapper.countAllEnded(search);
-            promos = promoMapper.selectAllPagingEnded(calculateOffset(page), 9, search);
+            promos = promoMapper.selectAllPagingEnded(calculateOffset(page, itemsPerPage), itemsPerPage, search);
         } else if (type.equals("all")) {
             countAll = promoMapper.countAll(search);
-            promos = promoMapper.selectAllPaging(calculateOffset(page), 9, search);
+            promos = promoMapper.selectAllPaging(calculateOffset(page, itemsPerPage), itemsPerPage, search);
         } else {
             countAll = promoMapper.countAllExcludingEnded(type, search);
-            promos = promoMapper.selectAllPagingExcludingEnded(calculateOffset(page), 9, type, search);
+            promos = promoMapper.selectAllPagingExcludingEnded(calculateOffset(page, itemsPerPage), itemsPerPage, type, search);
         }
 
-        setPageInfo(pageInfo, page, countAll);
+        setPageInfo(pageInfo, page, countAll, itemsPerPage);
         setPromotionFiles(promos);
 
         return Map.of("pageInfo", pageInfo, "promotionList", promos);
     }
 
-    private void setPageInfo(Map<String, Object> pageInfo, Integer page, Integer countAll) {
-        Integer lastPageNumber = (countAll - 1) / 9 + 1;
+    private void setPageInfo(Map<String, Object> pageInfo, Integer page, Integer countAll, Integer itemsPerPage) {
+        Integer lastPageNumber = (countAll - 1) / itemsPerPage + 1;
         Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
         Integer rightPageNumber = Math.min(leftPageNumber + 9, lastPageNumber);
 
@@ -98,8 +99,8 @@ public class PromoService {
         pageInfo.put("totalItems", countAll);
     }
 
-    private Integer calculateOffset(Integer page) {
-        return (page - 1) * 9;
+    private Integer calculateOffset(Integer page, Integer itemsPerPage) {
+        return (page - 1) * itemsPerPage;
     }
 
     private void setPromotionFiles(List<Promo> promos) {

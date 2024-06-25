@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import { Box, Image } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
@@ -81,18 +81,38 @@ const PromoCarousel = () => {
     prevArrow: <SamplePrevArrow />,
   };
 
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    return new Date(dateString)
+      .toLocaleDateString("ko-KR", options)
+      .replace(/\.$/, "");
+  };
+
   return (
     <Slider {...settings}>
       {recommendedPromos.map((promo) => (
         <Box
           key={promo.id}
           onClick={() => navigate(`/promotion/view/${promo.id}`)}
+          p={2}
+          cursor="pointer"
         >
           <Image
             src={promo.fileList[0]?.src}
             alt={promo.title}
-            cursor="pointer"
+            borderRadius="md"
           />
+          <Box p={2}>
+            <Flex justifyContent="space-between" alignItems="center">
+              <Text fontWeight="bold" mt={2} isTruncated>
+                {promo.title}
+              </Text>
+              <Text fontSize="sm" color="gray.500">
+                {formatDate(promo.eventStartDate)} ~{" "}
+                {formatDate(promo.eventEndDate)}
+              </Text>
+            </Flex>
+          </Box>
         </Box>
       ))}
     </Slider>
