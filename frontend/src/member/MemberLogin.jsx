@@ -209,8 +209,9 @@ export function MemberLogin() {
                 </a>
               </ModalFooter>
             </MarginBox>
-            <MarginBox border={"1px solid"} w={"50%"} h={"95%"}>
-              <Image src={adImage} w={"100%"} h={"95%"} />
+            <MarginBox border={"1px solid"} w={"50%"} h={"444px"}>
+              {/*<MarginBox border={"1px solid"} w={"50%"} h={"95%"}>*/}
+              <Image src={adImage} w={"100%"} h={"100%"} />
               {/*<Image src="https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/movie/782/수퍼 소닉2.jpg" />*/}
               {/*<Image src="https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/movie/785/서울의봄.jpg" />*/}
             </MarginBox>
