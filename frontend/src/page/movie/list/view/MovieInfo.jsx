@@ -14,7 +14,6 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MovieComment } from "./comment/MovieComment.jsx";
@@ -57,7 +56,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
 
   return (
     <Center>
-      <CenterBox border={"0px"}>
+      <Box w={"100%"}>
         <Stack>
           <Box>
             <p style={{ whiteSpace: "pre-wrap", marginBottom: "50px" }}>
@@ -104,7 +103,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
           isProcessing={isProcessing}
           setIsProcessing={setIsProcessing}
         />
-      </CenterBox>
+      </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
