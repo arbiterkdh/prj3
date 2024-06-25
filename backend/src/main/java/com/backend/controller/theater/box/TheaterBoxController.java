@@ -36,9 +36,6 @@ public class TheaterBoxController {
             @RequestParam String date,
             @RequestParam Integer theaterNumber,
             @RequestParam(required = false) Integer movieId) {
-        System.out.println("date = " + date);
-        System.out.println("theaterNumber = " + theaterNumber);
-        System.out.println("movieId = " + movieId);
 
         return theaterBoxService.getOnscreenListByDateAndTheaterNumberAndMovieId(date, theaterNumber, movieId);
     }

@@ -84,7 +84,9 @@ export function Book() {
     <Stack w={"100%"} h={"500px"}>
       <Flex>
         <OuterBookBox>
-          <BookBox borderTop={"none"}>상영 도시/지점명</BookBox>
+          <BookBox borderTop={"none"} fontWeight={"600"}>
+            상영 도시/지점명
+          </BookBox>
           <BookBox borderY={"none"}></BookBox>
           <BookTheaterList
             cityList={cityList}
@@ -98,7 +100,11 @@ export function Book() {
           />
         </OuterBookBox>
         <OuterBookBox>
-          <BookBox border={"none"} borderBottom={"1px solid"}>
+          <BookBox
+            fontWeight={"600"}
+            border={"none"}
+            borderBottom={"1px solid"}
+          >
             영화 선택
           </BookBox>
           <BookBox border={"none"}>

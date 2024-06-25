@@ -133,9 +133,10 @@ public interface BookMapper {
             FROM book_place_time bpt
             JOIN theater_box_movie tbm ON bpt.theater_box_movie_id = tbm.id
             JOIN theater_box tb ON tbm.theater_box_id = tb.id
-            WHERE theater_box_id = #{theaterBoxId}
+            WHERE tbm.theater_box_id = #{theaterBoxId}
+            AND bpt.start_time > CURRENT_TIME()
             """)
-    boolean countAllBookPlaceTimeByTheaterBoxId(Integer theaterBoxId);
+    int countAllBookPlaceTimeByTheaterBoxId(Integer theaterBoxId);
 
     @Select("""
             SELECT tbm.movie_id

@@ -36,13 +36,7 @@ export function BookTheaterBoxMovieManagementComponent({
 
   const toast = useToast();
 
-  useEffect(() => {
-    if (theaterBox.id !== undefined && isAdding) {
-      axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
-        setTheaterBox(res.data);
-      });
-    }
-  }, [isAdding]);
+  useEffect(() => {}, [isAdding]);
 
   function handleClickAddTheaterBoxMovie() {
     setIsAdding(true);

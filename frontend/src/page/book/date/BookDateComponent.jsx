@@ -74,6 +74,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
       ) : (
         <Box>
           <BookBox
+            fontWeight={"600"}
             border={"none"}
             borderLeft={"1px solid"}
             borderBottom={"1px solid"}
@@ -89,7 +90,7 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
               ")"}
           </BookBox>
 
-          <Flex align={"center"} borderLeft={"1px solid"}>
+          <Flex align={"center"} borderLeft={"1px solid"} px={1}>
             <ArrowLeftIcon onClick={handleClickLeft} cursor={"pointer"} />
             <Box
               w={"320px"}
@@ -113,6 +114,14 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                     bgColor={selectedDay === day ? "red.500" : ""}
                     _dark={selectedDay === day ? { bgColor: "red.700" } : {}}
                     align={"center"}
+                    _hover={
+                      selectedDay === day
+                        ? {}
+                        : {
+                            bgColor: "red.500",
+                            color: "whiteAlpha.900",
+                          }
+                    }
                   >
                     <Stack w={"55px"} h={"55px"}>
                       <Box fontSize={"xx-small"} mb={"-3px"}>

@@ -105,7 +105,8 @@ public class BookService {
     }
 
     public boolean checkBookPlaceTimeLeftByTheaterBoxId(Integer theaterBoxId) {
-        return bookMapper.countAllBookPlaceTimeByTheaterBoxId(theaterBoxId);
+        boolean result = bookMapper.countAllBookPlaceTimeByTheaterBoxId(theaterBoxId) > 0;
+        return result;
     }
 
     public List<Integer> getMovieIdListByTheaterBoxId(Integer theaterBoxId) {

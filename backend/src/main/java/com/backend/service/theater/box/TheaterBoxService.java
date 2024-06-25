@@ -5,7 +5,6 @@ import com.backend.domain.theater.box.TheaterBox;
 import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
-import com.backend.mapper.theater.TheaterMapper;
 import com.backend.mapper.theater.box.TheaterBoxMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,6 @@ public class TheaterBoxService {
 
     private final TheaterBoxMapper theaterBoxMapper;
     private final MovieMapper movieMapper;
-    private final TheaterMapper theaterMapper;
     private final BookMapper bookMapper;
 
     public List<TheaterBox> getTheaterBoxList(Integer theaterNumber) {
@@ -45,6 +43,10 @@ public class TheaterBoxService {
         TheaterBox theaterBox = theaterBoxMapper.selectTheaterBox(theaterBoxId);
         List<TheaterBoxMovie> theaterBoxMovieList = bookMapper.selectTheaterBoxTimeTableByTheaterBoxId(theaterBoxId);
 
+        for (TheaterBoxMovie theaterBoxMovie : theaterBoxMovieList) {
+            theaterBoxMovie.setBookPlaceTimeList(bookMapper.selectAllBookPlaceTimeByTheaterBoxMovieId(theaterBoxMovie.getId()));
+        }
+
         theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
         return theaterBox;
     }
@@ -52,7 +54,6 @@ public class TheaterBoxService {
     public List<TheaterBox> getOnscreenListByDateAndTheaterNumberAndMovieId(String date, Integer theaterNumber, Integer movieId) {
         List<TheaterBox> theaterBoxList = theaterBoxMapper.selectAllTheaterBoxByTheaterNumber(theaterNumber);
         LocalDate selectedDate = LocalDate.parse(date);
-        System.out.println("selectedDate = " + selectedDate);
 
         for (TheaterBox theaterBox : theaterBoxList) {
             theaterBox.setMovieIdList(bookMapper.selectAllMovieIdByTheaterNumber(theaterNumber));
@@ -70,9 +71,10 @@ public class TheaterBoxService {
             }
 
             theaterBox.setTheaterBoxMovieList(theaterBoxMovieList);
+            theaterBox.setBookPlaceTimeLeft(bookMapper.countAllBookPlaceTimeByTheaterBoxId(theaterBox.getId()) > 0);
         }
 
-        return null;
+        return theaterBoxList;
     }
 
     public ResponseEntity add(TheaterBoxMovie theaterBoxMovie) {

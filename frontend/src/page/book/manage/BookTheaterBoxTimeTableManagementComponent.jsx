@@ -42,12 +42,6 @@ export function BookTheaterBoxTimeTableManagementComponent({
   const toast = useToast();
 
   useEffect(() => {
-    if (theaterBox.id !== undefined && isAdding) {
-      axios.get(`/api/theaterbox/${theaterBox.id}`).then((res) => {
-        setTheaterBox(res.data);
-      });
-    }
-
     let dateArray = [];
     if (startDateValue) {
       for (let i = 0; i < 21; i++) {
