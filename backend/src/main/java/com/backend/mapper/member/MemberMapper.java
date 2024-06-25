@@ -55,7 +55,15 @@ public interface MemberMapper {
                                                    on po.payment_id = p.id
                                      where p.buyer_name = #{nickName}
                                      group by order_date
-                                     order by order_date desc;
+                                     order by order_date desc
+                                     limit #{offset}, 10
             """)
-    List<Payment> paymentResult(String nickName);
+    List<Payment> paymentResult(String nickName, Integer offset);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM payment
+            WHERE buyer_name = #{nickName}
+            """)
+    Integer totalCount(String nickName);
 }

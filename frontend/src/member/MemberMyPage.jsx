@@ -26,12 +26,19 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
 import { useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAngleLeft,
+  faAngleRight,
+  faAnglesLeft,
+  faAnglesRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -44,8 +51,10 @@ export function MemberMyPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [paymentResult, setPaymentResult] = useState([]);
+  const [pageInfo, setPageInfo] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const [page, setPage] = useState(1);
 
   const location = useLocation();
   const { nickName } = location.state;
@@ -65,14 +74,19 @@ export function MemberMyPage() {
   useEffect(() => {
     if (nickName) {
       axios
-        .get(`/api/member/mypage/paymentResult/${nickName}`)
+        .get(`/api/member/mypage/paymentResult/${nickName}`, {
+          params: {
+            page,
+          },
+        })
         .then((res) => {
-          setPaymentResult(res.data);
+          setPaymentResult(res.data.paymentResult);
+          setPageInfo(res.data.pageInfo);
         })
         .catch(() => {})
         .finally(() => {});
     }
-  }, [nickName]);
+  }, [nickName, page]);
 
   function handleClick() {
     axios
@@ -104,6 +118,12 @@ export function MemberMyPage() {
         setAddress("");
         setIsSending(false);
       });
+  }
+
+  const pageNumbers = [];
+
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
   }
 
   return (
@@ -202,7 +222,7 @@ export function MemberMyPage() {
             </TabPanel>
             <TabPanel>예매내역</TabPanel>
             <TabPanel>
-              결제내역
+              결제내역({pageInfo.totalCount})
               <Table>
                 <Thead>
                   <Tr>
@@ -225,6 +245,53 @@ export function MemberMyPage() {
                       <Td>{resultItem.totalPrice}</Td>
                     </Tr>
                   ))}
+                  <Tr>
+                    <Td>
+                      {pageInfo.prevPageNumber && (
+                        <>
+                          <Button onClick={() => setPage(1)}>
+                            <FontAwesomeIcon icon={faAnglesLeft} />
+                          </Button>
+                          <Button
+                            onClick={() => setPage(pageInfo.prevPageNumber)}
+                          >
+                            <FontAwesomeIcon icon={faAngleLeft} />
+                          </Button>
+                        </>
+                      )}
+                      {pageNumbers.map(
+                        (pageNumber) =>
+                          pageNumber !== 0 && (
+                            <Button
+                              onClick={() => setPage(pageNumber)}
+                              key={pageNumber}
+                              colorScheme={
+                                pageNumber === pageInfo.currentPageNumber
+                                  ? "blue"
+                                  : "gray"
+                              }
+                            >
+                              {pageNumber}
+                            </Button>
+                          ),
+                      )}
+
+                      {pageInfo.nextPageNumber && (
+                        <>
+                          <Button
+                            onClick={() => setPage(pageInfo.nextPageNumber)}
+                          >
+                            <FontAwesomeIcon icon={faAngleRight} />
+                          </Button>
+                          <Button
+                            onClick={() => setPage(pageInfo.lastPageNumber)}
+                          >
+                            <FontAwesomeIcon icon={faAnglesRight} />
+                          </Button>
+                        </>
+                      )}
+                    </Td>
+                  </Tr>
                 </Tbody>
               </Table>
             </TabPanel>
