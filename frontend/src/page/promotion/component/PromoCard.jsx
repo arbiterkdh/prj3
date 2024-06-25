@@ -29,15 +29,26 @@ const PromoCard = ({ promo }) => {
       height="364px" // 고정 카드 높이
     >
       <CardBody display="flex" flexDirection="column" p={4}>
-        {promo.fileList?.length > 0 && (
+        {promo.isRecommended === true && promo.fileList?.length > 1 ? (
           <Box mb={4} height="210px" overflow="hidden" borderRadius="lg">
             <Image
-              src={promo.fileList[0].src}
+              src={promo.fileList[1].src}
               objectFit="cover"
               height="100%"
               width="100%"
             />
           </Box>
+        ) : (
+          promo.fileList?.length > 0 && (
+            <Box mb={4} height="210px" overflow="hidden" borderRadius="lg">
+              <Image
+                src={promo.fileList[0].src}
+                objectFit="cover"
+                height="100%"
+                width="100%"
+              />
+            </Box>
+          )
         )}
         <Box flex={1}>
           <Heading as="h3" size="md" mb={2} isTruncated>

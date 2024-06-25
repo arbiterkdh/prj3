@@ -97,11 +97,21 @@ const PromoCarousel = () => {
           p={2}
           cursor="pointer"
         >
-          <Image
-            src={promo.fileList[0]?.src}
-            alt={promo.title}
-            borderRadius="md"
-          />
+          {promo.isRecommended === true && promo.fileList?.length > 0 ? (
+            <Image
+              src={promo.fileList[0]?.src}
+              alt={promo.title}
+              borderRadius="md"
+            />
+          ) : (
+            promo.fileList?.length > 0 && (
+              <Image
+                src={promo.fileList[0]?.src}
+                alt={promo.title}
+                borderRadius="md"
+              />
+            )
+          )}
           <Box p={2}>
             <Flex justifyContent="space-between" alignItems="center">
               <Text fontWeight="bold" mt={2} isTruncated>
