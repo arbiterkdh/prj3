@@ -38,10 +38,13 @@ CREATE TABLE book_place_time
 );
 
 ALTER TABLE book_place_time
-    CHANGE id book_place_time_id INT;
+    MODIFY COLUMN book_place_time_id INT AUTO_INCREMENT;
 
 ALTER TABLE book_place_time
-    MODIFY COLUMN book_place_time_id INT AUTO_INCREMENT;
+    MODIFY COLUMN vacancy INT NOT NULL DEFAULT 186;
+
+UPDATE book_place_time
+SET vacancy = 186;
 
 DROP TABLE book_place_time;
 
