@@ -35,6 +35,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import HeartButton from "../../../css/theme/component/button/HeartButton.jsx";
+import TicketingButton from "../../../css/theme/component/button/TicketingButton.jsx";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -152,7 +154,13 @@ export function MovieList() {
               {/* 현재 상영작 */}
               <SimpleGrid spacing={4} templateColumns="repeat(4, 1fr)">
                 {movieList.map((movie) => (
-                  <Card key={movie.id} maxW="sm" mb={"30px"}>
+                  <Card
+                    borderRadius={"0px"}
+                    _dark={{ bgColor: "#2d4c4c" }}
+                    key={movie.id}
+                    maxW="sm"
+                    mb={"30px"}
+                  >
                     <CardBody>
                       <Center>
                         <Image
@@ -173,7 +181,7 @@ export function MovieList() {
                     <Center>
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
-                          <Button
+                          <HeartButton
                             w={"100px"}
                             leftIcon={
                               movie.movieHeart.like ? (
@@ -183,18 +191,10 @@ export function MovieList() {
                               )
                             }
                             onClick={() => handleLikeClick(movie.id)}
-                            variant="outline"
-                            colorScheme="purple"
                           >
                             {movie.movieHeart.count}
-                          </Button>
-                          <Button
-                            w={"100px"}
-                            variant="solid"
-                            colorScheme="purple"
-                          >
-                            예매
-                          </Button>
+                          </HeartButton>
+                          <TicketingButton w={"100px"}>예매</TicketingButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>
@@ -231,7 +231,13 @@ export function MovieList() {
               {/* 상영 예정작 */}
               <SimpleGrid spacing={4} templateColumns="repeat(4, 1fr)">
                 {movieList.map((movie) => (
-                  <Card key={movie.id} maxW="sm" mb={"30px"}>
+                  <Card
+                    borderRadius={"0px"}
+                    _dark={{ bgColor: "#2d4c4c" }}
+                    key={movie.id}
+                    maxW="sm"
+                    mb={"30px"}
+                  >
                     <CardBody>
                       <Center>
                         <Image
@@ -252,7 +258,7 @@ export function MovieList() {
                     <Center>
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
-                          <Button
+                          <HeartButton
                             w={"100px"}
                             leftIcon={
                               movie.movieHeart.like ? (
@@ -262,18 +268,10 @@ export function MovieList() {
                               )
                             }
                             onClick={() => handleLikeClick(movie.id)}
-                            variant="outline"
-                            colorScheme="purple"
                           >
                             {movie.movieHeart.count}
-                          </Button>
-                          <Button
-                            w={"100px"}
-                            variant="solid"
-                            colorScheme="purple"
-                          >
-                            예매
-                          </Button>
+                          </HeartButton>
+                          <TicketingButton w={"100px"}>예매</TicketingButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>

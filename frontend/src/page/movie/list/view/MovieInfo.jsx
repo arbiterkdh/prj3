@@ -57,7 +57,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
 
   return (
     <Center>
-      <CenterBox>
+      <CenterBox border={"0px"}>
         <Stack>
           <Box>
             <p style={{ whiteSpace: "pre-wrap", marginBottom: "50px" }}>
@@ -98,7 +98,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
             </Button>
           </Flex>
         )}
-        <Divider />
+        <Divider color={"#DFE5E5"} />
         <MovieComment
           movieId={movie.id}
           isProcessing={isProcessing}

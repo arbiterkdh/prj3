@@ -41,7 +41,7 @@ export function MovieCommentItem({ comment, isProcessing, setIsProcessing }) {
   }
 
   return (
-    <Box border={"1px solid black"}>
+    <Box border={"1px solid #DFE5E5"}>
       <Flex mb={1}>
         <Flex fontWeight={900}>
           <Box mr={3}>

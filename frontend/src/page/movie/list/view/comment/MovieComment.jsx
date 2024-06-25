@@ -6,7 +6,7 @@ import { MovieCommentList } from "./MovieCommentList.jsx";
 export function MovieComment({ movieId, isProcessing, setIsProcessing }) {
   return (
     <Center>
-      <CenterBox>
+      <CenterBox border={"0px"}>
         <Heading>실관람평</Heading>
         <Box>
           <MovieCommentWrite

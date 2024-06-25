@@ -36,7 +36,7 @@ export function MovieCommentWrite({ movieId, isProcessing, setIsProcessing }) {
         <Textarea
           mt={1}
           h={"100%"}
-          border={"1px solid black"}
+          border={"1px solid #DFE5E5"}
           resize={"none"}
           placeholder={
             account.isLoggedIn() ? "댓글을 작성 해보세요" : "로그인을 해주세요"

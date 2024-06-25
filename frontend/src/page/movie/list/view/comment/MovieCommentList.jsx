@@ -56,7 +56,7 @@ export function MovieCommentList({ movieId, isProcessing, setIsProcessing }) {
           setIsProcessing={setIsProcessing}
         />
       ))}
-      <Center mt={10} mb={10}>
+      <Center mt={10}>
         <Flex>
           {pageInfo.currentPageNumber > 1 && (
             <Button size={"sm"} onClick={() => setPage(1)}>

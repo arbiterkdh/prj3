@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import {
   Box,
-  Button,
   Center,
   Flex,
   Heading,
@@ -24,6 +23,8 @@ import { MovieComment } from "./comment/MovieComment.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
+import HeartButton from "../../../../css/theme/component/button/HeartButton.jsx";
+import TicketingButton from "../../../../css/theme/component/button/TicketingButton.jsx";
 
 export function MovieView() {
   const { id } = useParams();
@@ -75,7 +76,7 @@ export function MovieView() {
                 {movie.title}
               </Heading>
               <Box>
-                <Button
+                <HeartButton
                   leftIcon={
                     like.like ? (
                       <FontAwesomeIcon icon={fullHeart} />
@@ -84,15 +85,11 @@ export function MovieView() {
                     )
                   }
                   onClick={handleLikeClick}
-                  variant={"outline"}
-                  colorScheme={"purple"}
                   w={"200px"}
                 >
                   {like.count}
-                </Button>
-                <Button variant={"solid"} colorScheme={"purple"} w={"200px"}>
-                  예매
-                </Button>
+                </HeartButton>
+                <TicketingButton w={"200px"}>예매</TicketingButton>
               </Box>
             </Stack>
             <Spacer />
@@ -103,13 +100,29 @@ export function MovieView() {
             </Box>
           </Flex>
           <Box>
-            <Tabs isFitted variant="enclosed">
-              <TabList mb="1em">
-                <Tab>주요정보</Tab>
-                <Tab>실관람평</Tab>
+            <Tabs isFitted variant={"enclosed"}>
+              <TabList mb="1em" borderBottom={"none"}>
+                <Tab
+                  borderBottom={"1px solid #e8eaed"}
+                  _selected={{
+                    border: "1px solid #e8eaed",
+                    borderBottom: "none",
+                  }}
+                >
+                  주요정보
+                </Tab>
+                <Tab
+                  borderBottom={"1px solid #e8eaed"}
+                  _selected={{
+                    border: "1px solid #e8eaed",
+                    borderBottom: "none",
+                  }}
+                >
+                  실관람평
+                </Tab>
               </TabList>
               <TabPanels>
-                <TabPanel>
+                <TabPanel mb={"-60px"}>
                   <MovieInfo
                     movie={movie}
                     isProcessing={isProcessing}
