@@ -284,14 +284,10 @@ export function BookTheaterBoxTimeTableManagementComponent({
                                   display={
                                     selectedMovieId === 0
                                       ? "block"
-                                      : selectedMovieId ===
-                                            theaterBoxMovie.movieId &&
-                                          (selectedDate === undefined ||
-                                            selectedDate === "")
+                                      : selectedDate === undefined ||
+                                          selectedDate === ""
                                         ? "block"
-                                        : selectedMovieId ===
-                                              theaterBoxMovie.movieId &&
-                                            bookPlaceTime.startTime.slice(
+                                        : bookPlaceTime.startTime.slice(
                                               0,
                                               10,
                                             ) === selectedDate

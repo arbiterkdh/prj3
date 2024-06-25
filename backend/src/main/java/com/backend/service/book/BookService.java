@@ -8,6 +8,7 @@ import com.backend.domain.theater.box.TheaterBoxMovie;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.theater.TheaterMapper;
+import com.backend.mapper.theater.box.TheaterBoxMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final MovieMapper movieMapper;
     private final TheaterMapper theaterMapper;
+    private final TheaterBoxMapper theaterBoxMapper;
 
     public List<Movie> getMovieList() {
         return movieMapper.selectAllMovie();
@@ -123,8 +125,10 @@ public class BookService {
         Integer runningTime = movieMapper.selectByMovieId(movieId).getRunningTime();
         LocalDateTime startTime = LocalDateTime.parse((String) requestBody.get("startTime"), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm"));
         LocalDateTime endTime = startTime.plusMinutes((int) (Math.ceil(((double) runningTime) / 10) * 10 + 10));
-        // 추가하기 전 시갑 겹치는 것 체크
-        int count = bookMapper.checkTimeConflict(theaterBoxMovieId, startTime, endTime);
+        // 추가하기 전 시간 겹치는 것 체크
+        TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(theaterBoxMovieId);
+
+        int count = bookMapper.checkTimeConflict(theaterBox.getId(), startTime, endTime);
         if (count > 0) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }

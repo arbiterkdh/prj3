@@ -13,6 +13,13 @@ const CenterBox = (props) => {
         border: "1px solid #193635",
         bgColor: "whiteAlpha.100",
       }}
+      boxShadow="
+        0 12px 24px rgba(0, 0, 0, 0.03),
+        0 -12px 24px rgba(0, 0, 0, 0.03),
+        12px 0 24px rgba(0, 0, 0, 0.03),
+        -12px 0 24px rgba(0, 0, 0, 0.03),
+        0 0 10px rgba(0, 0, 0, 0.03)
+      "
       {...props}
     />
   );

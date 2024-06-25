@@ -57,4 +57,11 @@ public interface TheaterBoxMapper {
             WHERE tb.id = #{theaterBoxId}
             """)
     List<Movie> selectAllMovieByTheaterBoxId(Integer theaterBoxId);
+
+    @Select("""
+            SELECT tb.id, tb.box_number, tb.theater_number, tb.capacity
+            FROM theater_box tb JOIN theater_box_movie tbm ON tb.id = tbm.theater_box_id
+            WHERE tbm.id = #{theaterBoxMovieId}
+            """)
+    TheaterBox selectTheaterBoxByTheaterBoxMovieId(Integer theaterBoxMovieId);
 }

@@ -161,11 +161,13 @@ public interface BookMapper {
 
     @Select("""
             SELECT COUNT(*)
-            FROM book_place_time
-            WHERE start_time BETWEEN #{startTime} AND DATE_ADD(#{endTime}, INTERVAL 9 MINUTE)
-            OR end_time BETWEEN DATE_SUB(#{startTime}, INTERVAL 9 MINUTE) AND #{endTime}
+            FROM book_place_time bpt JOIN theater_box_movie tbm ON bpt.theater_box_movie_id = tbm.id
+                                     JOIN theater_box t ON tbm.theater_box_id = t.id
+            WHERE t.id = #{theaterBoxId}
+            AND (start_time BETWEEN #{startTime} AND DATE_ADD(#{endTime}, INTERVAL 9 MINUTE)
+            OR end_time BETWEEN DATE_SUB(#{startTime}, INTERVAL 9 MINUTE) AND #{endTime})
             """)
-    int checkTimeConflict(Integer theaterBoxMovieId, LocalDateTime startTime, LocalDateTime endTime);
+    int checkTimeConflict(Integer theaterBoxId, LocalDateTime startTime, LocalDateTime endTime);
 
     @Select("""
             SELECT *
