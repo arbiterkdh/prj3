@@ -58,7 +58,12 @@ function ModifyQnAModal({
         closeOnBlur={false}
       >
         <PopoverTrigger>
-          <Badge variant="outline" colorScheme="green">
+          <Badge
+            variant="outline"
+            bgColor={"green.500"}
+            color={"white"}
+            cursor={"pointer"}
+          >
             수정
           </Badge>
         </PopoverTrigger>
