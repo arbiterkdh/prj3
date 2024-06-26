@@ -39,7 +39,6 @@ export function TheaterSeatList() {
       }
     }
   }
-  console.log(seatList);
 
   useEffect(() => {
     setBookProgress(2);
@@ -47,6 +46,7 @@ export function TheaterSeatList() {
   }, []);
 
   function handleSeatClick(alphabet, number) {
+    console.log(alphabet, number);
     let seatNumber = number;
     if (alphabet === "A") {
       if (number > 13) {
@@ -171,23 +171,38 @@ export function TheaterSeatList() {
           zIndex={2}
         >
           <Box h={"368px"} color={"blackAlpha.600"}>
-            <Box pt={"55px"} w={"500px"} h={"280px"}>
+            <Flex pt={"55px"} w={"530px"} h={"280px"}>
               <Stack align={"center"}>
                 {seatList.map((row, index) => (
                   <Flex key={index}>
+                    {row.alphabet === "D" && (
+                      <Flex>
+                        <Box h={"30px"} />
+                      </Flex>
+                    )}
                     {row.seat.map((col, index) => (
                       <Box key={index}>
                         {index === 0 && row.alphabet === "A" ? (
                           <Flex>
                             <EmptySeatBox />
                             <EmptySeatBox>
-                              <FontAwesomeIcon icon={faCouch} />
+                              <FontAwesomeIcon
+                                onClick={() =>
+                                  handleSeatClick(row.alphabet, col)
+                                }
+                                icon={faCouch}
+                              />
                             </EmptySeatBox>
                           </Flex>
                         ) : index === 17 && row.alphabet === "A" ? (
                           <Flex>
                             <EmptySeatBox>
-                              <FontAwesomeIcon icon={faCouch} />
+                              <FontAwesomeIcon
+                                onClick={() =>
+                                  handleSeatClick(row.alphabet, col)
+                                }
+                                icon={faCouch}
+                              />
                             </EmptySeatBox>
                             <EmptySeatBox />
                           </Flex>
@@ -196,7 +211,12 @@ export function TheaterSeatList() {
                           <Flex>
                             <EmptySeatBox />
                             <EmptySeatBox>
-                              <FontAwesomeIcon icon={faCouch} />
+                              <FontAwesomeIcon
+                                onClick={() =>
+                                  handleSeatClick(row.alphabet, col)
+                                }
+                                icon={faCouch}
+                              />
                             </EmptySeatBox>
                           </Flex>
                         ) : index > 3 && index < 14 && row.alphabet === "J" ? (
@@ -208,7 +228,12 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox />
                             <EmptySeatBox>
-                              <FontAwesomeIcon icon={faCouch} />
+                              <FontAwesomeIcon
+                                onClick={() =>
+                                  handleSeatClick(row.alphabet, col)
+                                }
+                                icon={faCouch}
+                              />
                             </EmptySeatBox>
                           </Flex>
                         ) : (index === 6 || index === 15) &&
@@ -217,7 +242,10 @@ export function TheaterSeatList() {
                           <EmptySeatBox />
                         ) : (
                           <EmptySeatBox>
-                            <FontAwesomeIcon icon={faCouch} />
+                            <FontAwesomeIcon
+                              onClick={() => handleSeatClick(row.alphabet, col)}
+                              icon={faCouch}
+                            />
                           </EmptySeatBox>
                         )}
                       </Box>
@@ -225,7 +253,7 @@ export function TheaterSeatList() {
                   </Flex>
                 ))}
               </Stack>
-            </Box>
+            </Flex>
           </Box>
         </Box>
       </BorderBox>
