@@ -21,7 +21,9 @@ function AddCartModal({
   price,
   quantity,
   name,
+  setCartCount,
 }) {
+  console.log("eeeeee:" + setCartCount);
   const toast = useToast();
   const Login = useContext(LoginContext);
   function handleCartAdd(productId) {
@@ -41,6 +43,15 @@ function AddCartModal({
           description: "장바구니 담기 완료",
           position: "bottom",
         });
+        if (Login.id) {
+          axios
+            .get(`/api/store/cart/totalCount/${Login.id}`)
+            .then((res) => {
+              setCartCount(res.data);
+            })
+            .catch(() => {})
+            .finally(() => {});
+        }
       })
       .catch(() => {})
       .finally(() => {

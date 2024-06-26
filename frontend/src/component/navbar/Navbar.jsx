@@ -1,17 +1,9 @@
-import {
-  Box,
-  Center,
-  Flex,
-  Heading,
-  Image,
-  Text,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Image, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../../member/MemberLogin.jsx";
 import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../LoginProvider.jsx";
 import { MovieDrawer } from "./drawer/MovieDrawer.jsx";
 import { BookDrawer } from "./drawer/BookDrawer.jsx";
@@ -20,12 +12,15 @@ import { PromoDrawer } from "./drawer/PromoDrawer.jsx";
 import NavBox from "../../css/theme/component/box/NavBox.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import AddCartModal from "../../page/store/storeList/cart/AddCartModal.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
   const navigate = useNavigate();
   const toast = useToast();
   const [drawer, setDrawer] = useState(0);
+  const [cartCount, setCartCount] = useState(null);
 
   function handleLogout() {
     account.logout();
@@ -37,12 +32,25 @@ export function Navbar() {
     });
   }
 
+  useEffect(() => {
+    if (account.id) {
+      axios
+        .get(`/api/store/cart/totalCount/${account.id}`)
+        .then((res) => {
+          setCartCount(res.data);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [account, cartCount]);
+
   return (
     <Box _dark={{ bgColor: "#002827" }} bgColor={"whiteAlpha.900"}>
       <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
             <CursorBox>고객센터</CursorBox>
+            <AddCartModal setCartCount={setCartCount} />
             <GapFlex>
               {account.isLoggedIn() && (
                 <Flex>
@@ -53,20 +61,14 @@ export function Navbar() {
                     alt={"profile"}
                     src={account.picture}
                   />
-                  {/*<CursorBox onClick={() => navigate("mypage")}>*/}
                   <CursorBox>
-                    <Text
-                      // color={"red"}
-                      // bgColor={"white"}
-                      // _dark={{ bgColor: "#2d4c4c", color: "white" }}
+                    <FontAwesomeIcon
+                      icon={faCartShopping}
+                      fontSize={"1.2rem"}
+                      cursor={"pointer"}
                       onClick={() => navigate("/store/cart")}
-                    >
-                      <FontAwesomeIcon
-                        icon={faCartShopping}
-                        fontSize={"1.2rem"}
-                        cursor={"pointer"}
-                      />
-                    </Text>
+                    />
+                    {cartCount}
                   </CursorBox>
                   <CursorBox
                     onClick={() => {

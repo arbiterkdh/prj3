@@ -43,8 +43,12 @@ public class CartController {
         service.modifyQuantity(productCart);
     }
 
-    @GetMapping("/totalCount")
-    public int totalCount(@RequestParam("memberNumber") Integer memberNumber) {
+    @GetMapping("/totalCount/{memberNumber}")
+    public int totalCount(@PathVariable Integer memberNumber) {
+
+        System.out.println("memberNumber = " + memberNumber);
+
+        System.out.println("총 개수:" + service.totalCount(memberNumber));
 
         return service.totalCount(memberNumber);
     }
