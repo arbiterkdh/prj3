@@ -188,6 +188,12 @@ public class PromoService {
         return promos;
     }
 
+    public List<Promo> getPromotionsWithVisibleApplyButton() {
+        List<Promo> promos = promoMapper.selectPromotionsWithVisibleApplyButton();
+        setPromotionFiles(promos);
+        return promos;
+    }
+
     public void addRecommendation(Integer id) {
         Promo promo = promoMapper.selectById(id);
         if (promo.getIsRecommended()) {
@@ -200,4 +206,9 @@ public class PromoService {
     public void removeRecommendation(Integer id) {
         promoMapper.updateRecommendation(id, false);
     }
+
+    public void updateApplyButtonVisibility(Integer id, boolean isApplyButtonVisible) {
+        promoMapper.updateApplyButtonVisibility(id, isApplyButtonVisible);
+    }
+
 }

@@ -49,6 +49,7 @@ export function PromoModify() {
         eventStartDate: promo.eventStartDate,
         eventEndDate: promo.eventEndDate,
         content: promo.content,
+        isApplyButtonVisible: promo.isApplyButtonVisible,
         removeFileList,
         addFileList,
       })
@@ -221,10 +222,21 @@ export function PromoModify() {
               placeholder="설명을 입력하세요."
             />
           </FormControl>
-          <Button colorScheme="teal" onClick={onOpen}>
-            저장
-          </Button>
         </Box>
+        <Box>
+          <FormControl display="flex" alignItems="center" mt={4}>
+            <FormLabel mb="0">응모하기 버튼 활성화</FormLabel>
+            <Switch
+              isChecked={promo.isApplyButtonVisible}
+              onChange={(e) =>
+                setPromo({ ...promo, isApplyButtonVisible: e.target.checked })
+              }
+            />
+          </FormControl>
+        </Box>
+        <Button colorScheme="teal" onClick={onOpen}>
+          저장
+        </Button>
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>

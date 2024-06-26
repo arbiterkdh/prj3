@@ -1,54 +1,49 @@
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
-const SampleNextArrow = ({ className, style, onClick }) => {
+const SampleNextArrow = ({ onClick }) => {
   return (
-    <div
-      className={className}
-      style={{
-        ...style,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "gray",
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
-        cursor: "pointer",
-        zIndex: 1,
-      }}
+    <IconButton
+      icon={<FontAwesomeIcon icon={faChevronRight} />}
       onClick={onClick}
-    >
-      <i className="fas fa-chevron-right" style={{ color: "white" }}></i>
-    </div>
+      position="absolute"
+      top="40%"
+      right="0"
+      transform="translateY(-50%)"
+      backgroundColor="gray.300"
+      borderRadius="40%"
+      _hover={{ backgroundColor: "gray.400" }}
+      _active={{ backgroundColor: "gray.500" }}
+      zIndex={1}
+    />
   );
 };
 
-const SamplePrevArrow = ({ className, style, onClick }) => {
+const SamplePrevArrow = ({ onClick }) => {
   return (
-    <div
-      className={className}
-      style={{
-        ...style,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "gray",
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
-        cursor: "pointer",
-        zIndex: 1,
-      }}
+    <IconButton
+      icon={<FontAwesomeIcon icon={faChevronLeft} />}
       onClick={onClick}
-    >
-      <i className="fas fa-chevron-left" style={{ color: "white" }}></i>
-    </div>
+      position="absolute"
+      top="40%"
+      left="0"
+      transform="translateY(-50%)"
+      backgroundColor="gray.300"
+      borderRadius="40%"
+      _hover={{ backgroundColor: "gray.400" }}
+      _active={{ backgroundColor: "gray.500" }}
+      zIndex={1}
+    />
   );
 };
 
@@ -97,20 +92,12 @@ const PromoCarousel = () => {
           p={2}
           cursor="pointer"
         >
-          {promo.isRecommended === true && promo.fileList?.length > 0 ? (
+          {promo.fileList?.length > 0 && (
             <Image
-              src={promo.fileList[0]?.src}
+              src={promo.fileList[0].src}
               alt={promo.title}
               borderRadius="md"
             />
-          ) : (
-            promo.fileList?.length > 0 && (
-              <Image
-                src={promo.fileList[0]?.src}
-                alt={promo.title}
-                borderRadius="md"
-              />
-            )
           )}
           <Box p={2}>
             <Flex alignItems="center">

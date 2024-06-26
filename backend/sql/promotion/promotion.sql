@@ -10,7 +10,14 @@ CREATE TABLE promo
     content        VARCHAR(1000) NULL
 );
 ALTER TABLE promo
-    ADD COLUMN isRecommended BOOLEAN DEFAULT FALSE;
+    ADD COLUMN isRecommended BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE promo
+    ADD COLUMN isApplyButtonVisible BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE promo
+    DROP COLUMN isRecommended,
+    DROP COLUMN isApplyButtonVisible;
+
 
 CREATE TABLE promo_file
 (

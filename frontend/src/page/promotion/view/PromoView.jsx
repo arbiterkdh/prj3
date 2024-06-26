@@ -157,6 +157,13 @@ export function PromoView() {
           <Box mt={4}>
             <Text>{promo.content}</Text>
           </Box>
+          {promo.isApplyButtonVisible && (
+            <Center mt={20}>
+              <Button size="lg" colorScheme="blue">
+                응모하기
+              </Button>
+            </Center>
+          )}
           <Button
             colorScheme={"purple"}
             onClick={() => navigate(`/promotion/modify/${promo.id}`)}

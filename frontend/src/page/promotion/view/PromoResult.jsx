@@ -119,15 +119,23 @@ export function PromoResult() {
               당첨자 발표 추가
             </Button>
           </Flex>
-          <Box mb={5}>
-            <Text>
-              -응모하신 이벤트의 당첨 여부는 나의 응모결과 확인을 통해 확인하실
-              수 있습니다.
-            </Text>
-            <Text>
-              -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
-              발표내역을 확인할 수 있습니다.
-            </Text>
+          <Box>
+            <Flex alignItems="center">
+              <Box mb={5}>
+                <Text>
+                  -응모하신 이벤트의 당첨 여부는 나의 응모결과 확인을 통해
+                  확인하실 수 있습니다.
+                </Text>
+                <Text>
+                  -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
+                  발표내역을 확인할 수 있습니다.
+                </Text>
+              </Box>
+              <Spacer />
+              <Button size="sm" bg="gray.300">
+                나의 응모결과 확인
+              </Button>
+            </Flex>
           </Box>
           <Box borderBottom={"2px solid black"} />
           <Flex>

@@ -81,7 +81,7 @@ export function PromoAll() {
 
   return (
     <Box>
-      <Box mb={50} />
+      <Box mb={20} />
       <Heading>추천 이벤트</Heading>
       <Box mb={50}>
         <PromoCarousel promoList={recommendedList} />

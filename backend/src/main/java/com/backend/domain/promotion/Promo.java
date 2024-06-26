@@ -16,4 +16,5 @@ public class Promo {
     private Boolean isRecommended;
     private List<PromoFile> fileList;
     private String eventStatus;
+    private Boolean isApplyButtonVisible;
 }
