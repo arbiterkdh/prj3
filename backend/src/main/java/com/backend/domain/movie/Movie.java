@@ -16,6 +16,8 @@ public class Movie {
     private LocalDate startDate;
     private String director;
     private String actors;
+    private String alphabet;
+    private String number;
     private List<String> type;
     private String movieImageFile;
     private MovieHeart movieHeart;

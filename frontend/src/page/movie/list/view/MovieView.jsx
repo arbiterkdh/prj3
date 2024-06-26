@@ -35,6 +35,11 @@ export function MovieView() {
     count: 0,
   });
   const toast = useToast();
+  const [posterUrl, setPosterUrl] = useState("");
+
+  const kmdbKey = import.meta.env.VITE_KMDb_APP_KEY;
+  const kmdbUrl =
+    "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y";
 
   useEffect(() => {
     axios
@@ -42,6 +47,11 @@ export function MovieView() {
       .then((res) => {
         setMovie(res.data.movie);
         setLike(res.data.like);
+        axios
+          .get(
+            `${kmdbUrl}&movieId=${res.data.movie.alphabet}&movieSeq=${res.data.movie.number}&ServiceKey=${kmdbKey}`,
+          )
+          .then((res) => setPosterUrl(res.data.Data[0].Result[0].posters));
       })
       .catch(() => {})
       .finally(() => {});
@@ -70,13 +80,60 @@ export function MovieView() {
     <Center>
       <CenterBox>
         <Stack>
-          <Flex mb={"20px"}>
+          <Flex position="relative" mb={"20px"} overflow={"hidden"}>
+            <Box
+              position="absolute"
+              top="0"
+              right="0"
+              bottom="0"
+              left="0"
+              //     style={{
+              //       backgroundImage: `linear-gradient(
+              //     to right,
+              //      rgba(0, 0, 0, 1.0) 0%,
+              //      rgba(0, 0, 0, 0.8) 10%,
+              //      rgba(0, 0, 0, 0.6) 20%,
+              //      rgba(0, 0, 0, 0.4) 30%,
+              //      rgba(0, 0, 0, 0.2) 40%,
+              //      rgba(0, 0, 0, 0) 50%,
+              //      rgba(0, 0, 0, 0.2) 60%,
+              //      rgba(0, 0, 0, 0.4) 70%,
+              //      rgba(0, 0, 0, 0.6) 80%,
+              //      rgba(0, 0, 0, 0.8) 90%,
+              //      rgba(0, 0, 0, 1.0) 100%,
+              // ), url(${posterUrl})`,
+              //     }}
+              //     backgroundImage={`linear-gradient(
+              //     to right,
+              //      rgba(0, 0, 0, 1.0) 0%,
+              //      rgba(0, 0, 0, 0.8) 10%,
+              //      rgba(0, 0, 0, 0.6) 20%,
+              //      rgba(0, 0, 0, 0.4) 30%,
+              //      rgba(0, 0, 0, 0.2) 40%,
+              //      rgba(0, 0, 0, 0) 50%,
+              //      rgba(0, 0, 0, 0.2) 60%,
+              //      rgba(0, 0, 0, 0.4) 70%,
+              //      rgba(0, 0, 0, 0.6) 80%,
+              //      rgba(0, 0, 0, 0.8) 90%,
+              //      rgba(0, 0, 0, 1.0) 100%,
+              // ), url(${posterUrl})`}
+              backgroundRepeat="no-repeat"
+              backgroundPosition="center"
+              backgroundSize="70%"
+              zIndex="1"
+            ></Box>
             <Stack justify={"space-between"}>
-              <Heading mt={"20px"} fontSize={"5xl"} textAlign={"center"}>
+              <Heading
+                zIndex={"10"}
+                mt={"20px"}
+                fontSize={"5xl"}
+                textAlign={"center"}
+              >
                 {movie.title}
               </Heading>
               <Box>
                 <HeartButton
+                  zIndex={"10"}
                   leftIcon={
                     like.like ? (
                       <FontAwesomeIcon icon={fullHeart} />
@@ -89,13 +146,21 @@ export function MovieView() {
                 >
                   {like.count}
                 </HeartButton>
-                <TicketingButton w={"200px"}>예매</TicketingButton>
+                <TicketingButton zIndex={"10"} w={"200px"}>
+                  예매
+                </TicketingButton>
               </Box>
             </Stack>
             <Spacer />
             <Box mb={10}>
               <Center>
-                <Image mb={"-30px"} w={"300px"} src={movie.movieImageFile} />
+                <Image
+                  zIndex={"10"}
+                  mb={"-30px"}
+                  w={"300px"}
+                  src={movie.movieImageFile}
+                />
+                {/*movie.movieImageFile*/}
               </Center>
             </Box>
           </Flex>

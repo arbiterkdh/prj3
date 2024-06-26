@@ -13,6 +13,13 @@ CREATE TABLE movie
     actors       VARCHAR(50)   NOT NULL
 );
 
+DESC movie;
+
+ALTER TABLE movie
+    ADD COLUMN alphabet VARCHAR(10);
+ALTER TABLE movie
+    ADD COLUMN number VARCHAR(10);
+
 ALTER TABLE movie
     MODIFY rating VARCHAR(20) NOT NULL;
 
