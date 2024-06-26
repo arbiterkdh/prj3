@@ -42,6 +42,11 @@ CREATE TABLE theater_box
     theater_number INT REFERENCES theater (number),
     capacity       INT NOT NULL DEFAULT 176
 );
+ALTER TABLE theater_box
+    MODIFY COLUMN capacity INT NOT NULL DEFAULT 186;
+
+UPDATE theater_box
+SET capacity = 186;
 
 SELECT *
 FROM theater_box;

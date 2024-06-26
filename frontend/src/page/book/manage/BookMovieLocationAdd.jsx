@@ -43,6 +43,11 @@ export function BookMovieLocationAdd({
       })
       .then((res) => {
         setMovieLocationAdd(res.data);
+        toast({
+          status: "success",
+          description: "추가되었습니다.",
+          position: "bottom-right",
+        });
       })
       .catch((err) => {
         if (err.response.status === 409) {

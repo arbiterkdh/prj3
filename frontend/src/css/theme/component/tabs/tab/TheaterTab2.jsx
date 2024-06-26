@@ -8,14 +8,16 @@ const TheaterTab2 = (props) => {
       _selected={{
         color: "darkslategray",
         fontWeight: "bold",
+        bgColor: "whiteAlpha.900",
         border: "1px solid lightgray",
-        borderBottom: "1px solid #F2F5F5",
+        borderBottom: "1px solid white",
       }}
       _dark={{
         _selected: {
           color: "white",
           border: "1px solid lightgray",
-          borderBottom: "1px solid #112325",
+          bgColor: "#1F3032",
+          borderBottom: "1px solid #1F3032",
         },
       }}
       {...props}
