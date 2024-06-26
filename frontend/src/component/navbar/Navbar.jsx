@@ -13,13 +13,14 @@ import NavBox from "../../css/theme/component/box/NavBox.jsx";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { CartContext } from "../CartProvider.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
+  const { cartCount, setCartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const toast = useToast();
   const [drawer, setDrawer] = useState(0);
-  const [cartCount, setCartCount] = useState(0);
 
   function handleLogout() {
     account.logout();
@@ -41,7 +42,7 @@ export function Navbar() {
         .catch(() => {})
         .finally(() => {});
     }
-  }, [account, cartCount]);
+  }, [account, setCartCount]);
 
   return (
     <Box _dark={{ bgColor: "#002827" }} bgColor={"whiteAlpha.900"}>

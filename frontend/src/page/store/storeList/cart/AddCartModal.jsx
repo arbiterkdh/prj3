@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import { CartContext } from "../../../../component/CartProvider.jsx";
 
 function AddCartModal({
   isCartOpen,
@@ -24,6 +25,8 @@ function AddCartModal({
 }) {
   const toast = useToast();
   const Login = useContext(LoginContext);
+
+  const { setCartCount } = useContext(CartContext);
   function handleCartAdd(productId) {
     console.log("fileName:" + fileName);
     axios
@@ -41,6 +44,15 @@ function AddCartModal({
           description: "장바구니 담기 완료",
           position: "bottom",
         });
+        if (Login.id) {
+          axios
+            .get(`/api/store/cart/totalCount/${Login.id}`)
+            .then((res) => {
+              setCartCount(res.data);
+            })
+            .catch(() => {})
+            .finally(() => {});
+        }
       })
       .catch(() => {})
       .finally(() => {
