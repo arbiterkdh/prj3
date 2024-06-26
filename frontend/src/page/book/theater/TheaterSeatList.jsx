@@ -42,6 +42,8 @@ export function TheaterSeatList() {
   const [theaterBox, setTheaterBox] = useState([]);
   const [theaterBoxMovie, setTheaterBoxMovie] = useState([]);
 
+  const [movieInfoButton, setMovieInfoButton] = useState(true);
+
   const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
   const [mouseLocation, setMouseLocation] = useState(null);
   const [seatFocused, setSeatFocused] = useState("");
@@ -104,7 +106,7 @@ export function TheaterSeatList() {
           <CloseButton onClick={() => navigate("/book")}></CloseButton>
         </Flex>
       </BorderBox>
-      <BorderBox h={"100px"} alignContent={"center"} p={4}>
+      <BorderBox h={"100px"} alignContent={"center"} p={4} fontWeight={"600"}>
         <Flex align={"center"} gap={2}>
           <Heading m={2} w={"250px"} noOfLines={1} lineHeight={"100px"}>
             {movie.title}
@@ -123,12 +125,15 @@ export function TheaterSeatList() {
             </Box>
           </Stack>
           <Box>
-            <NumberInput size="md" maxW={16} defaultValue={1} min={1}>
+            <NumberInput size="md" maxW={16} defaultValue={0} min={0}>
               <NumberInputField
                 p={2}
                 border={"1px solid"}
                 borderRadius={"none"}
                 fontSize={"16px"}
+                _focusVisible={{
+                  border: "2px solid gray",
+                }}
               />
               <NumberInputStepper borderLeft={"1px solid"}>
                 <NumberIncrementStepper borderBottom={"1px solid"} />
@@ -146,7 +151,13 @@ export function TheaterSeatList() {
             </BorderSelect>
           </Box>
           <InputGroup w={"150px"}>
-            <Input defaultValue={"0"} textAlign={"right"} readOnly />
+            <Input
+              defaultValue={0}
+              textAlign={"right"}
+              readOnly
+              border={"none"}
+              bgColor={"whiteAlpha.50"}
+            />
             <InputRightElement>원</InputRightElement>
           </InputGroup>
 
@@ -155,11 +166,29 @@ export function TheaterSeatList() {
           </Box>
         </Flex>
       </BorderBox>
+      <Button
+        position={"absolute"}
+        size={"sm"}
+        zIndex={4}
+        top={"420px"}
+        left={"1330px"}
+        bgColor={"whiteAlpha.700"}
+        _dark={{
+          bgColor: "whiteAlpha.300",
+          _hover: {
+            bgColor: "whiteAlpha.500",
+          },
+        }}
+        onClick={() => setMovieInfoButton(!movieInfoButton)}
+      >
+        {movieInfoButton ? "좌석먼저보기" : "영화소개보기"}
+      </Button>
       <Flex
-        zIndex={3}
+        zIndex={movieInfoButton ? 3 : 0}
+        display={movieInfoButton ? "flex" : "none"}
         position={"absolute"}
         w={"880px"}
-        h={"550px"}
+        h={"551px"}
         border={"1px solid"}
         align={"center"}
         boxShadow={"inset 0 0 35px rgba(0, 0, 0, 1)"}
