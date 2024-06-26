@@ -25,7 +25,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
-import PromoPagination from "../component/PromoPagination.jsx";
+import PromoResultPagination from "../component/PromoResultPagination.jsx";
 import PromoSearchBar from "../component/PromoSearchBar.jsx";
 import EventTypeLabel from "../component/PromoeventTypeLabels.jsx";
 
@@ -38,21 +38,22 @@ export function PromoResult() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get("page"), 10) || 1;
   const searchQuery = searchParams.get("search") || "";
+  const pageSize = 10;
+
+  const fetchEventResults = async (page, search) => {
+    try {
+      const response = await axios.get(
+        `/api/promotion/eventResult?page=${page}&pageSize=${pageSize}&search=${search}`,
+      );
+      setEventResults(response.data.results);
+      setPageInfo(response.data.pageInfo);
+    } catch (error) {
+      console.error("당첨자 발표를 가져오는데 실패했습니다.", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchEventResults = async () => {
-      try {
-        const response = await axios.get(
-          `/api/promotion/eventResult?page=${currentPage}&search=${searchQuery}`,
-        );
-        setEventResults(response.data.results);
-        setPageInfo(response.data.pageInfo);
-      } catch (error) {
-        console.error("당첨자 발표를 가져오는데 실패했습니다.", error);
-      }
-    };
-
-    fetchEventResults();
+    fetchEventResults(currentPage, searchQuery);
   }, [currentPage, searchQuery]);
 
   const handleResultClick = (event) => {
@@ -89,6 +90,10 @@ export function PromoResult() {
 
   const handleSearch = (query) => {
     setSearchParams({ page: 1, search: query });
+  };
+
+  const handlePageChange = (page) => {
+    setSearchParams({ page, search: searchQuery });
   };
 
   const filteredResults = eventResults.filter(
@@ -151,7 +156,7 @@ export function PromoResult() {
                     filteredResults.map((event, index) => (
                       <Tr key={event.id} style={{ cursor: "pointer" }}>
                         <Td onClick={() => handleRowClick(event.promotionId)}>
-                          {index + 1}
+                          {index + 1 + (currentPage - 1) * pageSize}
                         </Td>
                         <Td onClick={() => handleRowClick(event.promotionId)}>
                           <Text>
@@ -202,7 +207,10 @@ export function PromoResult() {
             </TableContainer>
           </Box>
           {pageInfo.totalItems > 0 && (
-            <PromoPagination pageInfo={pageInfo} eventType="eventResult" />
+            <PromoResultPagination
+              pageInfo={pageInfo}
+              onPageChange={handlePageChange}
+            />
           )}
         </Box>
         {selectedEvent && (

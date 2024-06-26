@@ -1,73 +1,16 @@
 import { Box, Button, Center } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faAnglesLeft,
-  faAnglesRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
-const PromoPagination = ({ pageInfo, eventType }) => {
-  const navigate = useNavigate();
-  const pageNumbers = [];
-  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
-    pageNumbers.push(i);
-  }
-
+const PromoPagination = ({ pageInfo, onLoadMore }) => {
   return (
-    <Box>
+    <Box mt={4}>
       <Center>
-        {pageInfo.prevPageNumber && (
-          <>
-            <Button onClick={() => navigate(`/promotion/${eventType}?page=1`)}>
-              <FontAwesomeIcon icon={faAnglesLeft} />
-            </Button>
-            <Button
-              onClick={() =>
-                navigate(
-                  `/promotion/${eventType}?page=${pageInfo.prevPageNumber}`,
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </Button>
-          </>
-        )}
-        {pageNumbers.map((pageNumber) => (
-          <Button
-            onClick={() =>
-              navigate(`/promotion/${eventType}?page=${pageNumber}`)
-            }
-            key={pageNumber}
-            colorScheme={
-              pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
-            }
-          >
-            {pageNumber}
+        {pageInfo.currentPageNumber < pageInfo.lastPageNumber && (
+          <Button w="100%" onClick={onLoadMore}>
+            더보기
+            <FontAwesomeIcon icon={faAngleDown} />
           </Button>
-        ))}
-        {pageInfo.nextPageNumber && (
-          <>
-            <Button
-              onClick={() =>
-                navigate(
-                  `/promotion/${eventType}?page=${pageInfo.nextPageNumber}`,
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faAngleRight} />
-            </Button>
-            <Button
-              onClick={() =>
-                navigate(
-                  `/promotion/${eventType}?page=${pageInfo.lastPageNumber}`,
-                )
-              }
-            >
-              <FontAwesomeIcon icon={faAnglesRight} />
-            </Button>
-          </>
         )}
       </Center>
     </Box>

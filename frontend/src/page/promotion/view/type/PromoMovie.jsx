@@ -9,7 +9,12 @@ export function PromoMovie() {
 
   return (
     <Box>
-      <PromoList eventType="movie" search={searchKeyword} page={currentPage} />
+      <PromoList
+        eventType="movie"
+        search={searchKeyword}
+        page={currentPage}
+        pageSize={12}
+      />
     </Box>
   );
 }

@@ -31,9 +31,10 @@ public class PromoController {
 
     @GetMapping("list")
     public Map<String, Object> listPromo(@RequestParam(defaultValue = "1") Integer page,
+                                         @RequestParam(required = false) Integer pageSize,
                                          @RequestParam(defaultValue = "") String type,
                                          @RequestParam(defaultValue = "") String search) {
-        return promoService.listPromo(page, type, search);
+        return promoService.listPromo(page, pageSize, type, search);
     }
 
     @GetMapping("list-all")

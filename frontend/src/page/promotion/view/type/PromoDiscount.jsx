@@ -13,6 +13,7 @@ export function PromoDiscount() {
         eventType="discount"
         search={searchKeyword}
         page={currentPage}
+        pageSize={12}
       />
     </Box>
   );

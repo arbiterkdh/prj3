@@ -115,6 +115,7 @@ const PromoCarousel = () => {
           <Box p={2}>
             <Flex alignItems="center">
               <Text
+                fontSize="sm"
                 fontWeight="bold"
                 isTruncated
                 maxWidth="calc(100% - 150px)"

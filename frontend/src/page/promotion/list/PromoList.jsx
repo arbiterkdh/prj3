@@ -3,40 +3,48 @@ import PromoSearchBar from "../component/PromoSearchBar.jsx";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PromoCard from "../component/PromoCard.jsx";
-import PromoPagination from "../component/PromoPagination.jsx";
 import usePromoList from "../component/UsePromoList.jsx";
+import PromoPagination from "../component/PromoPagination.jsx";
 
 export function PromoList({
   eventType: propEventType,
   eventStatusList,
-  maxItems,
+  maxItems = 20,
   showTotalPosts = true,
   showSearch = true,
   showPagination = true,
+  pageSize = 20,
 }) {
   const [promoSearch, setPromoSearch] = useState("");
   const eventType = propEventType || useParams().eventType;
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [page, setPage] = useState(1);
+  const [allPromos, setAllPromos] = useState([]);
 
   const { promoList, loading, pageInfo } = usePromoList(
     eventType === "all" ? "" : eventType,
     eventStatusList,
     promoSearch,
+    page,
+    pageSize,
   );
 
-  const filteredPromoList =
-    eventType !== "all"
-      ? promoList.filter((promo) => promo.eventType === eventType)
-      : promoList;
-
-  const displayedPromos = maxItems
-    ? filteredPromoList.slice(0, maxItems)
-    : filteredPromoList;
+  useEffect(() => {
+    if (!loading) {
+      setAllPromos((prevPromos) => [...prevPromos, ...promoList]);
+    }
+  }, [promoList, loading]);
 
   const handleSearch = (searchTerm) => {
     setSearchParams({ page: 1, search: searchTerm });
     setPromoSearch(searchTerm);
+    setPage(1);
+    setAllPromos([]);
+  };
+
+  const handleLoadMore = () => {
+    setPage((prevPage) => prevPage + 1);
   };
 
   useEffect(() => {
@@ -44,7 +52,7 @@ export function PromoList({
     setPromoSearch(searchTerm);
   }, [searchParams]);
 
-  if (loading) {
+  if (loading && page === 1) {
     return <Spinner />;
   }
 
@@ -59,26 +67,25 @@ export function PromoList({
         <Spacer />
         {showSearch && <PromoSearchBar onSearch={handleSearch} />}
       </Flex>
-      {displayedPromos.length === 0 ? (
+      {allPromos.length === 0 ? (
         <Text textAlign="center" mt={5} p={10}>
           해당 이벤트가 없습니다.
         </Text>
       ) : (
-        <SimpleGrid
-          spacing={6} // 간격을 줄이려면 이 값을 줄이세요
-          templateColumns="repeat(auto-fill, minmax(226px, 1fr))"
-          mb={6}
-        >
-          {displayedPromos.map((promo) => (
+        <SimpleGrid spacing={6} templateColumns="repeat(4, 1fr)" mb={6}>
+          {allPromos.slice(0.4).map((promo) => (
             <PromoCard key={promo.id} promo={promo} />
           ))}
         </SimpleGrid>
       )}
-      {showPagination && (
-        <Box mt={6}>
-          <PromoPagination pageInfo={pageInfo} eventType={eventType} />
-        </Box>
-      )}
+      {showPagination &&
+        pageInfo.currentPageNumber < pageInfo.lastPageNumber && (
+          <PromoPagination
+            pageInfo={pageInfo}
+            eventType={eventType}
+            onLoadMore={handleLoadMore}
+          />
+        )}
     </Box>
   );
 }

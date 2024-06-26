@@ -8,23 +8,30 @@ import PromoCarousel from "../../component/PromoCarousel.jsx";
 
 export function PromoAll() {
   const navigate = useNavigate();
-  const [promoList, setPromoList] = useState([]);
+  const [moviePromos, setMoviePromos] = useState([]);
+  const [theaterPromos, setTheaterPromos] = useState([]);
+  const [membershipPromos, setMembershipPromos] = useState([]);
+  const [discountPromos, setDiscountPromos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [recommendedList, setRecommendedList] = useState([]);
 
   useEffect(() => {
-    const fetchAllPromotions = async () => {
+    const fetchPromotions = async (type, setState) => {
       try {
-        const { data } = await axios.get(`/api/promotion/list-all`);
+        const { data } = await axios.get(`/api/promotion/list`, {
+          params: {
+            page: 1,
+            pageSize: 4, // 각 타입별로 4개씩 가져옴
+            type,
+          },
+        });
         const now = new Date();
         const activePromos = data.promotionList.filter(
           (promo) => new Date(promo.eventEndDate) >= now,
         );
-        setPromoList(activePromos);
+        setState(activePromos);
       } catch (error) {
-        console.error("Error fetching promotions:", error);
-      } finally {
-        setLoading(false);
+        console.error(`Error fetching ${type} promotions:`, error);
       }
     };
 
@@ -37,15 +44,16 @@ export function PromoAll() {
       }
     };
 
-    fetchAllPromotions();
+    fetchPromotions("movie", setMoviePromos);
+    fetchPromotions("theater", setTheaterPromos);
+    fetchPromotions("membership", setMembershipPromos);
+    fetchPromotions("discount", setDiscountPromos);
     fetchRecommendedPromotions();
+
+    setLoading(false);
   }, []);
 
-  if (loading) {
-    return <Spinner />;
-  }
-
-  const renderPromoSection = (title, eventType) => (
+  const renderPromoSection = (title, promos, eventType) => (
     <Box mb={50}>
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="25px">
@@ -57,16 +65,19 @@ export function PromoAll() {
       </Box>
       <PromoList
         eventType={eventType}
-        eventStatusList={promoList.filter(
-          (promo) => promo.eventType === eventType,
-        )}
+        eventStatusList={promos}
         maxItems={4}
         showTotalPosts={false}
         showSearch={false}
         showPagination={false}
+        pageSize={4} // 페이지 사이즈를 4로 설정
       />
     </Box>
   );
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   return (
     <Box>
@@ -75,10 +86,10 @@ export function PromoAll() {
       <Box mb={50}>
         <PromoCarousel promoList={recommendedList} />
       </Box>
-      {renderPromoSection("영화", "movie")}
-      {renderPromoSection("극장", "theater")}
-      {renderPromoSection("멤버십", "membership")}
-      {renderPromoSection("제휴/할인", "discount")}
+      {renderPromoSection("영화", moviePromos, "movie")}
+      {renderPromoSection("극장", theaterPromos, "theater")}
+      {renderPromoSection("멤버십", membershipPromos, "membership")}
+      {renderPromoSection("제휴/할인", discountPromos, "discount")}
     </Box>
   );
 }

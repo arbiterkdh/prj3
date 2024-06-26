@@ -31,7 +31,11 @@ public class PromoResultService {
         }
     }
 
-    public Map<String, Object> getPromoResults(int page, int pageSize) {
+    public Map<String, Object> getPromoResults(int page, Integer pageSize) {
+        if (pageSize == null) {
+            pageSize = 10; // 기본값을 10으로 설정
+        }
+
         int totalItems = promoResultMapper.countPromotionResults();
         int offset = (page - 1) * pageSize;
         List<PromoResult> results = promoResultMapper.selectPromotionResults(offset, pageSize);
@@ -79,7 +83,7 @@ public class PromoResultService {
 
         Map<String, Object> pageInfo = new HashMap<>();
         if (leftPageNumber > 1) {
-            pageInfo.put("prevPageNumber", leftPageNumber - 1);
+            pageInfo.put("prevPageNumber", leftPageNumber - 10);
         }
         if (rightPageNumber < lastPageNumber) {
             pageInfo.put("nextPageNumber", rightPageNumber + 1);

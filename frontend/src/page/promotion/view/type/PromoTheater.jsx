@@ -13,6 +13,7 @@ export function PromoTheater() {
         eventType="theater"
         search={searchKeyword}
         page={currentPage}
+        pageSize={12}
       />
     </Box>
   );
