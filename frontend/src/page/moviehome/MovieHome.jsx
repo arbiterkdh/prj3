@@ -26,7 +26,11 @@ export function MovieHome() {
       try {
         const res = await Promise.all(requests);
         const posterUrl = res.map((res) => {
-          return res.data.Data[0].Result[0].posters.split("|")[0];
+          let postersLength =
+            res.data.Data[0].Result[0].posters.split("|").length;
+          return res.data.Data[0].Result[0].posters.split("|")[
+            Math.floor(Math.random() * postersLength)
+          ];
         });
         setPosterUrlList(posterUrl);
       } catch (err) {

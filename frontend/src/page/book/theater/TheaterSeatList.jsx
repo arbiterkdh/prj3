@@ -29,7 +29,7 @@ import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import EmptySeatBox from "../../../css/theme/component/box/EmptySeatBox.jsx";
-import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
+import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 
 export function TheaterSeatList() {
   const { setBookProgress } = useOutletContext();
@@ -103,14 +103,11 @@ export function TheaterSeatList() {
           <Box fontSize={"lg"} fontWeight={"600"} alignContent={"center"}>
             CCV {theater.location}점 인원/좌석 선택
           </Box>
-          <CloseButton onClick={() => navigate("/book")}></CloseButton>
+          <CloseButton m={1} onClick={() => navigate("/book")}></CloseButton>
         </Flex>
       </BorderBox>
-      <BorderBox h={"100px"} alignContent={"center"} p={4} fontWeight={"600"}>
+      <BorderBox h={"100px"} p={4} fontWeight={"600"}>
         <Flex align={"center"} gap={2}>
-          <Heading m={2} w={"250px"} noOfLines={1} lineHeight={"100px"}>
-            {movie.title}
-          </Heading>
           <Stack fontSize={"16px"} gap={0} m={1}>
             <Box>{"상영시간: "}</Box>
             <Box>
@@ -125,31 +122,34 @@ export function TheaterSeatList() {
             </Box>
           </Stack>
           <Box>
-            <NumberInput size="md" maxW={16} defaultValue={0} min={0}>
-              <NumberInputField
-                p={2}
-                border={"1px solid"}
-                borderRadius={"none"}
-                fontSize={"16px"}
-                _focusVisible={{
-                  border: "2px solid gray",
-                }}
-              />
-              <NumberInputStepper borderLeft={"1px solid"}>
-                <NumberIncrementStepper borderBottom={"1px solid"} />
-                <NumberDecrementStepper
-                  _disabled={{ cursor: "default" }}
-                  borderTop={"1px solid"}
-                />
-              </NumberInputStepper>
-            </NumberInput>
+            <GapFlex align={"center"}>
+              <Box w={"60px"}>인원: </Box>
+              <InputGroup>
+                <NumberInput size="md" maxW={20} defaultValue={0} min={0}>
+                  <NumberInputField
+                    p={2}
+                    border={"1px solid"}
+                    borderRadius={"none"}
+                    fontSize={"16px"}
+                    _focusVisible={{
+                      border: "2px solid gray",
+                    }}
+                  />
+                  <NumberInputStepper borderLeft={"1px solid"}>
+                    <NumberIncrementStepper borderBottom={"1px solid"} />
+                    <NumberDecrementStepper
+                      _disabled={{ cursor: "default" }}
+                      borderTop={"1px solid"}
+                    />
+                  </NumberInputStepper>
+                </NumberInput>
+                <InputRightElement mx={8} h={"35px"}>
+                  명
+                </InputRightElement>
+              </InputGroup>
+            </GapFlex>
           </Box>
-          <Box>
-            <BorderSelect placeholder={"나이"} w={"82px"}>
-              <option>성인</option>
-              <option>청소년</option>
-            </BorderSelect>
-          </Box>
+
           <InputGroup w={"150px"}>
             <Input
               defaultValue={0}
@@ -202,7 +202,7 @@ export function TheaterSeatList() {
           {movie ? (
             <Image
               src={movie.movieImageFile}
-              maxH={"500px"}
+              maxH={"476px"}
               _dark={{
                 filter: "brightness(80%)",
               }}
@@ -212,14 +212,19 @@ export function TheaterSeatList() {
           )}
         </Box>
         <Box m={8} w={"440px"} h={"500px"} color={"whiteAlpha.800"}>
-          <Heading mx={-4} mt={4} fontSize={"lg"}>
+          <Heading mx={-5} my={8}>
+            {movie.title}
+          </Heading>
+          <Heading mx={-2} mt={4} fontSize={"lg"}>
             줄거리
           </Heading>
           <Text pr={5} whiteSpace={"pre-wrap"} h={"220px"} overflowY={"scroll"}>
             {movie.content}
           </Text>
-          <Stack m={-5} mt={5}>
-            <Heading>감독: {movie.director}</Heading>
+          <Stack>
+            <Box m={-3} mt={5} fontSize={"lg"} fontWeight={"600"}>
+              감독: {movie.director}
+            </Box>
             <Box noOfLines={1}>출연진: {movie.actors}</Box>
             <Box>장르: {movie.genre}</Box>
             <Flex>
