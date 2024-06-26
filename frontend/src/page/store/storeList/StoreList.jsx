@@ -4,7 +4,6 @@ import {
   Center,
   Flex,
   Heading,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +16,13 @@ import {
   faAngleRight,
   faAnglesLeft,
   faAnglesRight,
-  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AddCartModal from "./cart/AddCartModal.jsx";
 import ModifyProductModal from "./modify/ModifyProductModal.jsx";
 import DeleteProductModal from "./delete/DeleteProductModal.jsx";
 import ProductItemList from "./list/ProductItemList.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import AddCartModal from "./cart/AddCartModal.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -98,6 +96,7 @@ export function StoreList() {
           <Box w={"50%"}>
             <Flex alignItems={"center"}>
               <Heading>상품 리스트</Heading>
+              {/*
               <Text
                 color={"red"}
                 bgColor={"white"}
@@ -110,6 +109,7 @@ export function StoreList() {
                   cursor={"pointer"}
                 />
               </Text>
+              */}
             </Flex>
           </Box>
           <Box w={"50%"} textAlign={"right"}>

@@ -10,17 +10,16 @@ import { BookDrawer } from "./drawer/BookDrawer.jsx";
 import { TheaterDrawer } from "./drawer/TheaterDrawer.jsx";
 import { PromoDrawer } from "./drawer/PromoDrawer.jsx";
 import NavBox from "../../css/theme/component/box/NavBox.jsx";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
-import AddCartModal from "../../page/store/storeList/cart/AddCartModal.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
   const navigate = useNavigate();
   const toast = useToast();
   const [drawer, setDrawer] = useState(0);
-  const [cartCount, setCartCount] = useState(null);
+  const [cartCount, setCartCount] = useState(0);
 
   function handleLogout() {
     account.logout();
@@ -50,7 +49,6 @@ export function Navbar() {
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
             <CursorBox>고객센터</CursorBox>
-            <AddCartModal setCartCount={setCartCount} />
             <GapFlex>
               {account.isLoggedIn() && (
                 <Flex>
@@ -61,6 +59,7 @@ export function Navbar() {
                     alt={"profile"}
                     src={account.picture}
                   />
+                  {/*<CursorBox onClick={() => navigate("mypage")}>*/}
                   <CursorBox>
                     <FontAwesomeIcon
                       icon={faCartShopping}
