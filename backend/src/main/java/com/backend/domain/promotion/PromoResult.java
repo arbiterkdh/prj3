@@ -18,6 +18,6 @@ public class PromoResult {
     @Data
     public static class Winner {
         private String email;
-        private String name;
+        private String nickName;
     }
 }

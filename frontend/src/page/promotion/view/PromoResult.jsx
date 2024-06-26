@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -36,6 +36,7 @@ export function PromoResult() {
   const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { nickName } = useParams();
   const currentPage = parseInt(searchParams.get("page"), 10) || 1;
   const searchQuery = searchParams.get("search") || "";
   const pageSize = 10;
@@ -132,7 +133,11 @@ export function PromoResult() {
                 </Text>
               </Box>
               <Spacer />
-              <Button size="sm" bg="gray.300">
+              <Button
+                size="sm"
+                bg="gray.300"
+                onClick={() => navigate(`/mypage?nickName=${nickName}`)}
+              >
                 나의 응모결과 확인
               </Button>
             </Flex>
@@ -232,14 +237,14 @@ export function PromoResult() {
                     <Thead>
                       <Tr>
                         <Th>이메일</Th>
-                        <Th>당첨자 이름</Th>
+                        <Th>당첨자 닉네임</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {selectedEvent.winners.map((winner, index) => (
                         <Tr key={index}>
                           <Td>{winner.email}</Td>
-                          <Td>{winner.name}</Td>
+                          <Td>{winner.nickName}</Td>
                         </Tr>
                       ))}
                     </Tbody>

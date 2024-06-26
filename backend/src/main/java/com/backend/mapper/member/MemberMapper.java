@@ -32,6 +32,11 @@ public interface MemberMapper {
             """)
     Member selectByNickName(String nickName);
 
+    @Select("""
+            SELECT email, nick_name
+            FROM member
+            """)
+    List<Member> findAllMembers();
 
     @Select("""
             SELECT name

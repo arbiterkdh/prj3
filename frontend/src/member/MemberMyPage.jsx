@@ -31,7 +31,7 @@ import axios from "axios";
 import { LoginContext } from "../component/LoginProvider.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
@@ -39,6 +39,7 @@ import {
   faAnglesLeft,
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
+import EventTypeLabel from "../page/promotion/component/PromoeventTypeLabels.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -55,6 +56,8 @@ export function MemberMyPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [page, setPage] = useState(1);
+  const [promoResults, setPromoResults] = useState([]);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const { nickName } = location.state;
@@ -87,6 +90,17 @@ export function MemberMyPage() {
         .finally(() => {});
     }
   }, [nickName, page]);
+
+  useEffect(() => {
+    // 당첨자 결과 데이터 가져오기
+    axios
+      .get(`/api/promotion/eventResult?search=${member.email}`)
+      .then((res) => {
+        setPromoResults(res.data.results);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, [member.email]);
 
   function handleClick() {
     axios
@@ -136,6 +150,7 @@ export function MemberMyPage() {
             <Tab>비밀번호 변경</Tab>
             <Tab>예매내역</Tab>
             <Tab>결제내역</Tab>
+            <Tab>응모결과확인</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -292,6 +307,38 @@ export function MemberMyPage() {
                       )}
                     </Td>
                   </Tr>
+                </Tbody>
+              </Table>
+            </TabPanel>
+            <TabPanel>
+              <Heading>나의 응모 내역</Heading>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>번호</Th>
+                    <Th>분류</Th>
+                    <Th>이벤트명</Th>
+                    <Th>당첨자 발표</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {promoResults.map((result, index) => (
+                    <Tr key={index}>
+                      <Td>{index + 1}</Td>
+                      <Td>
+                        <EventTypeLabel eventType={result.eventType} />
+                      </Td>
+                      <Td>{result.eventName}</Td>
+                      <Td>
+                        <Button
+                          colorScheme={"blue"}
+                          onClick={() => navigate("/promotion/eventResult")}
+                        >
+                          결과확인
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
             </TabPanel>
