@@ -201,7 +201,6 @@ export function TheaterSeatList() {
           size={"sm"}
           zIndex={4}
           left={"89%"}
-          left={"89%"}
           bgColor={"whiteAlpha.700"}
           _dark={{
             bgColor: "whiteAlpha.300",
