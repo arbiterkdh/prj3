@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Textarea, useToast } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieCommentEdit({
   comment,
@@ -34,7 +35,7 @@ export function MovieCommentEdit({
 
   return (
     <Flex alignItems={"center"}>
-      <Box flex={1}>
+      <Box p={2} flex={1}>
         <Textarea
           resize={"none"}
           value={commentText}
@@ -42,14 +43,19 @@ export function MovieCommentEdit({
         />
       </Box>
       <Box>
-        <Button onClick={() => setIsEditing(false)}>취소</Button>
         <Button
-          isLoading={isProcessing}
-          onClick={handleModifyComment}
-          colorScheme={"blue"}
+          bgColor={"dimgray"}
+          color={"white"}
+          _hover={{
+            bgColor: "gray",
+          }}
+          onClick={() => setIsEditing(false)}
         >
-          수정
+          취소
         </Button>
+        <ColorButton isLoading={isProcessing} onClick={handleModifyComment}>
+          수정
+        </ColorButton>
       </Box>
     </Flex>
   );

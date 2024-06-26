@@ -24,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import HeartButton from "../../../../css/theme/component/button/HeartButton.jsx";
-import TicketingButton from "../../../../css/theme/component/button/TicketingButton.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieView() {
   const { id } = useParams();
@@ -51,7 +51,15 @@ export function MovieView() {
           .get(
             `${kmdbUrl}&movieId=${res.data.movie.alphabet}&movieSeq=${res.data.movie.number}&ServiceKey=${kmdbKey}`,
           )
-          .then((res) => setPosterUrl(res.data.Data[0].Result[0].posters));
+          .then((res) => {
+            let posterLength =
+              res.data.Data[0].Result[0].posters.split("|").length;
+            setPosterUrl(
+              res.data.Data[0].Result[0].posters.split("|")[
+                Math.floor(Math.random() * posterLength)
+              ],
+            );
+          });
       })
       .catch(() => {})
       .finally(() => {});
@@ -80,58 +88,42 @@ export function MovieView() {
     <Center>
       <CenterBox>
         <Stack>
-          <Flex position="relative" mb={"20px"} overflow={"hidden"}>
+          <Flex h={"450px"} position="relative" mb={"20px"}>
             <Box
               position="absolute"
               top="0"
               right="0"
               bottom="0"
               left="0"
-              //     style={{
-              //       backgroundImage: `linear-gradient(
-              //     to right,
-              //      rgba(0, 0, 0, 1.0) 0%,
-              //      rgba(0, 0, 0, 0.8) 10%,
-              //      rgba(0, 0, 0, 0.6) 20%,
-              //      rgba(0, 0, 0, 0.4) 30%,
-              //      rgba(0, 0, 0, 0.2) 40%,
-              //      rgba(0, 0, 0, 0) 50%,
-              //      rgba(0, 0, 0, 0.2) 60%,
-              //      rgba(0, 0, 0, 0.4) 70%,
-              //      rgba(0, 0, 0, 0.6) 80%,
-              //      rgba(0, 0, 0, 0.8) 90%,
-              //      rgba(0, 0, 0, 1.0) 100%,
-              // ), url(${posterUrl})`,
-              //     }}
-              //     backgroundImage={`linear-gradient(
-              //     to right,
-              //      rgba(0, 0, 0, 1.0) 0%,
-              //      rgba(0, 0, 0, 0.8) 10%,
-              //      rgba(0, 0, 0, 0.6) 20%,
-              //      rgba(0, 0, 0, 0.4) 30%,
-              //      rgba(0, 0, 0, 0.2) 40%,
-              //      rgba(0, 0, 0, 0) 50%,
-              //      rgba(0, 0, 0, 0.2) 60%,
-              //      rgba(0, 0, 0, 0.4) 70%,
-              //      rgba(0, 0, 0, 0.6) 80%,
-              //      rgba(0, 0, 0, 0.8) 90%,
-              //      rgba(0, 0, 0, 1.0) 100%,
-              // ), url(${posterUrl})`}
+              backgroundImage={`url(${posterUrl})`}
               backgroundRepeat="no-repeat"
-              backgroundPosition="center"
-              backgroundSize="70%"
+              backgroundPosition="center top"
+              backgroundSize="60%"
               zIndex="1"
-            ></Box>
+            />
+            <Box
+              background={
+                "linear-gradient(to right, #0f0f0f 20%, rgba(15, 15, 15, 0) 50%, #0f0f0f 80%)"
+              }
+              position="absolute"
+              top="0"
+              right="0"
+              bottom="0"
+              left="0"
+              zIndex="2"
+            />
             <Stack justify={"space-between"}>
               <Heading
+                p={10}
                 zIndex={"10"}
                 mt={"20px"}
                 fontSize={"5xl"}
                 textAlign={"center"}
+                color={"white"}
               >
                 {movie.title}
               </Heading>
-              <Box>
+              <Box p={10}>
                 <HeartButton
                   zIndex={"10"}
                   leftIcon={
@@ -146,21 +138,22 @@ export function MovieView() {
                 >
                   {like.count}
                 </HeartButton>
-                <TicketingButton zIndex={"10"} w={"200px"}>
+                <ColorButton zIndex={"10"} w={"200px"}>
                   예매
-                </TicketingButton>
+                </ColorButton>
               </Box>
             </Stack>
             <Spacer />
-            <Box mb={10}>
+            <Box p={12}>
               <Center>
                 <Image
+                  border={"1px solid"}
+                  color={"whiteAlpha.500"}
                   zIndex={"10"}
                   mb={"-30px"}
-                  w={"300px"}
+                  w={"250px"}
                   src={movie.movieImageFile}
                 />
-                {/*movie.movieImageFile*/}
               </Center>
             </Box>
           </Flex>

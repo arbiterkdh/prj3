@@ -36,7 +36,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import HeartButton from "../../../css/theme/component/button/HeartButton.jsx";
-import TicketingButton from "../../../css/theme/component/button/TicketingButton.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -243,7 +243,7 @@ export function MovieList() {
                           >
                             {movie.movieHeart.count}
                           </HeartButton>
-                          <TicketingButton w={"100px"}>예매</TicketingButton>
+                          <ColorButton w={"100px"}>예매</ColorButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>
@@ -337,7 +337,7 @@ export function MovieList() {
                           >
                             {movie.movieHeart.count}
                           </HeartButton>
-                          <TicketingButton w={"100px"}>예매</TicketingButton>
+                          <ColorButton w={"100px"}>예매</ColorButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>

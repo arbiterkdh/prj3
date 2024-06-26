@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/react";
 
-const TicketingButton = (props) => {
+const ColorButton = (props) => {
   return (
     <Button
       variant="solid"
@@ -20,4 +20,4 @@ const TicketingButton = (props) => {
   );
 };
 
-export default TicketingButton;
+export default ColorButton;

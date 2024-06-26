@@ -1,7 +1,8 @@
-import { Box, Button, Flex, Textarea, useToast } from "@chakra-ui/react";
+import { Box, Flex, Textarea, useToast } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { LoginContext } from "../../../../../component/LoginProvider.jsx";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieCommentWrite({ movieId, isProcessing, setIsProcessing }) {
   const [comment, setComment] = useState("");
@@ -36,7 +37,13 @@ export function MovieCommentWrite({ movieId, isProcessing, setIsProcessing }) {
         <Textarea
           mt={1}
           h={"100%"}
-          border={"1px solid #DFE5E5"}
+          border={"1px solid #f2efef"}
+          bgColor={"#f2efef"}
+          _dark={{
+            border: "1px solid #2d4c4c",
+            bgColor: "#2d4c4c",
+          }}
+          borderRadius={"10px"}
           resize={"none"}
           placeholder={
             account.isLoggedIn() ? "댓글을 작성 해보세요" : "로그인을 해주세요"
@@ -46,9 +53,9 @@ export function MovieCommentWrite({ movieId, isProcessing, setIsProcessing }) {
         />
       </Box>
       <Box>
-        <Button colorScheme={"blue"} h={"100%"} onClick={handleCommentSubmit}>
-          전송
-        </Button>
+        <ColorButton h={"100%"} onClick={handleCommentSubmit}>
+          작성
+        </ColorButton>
       </Box>
     </Flex>
   );
