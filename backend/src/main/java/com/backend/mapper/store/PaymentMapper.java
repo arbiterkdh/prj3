@@ -1,10 +1,7 @@
 package com.backend.mapper.store;
 
 import com.backend.domain.store.Payment;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -43,4 +40,20 @@ public interface PaymentMapper {
               and p.id = #{paymentId}
             """)
     List<Payment> getData(Integer memberNumber, Integer paymentId);
+
+    @Select("""
+            SELECT p.*, po.quantity as quantity
+            FROM payment p JOIN product_order po
+            ON p.id = po.payment_id
+            WHERE order_number = #{orderNumber}
+            """)
+    Payment paymentData(String orderNumber);
+
+
+    @Update("""
+            UPDATE payment
+            SET status = #{status}
+            WHERE order_number = #{orderNumber}
+            """)
+    int updatePaymentStatus(Payment payment);
 }

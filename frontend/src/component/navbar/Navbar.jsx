@@ -1,15 +1,25 @@
-import { Box, Center, Flex, Heading, Image, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../../member/MemberLogin.jsx";
 import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { LoginContext } from "../LoginProvider.jsx";
 import { MovieDrawer } from "./drawer/MovieDrawer.jsx";
 import { BookDrawer } from "./drawer/BookDrawer.jsx";
 import { TheaterDrawer } from "./drawer/TheaterDrawer.jsx";
 import { PromoDrawer } from "./drawer/PromoDrawer.jsx";
 import NavBox from "../../css/theme/component/box/NavBox.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 export function Navbar() {
   const account = useContext(LoginContext);
@@ -44,6 +54,20 @@ export function Navbar() {
                     src={account.picture}
                   />
                   {/*<CursorBox onClick={() => navigate("mypage")}>*/}
+                  <CursorBox>
+                    <Text
+                      // color={"red"}
+                      // bgColor={"white"}
+                      // _dark={{ bgColor: "#2d4c4c", color: "white" }}
+                      onClick={() => navigate("/store/cart")}
+                    >
+                      <FontAwesomeIcon
+                        icon={faCartShopping}
+                        fontSize={"1.2rem"}
+                        cursor={"pointer"}
+                      />
+                    </Text>
+                  </CursorBox>
                   <CursorBox
                     onClick={() => {
                       navigate("mypage", {

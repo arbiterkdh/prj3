@@ -11,7 +11,7 @@ public class Payment {
     private Boolean success;
     private String orderNumber;
     private String status;
-    private Integer amount;
+    private Long amount;
     private String buyerName;
     private String buyerEmail;
     private String buyerDate;

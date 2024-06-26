@@ -30,6 +30,15 @@ function Payment({
 
   let paymentAmount = isSinglePurchase ? price : totalSum;
 
+  function makeMerchantUid() {
+    let today = new Date();
+    let hours = today.getHours();
+    let minutes = today.getMinutes();
+    let seconds = today.getSeconds();
+    // let milliseconds = today.getMilliseconds();
+    return `OrderNo_${hours}${minutes}${seconds}`;
+  }
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://cdn.iamport.kr/v1/iamport.js";
@@ -47,17 +56,6 @@ function Payment({
     const { IMP } = window;
     if (!IMP) return;
 
-    function makeMerchantUid() {
-      let today = new Date();
-      let hours = today.getHours();
-      let minutes = today.getMinutes();
-      let seconds = today.getSeconds();
-      let milliseconds = today.getMilliseconds();
-      return (
-        `order_no_${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`
-      );
-    }
-
     IMP.request_pay(
       {
         pg: "html5_inicis.INIpayTest",
@@ -67,7 +65,7 @@ function Payment({
         amount: paymentAmount,
         buyer_email: Login.email,
         buyer_name: Login.nickName,
-        buyer_tel: "010-1234-5678", //필수 파라미터 입니다.
+        buyer_tel: "010-1234-5678",
         buyer_addr: "서울특별시 강남구 삼성동",
         buyer_postcode: "123-456",
         m_redirect_url: "{모바일에서 결제 완료 후 리디렉션 될 URL}",
@@ -112,18 +110,6 @@ function Payment({
             .finally(() => {});
         } else {
           console.log(rsp + "결제 실패");
-          axios
-            .post("/api/store/payment/add", {
-              success: rsp.success,
-              orderNumber: rsp.merchant_uid,
-              status: rsp.status,
-              amount: rsp.paid_amount,
-              buyerName: rsp.buyer_name,
-              buyerEmail: rsp.buyer_email,
-            })
-            .then((res) => {})
-            .catch(() => {})
-            .finally(() => {});
         }
       },
     );
@@ -135,20 +121,11 @@ function Payment({
     const { IMP } = window;
     if (!IMP) return;
 
-    function makeMerchantUid() {
-      let today = new Date();
-      let hours = today.getHours();
-      let minutes = today.getMinutes();
-      let seconds = today.getSeconds();
-      let milliseconds = today.getMilliseconds();
-      return `${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`;
-    }
-
     IMP.request_pay(
       {
         pg: "kakaopay",
         pay_method: "card",
-        merchant_uid: "order_no_" + makeMerchantUid(),
+        merchant_uid: makeMerchantUid(),
         name: paymentName,
         amount: paymentAmount,
         buyer_email: Login.email,
@@ -193,18 +170,6 @@ function Payment({
           navigate("/store/payment/payment-success");
         } else {
           console.log(rsp + "결제 실패");
-          axios
-            .post("/api/store/payment/add", {
-              success: rsp.success,
-              orderNumber: rsp.merchant_uid,
-              status: rsp.status,
-              amount: rsp.paid_amount,
-              buyerName: rsp.buyer_name,
-              buyerEmail: rsp.buyer_email,
-            })
-            .then((res) => {})
-            .catch(() => {})
-            .finally(() => {});
         }
       },
     );

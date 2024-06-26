@@ -2,6 +2,7 @@ package com.backend.mapper.member;
 
 import com.backend.domain.member.Member;
 import com.backend.domain.store.Payment;
+import com.backend.domain.store.PaymentCancel;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -49,7 +50,7 @@ public interface MemberMapper {
 
 
     @Select("""
-            select p.order_number, p.buyer_date, p.amount, p.qr_code, po.name as name, po.quantity as quantity, po.price as price, po.total_price as totalPrice
+            select p.id, p.order_number, p.status, p.buyer_date, p.amount, p.qr_code, p.buyer_name, po.name as name, po.quantity as quantity, po.price as price, po.total_price as totalPrice
                                      from payment p
                                               join product_order po
                                                    on po.payment_id = p.id
@@ -66,4 +67,12 @@ public interface MemberMapper {
             WHERE buyer_name = #{nickName}
             """)
     Integer totalCount(String nickName);
+
+    @Select("""
+            SELECT *
+            FROM payment_cancel
+            WHERE requestor = #{nickName}
+            limit #{offset},10
+            """)
+    List<PaymentCancel> paymentCancelResult(String nickName, Integer offset);
 }

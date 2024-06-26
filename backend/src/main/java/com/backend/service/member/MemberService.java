@@ -2,6 +2,7 @@ package com.backend.service.member;
 
 import com.backend.domain.member.Member;
 import com.backend.mapper.member.MemberMapper;
+import com.backend.mapper.store.PaymentCancelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -24,6 +25,7 @@ public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
     private final MemberMapper mapper;
+    private final PaymentCancelMapper paymentCancelMapper;
 
     public void add(Member member) {
         member.setPassword(passwordEncoder.encode(member.getPassword()));
@@ -99,11 +101,46 @@ public class MemberService {
         if (nextPageNumber <= lastPageNumber) {
             pageInfo.put("nextPageNumber", nextPageNumber);
         }
+
+        pageInfo.put("totalCount", totalCount);
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("leftPageNumber", leftPageNumber);
         pageInfo.put("rightPageNumber", rightPageNumber);
 
         return Map.of("paymentResult", mapper.paymentResult(nickName, offset)
                 , "pageInfo", pageInfo);
+    }
+
+    public Map<String, Object> paymentCancelResult(String nickName, Integer page) {
+
+        Integer offset = (page - 1) * 10;
+
+        Map pageInfo = new HashMap();
+
+        Integer totalCount = paymentCancelMapper.totalCount(nickName);
+        Integer lastPageNumber = (totalCount - 1) / 10 + 1;
+        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
+        Integer rightPageNumber = leftPageNumber + 9;
+
+        rightPageNumber = Math.min(rightPageNumber, lastPageNumber);
+
+        Integer prevPageNumber = leftPageNumber - 1;
+        Integer nextPageNumber = rightPageNumber + 1;
+
+        if (prevPageNumber > 0) {
+            pageInfo.put("prevPageNumber", prevPageNumber);
+        }
+        if (nextPageNumber <= lastPageNumber) {
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
+
+        pageInfo.put("totalCount", totalCount);
+        pageInfo.put("currentPageNumber", page);
+        pageInfo.put("leftPageNumber", leftPageNumber);
+        pageInfo.put("rightPageNumber", rightPageNumber);
+
+
+        return Map.of("paymentCancelResult", mapper.paymentCancelResult(nickName, offset),
+                "pageInfo", pageInfo);
     }
 }

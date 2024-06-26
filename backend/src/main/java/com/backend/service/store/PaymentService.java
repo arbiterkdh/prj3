@@ -1,14 +1,21 @@
 package com.backend.service.store;
 
 import com.backend.domain.store.Payment;
-import com.backend.mapper.store.CartMapper;
-import com.backend.mapper.store.PaymentMapper;
-import com.backend.mapper.store.ProductMapper;
-import com.backend.mapper.store.ProductOrderMapper;
+import com.backend.domain.store.PaymentCancel;
+import com.backend.mapper.store.*;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.net.ssl.HttpsURLConnection;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.List;
 
 @Transactional(rollbackFor = Exception.class)
@@ -22,8 +29,17 @@ public class PaymentService {
     private final ProductMapper productMapper;
 
     private final QrService qrService;
+    private final PaymentMapper paymentMapper;
+    private final PaymentCancelMapper paymentCancelMapper;
+
+    @Value("${payment.key}")
+    private String apiKey;
+
+    @Value("${payment.secret.key}")
+    private String secretApiKey;
 
     public int add(Payment payment) throws Exception {
+
 
         Object qrCode = qrService.create(payment);
 
@@ -65,5 +81,114 @@ public class PaymentService {
     public List<Payment> getData(Integer memberNumber, Integer paymentId) {
 
         return mapper.getData(memberNumber, paymentId);
+    }
+
+    public String getToken() throws Exception {
+
+        HttpsURLConnection conn = null;
+        URL url = new URL("https://api.iamport.kr/users/getToken");
+
+        conn = (HttpsURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-type", "application/json");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setDoOutput(true);
+
+        JSONObject json = new JSONObject();
+        json.put("imp_key", apiKey); // replace with your imp_key
+        json.put("imp_secret", secretApiKey); // replace with your imp_secret
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+        bw.write(json.toString());
+        bw.flush();
+        bw.close();
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+        String line;
+        String result = "";
+        while ((line = br.readLine()) != null) {
+            result += line;
+        }
+        br.close();
+
+        JSONParser parser = new JSONParser();
+        JSONObject response = (JSONObject) parser.parse(result);
+        JSONObject responseData = (JSONObject) response.get("response");
+        String token = (String) responseData.get("access_token");
+
+        return token;
+    }
+
+    public void cancelPayment(PaymentCancel paymentCancel) throws Exception {
+        String token = getToken(); // 토큰 생성
+
+        URL url = new URL("https://api.iamport.kr/payments/cancel");
+        HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-type", "application/json");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Authorization", "Bearer " + token); // 인증 헤더 설정
+        conn.setDoOutput(true);
+
+        // 취소 요청을 JSON 형식으로 변환
+        JSONObject json = new JSONObject();
+        json.put("merchant_uid", paymentCancel.getOrderNumber());
+        json.put("amount", paymentCancel.getAmount()); // 취소할 금액
+        json.put("reason", paymentCancel.getCancelReason()); // 취소 사유
+        json.put("requestor", paymentCancel.getRequestor()); // 요청자
+
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+        bw.write(json.toString());
+        bw.flush();
+        bw.close();
+
+        // API 응답 처리
+        BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            response.append(line);
+        }
+        br.close();
+
+        // 응답 결과 처리
+        JSONParser parser = new JSONParser();
+        JSONObject jsonResponse = (JSONObject) parser.parse(response.toString());
+
+        // 디버깅: 응답 내용 출력
+        System.out.println("응답 내용: " + jsonResponse.toString());
+
+        Long code = (Long) jsonResponse.get("code");
+        if (code != null && code == 0) {
+            System.out.println("결제 취소 성공");
+
+            // 결제 상태 업데이트 로직
+            Payment payment = paymentMapper.paymentData(paymentCancel.getOrderNumber());
+            if (payment != null) {
+                payment.setStatus("cancelled");
+                paymentMapper.updatePaymentStatus(payment);
+
+                JSONObject responseObj = (JSONObject) jsonResponse.get("response");
+                paymentCancel.setCancelledAt((Long) responseObj.get("cancelled_at"));
+                paymentCancel.setCardName((String) responseObj.get("card_name"));
+                paymentCancel.setName((String) responseObj.get("name"));
+                paymentCancel.setImpUid((String) responseObj.get("imp_uid"));
+                paymentCancel.setCardNumber((String) responseObj.get("card_number"));
+                paymentCancel.setReceiptUrl((String) responseObj.get("receipt_url"));
+
+                paymentCancelMapper.insert(paymentCancel);
+
+                productMapper.updateRefundStock(payment.getProductId(), payment.getQuantity());
+
+//                productOrderMapper.deleteOrder(payment.getId());
+
+
+            }
+
+        } else {
+            String errorMessage = (String) jsonResponse.get("message");
+            System.err.println("결제 취소 실패: " + errorMessage);
+        }
+
     }
 }

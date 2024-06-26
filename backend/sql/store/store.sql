@@ -202,5 +202,31 @@ FROM product_order po
 GROUP BY DATE(order_date)
 ORDER BY order_date desc;
 
-SELECT *
-FROM movie_file;
+
+CREATE TABLE payment_cancel
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    order_number  varchar(50),
+    payment_id    INT REFERENCES payment (id),
+    cancel_reason VARCHAR(100),
+    requestor     VARCHAR(100),
+    amount        LONG,
+    cancelled_at  LONG,
+    receipt_url   VARCHAR(200),
+    card_name     VARCHAR(100),
+    name          VARCHAR(100),
+    imp_uid       VARCHAR(50),
+    card_number   VARCHAR(50)
+);
+
+select *
+from payment;
+select *
+from payment_cancel;
+select *
+from product;
+select *
+from product_order;
+
+select *
+from product_cart;

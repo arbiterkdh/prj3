@@ -29,6 +29,7 @@ public class CartController {
         return service.cartProductList();
     }
 
+
     @DeleteMapping("/delete/{productId}")
     public void deleteItem(@PathVariable Integer productId) {
 
@@ -41,5 +42,12 @@ public class CartController {
 
         service.modifyQuantity(productCart);
     }
+
+    @GetMapping("/totalCount")
+    public int totalCount(@RequestParam("memberNumber") Integer memberNumber) {
+
+        return service.totalCount(memberNumber);
+    }
+
 
 }

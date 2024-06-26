@@ -86,4 +86,12 @@ public interface CartMapper {
             WHERE id = #{cartId}
             """)
     Integer getProductId(Integer cartId);
+
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM product_cart
+            WHERE member_number = #{memberNumber}
+            """)
+    Integer totalCount(Integer memberNumber);
 }

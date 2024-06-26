@@ -1,4 +1,3 @@
-import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 import {
   Box,
   Button,
@@ -8,6 +7,13 @@ import {
   Center,
   Heading,
   Input,
+  Link,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Select,
   Stack,
   StackDivider,
@@ -20,6 +26,7 @@ import {
   Tbody,
   Td,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
@@ -39,6 +46,7 @@ import {
   faAnglesLeft,
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
+import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -51,10 +59,25 @@ export function MemberMyPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [paymentResult, setPaymentResult] = useState([]);
-  const [pageInfo, setPageInfo] = useState({});
+  const [pageInfoPaymentResult, setPageInfoPaymentResult] = useState({});
+  const [pageInfoPaymentCancelResult, setPageInfoPaymentCancelResult] =
+    useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [page, setPage] = useState(1);
+
+  const [paymentCancelResult, setPaymentCancelResult] = useState([]);
+  const [cancelReason, setCancelReason] = useState("");
+  const [orderNumber, setOrderNumber] = useState("");
+  const [paymentId, setPaymentId] = useState(null);
+  const [buyerName, setBuyerName] = useState("");
+  const [amount, setAmount] = useState(0);
+
+  const {
+    isOpen: isCancleOpen,
+    onOpen: onCancelOpen,
+    onClose: onCancelClose,
+  } = useDisclosure();
 
   const location = useLocation();
   const { nickName } = location.state;
@@ -81,11 +104,26 @@ export function MemberMyPage() {
         })
         .then((res) => {
           setPaymentResult(res.data.paymentResult);
-          setPageInfo(res.data.pageInfo);
+          setPageInfoPaymentResult(res.data.pageInfo);
         })
         .catch(() => {})
         .finally(() => {});
     }
+  }, [nickName, page]);
+
+  useEffect(() => {
+    axios
+      .get(`/api/member/mypage/paymentCancelResult/${nickName}`, {
+        params: {
+          page,
+        },
+      })
+      .then((res) => {
+        setPaymentCancelResult(res.data.paymentCancelResult);
+        setPageInfoPaymentCancelResult(res.data.pageInfo);
+      })
+      .catch(() => {})
+      .finally(() => {});
   }, [nickName, page]);
 
   function handleClick() {
@@ -120,10 +158,43 @@ export function MemberMyPage() {
       });
   }
 
-  const pageNumbers = [];
+  const pageNumbersPaymentResult = [];
 
-  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
-    pageNumbers.push(i);
+  for (
+    let i = pageInfoPaymentResult.leftPageNumber;
+    i <= pageInfoPaymentResult.rightPageNumber;
+    i++
+  ) {
+    pageNumbersPaymentResult.push(i);
+  }
+
+  const pageNumbersPaymentCancelResult = [];
+  for (
+    let i = pageInfoPaymentCancelResult.leftPageNumber;
+    i <= pageInfoPaymentCancelResult.rightPageNumber;
+    i++
+  ) {
+    pageNumbersPaymentCancelResult.push(i);
+  }
+
+  function handlePaymentCancel() {
+    axios
+      .post("/api/store/payment/cancel", {
+        orderNumber,
+        paymentId,
+        requestor: buyerName,
+        cancelReason,
+        amount,
+      })
+      .then((res) => {
+        console.log("취소:" + res.data);
+      })
+      .catch((err) => {
+        console.error("취소 오류:" + err);
+      })
+      .finally(() => {
+        onCancelClose();
+      });
   }
 
   return (
@@ -135,7 +206,8 @@ export function MemberMyPage() {
             <Tab>회원정보</Tab>
             <Tab>비밀번호 변경</Tab>
             <Tab>예매내역</Tab>
-            <Tab>결제내역</Tab>
+            <Tab>결제내역({pageInfoPaymentResult.totalCount})</Tab>
+            <Tab>취소내역({pageInfoPaymentCancelResult.totalCount})</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -222,7 +294,7 @@ export function MemberMyPage() {
             </TabPanel>
             <TabPanel>예매내역</TabPanel>
             <TabPanel>
-              결제내역({pageInfo.totalCount})
+              결제내역
               <Table>
                 <Thead>
                   <Tr>
@@ -231,42 +303,69 @@ export function MemberMyPage() {
                     <Th>상품명</Th>
                     <Th>수량</Th>
                     <Th>가격</Th>
-                    <Th>총가격</Th>
+                    <Th>합계</Th>
+                    <Th>취소</Th>
+                    <Th>상태</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {paymentResult.map((resultItem, index) => (
-                    <Tr key={index}>
+                  {paymentResult.map((resultItem) => (
+                    <Tr key={resultItem.id}>
                       <Td>{resultItem.orderNumber}</Td>
                       <Td>{resultItem.buyerDate}</Td>
                       <Td>{resultItem.name}</Td>
                       <Td>{resultItem.quantity}</Td>
-                      <Td>{resultItem.price}</Td>
-                      <Td>{resultItem.totalPrice}</Td>
+                      <Td>{resultItem.price}원</Td>
+                      <Td>{resultItem.totalPrice}원</Td>
+                      <Td>
+                        {resultItem.status === "paid" ? (
+                          <Button
+                            onClick={() => {
+                              onCancelOpen();
+                              setOrderNumber(resultItem.orderNumber);
+                              setPaymentId(resultItem.id);
+                              setBuyerName(resultItem.buyerName);
+                              setAmount(resultItem.amount);
+                            }}
+                          >
+                            취소
+                          </Button>
+                        ) : (
+                          <Text>취소완료</Text>
+                        )}
+                      </Td>
+                      {resultItem.status === "paid" ? (
+                        <Td>결제완료</Td>
+                      ) : (
+                        <Td>결제취소</Td>
+                      )}
                     </Tr>
                   ))}
                   <Tr>
                     <Td>
-                      {pageInfo.prevPageNumber && (
+                      {pageInfoPaymentResult.prevPageNumber && (
                         <>
                           <Button onClick={() => setPage(1)}>
                             <FontAwesomeIcon icon={faAnglesLeft} />
                           </Button>
                           <Button
-                            onClick={() => setPage(pageInfo.prevPageNumber)}
+                            onClick={() =>
+                              setPage(pageInfoPaymentResult.prevPageNumber)
+                            }
                           >
                             <FontAwesomeIcon icon={faAngleLeft} />
                           </Button>
                         </>
                       )}
-                      {pageNumbers.map(
+                      {pageNumbersPaymentResult.map(
                         (pageNumber) =>
                           pageNumber !== 0 && (
                             <Button
                               onClick={() => setPage(pageNumber)}
                               key={pageNumber}
                               colorScheme={
-                                pageNumber === pageInfo.currentPageNumber
+                                pageNumber ===
+                                pageInfoPaymentResult.currentPageNumber
                                   ? "blue"
                                   : "gray"
                               }
@@ -276,15 +375,119 @@ export function MemberMyPage() {
                           ),
                       )}
 
-                      {pageInfo.nextPageNumber && (
+                      {pageInfoPaymentResult.nextPageNumber && (
                         <>
                           <Button
-                            onClick={() => setPage(pageInfo.nextPageNumber)}
+                            onClick={() =>
+                              setPage(pageInfoPaymentResult.nextPageNumber)
+                            }
                           >
                             <FontAwesomeIcon icon={faAngleRight} />
                           </Button>
                           <Button
-                            onClick={() => setPage(pageInfo.lastPageNumber)}
+                            onClick={() =>
+                              setPage(pageInfoPaymentResult.lastPageNumber)
+                            }
+                          >
+                            <FontAwesomeIcon icon={faAnglesRight} />
+                          </Button>
+                        </>
+                      )}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TabPanel>
+            <TabPanel>
+              상세 취소내역
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>주문 번호</Th>
+                    <Th>사유</Th>
+                    <Th>상품명</Th>
+                    <Th>가격</Th>
+                    <Th>결제카드</Th>
+                    <Th>카드번호</Th>
+                    <Th>영수증</Th>
+                    <Th>승인상태</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {paymentCancelResult.map((resultItem, index) => (
+                    <Tr key={index}>
+                      <Td>{resultItem.orderNumber}</Td>
+                      <Td>{resultItem.cancelReason}</Td>
+                      <Td>{resultItem.name}</Td>
+                      <Td>{resultItem.amount}원</Td>
+                      <Td>{resultItem.cardName}</Td>
+                      <Td>{resultItem.cardNumber}</Td>
+                      <Td>
+                        <Link href={resultItem.receiptUrl} target={"_blank"}>
+                          <Button>확인</Button>
+                        </Link>
+                      </Td>
+                      {resultItem.status === "paid" ? (
+                        <Td></Td>
+                      ) : (
+                        <Td fontSize={"sm"}>취소완료</Td>
+                      )}
+                    </Tr>
+                  ))}
+
+                  <Tr>
+                    <Td>
+                      {pageInfoPaymentCancelResult.prevPageNumber && (
+                        <>
+                          <Button onClick={() => setPage(1)}>
+                            <FontAwesomeIcon icon={faAnglesLeft} />
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              setPage(
+                                pageInfoPaymentCancelResult.prevPageNumber,
+                              )
+                            }
+                          >
+                            <FontAwesomeIcon icon={faAngleLeft} />
+                          </Button>
+                        </>
+                      )}
+                      {pageNumbersPaymentCancelResult.map(
+                        (pageNumber) =>
+                          pageNumber !== 0 && (
+                            <Button
+                              onClick={() => setPage(pageNumber)}
+                              key={pageNumber}
+                              colorScheme={
+                                pageNumber ===
+                                pageInfoPaymentCancelResult.currentPageNumber
+                                  ? "blue"
+                                  : "gray"
+                              }
+                            >
+                              {pageNumber}
+                            </Button>
+                          ),
+                      )}
+
+                      {pageInfoPaymentCancelResult.nextPageNumber && (
+                        <>
+                          <Button
+                            onClick={() =>
+                              setPage(
+                                pageInfoPaymentCancelResult.nextPageNumber,
+                              )
+                            }
+                          >
+                            <FontAwesomeIcon icon={faAngleRight} />
+                          </Button>
+                          <Button
+                            onClick={() =>
+                              setPage(
+                                pageInfoPaymentCancelResult.lastPageNumber,
+                              )
+                            }
                           >
                             <FontAwesomeIcon icon={faAnglesRight} />
                           </Button>
@@ -297,6 +500,22 @@ export function MemberMyPage() {
             </TabPanel>
           </TabPanels>
         </Tabs>
+        <Modal isOpen={isCancleOpen} onClose={onCancelClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalBody>
+              <ModalHeader>취소사유 입력</ModalHeader>
+              <Textarea
+                placeholder={"취소사유를 작성해주세요"}
+                onChange={(e) => setCancelReason(e.target.value)}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={() => handlePaymentCancel()}>확인</Button>
+              <Button onClick={() => onCancelClose()}>취소</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </CenterBox>
     </Center>
   );

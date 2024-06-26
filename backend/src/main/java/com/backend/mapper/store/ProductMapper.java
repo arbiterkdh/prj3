@@ -85,4 +85,11 @@ public interface ProductMapper {
             WHERE id = #{productId}
             """)
     int updateStock(Integer productId, Integer getQuantity);
+
+    @Update("""
+            UPDATE product
+            SET stock = stock + #{quantity}
+            WHERE id = #{productId}
+            """)
+    int updateRefundStock(Integer productId, Integer quantity);
 }

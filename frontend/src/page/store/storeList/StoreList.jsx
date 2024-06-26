@@ -98,8 +98,12 @@ export function StoreList() {
           <Box w={"50%"}>
             <Flex alignItems={"center"}>
               <Heading>상품 리스트</Heading>
-              <Text color={"red"} onClick={() => navigate("cart")}>
-                {" "}
+              <Text
+                color={"red"}
+                bgColor={"white"}
+                _dark={{ bgColor: "#2d4c4c", color: "white" }}
+                onClick={() => navigate("cart")}
+              >
                 <FontAwesomeIcon
                   icon={faCartShopping}
                   fontSize={"1.2rem"}
@@ -112,6 +116,7 @@ export function StoreList() {
             <Button
               onClick={() => navigate("/store/add")}
               bgColor={"#e73426"}
+              _dark={{ bgColor: "#2d4c4c" }}
               color={"white"}
             >
               상품등록

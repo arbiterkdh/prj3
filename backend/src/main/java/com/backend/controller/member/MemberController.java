@@ -60,4 +60,11 @@ public class MemberController {
         return service.paymentResult(nickName, page);
     }
 
+    @GetMapping("mypage/paymentCancelResult/{nickName}")
+    public Map<String, Object> paymentCancelResult(@PathVariable String nickName, @RequestParam(value = "page", defaultValue = "1") Integer page) {
+
+        return service.paymentCancelResult(nickName, page);
+    }
+
+
 }
