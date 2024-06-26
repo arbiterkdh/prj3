@@ -46,29 +46,17 @@ export function TheaterSeatList() {
   }, []);
 
   function handleSeatClick(alphabet, number) {
-    console.log(alphabet, number);
     let seatNumber = number;
-    if (alphabet === "A") {
-      if (number > 13) {
-        seatNumber = number - 2;
-      } else if (number > 4) {
-        seatNumber = number - 1;
-      }
-    } else if (alphabet === "I") {
-      if (number > 6) {
-        seatNumber = number - 10;
-      }
-    } else if (alphabet === "J") {
-      if (number > 4) {
-        seatNumber = number - 10;
-      }
-    } else {
+    if (alphabet !== "A" && alphabet !== "J") {
       if (number > 15) {
         seatNumber = number - 2;
-      } else if (number > 6) {
+      } else if (number > 7) {
         seatNumber = number - 1;
       }
+    } else if (alphabet === "J" && number > 4) {
+      seatNumber = number - 10;
     }
+    console.log(alphabet, seatNumber);
   }
 
   return (
