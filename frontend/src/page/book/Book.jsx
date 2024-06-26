@@ -144,6 +144,7 @@ export function Book() {
           <BookDateComponent
             selectedDay={selectedDay}
             setSelectedDay={setSelectedDay}
+            setCheckedMovieId={setCheckedMovieId}
           />
           <Box h={"550px"} borderLeft={"1px solid"} borderTop={"1px solid"}>
             <BookTheaterLocationMovieList
