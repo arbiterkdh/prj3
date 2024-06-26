@@ -29,7 +29,6 @@ import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import EmptySeatBox from "../../../css/theme/component/box/EmptySeatBox.jsx";
-import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
 
 export function TheaterSeatList() {
   const { setBookProgress } = useOutletContext();
@@ -43,6 +42,9 @@ export function TheaterSeatList() {
   const [theaterBoxMovie, setTheaterBoxMovie] = useState([]);
 
   const [movieInfoButton, setMovieInfoButton] = useState(true);
+
+  const [numberOfPeople, setNumberOfPeople] = useState(0);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
   const [mouseLocation, setMouseLocation] = useState(null);
@@ -107,25 +109,38 @@ export function TheaterSeatList() {
         </Flex>
       </BorderBox>
       <BorderBox h={"100px"} p={4} fontWeight={"600"}>
-        <Flex align={"center"} gap={2}>
-          <Stack fontSize={"16px"} gap={0} m={1}>
-            <Box>{"상영시간: "}</Box>
+        <Flex align={"center"} gap={4} my={2}>
+          <Flex fontSize={"16px"} gap={2}>
+            <Box fontSize={"18px"}>{"상영시간: "}</Box>
             <Box>
               {bookPlaceTime.startTime.slice(11, 16)}~
               {bookPlaceTime.endTime.slice(11, 16)}
             </Box>
-          </Stack>
-          <Stack gap={0} m={1}>
-            <Box>{"좌석: "}</Box>
+          </Flex>
+          <Flex gap={2}>
+            <Box fontSize={"18px"}>{"좌석: "}</Box>
             <Box>
               {bookPlaceTime.vacancy}/{theaterBox.capacity}
             </Box>
-          </Stack>
+          </Flex>
           <Box>
-            <GapFlex align={"center"}>
-              <Box w={"60px"}>인원: </Box>
+            <Flex gap={2} align={"center"}>
+              <Box w={"60px"} fontSize={"18px"}>
+                인원:{" "}
+              </Box>
               <InputGroup>
-                <NumberInput size="md" maxW={20} defaultValue={0} min={0}>
+                <NumberInput
+                  size="md"
+                  maxW={20}
+                  min={0}
+                  max={bookPlaceTime.vacancy}
+                  value={numberOfPeople ? numberOfPeople : 0}
+                  onChange={(e) => {
+                    setNumberOfPeople(e);
+                    setTotalAmount(e * 14000);
+                  }}
+                  allowMouseWheel
+                >
                   <NumberInputField
                     p={2}
                     border={"1px solid"}
@@ -134,29 +149,43 @@ export function TheaterSeatList() {
                     _focusVisible={{
                       border: "2px solid gray",
                     }}
+                    readOnly
                   />
                   <NumberInputStepper borderLeft={"1px solid"}>
-                    <NumberIncrementStepper borderBottom={"1px solid"} />
+                    <NumberIncrementStepper
+                      _disabled={{ cursor: "default" }}
+                      borderBottom={"1px solid"}
+                    />
                     <NumberDecrementStepper
                       _disabled={{ cursor: "default" }}
                       borderTop={"1px solid"}
                     />
                   </NumberInputStepper>
                 </NumberInput>
-                <InputRightElement mx={8} h={"35px"}>
+                <InputRightElement mr={9} h={"35px"} fontSize={"14px"}>
                   명
                 </InputRightElement>
               </InputGroup>
-            </GapFlex>
+            </Flex>
           </Box>
 
-          <InputGroup w={"150px"}>
+          <InputGroup w={"120px"} ml={-5} mr={-5} size={"sm"}>
             <Input
-              defaultValue={0}
+              value={
+                numberOfPeople > 71
+                  ? (numberOfPeople * 14 + "").slice(0, 1) +
+                    "," +
+                    (numberOfPeople * 14 + "").slice(1, 4) +
+                    ",000"
+                  : numberOfPeople > 0
+                    ? numberOfPeople * 14 + ",000"
+                    : 0
+              }
               textAlign={"right"}
-              readOnly
               border={"none"}
               bgColor={"whiteAlpha.50"}
+              fontSize={"16px"}
+              readOnly
             />
             <InputRightElement>원</InputRightElement>
           </InputGroup>
@@ -166,23 +195,26 @@ export function TheaterSeatList() {
           </Box>
         </Flex>
       </BorderBox>
-      <Button
-        position={"absolute"}
-        size={"sm"}
-        zIndex={4}
-        top={"420px"}
-        left={"1330px"}
-        bgColor={"whiteAlpha.700"}
-        _dark={{
-          bgColor: "whiteAlpha.300",
-          _hover: {
-            bgColor: "whiteAlpha.500",
-          },
-        }}
-        onClick={() => setMovieInfoButton(!movieInfoButton)}
-      >
-        {movieInfoButton ? "좌석먼저보기" : "영화소개보기"}
-      </Button>
+      <Box w={"880px"} position={"absolute"}>
+        <Button
+          m={2}
+          size={"sm"}
+          zIndex={4}
+          left={"89%"}
+          left={"89%"}
+          bgColor={"whiteAlpha.700"}
+          _dark={{
+            bgColor: "whiteAlpha.300",
+            _hover: {
+              bgColor: "whiteAlpha.500",
+            },
+          }}
+          onClick={() => setMovieInfoButton(!movieInfoButton)}
+        >
+          {movieInfoButton ? "좌석보기" : "영화소개"}
+        </Button>
+      </Box>
+
       <Flex
         zIndex={movieInfoButton ? 3 : 0}
         display={movieInfoButton ? "flex" : "none"}
@@ -218,11 +250,17 @@ export function TheaterSeatList() {
           <Heading mx={-2} mt={4} fontSize={"lg"}>
             줄거리
           </Heading>
-          <Text pr={5} whiteSpace={"pre-wrap"} h={"220px"} overflowY={"scroll"}>
+          <Text
+            pr={5}
+            mb={3}
+            whiteSpace={"pre-wrap"}
+            h={"190px"}
+            overflowY={"scroll"}
+          >
             {movie.content}
           </Text>
           <Stack>
-            <Box m={-3} mt={5} fontSize={"lg"} fontWeight={"600"}>
+            <Box mx={-3} mt={4} fontSize={"lg"} fontWeight={"600"}>
               감독: {movie.director}
             </Box>
             <Box noOfLines={1}>출연진: {movie.actors}</Box>
