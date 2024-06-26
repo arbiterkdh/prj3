@@ -36,7 +36,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import HeartButton from "../../../css/theme/component/button/HeartButton.jsx";
-import TicketingButton from "../../../css/theme/component/button/TicketingButton.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieList() {
   const [movieList, setMovieList] = useState([]);
@@ -129,9 +129,41 @@ export function MovieList() {
           </Box>
         )}
         <Tabs isFitted variant="enclosed">
-          <TabList mb="1em">
-            <Tab onClick={handleNowShowingMovieTab}>현재상영작</Tab>
-            <Tab onClick={handleComingSoonMovieTab}>상영예정작</Tab>
+          <TabList mb="1em" borderBottom={"none"}>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+              onClick={handleNowShowingMovieTab}
+            >
+              현재상영작
+            </Tab>
+            <Tab
+              borderBottom={"1px solid #e8eaed"}
+              _selected={{
+                border: "1px solid #e8eaed",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+              onClick={handleComingSoonMovieTab}
+            >
+              상영예정작
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -140,12 +172,29 @@ export function MovieList() {
                 <Spacer />
                 <InputGroup mb={5} w={"300px"} size="md">
                   <Input
+                    border={"3px solid #FF4357"}
+                    borderRadius={"20px"}
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     placeholder="영화명 검색"
                   />
                   <InputRightElement width="4.5rem">
-                    <Button onClick={handleSearchClick} h="1.75rem" size="md">
+                    <Button
+                      bgColor={"white"}
+                      _hover={{
+                        bgColor: "white",
+                      }}
+                      _dark={{
+                        color: "lightgray",
+                        bgColor: "#121212",
+                        _hover: {
+                          bgColor: "#121212",
+                        },
+                      }}
+                      onClick={handleSearchClick}
+                      h="1.75rem"
+                      size="md"
+                    >
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Button>
                   </InputRightElement>
@@ -194,7 +243,7 @@ export function MovieList() {
                           >
                             {movie.movieHeart.count}
                           </HeartButton>
-                          <TicketingButton w={"100px"}>예매</TicketingButton>
+                          <ColorButton w={"100px"}>예매</ColorButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>
@@ -217,12 +266,29 @@ export function MovieList() {
                 <Spacer />
                 <InputGroup mb={5} w={"300px"} size="md">
                   <Input
+                    border={"3px solid #FF4357"}
+                    borderRadius={"20px"}
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     placeholder="영화명 검색"
                   />
                   <InputRightElement width="4.5rem">
-                    <Button onClick={handleSearchClick} h="1.75rem" size="md">
+                    <Button
+                      bgColor={"white"}
+                      _hover={{
+                        bgColor: "white",
+                      }}
+                      _dark={{
+                        color: "lightgray",
+                        bgColor: "#121212",
+                        _hover: {
+                          bgColor: "#121212",
+                        },
+                      }}
+                      onClick={handleSearchClick}
+                      h="1.75rem"
+                      size="md"
+                    >
                       <FontAwesomeIcon icon={faMagnifyingGlass} />
                     </Button>
                   </InputRightElement>
@@ -271,7 +337,7 @@ export function MovieList() {
                           >
                             {movie.movieHeart.count}
                           </HeartButton>
-                          <TicketingButton w={"100px"}>예매</TicketingButton>
+                          <ColorButton w={"100px"}>예매</ColorButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>

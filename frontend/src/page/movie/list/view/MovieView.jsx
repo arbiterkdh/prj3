@@ -24,7 +24,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as fullHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as emptyHeart } from "@fortawesome/free-regular-svg-icons";
 import HeartButton from "../../../../css/theme/component/button/HeartButton.jsx";
-import TicketingButton from "../../../../css/theme/component/button/TicketingButton.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieView() {
   const { id } = useParams();
@@ -35,6 +35,11 @@ export function MovieView() {
     count: 0,
   });
   const toast = useToast();
+  const [posterUrl, setPosterUrl] = useState("");
+
+  const kmdbKey = import.meta.env.VITE_KMDb_APP_KEY;
+  const kmdbUrl =
+    "http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y";
 
   useEffect(() => {
     axios
@@ -42,6 +47,19 @@ export function MovieView() {
       .then((res) => {
         setMovie(res.data.movie);
         setLike(res.data.like);
+        axios
+          .get(
+            `${kmdbUrl}&movieId=${res.data.movie.alphabet}&movieSeq=${res.data.movie.number}&ServiceKey=${kmdbKey}`,
+          )
+          .then((res) => {
+            let posterLength =
+              res.data.Data[0].Result[0].posters.split("|").length;
+            setPosterUrl(
+              res.data.Data[0].Result[0].posters.split("|")[
+                Math.floor(Math.random() * posterLength)
+              ],
+            );
+          });
       })
       .catch(() => {})
       .finally(() => {});
@@ -70,13 +88,44 @@ export function MovieView() {
     <Center>
       <CenterBox>
         <Stack>
-          <Flex mb={"20px"}>
+          <Flex h={"450px"} position="relative" mb={"20px"}>
+            <Box
+              position="absolute"
+              top="0"
+              right="0"
+              bottom="0"
+              left="0"
+              backgroundImage={`url(${posterUrl})`}
+              backgroundRepeat="no-repeat"
+              backgroundPosition="center top"
+              backgroundSize="60%"
+              zIndex="1"
+            />
+            <Box
+              background={
+                "linear-gradient(to right, #0f0f0f 20%, rgba(15, 15, 15, 0) 50%, #0f0f0f 80%)"
+              }
+              position="absolute"
+              top="0"
+              right="0"
+              bottom="0"
+              left="0"
+              zIndex="2"
+            />
             <Stack justify={"space-between"}>
-              <Heading mt={"20px"} fontSize={"5xl"} textAlign={"center"}>
+              <Heading
+                p={10}
+                zIndex={"10"}
+                mt={"20px"}
+                fontSize={"5xl"}
+                textAlign={"center"}
+                color={"white"}
+              >
                 {movie.title}
               </Heading>
-              <Box>
+              <Box p={10}>
                 <HeartButton
+                  zIndex={"10"}
                   leftIcon={
                     like.like ? (
                       <FontAwesomeIcon icon={fullHeart} />
@@ -89,13 +138,22 @@ export function MovieView() {
                 >
                   {like.count}
                 </HeartButton>
-                <TicketingButton w={"200px"}>예매</TicketingButton>
+                <ColorButton zIndex={"10"} w={"200px"}>
+                  예매
+                </ColorButton>
               </Box>
             </Stack>
             <Spacer />
-            <Box mb={10}>
+            <Box p={12}>
               <Center>
-                <Image mb={"-30px"} w={"300px"} src={movie.movieImageFile} />
+                <Image
+                  border={"1px solid"}
+                  color={"whiteAlpha.500"}
+                  zIndex={"10"}
+                  mb={"-30px"}
+                  w={"250px"}
+                  src={movie.movieImageFile}
+                />
               </Center>
             </Box>
           </Flex>
@@ -103,9 +161,9 @@ export function MovieView() {
             <Tabs isFitted variant={"enclosed"}>
               <TabList mb="1em" borderBottom={"none"}>
                 <Tab
-                  borderBottom={"1px solid #e8eaed"}
+                  borderBottom={"1px solid lightgray"}
                   _selected={{
-                    border: "1px solid #e8eaed",
+                    border: "1px solid lightgray",
                     borderBottom: "1px solid #FEFEFE",
                   }}
                   _dark={{
@@ -119,9 +177,9 @@ export function MovieView() {
                   주요정보
                 </Tab>
                 <Tab
-                  borderBottom={"1px solid #e8eaed"}
+                  borderBottom={"1px solid lightgray"}
                   _selected={{
-                    border: "1px solid #e8eaed",
+                    border: "1px solid lightgray",
                     borderBottom: "1px solid #FEFEFE",
                   }}
                   _dark={{
@@ -143,7 +201,7 @@ export function MovieView() {
                     setIsProcessing={setIsProcessing}
                   />
                 </TabPanel>
-                <TabPanel>
+                <TabPanel mt={"-30px"}>
                   <MovieComment
                     movieId={id}
                     isProcessing={isProcessing}

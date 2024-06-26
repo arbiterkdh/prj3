@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { MovieComment } from "./comment/MovieComment.jsx";
 import { useContext } from "react";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -63,7 +64,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
               {movie.content}
             </p>
           </Box>
-          <Divider />
+          <Divider border={"1px solid lightgray"} />
           <Box mt={10}>
             <Flex>
               <Text mr={2}>상영타입 : </Text>
@@ -89,15 +90,20 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
         </Stack>
         {account.isAdmin() && (
           <Flex justifyContent={"flex-end"} mb={"50px"}>
-            <Button onClick={handleModifyClick} colorScheme={"blue"}>
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              onClick={handleModifyClick}
+            >
               수정
             </Button>
-            <Button onClick={onOpen} colorScheme={"red"}>
-              삭제
-            </Button>
+            <ColorButton onClick={onOpen}>삭제</ColorButton>
           </Flex>
         )}
-        <Divider color={"#DFE5E5"} />
+        <Divider border={"1px solid lightgray"} />
         <MovieComment
           movieId={movie.id}
           isProcessing={isProcessing}
@@ -112,9 +118,7 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
           <ModalBody>삭제 하시겠습니까?</ModalBody>
           <ModalFooter>
             <Button onClick={onClose}>취소</Button>
-            <Button onClick={handleRemoveClick} colorScheme={"red"}>
-              삭제
-            </Button>
+            <ColorButton onClick={handleRemoveClick}>삭제</ColorButton>
           </ModalFooter>
         </ModalContent>
       </Modal>

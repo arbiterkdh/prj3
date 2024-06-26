@@ -12,9 +12,9 @@ public interface MovieMapper {
     @Insert("""
             INSERT INTO movie
             (title, content, genre, running_time,
-            rating, start_Date, director, actors)
+            rating, start_Date, director, actors, alphabet, number)
             VALUES (#{title}, #{content}, #{genre}, #{runningTime},
-                   #{rating}, #{startDate}, #{director}, #{actors})
+                   #{rating}, #{startDate}, #{director}, #{actors}, #{alphabet}, #{number})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertMovie(Movie movie);

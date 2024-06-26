@@ -50,6 +50,8 @@ export function MovieAdd() {
   const [startDate, setStartDate] = useState(new Date());
   const [director, setDirector] = useState("");
   const [actors, setActors] = useState("");
+  const [alphabet, setAlphabet] = useState("");
+  const [number, setNumber] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [movieList, setMovieList] = useState([]);
 
@@ -71,6 +73,8 @@ export function MovieAdd() {
         startDate: startDate.toISOString().split("T")[0],
         director,
         actors,
+        alphabet,
+        number,
       })
       .then(() => navigate("/movie"));
   }
@@ -101,6 +105,8 @@ export function MovieAdd() {
           selectDirectorName(res.data.Data[0].Result[0].directors.director),
         );
         setActors(selectActorsName(res.data.Data[0].Result[0].actors.actor));
+        setAlphabet(movieId);
+        setNumber(movieSeq);
       })
       .finally(onClose);
   }
@@ -302,6 +308,16 @@ export function MovieAdd() {
               <Input
                 value={actors}
                 onChange={(e) => setActors(e.target.value)}
+              />
+            </Box>
+            <Box hidden={"_hidden"}>
+              <Input
+                value={alphabet}
+                onChange={(e) => setAlphabet(e.target.value)}
+              />
+              <Input
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
               />
             </Box>
             <Box>

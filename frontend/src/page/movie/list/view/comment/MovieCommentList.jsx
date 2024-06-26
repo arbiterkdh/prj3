@@ -46,6 +46,21 @@ export function MovieCommentList({ movieId, isProcessing, setIsProcessing }) {
     pageNumbers.push(i);
   }
 
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
+
   return (
     <Stack>
       {commentList.map((comment) => (
@@ -75,9 +90,10 @@ export function MovieCommentList({ movieId, isProcessing, setIsProcessing }) {
             <Button
               size={"sm"}
               onClick={() => setPage(pageNumber)}
-              colorScheme={
-                pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
-              }
+              // colorScheme={
+              //   pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
+              // }
+              sx={pageNumber === pageInfo.currentPageNumber ? clicked : {}}
               key={pageNumber}
             >
               {pageNumber}
