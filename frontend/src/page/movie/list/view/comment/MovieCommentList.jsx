@@ -90,9 +90,6 @@ export function MovieCommentList({ movieId, isProcessing, setIsProcessing }) {
             <Button
               size={"sm"}
               onClick={() => setPage(pageNumber)}
-              // colorScheme={
-              //   pageNumber === pageInfo.currentPageNumber ? "blue" : "gray"
-              // }
               sx={pageNumber === pageInfo.currentPageNumber ? clicked : {}}
               key={pageNumber}
             >
