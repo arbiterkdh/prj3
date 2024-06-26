@@ -20,6 +20,7 @@ export function TheaterSeatList() {
   );
   const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
   const [mouseLocation, setMouseLocation] = useState(null);
+  const [seatFocused, setSeatFocused] = useState("");
 
   const navigate = useNavigate();
 
@@ -42,21 +43,26 @@ export function TheaterSeatList() {
 
   useEffect(() => {
     setBookProgress(2);
-    axios.get(`/book/theaterseat/${bookPlaceTime.id}`);
-  }, []);
+    if (bookPlaceTime) {
+      axios
+        .get(`/api/book/theaterseat/${bookPlaceTime.bookPlaceTimeId}`)
+        .then((res) => {
+          console.log(res.data);
+        });
+    }
+  }, [bookPlaceTime]);
 
-  function handleSeatClick(alphabet, number) {
-    let seatNumber = number;
+  function handleSeatSelect(alphabet, number) {
     if (alphabet !== "A" && alphabet !== "J") {
       if (number > 15) {
-        seatNumber = number - 2;
+        number -= 2;
       } else if (number > 7) {
-        seatNumber = number - 1;
+        number -= 1;
       }
     } else if (alphabet === "J" && number > 4) {
-      seatNumber = number - 10;
+      number -= 10;
     }
-    console.log(alphabet, seatNumber);
+    return setSeatFocused(alphabet + "-" + number);
   }
 
   return (
@@ -103,7 +109,21 @@ export function TheaterSeatList() {
               transform: "perspective(500px) rotateX(-20deg)",
               transformOrigin: "bottom",
             }}
-          />
+          >
+            <Box
+              sx={{
+                width: "380px",
+                height: "50px",
+                color: "darkslategray",
+                _dark: { color: "red.900" },
+                transform: "perspective(100px) rotateX(15deg)",
+                transformOrigin: "bottom",
+              }}
+              fontSize={"6xl"}
+            >
+              {seatFocused && seatFocused}
+            </Box>
+          </Box>
         </Box>
       </BorderBox>
       <BorderBox
@@ -175,9 +195,11 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox>
                               <FontAwesomeIcon
-                                onClick={() =>
-                                  handleSeatClick(row.alphabet, col)
+                                cursor={"pointer"}
+                                onMouseEnter={() =>
+                                  handleSeatSelect(row.alphabet, col)
                                 }
+                                onMouseLeave={() => setSeatFocused("")}
                                 icon={faCouch}
                               />
                             </EmptySeatBox>
@@ -186,9 +208,11 @@ export function TheaterSeatList() {
                           <Flex>
                             <EmptySeatBox>
                               <FontAwesomeIcon
-                                onClick={() =>
-                                  handleSeatClick(row.alphabet, col)
+                                cursor={"pointer"}
+                                onMouseEnter={() =>
+                                  handleSeatSelect(row.alphabet, col)
                                 }
+                                onMouseLeave={() => setSeatFocused("")}
                                 icon={faCouch}
                               />
                             </EmptySeatBox>
@@ -200,9 +224,11 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox>
                               <FontAwesomeIcon
-                                onClick={() =>
-                                  handleSeatClick(row.alphabet, col)
+                                cursor={"pointer"}
+                                onMouseEnter={() =>
+                                  handleSeatSelect(row.alphabet, col)
                                 }
+                                onMouseLeave={() => setSeatFocused("")}
                                 icon={faCouch}
                               />
                             </EmptySeatBox>
@@ -217,9 +243,11 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox>
                               <FontAwesomeIcon
-                                onClick={() =>
-                                  handleSeatClick(row.alphabet, col)
+                                cursor={"pointer"}
+                                onMouseEnter={() =>
+                                  handleSeatSelect(row.alphabet, col)
                                 }
+                                onMouseLeave={() => setSeatFocused("")}
                                 icon={faCouch}
                               />
                             </EmptySeatBox>
@@ -231,7 +259,11 @@ export function TheaterSeatList() {
                         ) : (
                           <EmptySeatBox>
                             <FontAwesomeIcon
-                              onClick={() => handleSeatClick(row.alphabet, col)}
+                              cursor={"pointer"}
+                              onMouseEnter={() =>
+                                handleSeatSelect(row.alphabet, col)
+                              }
+                              onMouseLeave={() => setSeatFocused("")}
                               icon={faCouch}
                             />
                           </EmptySeatBox>

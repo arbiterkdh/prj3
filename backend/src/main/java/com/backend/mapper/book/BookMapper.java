@@ -187,4 +187,11 @@ public interface BookMapper {
             AND m.id = #{movieId}
             """)
     List<BookPlaceTime> selectAllBookPlaceTimeByTheaterBoxMovieIdAndDateAndMovieId(Integer theaterBoxMovieId, LocalDate selectedDate, Integer movieId);
+
+    @Select("""
+            SELECT *
+            FROM book_place_time
+            WHERE book_place_time_id = #{bookPlaceTimeId}
+            """)
+    BookPlaceTime selectBookPlaceTime(Integer bookPlaceTimeId);
 }
