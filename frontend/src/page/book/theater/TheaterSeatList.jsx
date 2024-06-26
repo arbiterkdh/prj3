@@ -1,4 +1,22 @@
-import { Box, CloseButton, Flex, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  CloseButton,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  Spinner,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import {
   faCouch,
   faDoorOpen,
@@ -11,6 +29,7 @@ import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import EmptySeatBox from "../../../css/theme/component/box/EmptySeatBox.jsx";
+import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
 
 export function TheaterSeatList() {
   const { setBookProgress } = useOutletContext();
@@ -18,6 +37,11 @@ export function TheaterSeatList() {
   const [bookPlaceTime, setBookPlaceTime] = useState(
     location.state.bookPlaceTime,
   );
+  const [movie, setMovie] = useState([]);
+  const [theater, setTheater] = useState([]);
+  const [theaterBox, setTheaterBox] = useState([]);
+  const [theaterBoxMovie, setTheaterBoxMovie] = useState([]);
+
   const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
   const [mouseLocation, setMouseLocation] = useState(null);
   const [seatFocused, setSeatFocused] = useState("");
@@ -47,10 +71,14 @@ export function TheaterSeatList() {
       axios
         .get(`/api/book/theaterseat/${bookPlaceTime.bookPlaceTimeId}`)
         .then((res) => {
-          console.log(res.data);
+          console.log(res.data.movie);
+          setMovie(res.data.movie);
+          setTheater(res.data.theater);
+          setTheaterBox(res.data.theaterBox);
+          setTheaterBoxMovie(res.data.theaterBoxMovie);
         });
     }
-  }, [bookPlaceTime]);
+  }, []);
 
   function handleSeatSelect(alphabet, number) {
     if (alphabet !== "A" && alphabet !== "J") {
@@ -71,14 +99,107 @@ export function TheaterSeatList() {
         <Flex justifyContent={"space-between"} m={1}>
           <Box></Box>
           <Box fontSize={"lg"} fontWeight={"600"} alignContent={"center"}>
-            인원/좌석 선택
+            CCV {theater.location}점 인원/좌석 선택
           </Box>
           <CloseButton onClick={() => navigate("/book")}></CloseButton>
         </Flex>
       </BorderBox>
-      <BorderBox h={"100px"} p={1}>
-        영화 나오는 곳
+      <BorderBox h={"100px"} alignContent={"center"} p={4}>
+        <Flex align={"center"} gap={2}>
+          <Heading m={2} w={"250px"} noOfLines={1} lineHeight={"100px"}>
+            {movie.title}
+          </Heading>
+          <Stack fontSize={"16px"} gap={0} m={1}>
+            <Box>{"상영시간: "}</Box>
+            <Box>
+              {bookPlaceTime.startTime.slice(11, 16)}~
+              {bookPlaceTime.endTime.slice(11, 16)}
+            </Box>
+          </Stack>
+          <Stack gap={0} m={1}>
+            <Box>{"좌석: "}</Box>
+            <Box>
+              {bookPlaceTime.vacancy}/{theaterBox.capacity}
+            </Box>
+          </Stack>
+          <Box>
+            <NumberInput size="md" maxW={16} defaultValue={1} min={1}>
+              <NumberInputField
+                p={2}
+                border={"1px solid"}
+                borderRadius={"none"}
+                fontSize={"16px"}
+              />
+              <NumberInputStepper borderLeft={"1px solid"}>
+                <NumberIncrementStepper borderBottom={"1px solid"} />
+                <NumberDecrementStepper
+                  _disabled={{ cursor: "default" }}
+                  borderTop={"1px solid"}
+                />
+              </NumberInputStepper>
+            </NumberInput>
+          </Box>
+          <Box>
+            <BorderSelect placeholder={"나이"} w={"82px"}>
+              <option>성인</option>
+              <option>청소년</option>
+            </BorderSelect>
+          </Box>
+          <InputGroup w={"150px"}>
+            <Input defaultValue={"0"} textAlign={"right"} readOnly />
+            <InputRightElement>원</InputRightElement>
+          </InputGroup>
+
+          <Box>
+            <Button p={2}>좌석선택</Button>
+          </Box>
+        </Flex>
       </BorderBox>
+      <Flex
+        zIndex={3}
+        position={"absolute"}
+        w={"880px"}
+        h={"550px"}
+        border={"1px solid"}
+        align={"center"}
+        boxShadow={"inset 0 0 35px rgba(0, 0, 0, 1)"}
+        bgColor={"rgba(17, 35, 37, 0.95)"}
+        _dark={{
+          bgColor: "blackAlpha.800",
+          boxShadow: "inset 0 0 35px rgba(45, 45, 45, 1)",
+        }}
+      >
+        <Box m={8} w={"380px"}>
+          {movie ? (
+            <Image
+              src={movie.movieImageFile}
+              maxH={"500px"}
+              _dark={{
+                filter: "brightness(80%)",
+              }}
+            />
+          ) : (
+            <Spinner></Spinner>
+          )}
+        </Box>
+        <Box m={8} w={"440px"} h={"500px"} color={"whiteAlpha.800"}>
+          <Heading mx={-4} mt={4} fontSize={"lg"}>
+            줄거리
+          </Heading>
+          <Text pr={5} whiteSpace={"pre-wrap"} h={"220px"} overflowY={"scroll"}>
+            {movie.content}
+          </Text>
+          <Stack m={-5} mt={5}>
+            <Heading>감독: {movie.director}</Heading>
+            <Box noOfLines={1}>출연진: {movie.actors}</Box>
+            <Box>장르: {movie.genre}</Box>
+            <Flex>
+              <Box w={"100%"}>수위: {movie.rating}</Box>
+              <Box w={"100%"}>평점: 9.0 </Box>
+            </Flex>
+          </Stack>
+        </Box>
+      </Flex>
       <BorderBox
         h={"150px"}
         display={"flex"}

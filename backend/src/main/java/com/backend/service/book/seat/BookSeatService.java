@@ -11,6 +11,7 @@ import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.theater.TheaterMapper;
 import com.backend.mapper.theater.box.TheaterBoxMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,12 @@ import java.util.Map;
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class BookSeatService {
+
+    @Value("${aws.s3.bucket.name}")
+    String bucketName;
+
+    @Value("${image.src.prefix}")
+    String srcPrefix;
 
     private final BookMapper bookMapper;
     private final BookSeatMapper bookSeatMapper;
@@ -36,6 +43,8 @@ public class BookSeatService {
         TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(theaterBoxMovie.getId());
         Theater theater = theaterMapper.selectTheaterByTheaterNumber(theaterBox.getTheaterNumber());
         Movie movie = movieMapper.selectByMovieId(theaterBoxMovie.getMovieId());
+        String file = STR."\{srcPrefix}/movie/\{movie.getId()}/\{movieMapper.selectFileNameByMovieId(movie.getId())}";
+        movie.setMovieImageFile(file);
 
         data.put("bookPlaceTime", bookPlaceTime);
         data.put("theaterBoxMovie", theaterBoxMovie);

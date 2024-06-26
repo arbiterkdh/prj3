@@ -26,7 +26,7 @@ export function BookHome() {
     <Center>
       <CenterBox>
         <Heading>빠른예매</Heading>
-        <Flex border={"2px solid"}>
+        <Flex border={"2px solid"} mb={"35px"}>
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack
               bgColor={bookProgress === 1 ? "red.500" : ""}
