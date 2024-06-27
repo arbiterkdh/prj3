@@ -71,15 +71,15 @@ function ProductItemList({
     return (
       <MarginBox>
         <Flex w={"100%"} gap={3} flexWrap={"wrap"}>
-          {productList.map((product) => (
-            <ProductItem key={product.id} product={product} />
+          {productList.map((product, index) => (
+            <ProductItem key={product.id} product={product} rank={index + 1} />
           ))}
         </Flex>
       </MarginBox>
     );
   };
 
-  const ProductItem = ({ product }) => {
+  const ProductItem = ({ product, rank }) => {
     return (
       <Box
         style={{
@@ -95,6 +95,16 @@ function ProductItemList({
           _dark={{ bgColor: "darkslategray", opacity: "0.9" }}
         >
           <CardBody>
+            {rank && (
+              <Box
+                fontSize="2xl"
+                fontWeight="bold"
+                color={"#ed3124"}
+                _dark={{ color: "blue.200" }}
+              >
+                {rank}위
+              </Box>
+            )}
             <Image
               style={{
                 width: "100%",

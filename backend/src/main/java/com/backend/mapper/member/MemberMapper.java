@@ -3,6 +3,7 @@ package com.backend.mapper.member;
 import com.backend.domain.member.Member;
 import com.backend.domain.store.Payment;
 import com.backend.domain.store.PaymentCancel;
+import com.backend.domain.store.ProductOrder;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -72,7 +73,16 @@ public interface MemberMapper {
             SELECT *
             FROM payment_cancel
             WHERE requestor = #{nickName}
+            order by id desc
             limit #{offset},10
             """)
     List<PaymentCancel> paymentCancelResult(String nickName, Integer offset);
+
+
+    @Select("""
+            SELECT name, quantity, price, total_price 
+            FROM product_order
+            WHERE payment_id = #{paymentId}
+            """)
+    List<ProductOrder> paymentOrderItem(Integer paymentId);
 }

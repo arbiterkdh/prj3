@@ -122,7 +122,9 @@ export function StoreList() {
             </StoreMenuText>
           </StoreMenuCursorBox>
           <StoreMenuCursorBox>
-            <StoreMenuText>Best</StoreMenuText>
+            <StoreMenuText onClick={() => setMenuTypeSelect("best")}>
+              Best
+            </StoreMenuText>
           </StoreMenuCursorBox>
           <StoreMenuCursorBox onClick={() => setMenuTypeSelect(1)}>
             <StoreMenuText>세트</StoreMenuText>

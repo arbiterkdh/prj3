@@ -153,8 +153,10 @@ public class PaymentService {
         if (code != null && code == 0) {
             System.out.println("결제 취소 성공");
 
-            Payment payment = paymentMapper.paymentData(paymentCancel.getOrderNumber());
-            if (payment != null) {
+            List<Payment> payments = paymentMapper.paymentData(paymentCancel.getOrderNumber());
+            if (payments.size() == 1) {
+
+                Payment payment = payments.get(0);
                 payment.setStatus("cancelled");
                 paymentMapper.updatePaymentStatus(payment);
 
@@ -171,7 +173,25 @@ public class PaymentService {
                 productMapper.updateRefundStock(payment.getProductId(), payment.getQuantity());
 
 //                productOrderMapper.deleteOrder(payment.getId());
+            } else {
+                for (Payment payment : payments) {
+                    payment.setStatus("cancelled");
+                    paymentMapper.updatePaymentStatus(payment);
+
+                    JSONObject responseObj = (JSONObject) jsonResponse.get("response");
+                    paymentCancel.setCancelledAt((Long) responseObj.get("cancelled_at"));
+                    paymentCancel.setCardName((String) responseObj.get("card_name"));
+                    paymentCancel.setName((String) responseObj.get("name"));
+                    paymentCancel.setImpUid((String) responseObj.get("imp_uid"));
+                    paymentCancel.setCardNumber((String) responseObj.get("card_number"));
+                    paymentCancel.setReceiptUrl((String) responseObj.get("receipt_url"));
+
+                    paymentCancelMapper.insert(paymentCancel);
+
+                    productMapper.updateRefundStock(payment.getProductId(), payment.getQuantity());
+                }
             }
+
         } else {
             String errorMessage = (String) jsonResponse.get("message");
             System.err.println("결제 취소 실패: " + errorMessage);

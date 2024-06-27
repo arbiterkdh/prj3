@@ -73,10 +73,18 @@ export function MemberMyPage() {
   const [buyerName, setBuyerName] = useState("");
   const [amount, setAmount] = useState(0);
 
+  const [selectPaymentResult, setSelectPaymentResult] = useState([]);
+
   const {
-    isOpen: isCancleOpen,
+    isOpen: isCancelOpen,
     onOpen: onCancelOpen,
     onClose: onCancelClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isPaymentResultOpen,
+    onOpen: onPaymentResultOpen,
+    onClose: onPaymentResultClose,
   } = useDisclosure();
 
   const location = useLocation();
@@ -197,6 +205,18 @@ export function MemberMyPage() {
       });
   }
 
+  function handlePaymentOrderItem(paymentId) {
+    console.log(paymentId);
+    axios
+      .get(`/api/member/mypage/paymentOrderItem/${paymentId}`)
+      .then((res) => {
+        setSelectPaymentResult(res.data);
+        onPaymentResultOpen();
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }
+
   return (
     <Center>
       <CenterBox>
@@ -298,25 +318,26 @@ export function MemberMyPage() {
               <Table>
                 <Thead>
                   <Tr>
-                    <Th>주문 번호</Th>
-                    <Th>주문일</Th>
-                    <Th>상품명</Th>
-                    <Th>수량</Th>
-                    <Th>가격</Th>
-                    <Th>합계</Th>
-                    <Th>취소</Th>
-                    <Th>상태</Th>
+                    <Th w={"30%"}>주문 번호</Th>
+                    <Th w={"30%"}>주문일</Th>
+                    <Th w={"10%"}>합계</Th>
+                    <Th w={"10%"}>취소</Th>
+                    <Th w={"20%"}>상태</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {paymentResult.map((resultItem) => (
                     <Tr key={resultItem.id}>
-                      <Td>{resultItem.orderNumber}</Td>
+                      <Td
+                        onClick={() => {
+                          handlePaymentOrderItem(resultItem.id);
+                        }}
+                        cursor={"pointer"}
+                      >
+                        {resultItem.orderNumber}
+                      </Td>
                       <Td>{resultItem.buyerDate}</Td>
-                      <Td>{resultItem.name}</Td>
-                      <Td>{resultItem.quantity}</Td>
-                      <Td>{resultItem.price}원</Td>
-                      <Td>{resultItem.totalPrice}원</Td>
+                      <Td>{resultItem.amount}원</Td>
                       <Td>
                         {resultItem.status === "paid" ? (
                           <Button
@@ -404,7 +425,6 @@ export function MemberMyPage() {
                 <Thead>
                   <Tr>
                     <Th>주문 번호</Th>
-                    <Th>사유</Th>
                     <Th>상품명</Th>
                     <Th>가격</Th>
                     <Th>결제카드</Th>
@@ -414,26 +434,33 @@ export function MemberMyPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {paymentCancelResult.map((resultItem, index) => (
-                    <Tr key={index}>
-                      <Td>{resultItem.orderNumber}</Td>
-                      <Td>{resultItem.cancelReason}</Td>
-                      <Td>{resultItem.name}</Td>
-                      <Td>{resultItem.amount}원</Td>
-                      <Td>{resultItem.cardName}</Td>
-                      <Td>{resultItem.cardNumber}</Td>
-                      <Td>
-                        <Link href={resultItem.receiptUrl} target={"_blank"}>
-                          <Button>확인</Button>
-                        </Link>
-                      </Td>
-                      {resultItem.status === "paid" ? (
-                        <Td></Td>
-                      ) : (
-                        <Td fontSize={"sm"}>취소완료</Td>
-                      )}
-                    </Tr>
-                  ))}
+                  {paymentCancelResult.map(
+                    (resultItem, index) =>
+                      paymentCancelResult.findIndex(
+                        (item) => item.orderNumber === resultItem.orderNumber,
+                      ) === index && (
+                        <Tr key={index}>
+                          <Td>{resultItem.orderNumber}</Td>
+                          <Td>{resultItem.name}</Td>
+                          <Td>{resultItem.amount}원</Td>
+                          <Td>{resultItem.cardName}</Td>
+                          <Td>{resultItem.cardNumber}</Td>
+                          <Td>
+                            <Link
+                              href={resultItem.receiptUrl}
+                              target={"_blank"}
+                            >
+                              <Button>확인</Button>
+                            </Link>
+                          </Td>
+                          {resultItem.status === "paid" ? (
+                            <Td></Td>
+                          ) : (
+                            <Td fontSize={"sm"}>취소완료</Td>
+                          )}
+                        </Tr>
+                      ),
+                  )}
 
                   <Tr>
                     <Td>
@@ -500,7 +527,7 @@ export function MemberMyPage() {
             </TabPanel>
           </TabPanels>
         </Tabs>
-        <Modal isOpen={isCancleOpen} onClose={onCancelClose}>
+        <Modal isOpen={isCancelOpen} onClose={onCancelClose}>
           <ModalOverlay />
           <ModalContent>
             <ModalBody>
@@ -513,6 +540,38 @@ export function MemberMyPage() {
             <ModalFooter>
               <Button onClick={() => handlePaymentCancel()}>확인</Button>
               <Button onClick={() => onCancelClose()}>취소</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        <Modal isOpen={isPaymentResultOpen} onClose={onPaymentResultClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>결제상품조회</ModalHeader>
+            <ModalBody>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>상품명</Th>
+                    <Th>수량</Th>
+                    <Th>가격</Th>
+                    <Th>합계</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {selectPaymentResult.map((resultItem, itemIndex) => (
+                    <Tr key={itemIndex}>
+                      <Td>{resultItem.name}</Td>
+                      <Td>{resultItem.quantity}</Td>
+                      <Td>{resultItem.price}원</Td>
+                      <Td>{resultItem.totalPrice}원</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onPaymentResultClose}>확인</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>

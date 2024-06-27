@@ -233,6 +233,12 @@ order by id desc;
 select *
 from product_cart;
 
+select name, sum(quantity) as totalQuantity
+from product_order
+group by name
+order by totalQuantity desc
+limit 5;
+
 
 
 select p.id    as payment_id,

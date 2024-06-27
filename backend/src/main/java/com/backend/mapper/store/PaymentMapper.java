@@ -47,7 +47,7 @@ public interface PaymentMapper {
             ON p.id = po.payment_id
             WHERE order_number = #{orderNumber}
             """)
-    Payment paymentData(String orderNumber);
+    List<Payment> paymentData(String orderNumber);
 
 
     @Update("""
