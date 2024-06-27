@@ -61,14 +61,19 @@ export function TheaterSeatList() {
   let ASCII_A = "A".charCodeAt(0);
   for (let i = 0; i < 10; i++) {
     const alphabet = String.fromCharCode(ASCII_A + i);
-    if (alphabet === "A" || alphabet === "J") {
+    if (alphabet === "A") {
       seatList.push({ alphabet, seat: [] });
       for (let j = 0; j < 18; j++) {
         seatList[i].seat.push(j + 1);
       }
+    } else if (alphabet === "J") {
+      seatList.push({ alphabet, seat: [] });
+      for (let j = 0; j < 8; j++) {
+        seatList[i].seat.push(j + 1);
+      }
     } else {
       seatList.push({ alphabet, seat: [] });
-      for (let j = 0; j < 22; j++) {
+      for (let j = 0; j < 20; j++) {
         seatList[i].seat.push(j + 1);
       }
     }
@@ -92,15 +97,6 @@ export function TheaterSeatList() {
 
   function handleSeatFocus(alphabet, number) {
     setRawFocused(alphabet + number);
-    if (alphabet !== "A" && alphabet !== "J") {
-      if (number > 15) {
-        number -= 2;
-      } else if (number > 7) {
-        number -= 1;
-      }
-    } else if (alphabet === "J" && number > 4) {
-      number -= 10;
-    }
     return setSeatFocused(alphabet + "-" + number);
   }
 
@@ -115,18 +111,7 @@ export function TheaterSeatList() {
     }
 
     let seatSelectedList = [...seatSelected];
-    let rawSelectedList = [...rawSelected];
-    let rawNumber = number;
 
-    if (alphabet !== "A" && alphabet !== "J") {
-      if (number > 15) {
-        number -= 2;
-      } else if (number > 7) {
-        number -= 1;
-      }
-    } else if (alphabet === "J" && number > 4) {
-      number -= 10;
-    }
     if (!seatSelectedList.includes(alphabet + "-" + number)) {
       if (seatSelected.length === numberOfPeople) {
         toast({
@@ -137,16 +122,11 @@ export function TheaterSeatList() {
         return;
       }
       seatSelectedList.push(alphabet + "-" + number);
-      rawSelectedList.push(alphabet + rawNumber);
     } else {
       seatSelectedList = seatSelectedList.filter(
         (seat) => seat !== alphabet + "-" + number,
       );
-      rawSelectedList = rawSelectedList.filter(
-        (rawSeat) => rawSeat !== alphabet + rawNumber,
-      );
     }
-    setRawSelected(rawSelectedList);
     return setSeatSelected(seatSelectedList);
   }
 
@@ -512,14 +492,14 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox
                               color={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? "darkslategray"
                                   : ""
                               }
                               _dark={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? { color: "red.800" }
                                   : {}
                               }
@@ -531,7 +511,6 @@ export function TheaterSeatList() {
                                 }
                                 onMouseLeave={() => {
                                   setSeatFocused("");
-                                  setRawFocused("");
                                 }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
@@ -544,14 +523,14 @@ export function TheaterSeatList() {
                           <Flex>
                             <EmptySeatBox
                               color={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? "darkslategray"
                                   : ""
                               }
                               _dark={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? { color: "red.800" }
                                   : {}
                               }
@@ -563,7 +542,6 @@ export function TheaterSeatList() {
                                 }
                                 onMouseLeave={() => {
                                   setSeatFocused("");
-                                  setRawFocused("");
                                 }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
@@ -579,14 +557,14 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox
                               color={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? "darkslategray"
                                   : ""
                               }
                               _dark={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? { color: "red.800" }
                                   : {}
                               }
@@ -598,7 +576,6 @@ export function TheaterSeatList() {
                                 }
                                 onMouseLeave={() => {
                                   setSeatFocused("");
-                                  setRawFocused("");
                                 }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
@@ -607,24 +584,19 @@ export function TheaterSeatList() {
                               />
                             </EmptySeatBox>
                           </Flex>
-                        ) : index > 3 && index < 14 && row.alphabet === "J" ? (
-                          <EmptySeatBox />
-                        ) : index === 14 && row.alphabet === "J" ? (
+                        ) : index === 4 && row.alphabet === "J" ? (
                           <Flex>
-                            <EmptySeatBox />
-                            <EmptySeatBox />
-                            <EmptySeatBox />
-                            <EmptySeatBox />
+                            <EmptySeatBox w={`${14 * (22 + 2)}px`} />
                             <EmptySeatBox
                               color={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? "darkslategray"
                                   : ""
                               }
                               _dark={
-                                rawFocused === row.alphabet + col ||
-                                rawSelected.includes(row.alphabet + col)
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
                                   ? { color: "red.800" }
                                   : {}
                               }
@@ -636,7 +608,6 @@ export function TheaterSeatList() {
                                 }
                                 onMouseLeave={() => {
                                   setSeatFocused("");
-                                  setRawFocused("");
                                 }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
@@ -645,21 +616,51 @@ export function TheaterSeatList() {
                               />
                             </EmptySeatBox>
                           </Flex>
-                        ) : (index === 6 || index === 15) &&
+                        ) : (index === 5 || index === 13) &&
                           row.alphabet !== "A" &&
                           row.alphabet !== "J" ? (
-                          <EmptySeatBox />
+                          <Flex>
+                            <EmptySeatBox
+                              color={
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
+                                  ? "darkslategray"
+                                  : ""
+                              }
+                              _dark={
+                                seatFocused === row.alphabet + "-" + col ||
+                                seatSelected.includes(row.alphabet + "-" + col)
+                                  ? { color: "red.800" }
+                                  : {}
+                              }
+                            >
+                              <FontAwesomeIcon
+                                cursor={"pointer"}
+                                onMouseEnter={() =>
+                                  handleSeatFocus(row.alphabet, col)
+                                }
+                                onMouseLeave={() => {
+                                  setSeatFocused("");
+                                }}
+                                onClick={() =>
+                                  handleSeatSelect(row.alphabet, col)
+                                }
+                                icon={faCouch}
+                              />
+                            </EmptySeatBox>
+                            <EmptySeatBox />
+                          </Flex>
                         ) : (
                           <EmptySeatBox
                             color={
-                              rawFocused === row.alphabet + col ||
-                              rawSelected.includes(row.alphabet + col)
+                              seatFocused === row.alphabet + "-" + col ||
+                              seatSelected.includes(row.alphabet + "-" + col)
                                 ? "darkslategray"
                                 : ""
                             }
                             _dark={
-                              rawFocused === row.alphabet + col ||
-                              rawSelected.includes(row.alphabet + col)
+                              seatFocused === row.alphabet + "-" + col ||
+                              seatSelected.includes(row.alphabet + "-" + col)
                                 ? { color: "red.800" }
                                 : {}
                             }
@@ -671,7 +672,6 @@ export function TheaterSeatList() {
                               }
                               onMouseLeave={() => {
                                 setSeatFocused("");
-                                setRawFocused("");
                               }}
                               onClick={() =>
                                 handleSeatSelect(row.alphabet, col)
