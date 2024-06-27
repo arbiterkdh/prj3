@@ -72,7 +72,11 @@ function ProductItemList({
       <MarginBox>
         <Flex w={"100%"} gap={3} flexWrap={"wrap"}>
           {productList.map((product, index) => (
-            <ProductItem key={product.id} product={product} rank={index + 1} />
+            <ProductItem
+              key={product.id}
+              product={product}
+              rank={product.menuType === "best" ? product.rank : null}
+            />
           ))}
         </Flex>
       </MarginBox>

@@ -18,6 +18,8 @@ CREATE TABLE product
     quantity INT      default 1,
     reg_date DATETIME DEFAULT NOW()
 );
+alter table product
+    modify column type varchar(10);
 
 CREATE TABLE product_cart
 (

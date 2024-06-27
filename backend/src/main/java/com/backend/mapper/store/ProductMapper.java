@@ -37,7 +37,8 @@ public interface ProductMapper {
             <choose>
                 <when test="menuTypeSelect == 'best'">
                     SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, SUM(po.quantity) as totalQuantity,
-                           RANK() OVER (ORDER BY SUM(po.quantity) DESC) as rank
+                           RANK() OVER (ORDER BY SUM(po.quantity) DESC) as rank,
+                           'best' as menuType
                     FROM product p
                     JOIN product_image pi ON p.id = pi.product_id
                     JOIN product_order po ON p.id = po.product_id
@@ -46,7 +47,8 @@ public interface ProductMapper {
                     LIMIT 5
                 </when>
                 <otherwise>
-                    SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, p.quantity
+                    SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, p.quantity,
+                           'other' as menuType
                     FROM product p
                     JOIN product_image pi ON p.id = pi.product_id
                     <if test="menuTypeSelect != 'all'">
@@ -58,7 +60,6 @@ public interface ProductMapper {
                 </otherwise>
             </choose>
             </script>
-                        
             """)
     List<Product> productList(String menuTypeSelect, Integer offset);
 
