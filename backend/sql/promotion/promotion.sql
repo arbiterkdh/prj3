@@ -34,33 +34,17 @@ CREATE TABLE promotion_result
     CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo (id)
 );
 
-CREATE TABLE winner (
-                        id INT PRIMARY KEY AUTO_INCREMENT,
-                        promotion_result_id INT,
-                        member_id INT,
-                        FOREIGN KEY (promotion_result_id) REFERENCES promotion_result(id),
-                        FOREIGN KEY (member_id) REFERENCES member(number)
-);
-
-CREATE TABLE promotion_result (
-                                  id INT AUTO_INCREMENT PRIMARY KEY,
-                                  promotion_id INT NOT NULL,
-                                  announcement_date DATE NOT NULL,
-                                  winners TEXT NOT NULL,
-                                  CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo(id)
-);
-
-CREATE TABLE promo_winner (
-                              id INT PRIMARY KEY AUTO_INCREMENT,
-                              promotion_result_id INT,
-                              member_id INT,
-                              FOREIGN KEY (promotion_result_id) REFERENCES promotion_result(id),
-                              FOREIGN KEY (member_id) REFERENCES member(number)
+CREATE TABLE promo_winner
+(
+    id                  INT PRIMARY KEY AUTO_INCREMENT,
+    promotion_result_id INT,
+    member_id           INT,
+    FOREIGN KEY (promotion_result_id) REFERENCES promotion_result (id),
+    FOREIGN KEY (member_id) REFERENCES member (number)
 );
 
 DROP TABLE IF EXISTS promo_winner;
 DROP TABLE IF EXISTS promotion_result;
-
 
 DESC promo;
 DESC promo_file;
@@ -94,3 +78,22 @@ SET promotion_id      = 132,
     announcement_date = '2024-06-28',
     winners           = '[{"email":"123@123","name":"123"}]'
 WHERE id = 132;
+
+-- 기존 외래 키 삭제
+ALTER TABLE promo_winner
+    DROP FOREIGN KEY promo_winner_ibfk_1;
+
+ALTER TABLE promotion_result
+    DROP FOREIGN KEY fk_promotion_id;
+
+-- 새로운 외래 키 추가 (ON DELETE CASCADE)
+ALTER TABLE promo_winner
+    ADD CONSTRAINT promo_winner_ibfk_1
+        FOREIGN KEY (promotion_result_id) REFERENCES promotion_result (id) ON DELETE CASCADE,
+    ADD CONSTRAINT promo_winner_member_fk
+        FOREIGN KEY (member_id) REFERENCES member (number);
+
+ALTER TABLE promotion_result
+    ADD CONSTRAINT fk_promotion_id
+        FOREIGN KEY (promotion_id) REFERENCES promo (id) ON DELETE CASCADE;
+

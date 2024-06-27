@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,8 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 public class PromoResultService {
+
+    @Autowired
     private final PromoResultMapper promoResultMapper;
     private final ObjectMapper objectMapper;
 

@@ -158,8 +158,6 @@ export function PromoResultAdd() {
       member.nickName.toLowerCase().includes(memberSearchQuery.toLowerCase()),
   );
 
-  console.log("winners:", winners);
-
   return (
     <Center>
       <CenterBox>

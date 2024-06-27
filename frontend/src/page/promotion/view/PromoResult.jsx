@@ -23,6 +23,7 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import PromoResultPagination from "../component/PromoResultPagination.jsx";
@@ -40,6 +41,7 @@ export function PromoResult() {
   const currentPage = parseInt(searchParams.get("page"), 10) || 1;
   const searchQuery = searchParams.get("search") || "";
   const pageSize = 10;
+  const toast = useToast();
 
   const fetchEventResults = async (page, search) => {
     try {
@@ -76,8 +78,22 @@ export function PromoResult() {
         ...prevPageInfo,
         totalItems: prevPageInfo.totalItems - 1,
       }));
+      toast({
+        title: "삭제 성공",
+        description: "당첨자 발표가 성공적으로 삭제되었습니다.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error("당첨자 발표를 삭제하는데 실패했습니다.", error);
+      toast({
+        title: "삭제 실패",
+        description: "당첨자 발표 삭제에 실패했습니다.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
