@@ -26,7 +26,7 @@ public class PromoResultService {
     private final ObjectMapper objectMapper;
 
     public void addPromoResult(PromoResult promoResult) {
-        Promo promo = promoResultMapper.getPromotionById(promoResult.getPromotionId());
+        Promo promo = promoResultMapper.getPromoById(promoResult.getPromotionId());
         if (promo != null) {
             promoResult.setEventType(promo.getEventType());
             promoResult.setEventName(promo.getTitle());
@@ -37,11 +37,11 @@ public class PromoResultService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize winners list", e);
         }
-        promoResultMapper.insertPromotionResult(promoResult);
-        int promotionResultId = promoResult.getId();
+        promoResultMapper.insertPromoResult(promoResult);
+        int promoResultId = promoResult.getId();
 
         for (PromoResult.Winner winner : promoResult.getWinners()) {
-            promoResultMapper.insertWinner(promotionResultId, winner.getEmail(), winner.getNickName());
+            promoResultMapper.insertWinner(promoResultId, winner.getEmail(), winner.getNickName());
         }
         System.out.println("PromoResult: " + promoResult);
         System.out.println("Winners: " + promoResult.getWinners());
@@ -52,9 +52,9 @@ public class PromoResultService {
             pageSize = 10; // 기본값을 10으로 설정
         }
 
-        int totalItems = promoResultMapper.countPromotionResults();
+        int totalItems = promoResultMapper.countPromoResults();
         int offset = (page - 1) * pageSize;
-        List<PromoResult> results = promoResultMapper.selectPromotionResults(offset, pageSize);
+        List<PromoResult> results = promoResultMapper.selectPromoResults(offset, pageSize);
         results.forEach(result -> deserializeWinners(result));
 
         Map<String, Object> response = new HashMap<>();
@@ -65,7 +65,7 @@ public class PromoResultService {
     }
 
     public PromoResult getPromoResultByPromotionId(int promotionId) {
-        PromoResult result = promoResultMapper.selectPromotionResultByPromotionId(promotionId);
+        PromoResult result = promoResultMapper.selectPromoResultByPromotionId(promotionId);
         if (result != null) {
             deserializeWinners(result);
         }
@@ -76,12 +76,12 @@ public class PromoResultService {
         try {
             String winnersJson = objectMapper.writeValueAsString(promoResult.getWinners());
             promoResult.setWinnersJson(winnersJson);
-            int rowsAffected = promoResultMapper.updatePromotionResult(id, promoResult);
+            int rowsAffected = promoResultMapper.updatePromoResult(id, promoResult);
             if (rowsAffected == 0) {
                 throw new RuntimeException("Update failed, no rows affected.");
             }
             // 업데이트 후 결과 확인 로그 추가
-            PromoResult updatedResult = promoResultMapper.selectPromotionResultById(id);
+            PromoResult updatedResult = promoResultMapper.selectPromoResultById(id);
             System.out.println("Updated Promotion Result from DB: " + updatedResult);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize winners list", e);
@@ -89,7 +89,7 @@ public class PromoResultService {
     }
 
     public void deletePromoResult(int id) {
-        promoResultMapper.deletePromotionResult(id);
+        promoResultMapper.deletePromoResult(id);
     }
 
     private Map<String, Object> createPageInfo(int page, int countAll, int pageSize) {

@@ -105,6 +105,10 @@ export function PromoResultAdd() {
       });
       navigate("/promotion/eventResult");
     } catch (error) {
+      console.error(
+        "Error adding promo result:",
+        error.response?.data || error.message,
+      );
       toast({
         title: "추가 중 오류가 발생하였습니다.",
         description: error.response?.data?.message || error.message,

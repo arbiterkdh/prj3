@@ -34,6 +34,9 @@ public class PromoService {
     String srcPrefix;
 
     public void addPromo(Promo promo, MultipartFile[] files) throws IOException {
+        if (promo.getIsRecommended() == null) {
+            promo.setIsRecommended(false);
+        }
         promoMapper.insertPromo(promo);
         if (files != null) {
             for (MultipartFile file : files) {
