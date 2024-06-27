@@ -1,9 +1,10 @@
-import { Box, Flex, Heading, useToast } from "@chakra-ui/react";
+import { Box, Flex, Heading, Tooltip, useToast } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import { LoginModal } from "../../../component/LoginModal.jsx";
 
 export function BookTheaterLocationMovieList({
   checkedTheaterNumber,
@@ -34,6 +35,7 @@ export function BookTheaterLocationMovieList({
 
   const [theaterBoxListFilteredByDate, setTheaterBoxListFilteredByDate] =
     useState([]);
+  const [isNeedLogin, setIsNeedLogin] = useState(false);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -61,7 +63,7 @@ export function BookTheaterLocationMovieList({
         description: "로그인이 필요한 서비스입니다.",
         position: "bottom-right",
       });
-      return navigate("/login", { state: { needLogin: true } });
+      return setIsNeedLogin(true);
     }
     return navigate(`/book/theaterseat`, { state: { bookPlaceTime } });
     // 예매 데이터 클릭 처리
@@ -69,6 +71,11 @@ export function BookTheaterLocationMovieList({
 
   return (
     <Box h={"inherit"} overflowY={"scroll"}>
+      <LoginModal
+        isNeedLogin={isNeedLogin}
+        setIsNeedLogin={setIsNeedLogin}
+        isBookComponent={true}
+      />
       {theaterBoxListFilteredByDate &&
         theaterBoxListFilteredByDate.map((theaterBoxFilteredByDate, index) => (
           <Box key={index}>
@@ -98,9 +105,40 @@ export function BookTheaterLocationMovieList({
                                 : "none"
                           }
                         >
-                          <Heading p={3} mt={5} mb={0}>
-                            {theaterBoxMovie.movieTitle}
-                          </Heading>
+                          {theaterBoxMovie.movieTitle.length > 11 ? (
+                            <Tooltip
+                              mx={3}
+                              my={-3}
+                              label={theaterBoxMovie.movieTitle}
+                              placement={"bottom-start"}
+                            >
+                              <Heading
+                                w={"360px"}
+                                overflow={"hidden"}
+                                fontSize={"26px"}
+                                mt={5}
+                                p={3}
+                                mb={0}
+                                whiteSpace={"nowrap"}
+                                textOverflow={"ellipsis"}
+                              >
+                                {theaterBoxMovie.movieTitle}
+                              </Heading>
+                            </Tooltip>
+                          ) : (
+                            <Heading
+                              w={"360px"}
+                              overflow={"hidden"}
+                              fontSize={"26px"}
+                              mt={5}
+                              p={3}
+                              mb={0}
+                              whiteSpace={"nowrap"}
+                              textOverflow={"ellipsis"}
+                            >
+                              {theaterBoxMovie.movieTitle}
+                            </Heading>
+                          )}
                           <Flex wrap={"wrap"} p={1}>
                             {theaterBoxMovie.bookPlaceTimeList.map(
                               (bookPlaceTime, index) => (

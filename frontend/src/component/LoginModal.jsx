@@ -33,18 +33,16 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export function LoginModal({
-  isNeedLogin,
-  setIsNeedLogin,
-  canShow,
-  setCanShow,
-  password,
-  setPassword,
-  adImage,
-}) {
+export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
   const account = useContext(LoginContext);
   const location = useLocation();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [canShow, setCanShow] = useState(false);
+  const [password, setPassword] = useState("");
+
+  const [movieImages, setMovieImages] = useState([]);
+  const [adImage, setAdImage] = useState("");
 
   const [email, setEmail] = useState("");
   const [eye, setEye] = useState(false);
@@ -53,20 +51,32 @@ export function LoginModal({
   const navigate = useNavigate();
 
   useEffect(() => {
+    axios
+      .get("/api/movie/list")
+      .then((res) => {
+        const images = res.data.movieList.map(
+          (movieItem) => movieItem.movieImageFile,
+        );
+        setMovieImages(images);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
+
+  useEffect(() => {
     if (isNeedLogin) {
       onOpen();
     }
-  }, [isNeedLogin]);
-
-  useEffect(() => {
-    if (location.state?.needLogin) {
-      onOpen();
+    if (movieImages.length > 0) {
+      const randomImage =
+        movieImages[Math.floor(Math.random() * movieImages.length)];
+      setAdImage(
+        randomImage.slice(-4) !== "null"
+          ? randomImage
+          : "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/default-ad-image.jpg",
+      );
     }
-
-    if (!account.isLoggedIn() && isNeedLogin) {
-      setIsNeedLogin(false);
-    }
-  }, [onOpen]);
+  }, [isNeedLogin, movieImages]);
 
   function handleLogin() {
     axios
@@ -79,7 +89,9 @@ export function LoginModal({
           position: "bottom-right",
         });
         onClose();
-        navigate("/");
+        if (!isBookComponent) {
+          navigate("/");
+        }
       })
       .catch(() => {
         account.logout();
@@ -99,8 +111,9 @@ export function LoginModal({
     <Modal
       isOpen={isOpen}
       onClose={() => {
-        setCanShow(false);
         onClose();
+        setCanShow(false);
+        setIsNeedLogin(false);
       }}
       isCentered={true}
     >

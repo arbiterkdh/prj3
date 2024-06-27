@@ -1,4 +1,4 @@
-import { Box, Input, Spinner, Stack } from "@chakra-ui/react";
+import { Box, Input, Spinner, Stack, Tooltip } from "@chakra-ui/react";
 import { useEffect } from "react";
 
 export function BookMovieList({
@@ -31,39 +31,62 @@ export function BookMovieList({
               상영중
             </Box>
           )}
-          {onScreenList.map((movie, index) => (
-            <Box key={movie.id}>
-              <Input
-                w={"95%"}
-                cursor={"pointer"}
-                border={"none"}
-                value={movie.title}
-                bgColor={checkedMovieId === movie.id ? "blackAlpha.200" : ""}
-                _hover={
-                  checkedMovieId === movie.id
-                    ? {}
-                    : {
-                        bgColor: "blackAlpha.200",
+          {onScreenList.map((movie, index) => {
+            let isSameMovie = checkedMovieId === movie.id;
+            let isSameTheater =
+              movie.theaterNumberList.includes(checkedTheaterNumber);
+            return (
+              <Box key={movie.id} w={"240px"}>
+                {movie.title.length > 12 ? (
+                  <Tooltip
+                    label={movie.title}
+                    placement={"bottom-start"}
+                    mx={2}
+                    my={"-42px"}
+                    fontSize={"md"}
+                  >
+                    <Input
+                      cursor={"pointer"}
+                      border={"none"}
+                      value={movie.title}
+                      bgColor={isSameMovie ? "blackAlpha.200" : ""}
+                      _hover={isSameMovie ? {} : { bgColor: "blackAlpha.200" }}
+                      _dark={
+                        isSameMovie
+                          ? { bgColor: "blackAlpha.500" }
+                          : {
+                              bgColor: "blackAlpha.50",
+                              _hover: { bgColor: "blackAlpha.400" },
+                            }
                       }
-                }
-                _dark={
-                  checkedMovieId === movie.id
-                    ? { bgColor: "blackAlpha.500" }
-                    : {
-                        bgColor: "blackAlpha.50",
-                        _hover: { bgColor: "blackAlpha.400" },
-                      }
-                }
-                isDisabled={
-                  !movie.theaterNumberList.includes(checkedTheaterNumber)
-                }
-                onClick={() => {
-                  setCheckedMovieId(movie.id);
-                }}
-                readOnly
-              />
-            </Box>
-          ))}
+                      isDisabled={!isSameTheater}
+                      onClick={() => setCheckedMovieId(movie.id)}
+                      readOnly
+                    />
+                  </Tooltip>
+                ) : (
+                  <Input
+                    cursor={"pointer"}
+                    border={"none"}
+                    value={movie.title}
+                    bgColor={isSameMovie ? "blackAlpha.200" : ""}
+                    _hover={isSameMovie ? {} : { bgColor: "blackAlpha.200" }}
+                    _dark={
+                      isSameMovie
+                        ? { bgColor: "blackAlpha.500" }
+                        : {
+                            bgColor: "blackAlpha.50",
+                            _hover: { bgColor: "blackAlpha.400" },
+                          }
+                    }
+                    isDisabled={!isSameTheater}
+                    onClick={() => setCheckedMovieId(movie.id)}
+                    readOnly
+                  />
+                )}
+              </Box>
+            );
+          })}
           {willScreenList.length > 0 && (
             <Box
               color={"whiteAlpha.900"}
@@ -89,9 +112,7 @@ export function BookMovieList({
                 isDisabled={
                   !movie.theaterNumberList.includes(checkedTheaterNumber)
                 }
-                onClick={() => {
-                  setCheckedMovieId(movie.id);
-                }}
+                onClick={() => setCheckedMovieId(movie.id)}
                 readOnly
               />
             </Box>
