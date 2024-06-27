@@ -42,7 +42,7 @@ function AddCartModal({
         toast({
           status: "success",
           description: "장바구니 담기 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         if (Login.id) {
           axios

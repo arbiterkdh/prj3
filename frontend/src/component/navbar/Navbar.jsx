@@ -1,4 +1,12 @@
-import { Box, Center, Flex, Heading, Image, useToast } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  useToast,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../../member/MemberLogin.jsx";
@@ -68,7 +76,12 @@ export function Navbar() {
                       cursor={"pointer"}
                       onClick={() => navigate("/store/cart")}
                     />
-                    {cartCount}
+                    <Badge
+                      _dark={{ bgColor: "#002827", color: "white" }}
+                      bgColor={"whiteAlpha.900"}
+                    >
+                      {cartCount}
+                    </Badge>
                   </CursorBox>
                   <CursorBox
                     onClick={() => {

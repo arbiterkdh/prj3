@@ -220,13 +220,33 @@ CREATE TABLE payment_cancel
 );
 
 select *
-from payment;
+from payment
+order by id desc;
 select *
 from payment_cancel;
 select *
 from product;
 select *
-from product_order;
+from product_order
+order by id desc;
 
 select *
 from product_cart;
+
+
+
+select p.id    as payment_id,
+       p.order_number,
+       p.status,
+       p.buyer_date,
+       p.qr_code,
+       p.buyer_name,
+       po.name as product_name,
+       po.quantity,
+       po.price,
+       po.total_price
+from payment p
+         join product_order po on po.payment_id = p.id
+where p.buyer_name = '계영'
+order by p.buyer_date desc
+limit 0, 10;

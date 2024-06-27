@@ -159,6 +159,7 @@ function ProductItemList({
                     size={"lg"}
                     variant="solid"
                     colorScheme="blue"
+                    _dark={{ bgColor: "#021514", color: "#e8ebeb" }}
                     onClick={() => {
                       onPayOpen();
                       setProductId(product.id);
@@ -179,6 +180,7 @@ function ProductItemList({
                     size={"lg"}
                     variant="solid"
                     colorScheme="red"
+                    _dark={{ bgColor: "#ee3125", color: "#e8ebeb" }}
                     onClick={() => {
                       onCartOpen();
                       setProductId(product.id);

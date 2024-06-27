@@ -176,9 +176,6 @@ export function StoreCart() {
               onClick={() => {
                 onModifyOpen();
                 setCartId(cartItem.id);
-                console.log("changeQuantity= " + changeQuantity);
-                console.log("changeTotalPrice= " + changeTotalPrice);
-                console.log("cartId= " + cartItem.id);
                 setIsDisabled(false);
               }}
             >
