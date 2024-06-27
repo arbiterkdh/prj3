@@ -31,14 +31,14 @@ export function PromoEnd() {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [promoSearch, setPromoSearch] = useState("");
+  const [page, setPage] = useState(1);
 
-  const fetchPromotions = (searchTerm) => {
-    const currentPage = searchParams.get("page") || 1;
+  const fetchPromotions = (searchTerm, page) => {
     const query = searchTerm ? `&search=${searchTerm}` : "";
     axios
-      .get(`/api/promotion/list?page=${currentPage}&type=ended${query}`)
+      .get(`/api/promotion/list?page=${page}&pageSize=15&type=ended${query}`)
       .then((res) => {
-        setPromoList(res.data.promotionList);
+        setPromoList((prevList) => [...prevList, ...res.data.promotionList]);
         setPageInfo(res.data.pageInfo);
       })
       .catch((error) => {
@@ -50,19 +50,14 @@ export function PromoEnd() {
   };
 
   useEffect(() => {
-    fetchPromotions(promoSearch);
-  }, [searchParams, promoSearch]);
+    fetchPromotions(promoSearch, page);
+  }, [searchParams, promoSearch, page]);
 
   useEffect(() => {
     setPromoSearch(""); // 위치가 변경될 때 검색 상태 초기화
   }, [location]);
 
-  const pageNumbers = [];
-  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
-    pageNumbers.push(i);
-  }
-
-  if (loading) {
+  if (loading && page === 1) {
     return <Spinner />;
   }
 
@@ -72,7 +67,13 @@ export function PromoEnd() {
 
   const handleSearch = (searchTerm) => {
     setSearchParams({ page: 1, search: searchTerm });
-    fetchPromotions(searchTerm); // Perform search when the search term changes
+    setPromoList([]); // 기존 리스트 초기화
+    setPage(1); // 페이지를 1로 리셋
+    fetchPromotions(searchTerm, 1); // Perform search when the search term changes
+  };
+
+  const handleLoadMore = () => {
+    setPage((prevPage) => prevPage + 1);
   };
 
   const formatDate = (dateString) => {
@@ -148,7 +149,7 @@ export function PromoEnd() {
               </TableContainer>
             )}
           </Box>
-          <PromoPagination pageInfo={pageInfo} eventType="eventEnd" />
+          <PromoPagination pageInfo={pageInfo} onLoadMore={handleLoadMore} />
         </Box>
       </CenterBox>
     </Center>

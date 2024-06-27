@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
   Box,
   Button,
@@ -25,7 +25,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
-import PromoPagination from "../component/PromoPagination.jsx";
+import PromoResultPagination from "../component/PromoResultPagination.jsx";
 import PromoSearchBar from "../component/PromoSearchBar.jsx";
 import EventTypeLabel from "../component/PromoeventTypeLabels.jsx";
 
@@ -36,23 +36,25 @@ export function PromoResult() {
   const [pageInfo, setPageInfo] = useState({});
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { nickName } = useParams();
   const currentPage = parseInt(searchParams.get("page"), 10) || 1;
   const searchQuery = searchParams.get("search") || "";
+  const pageSize = 10;
+
+  const fetchEventResults = async (page, search) => {
+    try {
+      const response = await axios.get(
+        `/api/promotion/eventResult?page=${page}&pageSize=${pageSize}&search=${search}`,
+      );
+      setEventResults(response.data.results);
+      setPageInfo(response.data.pageInfo);
+    } catch (error) {
+      console.error("당첨자 발표를 가져오는데 실패했습니다.", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchEventResults = async () => {
-      try {
-        const response = await axios.get(
-          `/api/promotion/eventResult?page=${currentPage}&search=${searchQuery}`,
-        );
-        setEventResults(response.data.results);
-        setPageInfo(response.data.pageInfo);
-      } catch (error) {
-        console.error("당첨자 발표를 가져오는데 실패했습니다.", error);
-      }
-    };
-
-    fetchEventResults();
+    fetchEventResults(currentPage, searchQuery);
   }, [currentPage, searchQuery]);
 
   const handleResultClick = (event) => {
@@ -91,6 +93,10 @@ export function PromoResult() {
     setSearchParams({ page: 1, search: query });
   };
 
+  const handlePageChange = (page) => {
+    setSearchParams({ page, search: searchQuery });
+  };
+
   const filteredResults = eventResults.filter(
     (event) =>
       event.eventType.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -114,15 +120,27 @@ export function PromoResult() {
               당첨자 발표 추가
             </Button>
           </Flex>
-          <Box mb={5}>
-            <Text>
-              -응모하신 이벤트의 당첨 여부는 나의 응모결과 확인을 통해 확인하실
-              수 있습니다.
-            </Text>
-            <Text>
-              -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
-              발표내역을 확인할 수 있습니다.
-            </Text>
+          <Box>
+            <Flex alignItems="center">
+              <Box mb={5}>
+                <Text>
+                  -응모하신 이벤트의 당첨 여부는 나의 응모결과 확인을 통해
+                  확인하실 수 있습니다.
+                </Text>
+                <Text>
+                  -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
+                  발표내역을 확인할 수 있습니다.
+                </Text>
+              </Box>
+              <Spacer />
+              <Button
+                size="sm"
+                bg="gray.300"
+                onClick={() => navigate(`/mypage?nickName=${nickName}`)}
+              >
+                나의 응모결과 확인
+              </Button>
+            </Flex>
           </Box>
           <Box borderBottom={"2px solid black"} />
           <Flex>
@@ -151,7 +169,7 @@ export function PromoResult() {
                     filteredResults.map((event, index) => (
                       <Tr key={event.id} style={{ cursor: "pointer" }}>
                         <Td onClick={() => handleRowClick(event.promotionId)}>
-                          {index + 1}
+                          {index + 1 + (currentPage - 1) * pageSize}
                         </Td>
                         <Td onClick={() => handleRowClick(event.promotionId)}>
                           <Text>
@@ -202,7 +220,10 @@ export function PromoResult() {
             </TableContainer>
           </Box>
           {pageInfo.totalItems > 0 && (
-            <PromoPagination pageInfo={pageInfo} eventType="eventResult" />
+            <PromoResultPagination
+              pageInfo={pageInfo}
+              onPageChange={handlePageChange}
+            />
           )}
         </Box>
         {selectedEvent && (
@@ -216,14 +237,14 @@ export function PromoResult() {
                     <Thead>
                       <Tr>
                         <Th>이메일</Th>
-                        <Th>당첨자 이름</Th>
+                        <Th>당첨자 닉네임</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {selectedEvent.winners.map((winner, index) => (
                         <Tr key={index}>
                           <Td>{winner.email}</Td>
-                          <Td>{winner.name}</Td>
+                          <Td>{winner.nickName}</Td>
                         </Tr>
                       ))}
                     </Tbody>

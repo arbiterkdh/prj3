@@ -1,5 +1,6 @@
 package com.backend.mapper.promotion;
 
+import com.backend.domain.promotion.Promo;
 import com.backend.domain.promotion.PromoResult;
 import org.apache.ibatis.annotations.*;
 
@@ -11,7 +12,20 @@ public interface PromoResultMapper {
             INSERT INTO promotion_result (promotion_id, announcement_date, winners)
             VALUES (#{promotionId}, #{announcementDate}, #{winnersJson})
             """)
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertPromotionResult(PromoResult promoResult);
+
+    @Insert("""
+            INSERT INTO promo_winner (promotion_result_id, member_id)
+            VALUES (#{promotionResultId}, (SELECT number FROM member WHERE email = #{email} AND nick_name = #{nickName}))
+            """)
+    int insertWinner(int promotionResultId, String email, String nickName);
+
+    @Select("""
+            SELECT eventType, title FROM promo
+            WHERE id = #{promotionId}
+            """)
+    Promo getPromotionById(int promotionId);
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,

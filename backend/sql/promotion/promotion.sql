@@ -10,7 +10,13 @@ CREATE TABLE promo
     content        VARCHAR(1000) NULL
 );
 ALTER TABLE promo
-    ADD COLUMN isRecommended BOOLEAN DEFAULT FALSE;
+    ADD COLUMN isRecommended BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE promo
+    ADD COLUMN isApplyButtonVisible BOOLEAN NOT NULL DEFAULT FALSE;
+
+ALTER TABLE promo
+    DROP COLUMN isRecommended,
+    DROP COLUMN isApplyButtonVisible;
 
 CREATE TABLE promo_file
 (
@@ -28,9 +34,38 @@ CREATE TABLE promotion_result
     CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo (id)
 );
 
+CREATE TABLE winner (
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        promotion_result_id INT,
+                        member_id INT,
+                        FOREIGN KEY (promotion_result_id) REFERENCES promotion_result(id),
+                        FOREIGN KEY (member_id) REFERENCES member(number)
+);
+
+CREATE TABLE promotion_result (
+                                  id INT AUTO_INCREMENT PRIMARY KEY,
+                                  promotion_id INT NOT NULL,
+                                  announcement_date DATE NOT NULL,
+                                  winners TEXT NOT NULL,
+                                  CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo(id)
+);
+
+CREATE TABLE promo_winner (
+                              id INT PRIMARY KEY AUTO_INCREMENT,
+                              promotion_result_id INT,
+                              member_id INT,
+                              FOREIGN KEY (promotion_result_id) REFERENCES promotion_result(id),
+                              FOREIGN KEY (member_id) REFERENCES member(number)
+);
+
+DROP TABLE IF EXISTS promo_winner;
+DROP TABLE IF EXISTS promotion_result;
+
+
 DESC promo;
 DESC promo_file;
 DESC promotion_result;
+DESC promo_winner;
 
 SELECT *
 FROM promo;
@@ -38,6 +73,8 @@ SELECT *
 FROM promo_file;
 SELECT *
 FROM promotion_result;
+SELECT *
+FROM promo_winner;
 
 INSERT INTO promo
     (title, eventType, eventStartDate, eventEndDate, content)

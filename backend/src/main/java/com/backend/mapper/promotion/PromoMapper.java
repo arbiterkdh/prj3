@@ -10,8 +10,8 @@ public interface PromoMapper {
 
     @Insert("""
             INSERT INTO promo
-            (id, title, eventType, eventStartDate, eventEndDate, content, isRecommended)
-            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended})
+            (id, title, eventType, eventStartDate, eventEndDate, content, isRecommended, isApplyButtonVisible)
+            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended}, #{isApplyButtonVisible})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertPromo(Promo promo);
@@ -43,7 +43,8 @@ public interface PromoMapper {
                 eventStartDate = #{eventStartDate},
                 eventEndDate = #{eventEndDate},
                 content = #{content},
-                isRecommended = #{isRecommended}
+                isRecommended = #{isRecommended},
+                isApplyButtonVisible = #{isApplyButtonVisible}
             WHERE id = #{id}
             """)
     int update(Promo promo);
@@ -141,7 +142,14 @@ public interface PromoMapper {
             SET isRecommended = #{isRecommended}
             WHERE id = #{id}
             """)
-    void updateRecommendation(Integer id, boolean isRecommended);
+    int updateRecommendation(Integer id, boolean isRecommended);
+
+    @Update("""
+            UPDATE promo
+            SET isApplyButtonVisible = #{isApplyButtonVisible}
+            WHERE id = #{id}
+            """)
+    int updateApplyButtonVisibility(Integer id, boolean isApplyButtonVisible);
 
     @Select("""
             SELECT *
@@ -149,4 +157,11 @@ public interface PromoMapper {
             WHERE isRecommended = true
             """)
     List<Promo> selectRecommendedPromotions();
+
+    @Select("""
+            SELECT *
+            FROM promo
+            WHERE isApplyButtonVisible = true
+            """)
+    List<Promo> selectPromotionsWithVisibleApplyButton();
 }

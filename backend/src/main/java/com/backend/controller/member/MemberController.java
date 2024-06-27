@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -58,6 +59,11 @@ public class MemberController {
 
         System.out.println("page = " + page);
         return service.paymentResult(nickName, page);
+    }
+
+    @GetMapping("/list-all")
+    public List<Member> getAllMembers() {
+        return service.getAllMembers();
     }
 
 }

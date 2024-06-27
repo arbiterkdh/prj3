@@ -13,6 +13,7 @@ export function PromoMembership() {
         eventType="membership"
         search={searchKeyword}
         page={currentPage}
+        pageSize={12}
       />
     </Box>
   );

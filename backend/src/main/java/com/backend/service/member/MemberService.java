@@ -106,4 +106,8 @@ public class MemberService {
         return Map.of("paymentResult", mapper.paymentResult(nickName, offset)
                 , "pageInfo", pageInfo);
     }
+
+    public List<Member> getAllMembers() {
+        return mapper.findAllMembers();
+    }
 }

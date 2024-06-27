@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
   Input,
@@ -20,6 +21,7 @@ export function PromoAdd() {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isApplyButtonVisible, setIsApplyButtonVisible] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -33,6 +35,7 @@ export function PromoAdd() {
         eventStartDate,
         eventEndDate,
         files,
+        isApplyButtonVisible,
       });
       toast({
         status: "success",
@@ -123,6 +126,15 @@ export function PromoAdd() {
           placeholder="설명을 입력하세요."
         />
       </FormControl>
+      <Box mb={5}>
+        <Checkbox
+          isInvalid
+          isChecked={isApplyButtonVisible}
+          onChange={(e) => setIsApplyButtonVisible(e.target.checked)}
+        >
+          응모하기 버튼 활성화
+        </Checkbox>
+      </Box>
       <Button
         colorScheme="teal"
         isLoading={loading}

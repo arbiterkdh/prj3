@@ -31,9 +31,10 @@ public class PromoController {
 
     @GetMapping("list")
     public Map<String, Object> listPromo(@RequestParam(defaultValue = "1") Integer page,
+                                         @RequestParam(required = false) Integer pageSize,
                                          @RequestParam(defaultValue = "") String type,
                                          @RequestParam(defaultValue = "") String search) {
-        return promoService.listPromo(page, type, search);
+        return promoService.listPromo(page, pageSize, type, search);
     }
 
     @GetMapping("list-all")
@@ -89,9 +90,27 @@ public class PromoController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("{id}/enable-apply-button")
+    public ResponseEntity enableApplyButton(@PathVariable Integer id) {
+        promoService.updateApplyButtonVisibility(id, true);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("{id}/disable-apply-button")
+    public ResponseEntity disableApplyButton(@PathVariable Integer id) {
+        promoService.updateApplyButtonVisibility(id, false);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("recommendations")
     public ResponseEntity<List<Promo>> getRecommendations() {
         List<Promo> recommendedPromos = promoService.getRecommendedPromotions();
         return ResponseEntity.ok(recommendedPromos);
+    }
+
+    @GetMapping("list-apply-button-visible")
+    public ResponseEntity<List<Promo>> getPromosWithVisibleApplyButton() {
+        List<Promo> promos = promoService.getPromotionsWithVisibleApplyButton();
+        return ResponseEntity.ok(promos);
     }
 }

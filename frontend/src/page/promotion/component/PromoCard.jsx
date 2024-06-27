@@ -18,19 +18,20 @@ const PromoCard = ({ promo }) => {
   return (
     <Card
       key={promo.id}
-      height="100%"
+      // height="100%"
       borderWidth="1px"
       borderRadius="lg"
+      borderColor="gray.500"
       overflow="hidden"
       boxShadow="md"
       cursor="pointer"
       onClick={handleCardClick}
       width="226px" // 고정 카드 너비
-      height="364px" // 고정 카드 높이
+      height="330px" // 고정 카드 높이
     >
-      <CardBody display="flex" flexDirection="column" p={4}>
+      <CardBody display="flex" flexDirection="column" p={1}>
         {promo.isRecommended === true && promo.fileList?.length > 1 ? (
-          <Box mb={4} height="210px" overflow="hidden" borderRadius="lg">
+          <Box mb={1} height="210px" overflow="hidden" borderTopRadius="10px">
             <Image
               src={promo.fileList[1].src}
               objectFit="cover"
@@ -40,7 +41,7 @@ const PromoCard = ({ promo }) => {
           </Box>
         ) : (
           promo.fileList?.length > 0 && (
-            <Box mb={4} height="210px" overflow="hidden" borderRadius="lg">
+            <Box mb={1} height="210px" overflow="hidden" borderTopRadius="10px">
               <Image
                 src={promo.fileList[0].src}
                 objectFit="cover"
@@ -51,10 +52,21 @@ const PromoCard = ({ promo }) => {
           )
         )}
         <Box flex={1}>
-          <Heading as="h3" size="md" mb={2} isTruncated>
+          <Heading
+            as="b"
+            size="sx"
+            mb={2}
+            fontSize="14px"
+            sx={{
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+            }}
+          >
             {promo.title}
           </Heading>
-          <Text fontSize="sm" color="gray.500" mb={2}>
+          <Text fontSize="sm" color="gray.500">
             {formatDate(promo.eventStartDate)} ~{" "}
             {formatDate(promo.eventEndDate)}
           </Text>

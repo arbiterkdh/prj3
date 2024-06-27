@@ -58,28 +58,17 @@ export function PromoNavbar() {
             </Button>
           </Box>
         </Box>
-        <Tabs
-          isFitted
-          variant="enclosed"
-          width="100%"
-          index={tabIndex}
-          onChange={(index) => {
-            const paths = [
-              "/promotion/all",
-              "/promotion/movie",
-              "/promotion/theater",
-              "/promotion/membership",
-              "/promotion/discount",
-            ];
-            handleTabClick(paths[index]);
-          }}
-        >
+        <Tabs isFitted variant="enclosed" width="100%" index={tabIndex}>
           <TabList mb="2em">
-            <Tab>전체</Tab>
-            <Tab>영화</Tab>
-            <Tab>극장</Tab>
-            <Tab>멤버십</Tab>
-            <Tab>제휴/할인</Tab>
+            <Tab onClick={() => handleTabClick("/promotion/all")}>전체</Tab>
+            <Tab onClick={() => handleTabClick("/promotion/movie")}>영화</Tab>
+            <Tab onClick={() => handleTabClick("/promotion/theater")}>극장</Tab>
+            <Tab onClick={() => handleTabClick("/promotion/membership")}>
+              멤버십
+            </Tab>
+            <Tab onClick={() => handleTabClick("/promotion/discount")}>
+              제휴/할인
+            </Tab>
           </TabList>
         </Tabs>
         <Outlet />

@@ -16,6 +16,7 @@ const PromoSearchBar = ({ onSearch }) => {
 
   const handleSearch = () => {
     onSearch(promoSearch);
+    setPromoSearch(""); // 검색 후 서치바 리셋
   };
 
   const handleKeyDown = (e) => {

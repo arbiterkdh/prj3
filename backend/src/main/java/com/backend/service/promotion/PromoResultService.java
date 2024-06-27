@@ -1,5 +1,6 @@
 package com.backend.service.promotion;
 
+import com.backend.domain.promotion.Promo;
 import com.backend.domain.promotion.PromoResult;
 import com.backend.mapper.promotion.PromoResultMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,16 +23,32 @@ public class PromoResultService {
     private final ObjectMapper objectMapper;
 
     public void addPromoResult(PromoResult promoResult) {
+        Promo promo = promoResultMapper.getPromotionById(promoResult.getPromotionId());
+        if (promo != null) {
+            promoResult.setEventType(promo.getEventType());
+            promoResult.setEventName(promo.getTitle());
+        }
         try {
             String winnersJson = objectMapper.writeValueAsString(promoResult.getWinners());
             promoResult.setWinnersJson(winnersJson);
-            promoResultMapper.insertPromotionResult(promoResult);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize winners list", e);
         }
+        promoResultMapper.insertPromotionResult(promoResult);
+        int promotionResultId = promoResult.getId();
+
+        for (PromoResult.Winner winner : promoResult.getWinners()) {
+            promoResultMapper.insertWinner(promotionResultId, winner.getEmail(), winner.getNickName());
+        }
+        System.out.println("PromoResult: " + promoResult);
+        System.out.println("Winners: " + promoResult.getWinners());
     }
 
-    public Map<String, Object> getPromoResults(int page, int pageSize) {
+    public Map<String, Object> getPromoResults(int page, Integer pageSize) {
+        if (pageSize == null) {
+            pageSize = 10; // 기본값을 10으로 설정
+        }
+
         int totalItems = promoResultMapper.countPromotionResults();
         int offset = (page - 1) * pageSize;
         List<PromoResult> results = promoResultMapper.selectPromotionResults(offset, pageSize);
@@ -79,7 +96,7 @@ public class PromoResultService {
 
         Map<String, Object> pageInfo = new HashMap<>();
         if (leftPageNumber > 1) {
-            pageInfo.put("prevPageNumber", leftPageNumber - 1);
+            pageInfo.put("prevPageNumber", leftPageNumber - 10);
         }
         if (rightPageNumber < lastPageNumber) {
             pageInfo.put("nextPageNumber", rightPageNumber + 1);

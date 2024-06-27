@@ -58,24 +58,27 @@ public class PromoService {
                 promo.getEventEndDate() != null;
     }
 
-    public Map<String, Object> listPromo(Integer page, String type, String search) {
+    public Map<String, Object> listPromo(Integer page, Integer pageSize, String type, String search) {
+        if (pageSize == null) {
+            pageSize = 4;
+        }
+
         Map<String, Object> pageInfo = new HashMap<>();
         Integer countAll;
         List<Promo> promos;
-        int itemsPerPage = 12; // 페이지당 아이템 수를 12로 변경
 
         if (type.equals("ended")) {
             countAll = promoMapper.countAllEnded(search);
-            promos = promoMapper.selectAllPagingEnded(calculateOffset(page, itemsPerPage), itemsPerPage, search);
+            promos = promoMapper.selectAllPagingEnded(calculateOffset(page, pageSize), pageSize, search);
         } else if (type.equals("all")) {
             countAll = promoMapper.countAll(search);
-            promos = promoMapper.selectAllPaging(calculateOffset(page, itemsPerPage), itemsPerPage, search);
+            promos = promoMapper.selectAllPaging(calculateOffset(page, pageSize), pageSize, search);
         } else {
             countAll = promoMapper.countAllExcludingEnded(type, search);
-            promos = promoMapper.selectAllPagingExcludingEnded(calculateOffset(page, itemsPerPage), itemsPerPage, type, search);
+            promos = promoMapper.selectAllPagingExcludingEnded(calculateOffset(page, pageSize), pageSize, type, search);
         }
 
-        setPageInfo(pageInfo, page, countAll, itemsPerPage);
+        setPageInfo(pageInfo, page, countAll, pageSize);
         setPromotionFiles(promos);
 
         return Map.of("pageInfo", pageInfo, "promotionList", promos);
@@ -83,19 +86,9 @@ public class PromoService {
 
     private void setPageInfo(Map<String, Object> pageInfo, Integer page, Integer countAll, Integer itemsPerPage) {
         Integer lastPageNumber = (countAll - 1) / itemsPerPage + 1;
-        Integer leftPageNumber = (page - 1) / 10 * 10 + 1;
-        Integer rightPageNumber = Math.min(leftPageNumber + 9, lastPageNumber);
 
-        if (leftPageNumber > 1) {
-            pageInfo.put("prevPageNumber", leftPageNumber - 1);
-        }
-        if (rightPageNumber < lastPageNumber) {
-            pageInfo.put("nextPageNumber", rightPageNumber + 1);
-        }
         pageInfo.put("currentPageNumber", page);
         pageInfo.put("lastPageNumber", lastPageNumber);
-        pageInfo.put("leftPageNumber", leftPageNumber);
-        pageInfo.put("rightPageNumber", rightPageNumber);
         pageInfo.put("totalItems", countAll);
     }
 
@@ -195,6 +188,12 @@ public class PromoService {
         return promos;
     }
 
+    public List<Promo> getPromotionsWithVisibleApplyButton() {
+        List<Promo> promos = promoMapper.selectPromotionsWithVisibleApplyButton();
+        setPromotionFiles(promos);
+        return promos;
+    }
+
     public void addRecommendation(Integer id) {
         Promo promo = promoMapper.selectById(id);
         if (promo.getIsRecommended()) {
@@ -207,4 +206,9 @@ public class PromoService {
     public void removeRecommendation(Integer id) {
         promoMapper.updateRecommendation(id, false);
     }
+
+    public void updateApplyButtonVisibility(Integer id, boolean isApplyButtonVisible) {
+        promoMapper.updateApplyButtonVisibility(id, isApplyButtonVisible);
+    }
+
 }
