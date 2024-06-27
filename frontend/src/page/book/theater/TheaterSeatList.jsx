@@ -16,6 +16,7 @@ import {
   Spinner,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import {
   faCouch,
@@ -49,11 +50,12 @@ export function TheaterSeatList() {
   const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
   const [mouseLocation, setMouseLocation] = useState(null);
   const [seatFocused, setSeatFocused] = useState("");
+  const [seatSelected, setSeatSelected] = useState([]);
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   let seatList = [];
-  let seatSelectedList = [];
 
   let ASCII_A = "A".charCodeAt(0);
   for (let i = 0; i < 10; i++) {
@@ -100,6 +102,15 @@ export function TheaterSeatList() {
   }
 
   function handleSeatSelect(alphabet, number) {
+    if (numberOfPeople === 0) {
+      toast({
+        status: "warning",
+        description: "인원을 먼저 선택해주세요.",
+        position: "bottom-right",
+      });
+      return;
+    }
+    let seatSelectedList = [...seatSelected];
     if (alphabet !== "A" && alphabet !== "J") {
       if (number > 15) {
         number -= 2;
@@ -109,6 +120,22 @@ export function TheaterSeatList() {
     } else if (alphabet === "J" && number > 4) {
       number -= 10;
     }
+    if (!seatSelectedList.includes(alphabet + "-" + number)) {
+      seatSelectedList.push(alphabet + "-" + number);
+      if (seatSelected.length === numberOfPeople) {
+        toast({
+          status: "warning",
+          description: "더 이상 선택할 수 없습니다.",
+          position: "bottom-right",
+        });
+        return;
+      }
+    } else {
+      seatSelectedList = seatSelectedList.filter(
+        (seat) => seat !== alphabet + "-" + number,
+      );
+    }
+    return setSeatSelected(seatSelectedList);
   }
 
   return (
@@ -117,106 +144,156 @@ export function TheaterSeatList() {
         <Flex justifyContent={"space-between"} m={1}>
           <Box></Box>
           <Box fontSize={"lg"} fontWeight={"600"} alignContent={"center"}>
-            CCV {theater.location}점 인원/좌석 선택
+            CCV {theater.location}점 {theaterBox.boxNumber}관 인원/좌석 선택
           </Box>
-          <CloseButton m={1} onClick={() => navigate("/book")}></CloseButton>
+          <CloseButton m={1} onClick={() => navigate("/book")} />
         </Flex>
       </BorderBox>
-      <BorderBox h={"100px"} p={4} fontWeight={"600"}>
-        <Flex align={"center"} gap={4} my={2}>
-          <Flex fontSize={"16px"} gap={2}>
-            <Box fontSize={"18px"}>{"상영시간: "}</Box>
-            <Box>
-              {bookPlaceTime.startTime.slice(11, 16)}~
-              {bookPlaceTime.endTime.slice(11, 16)}
-            </Box>
-          </Flex>
-          <Flex gap={2}>
-            <Box fontSize={"18px"}>{"좌석: "}</Box>
-            <Box>
-              {bookPlaceTime.vacancy}/{theaterBox.capacity}
-            </Box>
-          </Flex>
-          <Box>
-            <Flex gap={2} align={"center"}>
-              <Box w={"60px"} fontSize={"18px"}>
-                인원:{" "}
+      <BorderBox
+        alignContent={"center"}
+        h={"100px"}
+        pl={4}
+        pr={0}
+        fontWeight={"600"}
+      >
+        <Flex gap={4}>
+          <Flex align={"center"} gap={4}>
+            <Flex fontSize={"16px"} gap={2}>
+              <Box fontSize={"18px"}>{"상영시간: "}</Box>
+              <Box>
+                {bookPlaceTime.startTime.slice(11, 16)}~
+                {bookPlaceTime.endTime.slice(11, 16)}
               </Box>
-              <InputGroup>
-                <NumberInput
-                  size="sm"
-                  maxW={20}
-                  min={0}
-                  max={bookPlaceTime.vacancy}
-                  value={numberOfPeople ? numberOfPeople : 0}
-                  onChange={(e) => {
-                    setNumberOfPeople(e);
-                    setTotalAmount(e * 14000);
-                  }}
-                  allowMouseWheel
-                >
-                  <NumberInputField
-                    p={2}
-                    border={"1px solid"}
-                    borderRadius={"none"}
-                    fontSize={"16px"}
-                    _focusVisible={{
-                      border: "2px solid gray",
-                    }}
-                    readOnly
-                  />
-                  <NumberInputStepper borderLeft={"1px solid"}>
-                    <NumberIncrementStepper
-                      _disabled={{ cursor: "default" }}
-                      borderBottom={"1px solid"}
-                    />
-                    <NumberDecrementStepper
-                      _disabled={{ cursor: "default" }}
-                      borderTop={"1px solid"}
-                    />
-                  </NumberInputStepper>
-                </NumberInput>
-                <InputRightElement h={"25px"} mr={9} fontSize={"14px"}>
-                  명
-                </InputRightElement>
-              </InputGroup>
             </Flex>
-          </Box>
+            <Flex gap={2}>
+              <Box fontSize={"18px"}>{"좌석: "}</Box>
+              <Box>
+                {bookPlaceTime.vacancy}/{theaterBox.capacity}
+              </Box>
+            </Flex>
+            <Box>
+              <Flex gap={2} align={"center"}>
+                <Box w={"60px"} fontSize={"18px"}>
+                  인원:{" "}
+                </Box>
+                <InputGroup>
+                  <NumberInput
+                    size="sm"
+                    maxW={20}
+                    min={0}
+                    max={bookPlaceTime.vacancy}
+                    value={numberOfPeople}
+                    onChange={(e) => {
+                      let prevPeopleCount = Number(numberOfPeople);
+                      if (
+                        prevPeopleCount > Number(e) &&
+                        seatSelected.length === prevPeopleCount
+                      ) {
+                        let newSeatSelected = [...seatSelected];
+                        newSeatSelected.pop();
+                        setSeatSelected(newSeatSelected);
+                      }
+                      setNumberOfPeople(Number(e));
+                      setTotalAmount(e * 14000);
+                    }}
+                    allowMouseWheel
+                  >
+                    <NumberInputField
+                      p={2}
+                      border={"1px solid"}
+                      borderRadius={"none"}
+                      fontSize={"16px"}
+                      _focusVisible={{
+                        border: "2px solid gray",
+                      }}
+                      readOnly
+                    />
+                    <NumberInputStepper borderLeft={"1px solid"}>
+                      <NumberIncrementStepper
+                        _disabled={{ cursor: "default" }}
+                        borderBottom={"1px solid"}
+                      />
+                      <NumberDecrementStepper
+                        _disabled={{ cursor: "default" }}
+                        borderTop={"1px solid"}
+                      />
+                    </NumberInputStepper>
+                  </NumberInput>
+                  <InputRightElement h={"25px"} mr={9} fontSize={"14px"}>
+                    명
+                  </InputRightElement>
+                </InputGroup>
+              </Flex>
+            </Box>
 
-          <InputGroup w={"120px"} ml={-8} mr={-4} size={"sm"}>
-            <Input
-              value={
-                numberOfPeople > 71
-                  ? (numberOfPeople * 14 + "").slice(0, 1) +
-                    "," +
-                    (numberOfPeople * 14 + "").slice(1, 4) +
-                    ",000"
-                  : numberOfPeople > 0
-                    ? numberOfPeople * 14 + ",000"
-                    : 0
-              }
-              textAlign={"right"}
-              border={"none"}
-              bgColor={"whiteAlpha.50"}
-              fontSize={"16px"}
-              readOnly
-            />
-            <InputRightElement>원</InputRightElement>
-          </InputGroup>
+            <InputGroup w={"120px"} ml={-8} mr={-4} size={"sm"}>
+              <Input
+                value={
+                  numberOfPeople > 71
+                    ? (numberOfPeople * 14 + "").slice(0, 1) +
+                      "," +
+                      (numberOfPeople * 14 + "").slice(1, 4) +
+                      ",000"
+                    : numberOfPeople > 0
+                      ? numberOfPeople * 14 + ",000"
+                      : 0
+                }
+                textAlign={"right"}
+                border={"none"}
+                bgColor={"whiteAlpha.50"}
+                fontSize={"16px"}
+                readOnly
+              />
+              <InputRightElement>원</InputRightElement>
+            </InputGroup>
 
-          <Box>
-            <Button p={2} size={"sm"}>
-              좌석선택
-            </Button>
-          </Box>
+            <Box>
+              <Button p={2} size={"sm"}>
+                좌석선택
+              </Button>
+            </Box>
+          </Flex>
           <Box
-            my={"-22px"}
-            mx={"-15px"}
-            border={"1px solid"}
-            w={"220px"}
-            h={"95px"}
+            mx={"0px"}
+            bgColor={"gray.200"}
+            _dark={{ bgColor: "blackAlpha.400" }}
+            w={"200px"}
+            h={"90px"}
             overflowY={"scroll"}
-          ></Box>
+            p={1}
+            pl={2}
+          >
+            {numberOfPeople === 0 ? (
+              <Box>인원을 선택해주세요.</Box>
+            ) : seatSelected.length > 0 ? (
+              seatSelected.map((selectedSeat, index) => (
+                <Flex key={index} align={"center"} gap={"2px"}>
+                  <Box>{selectedSeat}</Box>
+                  <CloseButton
+                    w={"12px"}
+                    h={"12px"}
+                    borderRadius={"none"}
+                    border={"1px solid"}
+                    _hover={{
+                      opacity: "0.6",
+                    }}
+                    onClick={() => {
+                      let newSeatSelected = [...selectedSeat];
+                      if (newSeatSelected.length === 1) {
+                        setSeatSelected([]);
+                      } else {
+                        setSeatSelected(
+                          newSeatSelected.filter((seat, idx) => idx !== index),
+                        );
+                      }
+                    }}
+                  />
+                </Flex>
+              ))
+            ) : (
+              <Box>좌석을 선택해주세요.</Box>
+            )}
+          </Box>
         </Flex>
       </BorderBox>
       <Box w={"880px"} position={"absolute"}>
@@ -263,7 +340,7 @@ export function TheaterSeatList() {
               }}
             />
           ) : (
-            <Spinner></Spinner>
+            <Spinner />
           )}
         </Box>
         <Box m={8} w={"440px"} h={"500px"} color={"whiteAlpha.800"}>
