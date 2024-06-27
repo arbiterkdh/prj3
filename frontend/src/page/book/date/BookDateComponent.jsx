@@ -5,7 +5,11 @@ import axios from "axios";
 import { ArrowLeftIcon, ArrowRightIcon } from "@chakra-ui/icons";
 import CursorBox from "../../../css/theme/component/box/CursorBox.jsx";
 
-export function BookDateComponent({ selectedDay, setSelectedDay }) {
+export function BookDateComponent({
+  selectedDay,
+  setSelectedDay,
+  setCheckedMovieId,
+}) {
   const [dayOfWeek, setDayOfWeek] = useState(0);
   const [bookPeriodList, setBookPeriodList] = useState([]);
 
@@ -108,7 +112,10 @@ export function BookDateComponent({ selectedDay, setSelectedDay }) {
                 {bookPeriodListPlusDayOfWeek.map((day, index) => (
                   <CursorBox
                     key={day}
-                    onClick={() => setSelectedDay(day)}
+                    onClick={() => {
+                      setSelectedDay(day);
+                      setCheckedMovieId(0);
+                    }}
                     rounded={"full"}
                     color={selectedDay === day ? "whiteAlpha.900" : ""}
                     bgColor={selectedDay === day ? "red.500" : ""}

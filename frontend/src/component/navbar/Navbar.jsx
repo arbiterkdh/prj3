@@ -36,20 +36,31 @@ export function Navbar() {
             <GapFlex>
               {account.isLoggedIn() && (
                 <Flex>
-                  <Image
-                    w={"33px"}
-                    h={"33px"}
-                    rounded={"full"}
-                    alt={"profile"}
-                    src={account.picture}
-                  />
+                  {account.picture ? (
+                    <Image
+                      w={"33px"}
+                      h={"33px"}
+                      rounded={"full"}
+                      alt={"profile"}
+                      src={account.picture}
+                    />
+                  ) : (
+                    <Image
+                      w={"33px"}
+                      h={"33px"}
+                      rounded={"full"}
+                      alt={"profile"}
+                      src={
+                        "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccvicon.png"
+                      }
+                    />
+                  )}
                   {/*<CursorBox onClick={() => navigate("mypage")}>*/}
                   <CursorBox
                     onClick={() => {
                       navigate("mypage", {
                         state: { nickName: account.nickName },
                       });
-                      console.log("account.nickName:" + account.nickName);
                     }}
                   >
                     마이페이지
