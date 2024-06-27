@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -38,6 +39,7 @@ public class BookSeatService {
     public Map<String, Object> getDataByBookPlaceTimeId(Integer bookPlaceTimeId) {
         Map<String, Object> data = new HashMap<>();
 
+        List<String> rowColList = bookSeatMapper.selectAllRowColByBookPlaceTimeId(bookPlaceTimeId);
         BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookPlaceTimeId);
         TheaterBoxMovie theaterBoxMovie = theaterBoxMapper.selectTheaterBoxMovieByBookPlaceTimeId(bookPlaceTimeId);
         TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(theaterBoxMovie.getId());
@@ -46,13 +48,12 @@ public class BookSeatService {
         String file = STR."\{srcPrefix}/movie/\{movie.getId()}/\{movieMapper.selectFileNameByMovieId(movie.getId())}";
         movie.setMovieImageFile(file);
 
+        data.put("rowColList", rowColList);
         data.put("bookPlaceTime", bookPlaceTime);
         data.put("theaterBoxMovie", theaterBoxMovie);
         data.put("theaterBox", theaterBox);
         data.put("theater", theater);
         data.put("movie", movie);
-
-        // 뭐가 필요할 지 감이 잘 안와서 일단 다 집어넣음.
 
         return data;
     }

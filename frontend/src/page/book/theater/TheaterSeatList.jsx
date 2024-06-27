@@ -51,6 +51,7 @@ export function TheaterSeatList() {
   const [rawSelected, setRawSelected] = useState([]);
   const [seatFocused, setSeatFocused] = useState("");
   const [seatSelected, setSeatSelected] = useState([]);
+  const [seatBooked, setSeatBooked] = useState([]);
 
   const navigate = useNavigate();
   const toast = useToast();
@@ -79,11 +80,12 @@ export function TheaterSeatList() {
       axios
         .get(`/api/book/theaterseat/${bookPlaceTime.bookPlaceTimeId}`)
         .then((res) => {
-          console.log(res.data.movie);
+          console.log(res.data);
           setMovie(res.data.movie);
           setTheater(res.data.theater);
           setTheaterBox(res.data.theaterBox);
           setTheaterBoxMovie(res.data.theaterBoxMovie);
+          setSeatBooked(res.data.rowColList);
         });
     }
   }, []);
