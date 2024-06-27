@@ -47,8 +47,8 @@ export function TheaterSeatList() {
   const [numberOfPeople, setNumberOfPeople] = useState(0);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  const [checkedSeat, setCheckedSeat] = useState({ alphabet: "", seat: 0 });
-  const [mouseLocation, setMouseLocation] = useState(null);
+  const [rawFocused, setRawFocused] = useState("");
+  const [rawSelected, setRawSelected] = useState([]);
   const [seatFocused, setSeatFocused] = useState("");
   const [seatSelected, setSeatSelected] = useState([]);
 
@@ -89,6 +89,7 @@ export function TheaterSeatList() {
   }, []);
 
   function handleSeatFocus(alphabet, number) {
+    setRawFocused(alphabet + number);
     if (alphabet !== "A" && alphabet !== "J") {
       if (number > 15) {
         number -= 2;
@@ -110,7 +111,11 @@ export function TheaterSeatList() {
       });
       return;
     }
+
     let seatSelectedList = [...seatSelected];
+    let rawSelectedList = [...rawSelected];
+    let rawNumber = number;
+
     if (alphabet !== "A" && alphabet !== "J") {
       if (number > 15) {
         number -= 2;
@@ -121,7 +126,6 @@ export function TheaterSeatList() {
       number -= 10;
     }
     if (!seatSelectedList.includes(alphabet + "-" + number)) {
-      seatSelectedList.push(alphabet + "-" + number);
       if (seatSelected.length === numberOfPeople) {
         toast({
           status: "warning",
@@ -130,11 +134,17 @@ export function TheaterSeatList() {
         });
         return;
       }
+      seatSelectedList.push(alphabet + "-" + number);
+      rawSelectedList.push(alphabet + rawNumber);
     } else {
       seatSelectedList = seatSelectedList.filter(
         (seat) => seat !== alphabet + "-" + number,
       );
+      rawSelectedList = rawSelectedList.filter(
+        (rawSeat) => rawSeat !== alphabet + rawNumber,
+      );
     }
+    setRawSelected(rawSelectedList);
     return setSeatSelected(seatSelectedList);
   }
 
@@ -156,7 +166,7 @@ export function TheaterSeatList() {
         pr={0}
         fontWeight={"600"}
       >
-        <Flex gap={4}>
+        <Flex columnGap={4}>
           <Flex align={"center"} gap={4}>
             <Flex fontSize={"16px"} gap={2}>
               <Box fontSize={"18px"}>{"상영시간: "}</Box>
@@ -190,8 +200,11 @@ export function TheaterSeatList() {
                         seatSelected.length === prevPeopleCount
                       ) {
                         let newSeatSelected = [...seatSelected];
+                        let newRawSeatSelected = [...rawSelected];
                         newSeatSelected.pop();
+                        newRawSeatSelected.pop();
                         setSeatSelected(newSeatSelected);
+                        setRawSelected(newRawSeatSelected);
                       }
                       setNumberOfPeople(Number(e));
                       setTotalAmount(e * 14000);
@@ -253,22 +266,33 @@ export function TheaterSeatList() {
               </Button>
             </Box>
           </Flex>
-          <Box
-            mx={"0px"}
+          <Flex
             bgColor={"gray.200"}
             _dark={{ bgColor: "blackAlpha.400" }}
             w={"200px"}
             h={"90px"}
             overflowY={"scroll"}
+            flexWrap={"wrap"}
+            alignContent={"start"}
             p={1}
             pl={2}
+            columnGap={1}
           >
             {numberOfPeople === 0 ? (
               <Box>인원을 선택해주세요.</Box>
             ) : seatSelected.length > 0 ? (
               seatSelected.map((selectedSeat, index) => (
-                <Flex key={index} align={"center"} gap={"2px"}>
-                  <Box>{selectedSeat}</Box>
+                <Flex
+                  key={index}
+                  h={"20px"}
+                  w={"53px"}
+                  align={"center"}
+                  justifyContent={"space-between"}
+                  gap={"3px"}
+                >
+                  <Box w={"40px"} h={"24px"} textAlign={"right"}>
+                    {selectedSeat}
+                  </Box>
                   <CloseButton
                     w={"12px"}
                     h={"12px"}
@@ -278,14 +302,12 @@ export function TheaterSeatList() {
                       opacity: "0.6",
                     }}
                     onClick={() => {
-                      let newSeatSelected = [...selectedSeat];
-                      if (newSeatSelected.length === 1) {
-                        setSeatSelected([]);
-                      } else {
-                        setSeatSelected(
-                          newSeatSelected.filter((seat, idx) => idx !== index),
-                        );
-                      }
+                      setSeatSelected((prevSeats) => {
+                        return prevSeats.filter((_, idx) => idx !== index);
+                      });
+                      setRawSelected((prevRawSeats) => {
+                        return prevRawSeats.filter((_, idx) => idx !== index);
+                      });
                     }}
                   />
                 </Flex>
@@ -293,7 +315,7 @@ export function TheaterSeatList() {
             ) : (
               <Box>좌석을 선택해주세요.</Box>
             )}
-          </Box>
+          </Flex>
         </Flex>
       </BorderBox>
       <Box w={"880px"} position={"absolute"}>
@@ -414,7 +436,7 @@ export function TheaterSeatList() {
               }}
               fontSize={"6xl"}
             >
-              {seatFocused && seatFocused}
+              {seatFocused}
             </Box>
           </Box>
         </Box>
@@ -486,13 +508,29 @@ export function TheaterSeatList() {
                         {index === 0 && row.alphabet === "A" ? (
                           <Flex>
                             <EmptySeatBox />
-                            <EmptySeatBox>
+                            <EmptySeatBox
+                              color={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? "darkslategray"
+                                  : ""
+                              }
+                              _dark={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? { color: "red.800" }
+                                  : {}
+                              }
+                            >
                               <FontAwesomeIcon
                                 cursor={"pointer"}
                                 onMouseEnter={() =>
                                   handleSeatFocus(row.alphabet, col)
                                 }
-                                onMouseLeave={() => setSeatFocused("")}
+                                onMouseLeave={() => {
+                                  setSeatFocused("");
+                                  setRawFocused("");
+                                }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
                                 }
@@ -502,13 +540,29 @@ export function TheaterSeatList() {
                           </Flex>
                         ) : index === 17 && row.alphabet === "A" ? (
                           <Flex>
-                            <EmptySeatBox>
+                            <EmptySeatBox
+                              color={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? "darkslategray"
+                                  : ""
+                              }
+                              _dark={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? { color: "red.800" }
+                                  : {}
+                              }
+                            >
                               <FontAwesomeIcon
                                 cursor={"pointer"}
                                 onMouseEnter={() =>
                                   handleSeatFocus(row.alphabet, col)
                                 }
-                                onMouseLeave={() => setSeatFocused("")}
+                                onMouseLeave={() => {
+                                  setSeatFocused("");
+                                  setRawFocused("");
+                                }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
                                 }
@@ -521,13 +575,29 @@ export function TheaterSeatList() {
                           row.alphabet === "A" ? (
                           <Flex>
                             <EmptySeatBox />
-                            <EmptySeatBox>
+                            <EmptySeatBox
+                              color={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? "darkslategray"
+                                  : ""
+                              }
+                              _dark={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? { color: "red.800" }
+                                  : {}
+                              }
+                            >
                               <FontAwesomeIcon
                                 cursor={"pointer"}
                                 onMouseEnter={() =>
                                   handleSeatFocus(row.alphabet, col)
                                 }
-                                onMouseLeave={() => setSeatFocused("")}
+                                onMouseLeave={() => {
+                                  setSeatFocused("");
+                                  setRawFocused("");
+                                }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
                                 }
@@ -543,13 +613,29 @@ export function TheaterSeatList() {
                             <EmptySeatBox />
                             <EmptySeatBox />
                             <EmptySeatBox />
-                            <EmptySeatBox>
+                            <EmptySeatBox
+                              color={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? "darkslategray"
+                                  : ""
+                              }
+                              _dark={
+                                rawFocused === row.alphabet + col ||
+                                rawSelected.includes(row.alphabet + col)
+                                  ? { color: "red.800" }
+                                  : {}
+                              }
+                            >
                               <FontAwesomeIcon
                                 cursor={"pointer"}
                                 onMouseEnter={() =>
                                   handleSeatFocus(row.alphabet, col)
                                 }
-                                onMouseLeave={() => setSeatFocused("")}
+                                onMouseLeave={() => {
+                                  setSeatFocused("");
+                                  setRawFocused("");
+                                }}
                                 onClick={() =>
                                   handleSeatSelect(row.alphabet, col)
                                 }
@@ -562,13 +648,29 @@ export function TheaterSeatList() {
                           row.alphabet !== "J" ? (
                           <EmptySeatBox />
                         ) : (
-                          <EmptySeatBox>
+                          <EmptySeatBox
+                            color={
+                              rawFocused === row.alphabet + col ||
+                              rawSelected.includes(row.alphabet + col)
+                                ? "darkslategray"
+                                : ""
+                            }
+                            _dark={
+                              rawFocused === row.alphabet + col ||
+                              rawSelected.includes(row.alphabet + col)
+                                ? { color: "red.800" }
+                                : {}
+                            }
+                          >
                             <FontAwesomeIcon
                               cursor={"pointer"}
                               onMouseEnter={() =>
                                 handleSeatFocus(row.alphabet, col)
                               }
-                              onMouseLeave={() => setSeatFocused("")}
+                              onMouseLeave={() => {
+                                setSeatFocused("");
+                                setRawFocused("");
+                              }}
                               onClick={() =>
                                 handleSeatSelect(row.alphabet, col)
                               }
