@@ -103,7 +103,7 @@ export function TheaterSeatList() {
     }
     return setSeatFocused(alphabet + "-" + number);
   }
-
+  //
   function handleSeatSelect(alphabet, number) {
     if (numberOfPeople === 0) {
       toast({
