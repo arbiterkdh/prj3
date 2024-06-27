@@ -1,8 +1,9 @@
-import { Box, Flex, Heading } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Flex, Heading, useToast } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import MarginBox from "../../../css/theme/component/box/MarginBox.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 export function BookTheaterLocationMovieList({
   checkedTheaterNumber,
@@ -13,6 +14,8 @@ export function BookTheaterLocationMovieList({
   setSelectedDay,
   theaterBoxList,
 }) {
+  const account = useContext(LoginContext);
+
   const date = new Date();
   const year = date.getFullYear();
   const month =
@@ -33,6 +36,7 @@ export function BookTheaterLocationMovieList({
     useState([]);
 
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     if (checkedTheaterNumber && selectedDay) {
@@ -51,6 +55,13 @@ export function BookTheaterLocationMovieList({
   // 영화 마감시간 밤 12시
 
   function handleBookDataClick(bookPlaceTime) {
+    if (!account.isLoggedIn()) {
+      toast({
+        status: "info",
+        description: "로그인이 필요한 서비스입니다.",
+        position: "bottom-right",
+      });
+    }
     navigate(`/book/theaterseat`, { state: { bookPlaceTime } });
     // 예매 데이터 클릭 처리
   }

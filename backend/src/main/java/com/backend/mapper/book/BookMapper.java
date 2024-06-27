@@ -194,4 +194,12 @@ public interface BookMapper {
             WHERE book_place_time_id = #{bookPlaceTimeId}
             """)
     BookPlaceTime selectBookPlaceTime(Integer bookPlaceTimeId);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM book_place_time
+            WHERE book_place_time_id = #{bookPlaceTimeId}
+            AND start_time > DATE_ADD(CURRENT_TIME(), INTERVAL 10 MINUTE)
+            """)
+    int compareStartTimeAndCurrentTimeByBookPlaceTimeId(Integer bookPlaceTimeId);
 }

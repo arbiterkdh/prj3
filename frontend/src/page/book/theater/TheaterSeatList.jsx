@@ -22,6 +22,7 @@ import {
   faCouch,
   faDoorOpen,
   faLeftLong,
+  faPerson,
   faRightLong,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -76,6 +77,7 @@ export function TheaterSeatList() {
           setTheater(res.data.theater);
           setTheaterBox(res.data.theaterBox);
           setTheaterBoxMovie(res.data.theaterBoxMovie);
+          setBookPlaceTime(res.data.bookPlaceTime);
           setSeatBooked(res.data.rowColList);
         });
     }
@@ -96,8 +98,9 @@ export function TheaterSeatList() {
     }
 
     let seatSelectedList = [...seatSelected];
+    let rowCol = alphabet + "-" + number;
 
-    if (!seatSelectedList.includes(alphabet + "-" + number)) {
+    if (!seatSelectedList.includes(rowCol)) {
       if (seatSelected.length === numberOfPeople) {
         toast({
           status: "warning",
@@ -106,12 +109,13 @@ export function TheaterSeatList() {
         });
         return;
       }
-      seatSelectedList.push(alphabet + "-" + number);
+      seatSelectedList.push(rowCol);
     } else {
-      seatSelectedList = seatSelectedList.filter(
-        (seat) => seat !== alphabet + "-" + number,
-      );
+      seatSelectedList = seatSelectedList.filter((seat) => seat !== rowCol);
     }
+
+    axios.post("/api/book/theaterseat/state", { bookPlaceTime, rowCol });
+
     return setSeatSelected(seatSelectedList);
   }
 
@@ -454,7 +458,12 @@ export function TheaterSeatList() {
           _dark={{ bgColor: "gray" }}
           zIndex={2}
         >
-          <Box h={"368px"} color={"blackAlpha.600"}>
+          <Box
+            h={"368px"}
+            color={"blackAlpha.600"}
+            position={"absolute"}
+            left={"308px"}
+          >
             <Flex pt={"55px"} w={"530px"} h={"280px"}>
               <Stack align={"center"}>
                 {seatList.map((row, index) => {
@@ -467,6 +476,7 @@ export function TheaterSeatList() {
                       )}
                       {row.seat.map((col, index) => {
                         let rowCol = row.alphabet + "-" + col;
+                        let isBooked = seatBooked.includes(rowCol);
                         return (
                           <Box key={index}>
                             {rowCol === "A-1" || rowCol === "A-22" ? (
@@ -477,7 +487,7 @@ export function TheaterSeatList() {
                               <EmptySeatBox />
                             ) : index === 6 || index === 15 ? (
                               <EmptySeatBox />
-                            ) : (
+                            ) : !isBooked ? (
                               <EmptySeatBox
                                 color={
                                   seatFocused === rowCol ||
@@ -503,6 +513,26 @@ export function TheaterSeatList() {
                                   onClick={() =>
                                     handleSeatSelect(row.alphabet, col)
                                   }
+                                  icon={faCouch}
+                                />
+                              </EmptySeatBox>
+                            ) : (
+                              <EmptySeatBox>
+                                <Box
+                                  w={"22px"}
+                                  h={"20px"}
+                                  zIndex={3}
+                                  position={"absolute"}
+                                  alignContent={"center"}
+                                  color={"black"}
+                                >
+                                  <FontAwesomeIcon
+                                    size={"lg"}
+                                    icon={faPerson}
+                                  />
+                                </Box>
+                                <FontAwesomeIcon
+                                  cursor={"default"}
                                   icon={faCouch}
                                 />
                               </EmptySeatBox>
