@@ -14,6 +14,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import MarginBox from "../css/theme/component/box/MarginBox.jsx";
@@ -28,13 +29,13 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import CursorBox from "../css/theme/component/box/CursorBox.jsx";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function LoginModal({
-  isOpen,
-  onClose,
+  isNeedLogin,
+  setIsNeedLogin,
   canShow,
   setCanShow,
   password,
@@ -42,12 +43,30 @@ export function LoginModal({
   adImage,
 }) {
   const account = useContext(LoginContext);
+  const location = useLocation();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [email, setEmail] = useState("");
   const [eye, setEye] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isNeedLogin) {
+      onOpen();
+    }
+  }, [isNeedLogin]);
+
+  useEffect(() => {
+    if (location.state?.needLogin) {
+      onOpen();
+    }
+
+    if (!account.isLoggedIn() && isNeedLogin) {
+      setIsNeedLogin(false);
+    }
+  }, [onOpen]);
 
   function handleLogin() {
     axios

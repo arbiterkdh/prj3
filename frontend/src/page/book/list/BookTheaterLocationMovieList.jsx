@@ -61,8 +61,9 @@ export function BookTheaterLocationMovieList({
         description: "로그인이 필요한 서비스입니다.",
         position: "bottom-right",
       });
+      return navigate("/login", { state: { needLogin: true } });
     }
-    navigate(`/book/theaterseat`, { state: { bookPlaceTime } });
+    return navigate(`/book/theaterseat`, { state: { bookPlaceTime } });
     // 예매 데이터 클릭 처리
   }
 
