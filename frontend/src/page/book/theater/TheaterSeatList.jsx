@@ -478,212 +478,217 @@ export function TheaterSeatList() {
           <Box h={"368px"} color={"blackAlpha.600"}>
             <Flex pt={"55px"} w={"530px"} h={"280px"}>
               <Stack align={"center"}>
-                {seatList.map((row, index) => (
-                  <Flex key={index}>
-                    {row.alphabet === "D" && (
-                      <Flex>
-                        <Box h={"30px"} />
-                      </Flex>
-                    )}
-                    {row.seat.map((col, index) => (
-                      <Box key={index}>
-                        {index === 0 && row.alphabet === "A" ? (
-                          <Flex>
-                            <EmptySeatBox />
-                            <EmptySeatBox
-                              color={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? "darkslategray"
-                                  : ""
-                              }
-                              _dark={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? { color: "red.800" }
-                                  : {}
-                              }
-                            >
-                              <FontAwesomeIcon
-                                cursor={"pointer"}
-                                onMouseEnter={() =>
-                                  handleSeatFocus(row.alphabet, col)
+                {seatList.map((row, index) => {
+                  return (
+                    <Flex key={index}>
+                      {row.alphabet === "D" && (
+                        <Flex>
+                          <Box h={"30px"} />
+                        </Flex>
+                      )}
+                      {row.seat.map((col, index) => {
+                        let rowCol = row.alphabet + "-" + col;
+                        return (
+                          <Box key={index}>
+                            {index === 0 && row.alphabet === "A" ? (
+                              <Flex>
+                                <EmptySeatBox />
+                                <EmptySeatBox
+                                  color={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? "darkslategray"
+                                      : ""
+                                  }
+                                  _dark={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? { color: "red.800" }
+                                      : {}
+                                  }
+                                >
+                                  <FontAwesomeIcon
+                                    cursor={"pointer"}
+                                    onMouseEnter={() =>
+                                      handleSeatFocus(row.alphabet, col)
+                                    }
+                                    onMouseLeave={() => {
+                                      setSeatFocused("");
+                                    }}
+                                    onClick={() =>
+                                      handleSeatSelect(row.alphabet, col)
+                                    }
+                                    icon={faCouch}
+                                  />
+                                </EmptySeatBox>
+                              </Flex>
+                            ) : index === 17 && row.alphabet === "A" ? (
+                              <Flex>
+                                <EmptySeatBox
+                                  color={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? "darkslategray"
+                                      : ""
+                                  }
+                                  _dark={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? { color: "red.800" }
+                                      : {}
+                                  }
+                                >
+                                  <FontAwesomeIcon
+                                    cursor={"pointer"}
+                                    onMouseEnter={() =>
+                                      handleSeatFocus(row.alphabet, col)
+                                    }
+                                    onMouseLeave={() => {
+                                      setSeatFocused("");
+                                    }}
+                                    onClick={() =>
+                                      handleSeatSelect(row.alphabet, col)
+                                    }
+                                    icon={faCouch}
+                                  />
+                                </EmptySeatBox>
+                                <EmptySeatBox />
+                              </Flex>
+                            ) : (index === 5 || index === 13) &&
+                              row.alphabet === "A" ? (
+                              <Flex>
+                                <EmptySeatBox />
+                                <EmptySeatBox
+                                  color={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? "darkslategray"
+                                      : ""
+                                  }
+                                  _dark={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? { color: "red.800" }
+                                      : {}
+                                  }
+                                >
+                                  <FontAwesomeIcon
+                                    cursor={"pointer"}
+                                    onMouseEnter={() =>
+                                      handleSeatFocus(row.alphabet, col)
+                                    }
+                                    onMouseLeave={() => {
+                                      setSeatFocused("");
+                                    }}
+                                    onClick={() =>
+                                      handleSeatSelect(row.alphabet, col)
+                                    }
+                                    icon={faCouch}
+                                  />
+                                </EmptySeatBox>
+                              </Flex>
+                            ) : index === 4 && row.alphabet === "J" ? (
+                              <Flex>
+                                <EmptySeatBox w={`${14 * (22 + 2)}px`} />
+                                <EmptySeatBox
+                                  color={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? "darkslategray"
+                                      : ""
+                                  }
+                                  _dark={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? { color: "red.800" }
+                                      : {}
+                                  }
+                                >
+                                  <FontAwesomeIcon
+                                    cursor={"pointer"}
+                                    onMouseEnter={() =>
+                                      handleSeatFocus(row.alphabet, col)
+                                    }
+                                    onMouseLeave={() => {
+                                      setSeatFocused("");
+                                    }}
+                                    onClick={() =>
+                                      handleSeatSelect(row.alphabet, col)
+                                    }
+                                    icon={faCouch}
+                                  />
+                                </EmptySeatBox>
+                              </Flex>
+                            ) : (index === 5 || index === 13) &&
+                              row.alphabet !== "A" &&
+                              row.alphabet !== "J" ? (
+                              <Flex>
+                                <EmptySeatBox
+                                  color={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? "darkslategray"
+                                      : ""
+                                  }
+                                  _dark={
+                                    seatFocused === rowCol ||
+                                    seatSelected.includes(rowCol)
+                                      ? { color: "red.800" }
+                                      : {}
+                                  }
+                                >
+                                  <FontAwesomeIcon
+                                    cursor={"pointer"}
+                                    onMouseEnter={() =>
+                                      handleSeatFocus(row.alphabet, col)
+                                    }
+                                    onMouseLeave={() => {
+                                      setSeatFocused("");
+                                    }}
+                                    onClick={() =>
+                                      handleSeatSelect(row.alphabet, col)
+                                    }
+                                    icon={faCouch}
+                                  />
+                                </EmptySeatBox>
+                                <EmptySeatBox />
+                              </Flex>
+                            ) : (
+                              <EmptySeatBox
+                                color={
+                                  seatFocused === rowCol ||
+                                  seatSelected.includes(rowCol)
+                                    ? "darkslategray"
+                                    : ""
                                 }
-                                onMouseLeave={() => {
-                                  setSeatFocused("");
-                                }}
-                                onClick={() =>
-                                  handleSeatSelect(row.alphabet, col)
+                                _dark={
+                                  seatFocused === rowCol ||
+                                  seatSelected.includes(rowCol)
+                                    ? { color: "red.800" }
+                                    : {}
                                 }
-                                icon={faCouch}
-                              />
-                            </EmptySeatBox>
-                          </Flex>
-                        ) : index === 17 && row.alphabet === "A" ? (
-                          <Flex>
-                            <EmptySeatBox
-                              color={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? "darkslategray"
-                                  : ""
-                              }
-                              _dark={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? { color: "red.800" }
-                                  : {}
-                              }
-                            >
-                              <FontAwesomeIcon
-                                cursor={"pointer"}
-                                onMouseEnter={() =>
-                                  handleSeatFocus(row.alphabet, col)
-                                }
-                                onMouseLeave={() => {
-                                  setSeatFocused("");
-                                }}
-                                onClick={() =>
-                                  handleSeatSelect(row.alphabet, col)
-                                }
-                                icon={faCouch}
-                              />
-                            </EmptySeatBox>
-                            <EmptySeatBox />
-                          </Flex>
-                        ) : (index === 5 || index === 13) &&
-                          row.alphabet === "A" ? (
-                          <Flex>
-                            <EmptySeatBox />
-                            <EmptySeatBox
-                              color={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? "darkslategray"
-                                  : ""
-                              }
-                              _dark={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? { color: "red.800" }
-                                  : {}
-                              }
-                            >
-                              <FontAwesomeIcon
-                                cursor={"pointer"}
-                                onMouseEnter={() =>
-                                  handleSeatFocus(row.alphabet, col)
-                                }
-                                onMouseLeave={() => {
-                                  setSeatFocused("");
-                                }}
-                                onClick={() =>
-                                  handleSeatSelect(row.alphabet, col)
-                                }
-                                icon={faCouch}
-                              />
-                            </EmptySeatBox>
-                          </Flex>
-                        ) : index === 4 && row.alphabet === "J" ? (
-                          <Flex>
-                            <EmptySeatBox w={`${14 * (22 + 2)}px`} />
-                            <EmptySeatBox
-                              color={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? "darkslategray"
-                                  : ""
-                              }
-                              _dark={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? { color: "red.800" }
-                                  : {}
-                              }
-                            >
-                              <FontAwesomeIcon
-                                cursor={"pointer"}
-                                onMouseEnter={() =>
-                                  handleSeatFocus(row.alphabet, col)
-                                }
-                                onMouseLeave={() => {
-                                  setSeatFocused("");
-                                }}
-                                onClick={() =>
-                                  handleSeatSelect(row.alphabet, col)
-                                }
-                                icon={faCouch}
-                              />
-                            </EmptySeatBox>
-                          </Flex>
-                        ) : (index === 5 || index === 13) &&
-                          row.alphabet !== "A" &&
-                          row.alphabet !== "J" ? (
-                          <Flex>
-                            <EmptySeatBox
-                              color={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? "darkslategray"
-                                  : ""
-                              }
-                              _dark={
-                                seatFocused === row.alphabet + "-" + col ||
-                                seatSelected.includes(row.alphabet + "-" + col)
-                                  ? { color: "red.800" }
-                                  : {}
-                              }
-                            >
-                              <FontAwesomeIcon
-                                cursor={"pointer"}
-                                onMouseEnter={() =>
-                                  handleSeatFocus(row.alphabet, col)
-                                }
-                                onMouseLeave={() => {
-                                  setSeatFocused("");
-                                }}
-                                onClick={() =>
-                                  handleSeatSelect(row.alphabet, col)
-                                }
-                                icon={faCouch}
-                              />
-                            </EmptySeatBox>
-                            <EmptySeatBox />
-                          </Flex>
-                        ) : (
-                          <EmptySeatBox
-                            color={
-                              seatFocused === row.alphabet + "-" + col ||
-                              seatSelected.includes(row.alphabet + "-" + col)
-                                ? "darkslategray"
-                                : ""
-                            }
-                            _dark={
-                              seatFocused === row.alphabet + "-" + col ||
-                              seatSelected.includes(row.alphabet + "-" + col)
-                                ? { color: "red.800" }
-                                : {}
-                            }
-                          >
-                            <FontAwesomeIcon
-                              cursor={"pointer"}
-                              onMouseEnter={() =>
-                                handleSeatFocus(row.alphabet, col)
-                              }
-                              onMouseLeave={() => {
-                                setSeatFocused("");
-                              }}
-                              onClick={() =>
-                                handleSeatSelect(row.alphabet, col)
-                              }
-                              icon={faCouch}
-                            />
-                          </EmptySeatBox>
-                        )}
-                      </Box>
-                    ))}
-                  </Flex>
-                ))}
+                              >
+                                <FontAwesomeIcon
+                                  cursor={"pointer"}
+                                  onMouseEnter={() =>
+                                    handleSeatFocus(row.alphabet, col)
+                                  }
+                                  onMouseLeave={() => {
+                                    setSeatFocused("");
+                                  }}
+                                  onClick={() =>
+                                    handleSeatSelect(row.alphabet, col)
+                                  }
+                                  icon={faCouch}
+                                />
+                              </EmptySeatBox>
+                            )}
+                          </Box>
+                        );
+                      })}
+                    </Flex>
+                  );
+                })}
               </Stack>
             </Flex>
           </Box>
