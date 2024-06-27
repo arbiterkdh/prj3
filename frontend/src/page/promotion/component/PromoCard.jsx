@@ -18,7 +18,7 @@ const PromoCard = ({ promo }) => {
   return (
     <Card
       key={promo.id}
-      height="100%"
+      // height="100%"
       borderWidth="1px"
       borderRadius="lg"
       borderColor="gray.500"
