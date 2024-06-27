@@ -38,6 +38,7 @@ import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CenterTd from "../../../css/theme/component/table/thead/tr/td/CenterTd.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieAdd() {
   const [title, setTitle] = useState("");
@@ -174,6 +175,8 @@ export function MovieAdd() {
     let actorListLength = 0;
     if (actor.length > 5) {
       actorListLength = 5;
+    } else {
+      actorListLength = actor.length;
     }
     let actorsName = "";
     for (let i = 0; i < actorListLength; i++) {
@@ -191,12 +194,12 @@ export function MovieAdd() {
         <Flex>
           <Heading mb={10}>영화 추가</Heading>
           <Spacer />
-          <Button
+          <ColorButton
             onClick={onOpen}
             rightIcon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
           >
             영화검색
-          </Button>
+          </ColorButton>
         </Flex>
         <Box>
           <Stack>
@@ -213,6 +216,7 @@ export function MovieAdd() {
               <FormControl>
                 <FormLabel>이미지</FormLabel>
                 <Input
+                  alignContent={"center"}
                   type="file"
                   accept="image/*"
                   onChange={(e) => setFile(e.target.files)}
@@ -257,6 +261,16 @@ export function MovieAdd() {
               <CheckboxGroup>
                 <Stack spacing={[1, 5]} direction={["column", "row"]}>
                   <Checkbox
+                    ml={"3px"}
+                    _checked={{
+                      "& .chakra-checkbox__control": {
+                        backgroundColor: "#ff4357",
+                        borderColor: "#ff4357",
+                        _hover: {
+                          backgroundColor: "#ff4357",
+                        },
+                      },
+                    }}
                     value="2D"
                     onChange={(e) =>
                       handleMovieType(e.target.value, e.target.checked)
@@ -265,6 +279,15 @@ export function MovieAdd() {
                     2D
                   </Checkbox>
                   <Checkbox
+                    _checked={{
+                      "& .chakra-checkbox__control": {
+                        backgroundColor: "#ff4357",
+                        borderColor: "#ff4357",
+                        _hover: {
+                          backgroundColor: "#ff4357",
+                        },
+                      },
+                    }}
                     value="3D"
                     onChange={(e) =>
                       handleMovieType(e.target.value, e.target.checked)
@@ -288,12 +311,14 @@ export function MovieAdd() {
             <Box>
               <FormControl>
                 <FormLabel>개봉일</FormLabel>
-                <DatePicker
-                  locale={ko}
-                  dateFormat="yyyy년 MM월 dd일"
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                />
+                <Box ml={"3px"}>
+                  <DatePicker
+                    locale={ko}
+                    dateFormat="yyyy년 MM월 dd일"
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                  />
+                </Box>
               </FormControl>
             </Box>
             <Box>
@@ -321,14 +346,22 @@ export function MovieAdd() {
               />
             </Box>
             <Box>
-              <Button onClick={handleMovieCancel}>취소</Button>
               <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={handleMovieCancel}
+              >
+                취소
+              </Button>
+              <ColorButton
                 isDisabled={disableSaveButton}
                 onClick={handleMovieSave}
-                colorScheme={"blue"}
               >
                 저장
-              </Button>
+              </ColorButton>
             </Box>
           </Stack>
         </Box>
@@ -341,17 +374,34 @@ export function MovieAdd() {
         onClose={onClose}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>영화검색</ModalHeader>
           <ModalBody>
             <InputGroup mb={5} w={"100%"} size="md">
               <Input
+                border={"3px solid #FF4357"}
+                borderRadius={"20px"}
                 value={searchKeyword}
                 onChange={(e) => setSearchKeyword(e.target.value)}
                 placeholder="영화명 검색"
               />
               <InputRightElement width="4.5rem">
-                <Button onClick={handleSearchClick} h="1.75rem" size="md">
+                <Button
+                  bgColor={"white"}
+                  _hover={{
+                    bgColor: "white",
+                  }}
+                  _dark={{
+                    color: "lightgray",
+                    bgColor: "#121212",
+                    _hover: {
+                      bgColor: "#121212",
+                    },
+                  }}
+                  onClick={handleSearchClick}
+                  h="1.75rem"
+                  size="md"
+                >
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </Button>
               </InputRightElement>
@@ -380,13 +430,13 @@ export function MovieAdd() {
                         </a>
                       </Td>
                       <CenterTd>
-                        <Button
+                        <ColorButton
                           onClick={() =>
                             handleMovieSelect(movie.movieId, movie.movieSeq)
                           }
                         >
                           선택
-                        </Button>
+                        </ColorButton>
                       </CenterTd>
                     </Tr>
                   ))}
@@ -395,7 +445,16 @@ export function MovieAdd() {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>닫기</Button>
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              onClick={onClose}
+            >
+              닫기
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

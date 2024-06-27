@@ -134,3 +134,16 @@ CREATE TABLE movie_like
     movie_id  INT NOT NULL REFERENCES movie (id),
     member_id INT NOT NULL REFERENCES member (number)
 );
+
+DESC movie_location;
+
+SELECT *
+FROM theater_box_movie;
+
+SELECT*
+FROM movie
+ORDER BY id DESC;
+
+DELETE
+FROM movie
+WHERE id < 784;

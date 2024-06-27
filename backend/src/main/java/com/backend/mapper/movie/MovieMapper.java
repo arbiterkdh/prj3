@@ -190,4 +190,59 @@ public interface MovieMapper {
             WHERE movie_id = #{movieId}
             """)
     int deleteMovieLikeByMovieId(Integer movieId);
+
+
+    @Delete("""
+            DELETE FROM movie_location
+            WHERE movie_id = #{movieId}
+            """)
+    int deleteMovieLocationByMovieId(Integer movieId);
+
+
+    @Delete("""
+            DELETE FROM theater_box_movie
+            WHERE movie_id = #{movieId}
+            """)
+    int deleteTheaterBoxMovieByMovieId(Integer movieId);
+
+    @Delete("""
+            DELETE FROM book_place_time
+            WHERE theater_box_movie_id = #{id}
+            """)
+    int deleteBookPlaceTimeByMovieId(Integer id);
+
+
+    @Select("""
+            SELECT id FROM theater_box_movie
+            WHERE movie_id = #{movieId}
+            """)
+    List<Integer> selectTheaterBoxMovieByMovieId(Integer movieId);
+
+
+    @Delete("""
+            DELETE FROM book_place_time
+            WHERE theater_box_movie_id = #{id}
+            """)
+    int deleteBookPlaceTime(Integer id);
+
+
+    @Delete("""
+            DELETE FROM theater_box_movie
+            WHERE id = #{id}
+            """)
+    int deleteTheaterBoxMovie(Integer id);
+
+    @Select("""
+            SELECT book_place_time_id
+            FROM book_place_time
+            WHERE theater_box_movie_id = #{id}
+            """)
+    List<Integer> selectBookPlaceTimeId(Integer id);
+
+    @Delete("""
+            DELETE FROM book_seat
+            WHERE book_seat_book_place_time_id = #{id}
+            """)
+    int deleteBookSeat(Integer id);
 }
+

@@ -113,11 +113,20 @@ export function MovieInfo({ movie, isProcessing, setIsProcessing }) {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>삭제 확인</ModalHeader>
           <ModalBody>삭제 하시겠습니까?</ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>취소</Button>
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              onClick={onClose}
+            >
+              취소
+            </Button>
             <ColorButton onClick={handleRemoveClick}>삭제</ColorButton>
           </ModalFooter>
         </ModalContent>
