@@ -46,8 +46,6 @@ function ModifyProductModal({
   const toast = useToast();
 
   const handleNumberInputChange = (value) => {
-    // const val = parseInt(value, 10);
-    // setStock(isNaN(val) ? 0 : val);
     setStock(value);
   };
 
