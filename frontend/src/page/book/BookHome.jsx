@@ -26,6 +26,14 @@ export function BookHome() {
     <Center>
       <CenterBox>
         <Heading>빠른예매</Heading>
+        <Box
+          w={"100%"}
+          color={"darkslategray"}
+          borderTop={"5px solid"}
+          _dark={{ color: "whiteAlpha.200" }}
+          h={"35px"}
+          mb={-5}
+        ></Box>
         <Flex border={"2px solid"} mb={"35px"}>
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack

@@ -123,10 +123,10 @@ export function TheaterList({
               }
               _dark={
                 isSameCity
-                  ? { bgColor: "red.700" }
+                  ? { bgColor: "red.800" }
                   : {
                       _hover: {
-                        bgColor: "red.600",
+                        bgColor: "red.700",
                       },
                     }
               }

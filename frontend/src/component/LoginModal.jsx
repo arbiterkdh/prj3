@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Divider,
   Flex,
   Image,
@@ -32,6 +31,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import ColorButton from "../css/theme/component/button/ColorButton.jsx";
 
 export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
   const account = useContext(LoginContext);
@@ -118,14 +118,14 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
       isCentered={true}
     >
       <ModalOverlay />
-      <ModalContent minW={"760px"} h={"500px"}>
+      <ModalContent minW={"760px"} h={"500px"} _dark={{ bgColor: "#04363A" }}>
         <ModalHeader
           bgColor={"red.600"}
           color={"whiteAlpha.900"}
           _dark={{
-            bgColor: "darkslategray",
+            bgColor: "red.700",
           }}
-          h={12}
+          h={10}
           alignContent={"center"}
         >
           로그인
@@ -172,9 +172,9 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
               </MarginBox>
             </ModalBody>
             <ModalFooter>
-              <Button w={"100%"} onClick={handleLogin}>
+              <ColorButton w={"100%"} onClick={handleLogin}>
                 로그인
-              </Button>
+              </ColorButton>
             </ModalFooter>
             <ModalFooter display="flex" justifyContent="space-evenly">
               <CursorBox>ID/PW 찾기</CursorBox>
