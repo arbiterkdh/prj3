@@ -18,8 +18,9 @@ public interface CartMapper {
     @Select("""
             SELECT *
             FROM product_cart
+            WHERE member_number = #{memberNumber}
             """)
-    List<ProductCart> cartProductList();
+    List<ProductCart> cartProductList(Integer memberNumber);
 
 
     @Update("""

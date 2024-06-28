@@ -58,10 +58,10 @@ public class CartService {
         }
     }
 
-    public List<ProductCart> cartProductList() {
+    public List<ProductCart> cartProductList(Integer memberNumber) {
 
 
-        List<ProductCart> productCartList = mapper.cartProductList();
+        List<ProductCart> productCartList = mapper.cartProductList(memberNumber);
 
         for (ProductCart cartItem : productCartList) {
 

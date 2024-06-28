@@ -23,10 +23,10 @@ public class CartController {
         service.addCart(product, memberNumber);
     }
 
-    @GetMapping("/list")
-    public List<ProductCart> cartList() {
+    @GetMapping("/list/{memberNumber}")
+    public List<ProductCart> cartList(@PathVariable Integer memberNumber) {
 
-        return service.cartProductList();
+        return service.cartProductList(memberNumber);
     }
 
 

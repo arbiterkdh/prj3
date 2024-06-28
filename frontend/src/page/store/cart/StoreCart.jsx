@@ -53,6 +53,8 @@ export function StoreCart() {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cartId, setCartId] = useState(null);
+
+  const account = useContext(LoginContext);
   const {
     isOpen: isModifyOpen,
     onOpen: onModifyOpen,
@@ -77,7 +79,7 @@ export function StoreCart() {
 
   useEffect(() => {
     axios
-      .get(`/api/store/cart/list`)
+      .get(`/api/store/cart/list/${account.id}`)
       .then((res) => {
         const initialAllCheck = res.data.reduce((itemArr, item) => {
           itemArr[item.productId] = true;
