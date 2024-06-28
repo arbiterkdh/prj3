@@ -486,6 +486,7 @@ export function MemberMyPage() {
                             onClick={() => {
                               handlePaymentCancelItem(resultItem.orderNumber);
                             }}
+                            cursor={"pointer"}
                           >
                             {resultItem.orderNumber}
                           </Td>
