@@ -1,6 +1,7 @@
 package com.backend.service.book.seat;
 
 import com.backend.domain.book.BookPlaceTime;
+import com.backend.domain.book.seat.BookSeat;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.theater.Theater;
 import com.backend.domain.theater.box.TheaterBox;
@@ -56,5 +57,17 @@ public class BookSeatService {
         data.put("movie", movie);
 
         return data;
+    }
+
+    public BookSeat getBookSeat(BookPlaceTime bookPlaceTime, String rowCol) {
+        return bookSeatMapper.selectBookSeat(bookPlaceTime.getBookPlaceTimeId(), rowCol);
+    }
+
+    public List<String> getRowColList(BookPlaceTime bookPlaceTime) {
+        return bookSeatMapper.selectAllRowColByBookPlaceTimeId(bookPlaceTime.getBookPlaceTimeId());
+    }
+
+    public void addBookSeat(BookPlaceTime bookPlaceTime, String rowCol) {
+        bookSeatMapper.insertBookSeat(bookPlaceTime.getBookPlaceTimeId(), rowCol);
     }
 }

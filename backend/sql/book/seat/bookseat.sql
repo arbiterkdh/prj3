@@ -17,7 +17,7 @@ FROM book_place_time bpt
 
 INSERT INTO book_seat
     (book_seat_book_place_time_id, row_col)
-VALUES (78, 'A-2');
+VALUES (85, 'A-5');
 
 SELECT *
 FROM book_seat;

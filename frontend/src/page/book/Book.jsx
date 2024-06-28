@@ -91,7 +91,7 @@ export function Book() {
           >
             상영 도시/지점명
           </BookBox>
-          <BookBox borderY={"none"}></BookBox>
+          <BookBox borderY={"none"} />
           <BookTheaterList
             cityList={cityList}
             theaterNumberList={theaterNumberList}

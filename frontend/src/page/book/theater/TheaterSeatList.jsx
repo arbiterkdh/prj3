@@ -28,12 +28,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BorderBox from "../../../css/theme/component/box/BorderBox.jsx";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import EmptySeatBox from "../../../css/theme/component/box/EmptySeatBox.jsx";
+import SmallFontBox from "../../../css/theme/component/box/SmallFontBox.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 export function TheaterSeatList() {
   const { setBookProgress } = useOutletContext();
+  const account = useContext(LoginContext);
   const location = useLocation();
   const [bookPlaceTime, setBookPlaceTime] = useState(
     location.state.bookPlaceTime,
@@ -67,12 +70,14 @@ export function TheaterSeatList() {
   }
 
   useEffect(() => {
+    if (!account.isLoggedIn()) {
+      navigate("/");
+    }
     setBookProgress(2);
     if (bookPlaceTime) {
       axios
         .get(`/api/book/theaterseat/${bookPlaceTime.bookPlaceTimeId}`)
         .then((res) => {
-          console.log(res.data);
           setMovie(res.data.movie);
           setTheater(res.data.theater);
           setTheaterBox(res.data.theaterBox);
@@ -87,7 +92,7 @@ export function TheaterSeatList() {
     return setSeatFocused(alphabet + "-" + number);
   }
 
-  function handleSeatSelect(alphabet, number) {
+  async function handleSeatSelect(alphabet, number) {
     if (numberOfPeople === 0) {
       toast({
         status: "warning",
@@ -99,6 +104,31 @@ export function TheaterSeatList() {
 
     let seatSelectedList = [...seatSelected];
     let rowCol = alphabet + "-" + number;
+
+    try {
+      const response = await axios.post("/api/book/theaterseat/state", {
+        bookPlaceTime,
+        rowCol,
+      });
+    } catch (err) {
+      if (err.response.status === 504) {
+        toast({
+          status: "warning",
+          description: "예매 가능 시간이 초과되었습니다.",
+          position: "bottom-right",
+        });
+        navigate("/book");
+      } else if (err.response.status === 409) {
+        toast({
+          status: "warning",
+          description: "예매중이거나, 예매된 좌석입니다.",
+          position: "bottom-right",
+        });
+        setSeatBooked(err.response.data);
+        setSeatSelected((prev) => prev.filter((seat) => seat !== rowCol));
+      }
+      return;
+    }
 
     if (!seatSelectedList.includes(rowCol)) {
       if (seatSelected.length === numberOfPeople) {
@@ -114,16 +144,14 @@ export function TheaterSeatList() {
       seatSelectedList = seatSelectedList.filter((seat) => seat !== rowCol);
     }
 
-    axios.post("/api/book/theaterseat/state", { bookPlaceTime, rowCol });
-
-    return setSeatSelected(seatSelectedList);
+    setSeatSelected(seatSelectedList);
   }
 
   return (
     <Box>
       <BorderBox alignContent={"center"} textAlign={"center"} h={"50px"}>
         <Flex justifyContent={"space-between"} m={1}>
-          <Box></Box>
+          <Box />
           <Box fontSize={"lg"} fontWeight={"600"} alignContent={"center"}>
             CCV {theater.location}점 {theaterBox.boxNumber}관 인원/좌석 선택
           </Box>
@@ -317,11 +345,13 @@ export function TheaterSeatList() {
           boxShadow: "inset 0 0 35px rgba(45, 45, 45, 1)",
         }}
       >
-        <Box m={8} w={"380px"}>
+        <Box m={8} w={"340px"}>
           {movie ? (
             <Image
+              border={"1px solid"}
+              color={"whiteAlpha.50"}
               src={movie.movieImageFile}
-              maxH={"476px"}
+              maxH={"480px"}
               _dark={{
                 filter: "brightness(80%)",
               }}
@@ -339,7 +369,7 @@ export function TheaterSeatList() {
           </Heading>
           <Text
             pr={5}
-            mb={3}
+            mb={5}
             whiteSpace={"pre-wrap"}
             h={"190px"}
             overflowY={"scroll"}
@@ -347,14 +377,25 @@ export function TheaterSeatList() {
             {movie.content}
           </Text>
           <Stack>
-            <Box mx={-3} mt={4} fontSize={"lg"} fontWeight={"600"}>
+            <Box
+              mx={-3}
+              mt={4}
+              fontSize={"lg"}
+              fontWeight={"600"}
+              w={"450px"}
+              overflowX={"hidden"}
+              whiteSpace={"nowrap"}
+              textOverflow={"ellipsis"}
+            >
               감독: {movie.director}
             </Box>
-            <Box noOfLines={1}>출연진: {movie.actors}</Box>
-            <Box>장르: {movie.genre}</Box>
-            <Flex>
-              <Box w={"100%"}>수위: {movie.rating}</Box>
-              <Box w={"100%"}>평점: 9.0 </Box>
+            <SmallFontBox noOfLines={1}>출연진: {movie.actors}</SmallFontBox>
+            <SmallFontBox>장르: {movie.genre}</SmallFontBox>
+            <Flex justifyContent={"space-between"}>
+              <SmallFontBox w={"300px"}>수위: {movie.rating}</SmallFontBox>
+              <Box w={"80px"} fontWeight={"600"}>
+                평점: 9.0
+              </Box>
             </Flex>
           </Stack>
         </Box>
@@ -462,7 +503,7 @@ export function TheaterSeatList() {
             h={"368px"}
             color={"blackAlpha.600"}
             position={"absolute"}
-            left={"308px"}
+            left={"288px"}
           >
             <Flex pt={"55px"} w={"530px"} h={"280px"}>
               <Stack align={"center"}>
@@ -476,6 +517,7 @@ export function TheaterSeatList() {
                       )}
                       {row.seat.map((col, index) => {
                         let rowCol = row.alphabet + "-" + col;
+                        let isFocused = seatFocused === rowCol;
                         let isBooked = seatBooked.includes(rowCol);
                         return (
                           <Box key={index}>
@@ -490,14 +532,12 @@ export function TheaterSeatList() {
                             ) : !isBooked ? (
                               <EmptySeatBox
                                 color={
-                                  seatFocused === rowCol ||
-                                  seatSelected.includes(rowCol)
+                                  isFocused || seatSelected.includes(rowCol)
                                     ? "darkslategray"
                                     : ""
                                 }
                                 _dark={
-                                  seatFocused === rowCol ||
-                                  seatSelected.includes(rowCol)
+                                  isFocused || seatSelected.includes(rowCol)
                                     ? { color: "red.800" }
                                     : {}
                                 }
