@@ -19,6 +19,8 @@ public class CartController {
     @PostMapping("/add")
     public void addCart(Product product, @RequestParam("memberNumber") Integer memberNumber) {
 
+        System.out.println("product = " + product);
+        System.out.println("memberNumber = " + memberNumber);
 
         service.addCart(product, memberNumber);
     }

@@ -78,19 +78,21 @@ export function StoreCart() {
   };
 
   useEffect(() => {
-    axios
-      .get(`/api/store/cart/list/${account.id}`)
-      .then((res) => {
-        const initialAllCheck = res.data.reduce((itemArr, item) => {
-          itemArr[item.productId] = true;
-          return itemArr;
-        }, {});
-        setProductCartList(res.data);
-        setCheckItem(initialAllCheck);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, []);
+    if (account.id) {
+      axios
+        .get(`/api/store/cart/list/${account.id}`)
+        .then((res) => {
+          const initialAllCheck = res.data.reduce((itemArr, item) => {
+            itemArr[item.productId] = true;
+            return itemArr;
+          }, {});
+          setProductCartList(res.data);
+          setCheckItem(initialAllCheck);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [account]);
 
   const handleCheckBoxChange = (productId) => {
     setCheckItem((prev) => ({

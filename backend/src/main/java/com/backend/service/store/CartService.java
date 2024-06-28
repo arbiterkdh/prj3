@@ -33,29 +33,41 @@ public class CartService {
     public void addCart(Product product, Integer memberNumber) {
 
 
-        ProductCart existCart = mapper.getExistItem(product.getId());
+//        ProductCart existCart = mapper.getExistItem(memberNumber); //맴버번호로
 
+
+        List<ProductCart> memberCartList = mapper.cartProductList(memberNumber); // 회원의 장바구니 상품 조회
+
+        for (int i = 0; i < memberCartList.size(); i++) {
+
+            if (memberCartList.get(i).getProductId() == product.getId()) {
+                System.out.println("장바구니에 상품이 존재합니다");
+                mapper.updateQuantity(memberCartList.get(i).getId());
+
+            } else {
+                System.out.println("없는 상품입니다");
+            }
+        }
+
+
+        /*
         if (existCart != null) {
 
             mapper.updateQuantity(existCart.getId());
         } else {
-            Product productInfo = productMapper.info(product.getId());
+            ProductCart cart = new ProductCart();
 
-            if (productInfo != null) {
+            cart.setId(product.getId());
+            cart.setName(product.getName());
+            cart.setPrice(product.getPrice());
+            cart.setFileName(product.getFileName());
+            cart.setQuantity(product.getQuantity());
+            cart.setMemberNumber(memberNumber);
+            cart.setTotalPrice(product.getPrice());
 
-                ProductCart cart = new ProductCart();
-
-                cart.setId(product.getId());
-                cart.setName(product.getName());
-                cart.setPrice(product.getPrice());
-                cart.setFileName(product.getFileName());
-                cart.setQuantity(product.getQuantity());
-                cart.setMemberNumber(memberNumber);
-                cart.setTotalPrice(product.getPrice());
-
-                mapper.addCart(cart);
-            }
+            mapper.addCart(cart);
         }
+         */
     }
 
     public List<ProductCart> cartProductList(Integer memberNumber) {

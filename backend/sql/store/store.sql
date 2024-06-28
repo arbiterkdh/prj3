@@ -261,3 +261,6 @@ limit 0, 10;
 
 select *
 from member;
+
+select *
+from product_cart;

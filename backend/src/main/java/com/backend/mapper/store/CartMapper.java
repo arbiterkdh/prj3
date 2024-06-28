@@ -33,9 +33,9 @@ public interface CartMapper {
     @Select("""
             SELECT *
             FROM product_cart
-            WHERE product_id = #{productId}
+            WHERE member_number = #{memberNumber}
             """)
-    ProductCart getExistItem(Integer productId);
+    ProductCart getExistItem(Integer memberNumber);
 
 
     @Delete("""
