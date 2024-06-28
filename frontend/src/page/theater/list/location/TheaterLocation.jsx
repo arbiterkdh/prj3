@@ -17,6 +17,7 @@ import TheaterTab from "../../../../css/theme/component/tabs/tab/TheaterTab.jsx"
 import TheaterTab2 from "../../../../css/theme/component/tabs/tab/TheaterTab2.jsx";
 import axios from "axios";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import CursorBox from "../../../../css/theme/component/box/CursorBox.jsx";
 
 export function TheaterLocation() {
   const account = useContext(LoginContext);
@@ -35,10 +36,11 @@ export function TheaterLocation() {
     axios.get("/api/theater/city/location").then((res) => {
       setCityList(res.data);
     });
-    axios
-      .get(`/api/theater/location/${theaterNumber}`)
-      .then((res) => setTheaterLocation(res.data.location));
-  }, []);
+    axios.get(`/api/theater/location/${theaterNumber}`).then((res) => {
+      setTheaterLocation(res.data.location);
+      console.log(res.data.location);
+    });
+  }, [theaterNumber]);
 
   return (
     <Center>
@@ -109,16 +111,17 @@ export function TheaterLocation() {
                     {isSameIndex &&
                       city.theaterList.map((theater, index) => {
                         return (
-                          <Box
-                            w={"25%"}
-                            h={"35px"}
+                          <CursorBox
+                            w={"24%"}
+                            h={"30px"}
                             key={index}
-                            onClick={() =>
-                              navigate(`/theater/${theater.number}`)
-                            }
+                            onClick={() => {
+                              setTheaterNumber(theater.number);
+                              navigate(`/theater/${theater.number}`);
+                            }}
                           >
                             {theater.location}
-                          </Box>
+                          </CursorBox>
                         );
                       })}
                   </Flex>
