@@ -6,8 +6,6 @@ const TheaterListBox = (props) => {
       width={"120px"}
       height={"50px"}
       cursor={"pointer"}
-      border={"1px solid"}
-      m={1}
       textAlign={"center"}
       alignContent={"center"}
       {...props}

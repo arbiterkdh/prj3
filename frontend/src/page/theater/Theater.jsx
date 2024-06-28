@@ -3,9 +3,8 @@ import {
   Center,
   Flex,
   Heading,
+  Image,
   Table,
-  Tbody,
-  Td,
   Th,
   Thead,
   Tr,
@@ -15,6 +14,8 @@ import { TheaterList } from "./list/TheaterList.jsx";
 import { TheaterAdd } from "./add/TheaterAdd.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { TheaterNotification } from "./notification/TheaterNotification.jsx";
 
 export function Theater() {
   const [theaterList, setTheaterList] = useState([]);
@@ -22,6 +23,10 @@ export function Theater() {
   const [isRemoving, setIsRemoving] = useState(false);
   const [cityList, setCityList] = useState([]);
   const [cityName, setCityName] = useState("");
+
+  const [recommendedPromos, setRecommendedPromos] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -31,6 +36,10 @@ export function Theater() {
       })
       .catch()
       .finally();
+
+    axios
+      .get("/api/promotion/recommendations")
+      .then((res) => setRecommendedPromos(res.data));
   }, []);
 
   return (
@@ -53,19 +62,57 @@ export function Theater() {
           cityList={cityList}
           setIsModifying={setIsModifying}
         />
+        {recommendedPromos.length > 0 && (
+          <Box>
+            <Heading mt={16} mb={8}>
+              극장 이벤트
+            </Heading>
+            <Flex
+              p={"6px"}
+              h={"235px"}
+              bgColor={"red.500"}
+              _dark={{
+                bgColor: "darkslategray",
+              }}
+              align={"center"}
+            >
+              <Box
+                border={"4px solid"}
+                color={"red.300"}
+                _dark={{
+                  color: "whiteAlpha.500",
+                }}
+                w={"50%"}
+                onClick={() =>
+                  navigate(`/promotion/view/${recommendedPromos[0].id}`)
+                }
+              >
+                <Image
+                  borderRadius={"30px"}
+                  src={recommendedPromos[0].fileList[0].src}
+                />
+              </Box>
+              <Box
+                border={"4px solid"}
+                color={"red.300"}
+                _dark={{
+                  color: "whiteAlpha.500",
+                }}
+                w={"50%"}
+                onClick={() =>
+                  navigate(`/promotion/view/${recommendedPromos[1].id}`)
+                }
+              >
+                <Image
+                  borderRadius={"30px"}
+                  src={recommendedPromos[1].fileList[0].src}
+                />
+              </Box>
+            </Flex>
+          </Box>
+        )}
         <Box>
-          <Heading>극장 이벤트</Heading>
-          <Flex>
-            <Box w={"50%"} h={"240px"} border={"1px solid"}>
-              이벤트1
-            </Box>
-            <Box w={"50%"} h={"240px"} border={"1px solid"}>
-              이벤트2
-            </Box>
-          </Flex>
-        </Box>
-        <Box>
-          <Heading>극장 공지사항</Heading>
+          <Heading mt={16}>극장 공지사항</Heading>
           <Table>
             <Thead>
               <Tr>
@@ -75,14 +122,7 @@ export function Theater() {
                 <Th>등록일</Th>
               </Tr>
             </Thead>
-            <Tbody>
-              <Tr>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-              </Tr>
-            </Tbody>
+            <TheaterNotification />
           </Table>
         </Box>
       </CenterBox>

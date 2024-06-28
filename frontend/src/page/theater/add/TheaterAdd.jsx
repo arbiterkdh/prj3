@@ -13,10 +13,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import GapFlex from "../../../css/theme/component/flex/GapFlex.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 export function TheaterAdd({ setCityName, cityList, setIsModifying }) {
+  const account = useContext(LoginContext);
+
   const [city, setCity] = useState("");
   const [location, setLocation] = useState("");
 
@@ -58,28 +61,30 @@ export function TheaterAdd({ setCityName, cityList, setIsModifying }) {
 
   return (
     <Box>
-      <GapFlex>
-        <Select
-          placeholder={"선택"}
-          border={"1px solid"}
-          borderRadius={"none"}
-          onChange={(e) => setCity(e.target.value)}
-        >
-          {cityList.map((city) => (
-            <option key={city} value={city} style={{ borderRadius: "none" }}>
-              {city}
-            </option>
-          ))}
-        </Select>
-        <Input
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder={"지점명"}
-        />
-        <Button w={"100%"} onClick={handleCheckInput}>
-          극장 추가
-        </Button>
-      </GapFlex>
+      {account.isAdmin() && (
+        <GapFlex>
+          <Select
+            placeholder={"선택"}
+            border={"1px solid"}
+            borderRadius={"none"}
+            onChange={(e) => setCity(e.target.value)}
+          >
+            {cityList.map((city) => (
+              <option key={city} value={city} style={{ borderRadius: "none" }}>
+                {city}
+              </option>
+            ))}
+          </Select>
+          <Input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder={"지점명"}
+          />
+          <Button w={"100%"} onClick={handleCheckInput}>
+            극장 추가
+          </Button>
+        </GapFlex>
+      )}
 
       <Modal onClose={onClose} isOpen={isOpen}>
         <ModalOverlay></ModalOverlay>
