@@ -47,7 +47,6 @@ import {
 import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
-import EventTypeLabel from "../page/promotion/component/PromoeventTypeLabels.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -138,20 +137,15 @@ export function MemberMyPage() {
   }, [nickName, page]);
 
   useEffect(() => {
-    if (member.number) {
-      axios
-        .get(`/api/promotion/eventResult`, {
-          params: {
-            memberNumber: member.number,
-          },
-        })
-        .then((res) => {
-          setPromoResults(res.data.results);
-        })
-        .catch(() => {})
-        .finally(() => {});
-    }
-  }, [member.number]);
+    // 당첨자 결과 데이터 가져오기
+    axios
+      .get(`/api/promotion/eventResult?search=${member.email}`)
+      .then((res) => {
+        setPromoResults(res.data.results);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, [member.email]);
 
   function handleClick() {
     axios
@@ -558,23 +552,12 @@ export function MemberMyPage() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {promoResults.map((result, index) => (
-                    <Tr key={index}>
-                      <Td>{index + 1}</Td>
-                      <Td>
-                        <EventTypeLabel eventType={result.eventType} />
-                      </Td>
-                      <Td>{result.eventName}</Td>
-                      <Td>
-                        <Button
-                          colorScheme={"blue"}
-                          onClick={() => navigate("/promotion/eventResult")}
-                        >
-                          결과확인
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
+                  <Tr>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                  </Tr>
                 </Tbody>
               </Table>
             </TabPanel>

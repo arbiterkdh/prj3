@@ -24,9 +24,8 @@ public class PromoResultController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> getPromoResults(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(required = false) Integer memberNumber) { // 멤버 번호 파라미터 추가
-        Map<String, Object> results = promoResultService.getPromoResults(page, pageSize, memberNumber);
+            @RequestParam(defaultValue = "10") int pageSize) {
+        Map<String, Object> results = promoResultService.getPromoResults(page, pageSize);
         return ResponseEntity.ok(results);
     }
 

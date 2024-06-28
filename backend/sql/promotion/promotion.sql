@@ -14,9 +14,11 @@ ALTER TABLE promo
 ALTER TABLE promo
     ADD COLUMN isApplyButtonVisible BOOLEAN NOT NULL DEFAULT FALSE;
 
-ALTER TABLE promo DROP COLUMN isRecommended;
+ALTER TABLE promo
+    DROP COLUMN isRecommended;
 
-ALTER TABLE promo ADD COLUMN isRecommended BOOLEAN NULL;
+ALTER TABLE promo
+    ADD COLUMN isRecommended BOOLEAN NULL;
 
 ALTER TABLE promo
     DROP COLUMN isRecommended,
@@ -35,14 +37,15 @@ CREATE TABLE promotion_result
     promotion_id      INT  NOT NULL,
     announcement_date DATE NOT NULL,
     winners           TEXT NOT NULL,
-    CONSTRAINT fk_promotion_id FOREIGN KEY (promotion_id) REFERENCES promo (id)
+    CONSTRAINT fk_promotion_id
+        FOREIGN KEY (promotion_id) REFERENCES promo (id) ON DELETE CASCADE
 );
 
 CREATE TABLE promo_winner
 (
-    id                  INT PRIMARY KEY AUTO_INCREMENT,
+    id              INT PRIMARY KEY AUTO_INCREMENT,
     promo_result_id INT,
-    member_id           INT,
+    member_id       INT,
     FOREIGN KEY (promo_result_id) REFERENCES promo_result (id),
     FOREIGN KEY (member_id) REFERENCES member (number)
 );
@@ -77,12 +80,6 @@ FROM promo;
 SELECT *
 FROM promo_result
 WHERE promo_result.promotion_id = 132;
-
-UPDATE promo_result
-SET promotion_id      = 132,
-    announcement_date = '2024-06-28',
-    winners           = '[{"email":"123@123","name":"123"}]'
-WHERE id = 132;
 
 -- 기존 외래 키 삭제
 ALTER TABLE promo_winner

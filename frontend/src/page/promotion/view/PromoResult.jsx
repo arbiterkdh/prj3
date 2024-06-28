@@ -148,14 +148,6 @@ export function PromoResult() {
                   발표내역을 확인할 수 있습니다.
                 </Text>
               </Box>
-              <Spacer />
-              <Button
-                size="sm"
-                bg="gray.300"
-                onClick={() => navigate(`/mypage?nickName=${nickName}`)}
-              >
-                나의 응모결과 확인
-              </Button>
             </Flex>
           </Box>
           <Box borderBottom={"2px solid black"} />
