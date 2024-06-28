@@ -16,6 +16,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import { CartContext } from "../../../component/CartProvider.jsx";
 
 function PaymentSuccess() {
   const [paymentData, setPaymentData] = useState([]);
@@ -24,11 +25,22 @@ function PaymentSuccess() {
   const { paymentId } = location.state || {};
   const navigate = useNavigate();
 
+  const { setCartCount } = useContext(CartContext);
+
   useEffect(() => {
     axios
       .get(`/api/store/payment/orderDataList/${Login.id}/${paymentId}`)
       .then((res) => {
         setPaymentData(res.data);
+        if (Login.id) {
+          axios
+            .get(`/api/store/cart/totalCount/${Login.id}`)
+            .then((res) => {
+              setCartCount(res.data);
+            })
+            .catch(() => {})
+            .finally(() => {});
+        }
       })
       .catch(() => {})
       .finally(() => {});
@@ -77,7 +89,7 @@ function PaymentSuccess() {
                       <Text mb={5}>
                         총 결제 금액 : {paymentData[0].amount}원
                       </Text>
-                      <Button onClick={() => navigate("store")}>
+                      <Button onClick={() => navigate("/store")}>
                         스토어 이동
                       </Button>
                     </Td>

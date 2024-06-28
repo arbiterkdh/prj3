@@ -268,6 +268,4 @@ select *
 from product_cart;
 
 
-delete
-from product_cart
-where id = 2;
+
