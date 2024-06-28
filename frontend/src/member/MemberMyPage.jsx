@@ -1,3 +1,6 @@
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { LoginContext } from "../component/LoginProvider.jsx";
 import {
   Box,
   Button,
@@ -33,11 +36,6 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { LoginContext } from "../component/LoginProvider.jsx";
-import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
-import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -46,8 +44,10 @@ import {
   faAnglesLeft,
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
-import EventTypeLabel from "../page/promotion/component/PromoeventTypeLabels.jsx";
 import CenterBox from "../css/theme/component/box/CenterBox.jsx";
+import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
+import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
+import EventTypeLabel from "../page/promotion/component/PromoeventTypeLabels.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -138,15 +138,20 @@ export function MemberMyPage() {
   }, [nickName, page]);
 
   useEffect(() => {
-    // 당첨자 결과 데이터 가져오기
-    axios
-      .get(`/api/promotion/eventResult?search=${member.email}`)
-      .then((res) => {
-        setPromoResults(res.data.results);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, [member.email]);
+    if (member.number) {
+      axios
+        .get(`/api/promotion/eventResult`, {
+          params: {
+            memberNumber: member.number,
+          },
+        })
+        .then((res) => {
+          setPromoResults(res.data.results);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [member.number]);
 
   function handleClick() {
     axios
@@ -158,6 +163,7 @@ export function MemberMyPage() {
       .catch((err) => {})
       .finally();
   }
+
   function sendVerifyNumber() {
     setIsSending(true);
     setIsRunning(true);

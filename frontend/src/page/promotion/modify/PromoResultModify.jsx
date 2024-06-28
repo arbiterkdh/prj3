@@ -5,10 +5,12 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   FormControl,
   FormLabel,
   Heading,
   Input,
+  Select,
   Spinner,
   Table,
   Tbody,
@@ -24,11 +26,13 @@ import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 export function PromoResultModify() {
   const { id } = useParams();
   const [announcementDate, setAnnouncementDate] = useState("");
-  const [winnerEmail, setWinnerEmail] = useState("");
-  const [winnerName, setWinnerName] = useState("");
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [memberSearchQuery, setMemberSearchQuery] = useState("");
   const [winners, setWinners] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [promotion, setPromotion] = useState(null); // 새로운 state 추가
+  const [promotion, setPromotion] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -48,13 +52,27 @@ export function PromoResultModify() {
       }
     };
 
+    const fetchMembers = async () => {
+      try {
+        const response = await axios.get("/api/member/list-all");
+        setMembers(response.data);
+      } catch (error) {
+        console.error("Failed to fetch members", error);
+      }
+    };
+
     fetchPromotionResult();
+    fetchMembers();
   }, [id]);
 
+  useEffect(() => {
+    setIsSubmitButtonDisabled(winners.length === 0);
+  }, [winners]);
+
   const handleAddWinner = () => {
-    if (!winnerEmail || !winnerName) {
+    if (!selectedMember) {
       toast({
-        title: "이메일과 이름을 모두 입력해 주세요.",
+        title: "이메일과 닉네임을 모두 선택해 주세요.",
         status: "warning",
         duration: 2000,
         isClosable: true,
@@ -62,9 +80,20 @@ export function PromoResultModify() {
       return;
     }
 
-    setWinners([...winners, { email: winnerEmail, name: winnerName }]);
-    setWinnerEmail("");
-    setWinnerName("");
+    const isAlreadyAdded = winners.some(
+      (winner) => winner.email === selectedMember.email,
+    );
+    if (isAlreadyAdded) {
+      toast({
+        title: "이미 추가된 당첨자입니다.",
+        status: "warning",
+        duration: 2000,
+        isClosable: true,
+      });
+    } else {
+      setWinners([...winners, selectedMember]);
+      setSelectedMember(null);
+    }
   };
 
   const handleRemoveWinner = (index) => {
@@ -75,9 +104,9 @@ export function PromoResultModify() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (winners.some((winner) => !winner.email || !winner.name)) {
+    if (winners.some((winner) => !winner.email || !winner.nickName)) {
       toast({
-        title: "이메일과 이름을 모두 입력해 주세요.",
+        title: "이메일과 닉네임을 모두 선택해 주세요.",
         status: "warning",
         duration: 2000,
         isClosable: true,
@@ -111,6 +140,12 @@ export function PromoResultModify() {
     }
   };
 
+  const filteredMembers = members.filter(
+    (member) =>
+      member.email.toLowerCase().includes(memberSearchQuery.toLowerCase()) ||
+      member.nickName.toLowerCase().includes(memberSearchQuery.toLowerCase()),
+  );
+
   if (loading) {
     return (
       <Center>
@@ -133,20 +168,46 @@ export function PromoResultModify() {
                   : "로딩 중..."}
               </Text>
             </FormControl>
-            <FormControl id="winnerEmail" mt={4}>
-              <FormLabel>이메일</FormLabel>
-              <Input
-                value={winnerEmail}
-                onChange={(e) => setWinnerEmail(e.target.value)}
-              />
-            </FormControl>
-            <FormControl id="winnerName" mt={4}>
-              <FormLabel>당첨자 이름</FormLabel>
-              <Input
-                value={winnerName}
-                onChange={(e) => setWinnerName(e.target.value)}
-              />
-            </FormControl>
+            <Flex mb={4}>
+              <FormControl id="member" mr={4} isRequired>
+                <FormLabel>이메일과 닉네임 선택</FormLabel>
+                <Select
+                  placeholder="당첨자를 선택하세요"
+                  value={
+                    selectedMember
+                      ? `${selectedMember.email} (${selectedMember.nickName})`
+                      : ""
+                  }
+                  onChange={(e) => {
+                    const [email, nickName] = e.target.value.split(" (");
+                    setSelectedMember(
+                      members.find(
+                        (member) =>
+                          member.email === email &&
+                          member.nickName === nickName.slice(0, -1),
+                      ),
+                    );
+                  }}
+                >
+                  {filteredMembers.map((member) => (
+                    <option
+                      key={member.email}
+                      value={`${member.email} (${member.nickName})`}
+                    >
+                      {member.email} - {member.nickName}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl id="memberSearchQuery">
+                <FormLabel>회원 검색</FormLabel>
+                <Input
+                  placeholder="이메일 또는 닉네임을 입력하세요"
+                  value={memberSearchQuery}
+                  onChange={(e) => setMemberSearchQuery(e.target.value)}
+                />
+              </FormControl>
+            </Flex>
             <Button mt={4} colorScheme="green" onClick={handleAddWinner}>
               당첨자 추가
             </Button>
@@ -154,7 +215,7 @@ export function PromoResultModify() {
               <Thead>
                 <Tr>
                   <Th>이메일</Th>
-                  <Th>당첨자 이름</Th>
+                  <Th>당첨자 닉네임</Th>
                   <Th>삭제</Th>
                 </Tr>
               </Thead>
@@ -162,7 +223,7 @@ export function PromoResultModify() {
                 {winners.map((winner, index) => (
                   <Tr key={index}>
                     <Td>{winner.email}</Td>
-                    <Td>{winner.name}</Td>
+                    <Td>{winner.nickName}</Td>
                     <Td>
                       <Button
                         colorScheme="red"
@@ -175,7 +236,13 @@ export function PromoResultModify() {
                 ))}
               </Tbody>
             </Table>
-            <Button type="submit" colorScheme="blue" mt={6} width="full">
+            <Button
+              type="submit"
+              colorScheme="blue"
+              mt={6}
+              width="full"
+              isDisabled={isSubmitButtonDisabled && winners.length === 0}
+            >
               수정하기
             </Button>
           </form>
