@@ -357,7 +357,7 @@ export function TheaterSeatList() {
         position={"absolute"}
       >
         <ColorButton w={"100px"} h={"100px"} fontSize={"18px"} rounded={"full"}>
-          예매확정
+          좌석결정
         </ColorButton>
       </Box>
 
