@@ -79,7 +79,7 @@ export function MovieHome() {
                   <Stack align={"center"}>
                     <Image h={"350px"} src={url} _dark={{ opacity: "0.8" }} />
                     <Box
-                      h={"20px"}
+                      h={"25px"}
                       fontWeight={600}
                       fontSize={
                         dailyBoxOffice[index].movieNm.length > 10

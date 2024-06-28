@@ -138,10 +138,10 @@ export function TheaterList({
         })}
       </Flex>
       <Box
-        borderTop={"1px solid"}
+        borderY={"1px solid"}
         borderColor={"blackAlpha.400"}
         _dark={{ borderColor: "whiteAlpha.300" }}
-        pt={5}
+        py={4}
       >
         <Flex justifyContent={"left"} flexWrap={"wrap"}>
           {theaterList.map((theater, index) => (
