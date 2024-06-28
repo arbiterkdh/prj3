@@ -125,6 +125,10 @@ export function MovieView() {
               </Heading>
               <Box p={10}>
                 <HeartButton
+                  border={"3px solid"}
+                  _hover={{
+                    bgColor: "whiteAlpha.900",
+                  }}
                   zIndex={"10"}
                   leftIcon={
                     like.like ? (
