@@ -129,6 +129,13 @@ export function MovieView() {
                   _hover={{
                     bgColor: "whiteAlpha.900",
                   }}
+                  _dark={{
+                    border: "2px solid",
+                    _hover: {
+                      color: "whiteAlpha.900",
+                      bgColor: "red.600",
+                    },
+                  }}
                   zIndex={"10"}
                   leftIcon={
                     like.like ? (
