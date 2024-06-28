@@ -246,10 +246,9 @@ export function MemberMyPage() {
             <Tab>회원정보</Tab>
             <Tab>비밀번호 변경</Tab>
             <Tab>예매내역</Tab>
-            <Tab>결제내역</Tab>
-            <Tab>응모결과확인</Tab>
             <Tab>결제내역({pageInfoPaymentResult.totalCount})</Tab>
             <Tab>취소내역({pageInfoPaymentCancelResult.totalCount})</Tab>
+            <Tab>응모결과확인</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
