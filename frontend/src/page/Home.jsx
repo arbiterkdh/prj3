@@ -56,7 +56,7 @@ export function Home() {
         rounded={"full"}
         size={"md"}
         position={"fixed"}
-        zIndex={1}
+        zIndex={100}
         bottom={2}
         right={2}
         onClick={toggleColorMode}

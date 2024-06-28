@@ -38,7 +38,6 @@ export function TheaterLocation() {
     });
     axios.get(`/api/theater/location/${theaterNumber}`).then((res) => {
       setTheaterLocation(res.data.location);
-      console.log(res.data.location);
     });
   }, [theaterNumber]);
 
@@ -47,6 +46,7 @@ export function TheaterLocation() {
       <Box w={"100%"} justifyContent={"center"} align={"center"}>
         <Image
           w={"inherit"}
+          minW={"1000px"}
           position={"absolute"}
           h={"165px"}
           zIndex={-1}
