@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface PromoResultMapper {
+
     @Insert("""
             INSERT INTO promo_result (promotion_id, announcement_date, winners)
             VALUES (#{promotionId}, #{announcementDate}, #{winnersJson})
@@ -71,4 +72,25 @@ public interface PromoResultMapper {
             WHERE id = #{id}
             """)
     PromoResult selectPromoResultById(int id);
+
+    // 멤버 번호로 결과를 필터링하는 쿼리 추가
+    @Select("""
+            SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
+                   p.eventType as eventType, p.title as eventName
+            FROM promo_result pr
+            JOIN promo p ON pr.promotion_id = p.id
+            JOIN promo_winner pw ON pr.id = pw.promo_result_id
+            WHERE pw.member_id = #{memberNumber}
+            LIMIT #{offset}, #{pageSize}
+            """)
+    List<PromoResult> selectPromoResultsByMemberNumber(int memberNumber, int offset, int pageSize);
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM promo_result pr
+            JOIN promo_winner pw ON pr.id = pw.promo_result_id
+            WHERE pw.member_id = #{memberNumber}
+            """)
+    int countPromoResultsByMemberNumber(int memberNumber);
+    
 }

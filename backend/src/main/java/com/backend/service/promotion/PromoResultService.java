@@ -47,15 +47,26 @@ public class PromoResultService {
         System.out.println("Winners: " + promoResult.getWinners());
     }
 
-    public Map<String, Object> getPromoResults(int page, Integer pageSize) {
+    public Map<String, Object> getPromoResults(int page, Integer pageSize, Integer memberNumber) { // 멤버 번호 파라미터 추가
         if (pageSize == null) {
             pageSize = 10; // 기본값을 10으로 설정
         }
 
-        int totalItems = promoResultMapper.countPromoResults();
+        int totalItems;
+        List<PromoResult> results;
         int offset = (page - 1) * pageSize;
-        List<PromoResult> results = promoResultMapper.selectPromoResults(offset, pageSize);
-        results.forEach(result -> deserializeWinners(result));
+
+        if (memberNumber != null) {
+            // 멤버 번호로 필터링된 결과를 가져옴
+            totalItems = promoResultMapper.countPromoResultsByMemberNumber(memberNumber);
+            results = promoResultMapper.selectPromoResultsByMemberNumber(memberNumber, offset, pageSize);
+        } else {
+            // 전체 결과를 가져옴
+            totalItems = promoResultMapper.countPromoResults();
+            results = promoResultMapper.selectPromoResults(offset, pageSize);
+        }
+
+        results.forEach(this::deserializeWinners);
 
         Map<String, Object> response = new HashMap<>();
         response.put("results", results);
