@@ -78,7 +78,18 @@ export function MovieHome() {
                 <BookBox key={index} w={"300px"} h={"400px"} border={"0px"}>
                   <Stack align={"center"}>
                     <Image h={"350px"} src={url} _dark={{ opacity: "0.8" }} />
-                    <Box fontWeight={600} fontSize={"1.05rem"}>
+                    <Box
+                      h={"20px"}
+                      fontWeight={600}
+                      fontSize={
+                        dailyBoxOffice[index].movieNm.length > 10
+                          ? "16px"
+                          : "18px"
+                      }
+                      noOfLines={
+                        dailyBoxOffice[index].movieNm.length > 12 ? 1 : 0
+                      }
+                    >
                       {index + 1}위. {dailyBoxOffice[index].movieNm}
                     </Box>
                   </Stack>

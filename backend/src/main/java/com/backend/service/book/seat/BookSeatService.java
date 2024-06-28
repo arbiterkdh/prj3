@@ -64,13 +64,17 @@ public class BookSeatService {
         boolean bookedSeatBySameMember = bookSeatMapper.checkBookSeatHasSameMemberNumber(bookSeat) == 1;
         boolean bookedSeat = bookSeatMapper.selectBookSeat(bookSeat) != null;
 
+        Integer bookPlaceTimeId = bookSeat.getBookPlaceTimeId();
+
         if (bookedSeatBySameMember) {
             bookSeatMapper.deleteBookSeat(bookSeat);
+            bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTimeId, 1);
             return "deleted";
         } else if (bookedSeat) {
             return "alreadyBooked";
         } else {
             bookSeatMapper.insertBookSeat(bookSeat);
+            bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTimeId, -1);
             return "added";
         }
     }

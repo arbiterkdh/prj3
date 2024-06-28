@@ -134,7 +134,7 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
         <Flex justifyContent={"space-between"} h={"100%"}>
           <MarginBox w={"50%"}>
             <ModalBody>
-              <MarginBox>
+              <Box>
                 <Input
                   placeholder={"이메일"}
                   onChange={(e) => setEmail(e.target.value)}
@@ -169,14 +169,14 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
                     )}
                   </InputRightElement>
                 </InputGroup>
-              </MarginBox>
+              </Box>
             </ModalBody>
-            <ModalFooter>
+            <ModalFooter ml={2}>
               <ColorButton w={"100%"} onClick={handleLogin}>
                 로그인
               </ColorButton>
             </ModalFooter>
-            <ModalFooter display="flex" justifyContent="space-evenly">
+            <ModalFooter ml={2} display="flex" justifyContent="space-evenly">
               <CursorBox>ID/PW 찾기</CursorBox>
               <Divider orientation={"vertical"} />
               <CursorBox
@@ -190,7 +190,7 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
               <Divider orientation={"vertical"} />
               <CursorBox>비회원 예매확인</CursorBox>
             </ModalFooter>
-            <ModalFooter display="flex" justifyContent="space-evenly">
+            <ModalFooter ml={2} display="flex" justifyContent="space-evenly">
               <a href={""}>
                 <Image
                   src={

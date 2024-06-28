@@ -20,6 +20,7 @@ import {
 } from "@chakra-ui/react";
 import {
   faCouch,
+  faCreditCard,
   faDoorOpen,
   faLeftLong,
   faPerson,
@@ -350,14 +351,23 @@ export function TheaterSeatList() {
         </Button>
       </Box>
       <Box
-        display={movieInfoButton ? "none" : "block"}
+        display={
+          movieInfoButton
+            ? "none"
+            : seatSelected.length > 0 && seatSelected.length === numberOfPeople
+              ? "block"
+              : "none"
+        }
         zIndex={4}
         top={"840px"}
         left={"860px"}
         position={"absolute"}
       >
-        <ColorButton w={"100px"} h={"100px"} fontSize={"18px"} rounded={"full"}>
-          좌석결정
+        <ColorButton w={"100px"} h={"100px"} fontSize={"16px"} rounded={"full"}>
+          <Flex align={"center"} gap={1}>
+            <Box>좌석결정</Box>
+            <FontAwesomeIcon icon={faCreditCard} beat />
+          </Flex>
         </ColorButton>
       </Box>
 

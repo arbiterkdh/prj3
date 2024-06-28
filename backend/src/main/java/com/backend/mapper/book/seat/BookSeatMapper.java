@@ -1,10 +1,7 @@
 package com.backend.mapper.book.seat;
 
 import com.backend.domain.book.seat.BookSeat;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -56,4 +53,11 @@ public interface BookSeatMapper {
             AND is_paid = FALSE
             """)
     int deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber);
+
+    @Update("""
+            UPDATE book_place_time
+            SET vacancy = vacancy + #{i}
+            WHERE book_place_time_id = #{bookPlaceTimeId}
+            """)
+    int updateBookPlaceTimeVacancy(Integer bookPlaceTimeId, int i);
 }
