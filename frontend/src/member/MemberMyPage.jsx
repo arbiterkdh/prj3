@@ -383,60 +383,62 @@ export function MemberMyPage() {
                       )}
                     </Tr>
                   ))}
-                  <Tr>
-                    <Td>
-                      {pageInfoPaymentResult.prevPageNumber && (
-                        <>
-                          <Button onClick={() => setPage(1)}>
-                            <FontAwesomeIcon icon={faAnglesLeft} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(pageInfoPaymentResult.prevPageNumber)
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleLeft} />
-                          </Button>
-                        </>
-                      )}
-                      {pageNumbersPaymentResult.map(
-                        (pageNumber) =>
-                          pageNumber !== 0 && (
+                  {paymentResult.length > 0 && (
+                    <Tr>
+                      <Td>
+                        {pageInfoPaymentResult.prevPageNumber && (
+                          <>
+                            <Button onClick={() => setPage(1)}>
+                              <FontAwesomeIcon icon={faAnglesLeft} />
+                            </Button>
                             <Button
-                              onClick={() => setPage(pageNumber)}
-                              key={pageNumber}
-                              colorScheme={
-                                pageNumber ===
-                                pageInfoPaymentResult.currentPageNumber
-                                  ? "blue"
-                                  : "gray"
+                              onClick={() =>
+                                setPage(pageInfoPaymentResult.prevPageNumber)
                               }
                             >
-                              {pageNumber}
+                              <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
-                          ),
-                      )}
+                          </>
+                        )}
+                        {pageNumbersPaymentResult.map(
+                          (pageNumber) =>
+                            pageNumber !== 0 && (
+                              <Button
+                                onClick={() => setPage(pageNumber)}
+                                key={pageNumber}
+                                colorScheme={
+                                  pageNumber ===
+                                  pageInfoPaymentResult.currentPageNumber
+                                    ? "blue"
+                                    : "gray"
+                                }
+                              >
+                                {pageNumber}
+                              </Button>
+                            ),
+                        )}
 
-                      {pageInfoPaymentResult.nextPageNumber && (
-                        <>
-                          <Button
-                            onClick={() =>
-                              setPage(pageInfoPaymentResult.nextPageNumber)
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleRight} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(pageInfoPaymentResult.lastPageNumber)
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                          </Button>
-                        </>
-                      )}
-                    </Td>
-                  </Tr>
+                        {pageInfoPaymentResult.nextPageNumber && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                setPage(pageInfoPaymentResult.nextPageNumber)
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAngleRight} />
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                setPage(pageInfoPaymentResult.lastPageNumber)
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                            </Button>
+                          </>
+                        )}
+                      </Td>
+                    </Tr>
+                  )}
                 </Tbody>
               </Table>
             </TabPanel>
@@ -483,66 +485,68 @@ export function MemberMyPage() {
                       ),
                   )}
 
-                  <Tr>
-                    <Td>
-                      {pageInfoPaymentCancelResult.prevPageNumber && (
-                        <>
-                          <Button onClick={() => setPage(1)}>
-                            <FontAwesomeIcon icon={faAnglesLeft} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(
-                                pageInfoPaymentCancelResult.prevPageNumber,
-                              )
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleLeft} />
-                          </Button>
-                        </>
-                      )}
-                      {pageNumbersPaymentCancelResult.map(
-                        (pageNumber) =>
-                          pageNumber !== 0 && (
+                  {paymentCancelResult.length > 0 && (
+                    <Tr>
+                      <Td>
+                        {pageInfoPaymentCancelResult.prevPageNumber && (
+                          <>
+                            <Button onClick={() => setPage(1)}>
+                              <FontAwesomeIcon icon={faAnglesLeft} />
+                            </Button>
                             <Button
-                              onClick={() => setPage(pageNumber)}
-                              key={pageNumber}
-                              colorScheme={
-                                pageNumber ===
-                                pageInfoPaymentCancelResult.currentPageNumber
-                                  ? "blue"
-                                  : "gray"
+                              onClick={() =>
+                                setPage(
+                                  pageInfoPaymentCancelResult.prevPageNumber,
+                                )
                               }
                             >
-                              {pageNumber}
+                              <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
-                          ),
-                      )}
+                          </>
+                        )}
+                        {pageNumbersPaymentCancelResult.map(
+                          (pageNumber) =>
+                            pageNumber !== 0 && (
+                              <Button
+                                onClick={() => setPage(pageNumber)}
+                                key={pageNumber}
+                                colorScheme={
+                                  pageNumber ===
+                                  pageInfoPaymentCancelResult.currentPageNumber
+                                    ? "blue"
+                                    : "gray"
+                                }
+                              >
+                                {pageNumber}
+                              </Button>
+                            ),
+                        )}
 
-                      {pageInfoPaymentCancelResult.nextPageNumber && (
-                        <>
-                          <Button
-                            onClick={() =>
-                              setPage(
-                                pageInfoPaymentCancelResult.nextPageNumber,
-                              )
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleRight} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(
-                                pageInfoPaymentCancelResult.lastPageNumber,
-                              )
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                          </Button>
-                        </>
-                      )}
-                    </Td>
-                  </Tr>
+                        {pageInfoPaymentCancelResult.nextPageNumber && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                setPage(
+                                  pageInfoPaymentCancelResult.nextPageNumber,
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAngleRight} />
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                setPage(
+                                  pageInfoPaymentCancelResult.lastPageNumber,
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                            </Button>
+                          </>
+                        )}
+                      </Td>
+                    </Tr>
+                  )}
                 </Tbody>
               </Table>
             </TabPanel>
