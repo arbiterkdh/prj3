@@ -60,4 +60,11 @@ public interface BookSeatMapper {
             WHERE book_place_time_id = #{bookPlaceTimeId}
             """)
     int updateBookPlaceTimeVacancy(Integer bookPlaceTimeId, int i);
+
+    @Delete("""
+            DELETE FROM book_seat
+            WHERE is_paid = FALSE
+            AND DATE_ADD(selected_time, INTERVAL 10 MINUTE ) < NOW()
+            """)
+    int deleteBookSeatByCompareSelectedTimeWithCurrentTime();
 }

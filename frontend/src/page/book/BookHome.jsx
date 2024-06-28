@@ -33,7 +33,7 @@ export function BookHome() {
           _dark={{ color: "whiteAlpha.200" }}
           h={"35px"}
           mb={-5}
-        ></Box>
+        />
         <Flex border={"2px solid"} mb={"35px"}>
           <BookStack h={"700px"} gap={0}>
             <OuterBookStack

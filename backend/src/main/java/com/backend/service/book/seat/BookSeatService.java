@@ -89,4 +89,8 @@ public class BookSeatService {
     public void deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber) {
         bookSeatMapper.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
     }
+
+    public void removeBookSeatByTimeoutExpiredWithoutPayment() {
+        bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
+    }
 }

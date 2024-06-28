@@ -22,13 +22,15 @@ public class BookSeatController {
 
     @GetMapping("{bookPlaceTimeId}")
     public Map<String, Object> bookTheaterSeat(@PathVariable Integer bookPlaceTimeId) {
+
+        bookSeatService.removeBookSeatByTimeoutExpiredWithoutPayment();
+
         return bookSeatService.getDataByBookPlaceTimeId(bookPlaceTimeId);
     }
 
     @PostMapping("state")
     public ResponseEntity handleBookSeatState(@RequestBody BookSeat bookSeat) {
         Integer bookPlaceTimeId = bookSeat.getBookPlaceTimeId();
-        String rowCol = bookSeat.getRowCol();
         BookPlaceTime bookPlaceTime = bookService.getBookPlaceTimeByBookPlaceTimeId(bookPlaceTimeId);
 
         boolean timeRemain = bookService.checkTimeByBookPlaceTimeId(bookPlaceTimeId);

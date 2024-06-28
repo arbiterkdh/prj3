@@ -5,7 +5,8 @@ CREATE TABLE book_seat
     book_seat_book_place_time_id INT         NOT NULL REFERENCES book_place_time (book_place_time_id),
     row_col                      VARCHAR(10) NOT NULL,
     book_seat_member_number      INT REFERENCES member (number),
-    is_paid                      BOOLEAN DEFAULT FALSE,
+    is_paid                      BOOLEAN              DEFAULT FALSE,
+    selected_time                DATETIME    NOT NULL DEFAULT NOW(),
     PRIMARY KEY (book_seat_book_place_time_id, row_col)
 );
 
@@ -14,6 +15,11 @@ DROP TABLE book_seat;
 SELECT *
 FROM book_place_time
 WHERE book_place_time_id = 85;
+
+DELETE
+FROM book_seat
+WHERE is_paid = FALSE
+  AND DATE_ADD(selected_time, INTERVAL 10 MINUTE) < NOW();
 
 SELECT *
 FROM book_place_time bpt
