@@ -4,7 +4,6 @@ import {
   Center,
   Flex,
   Heading,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +16,13 @@ import {
   faAngleRight,
   faAnglesLeft,
   faAnglesRight,
-  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import AddCartModal from "./cart/AddCartModal.jsx";
 import ModifyProductModal from "./modify/ModifyProductModal.jsx";
 import DeleteProductModal from "./delete/DeleteProductModal.jsx";
 import ProductItemList from "./list/ProductItemList.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import AddCartModal from "./cart/AddCartModal.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -98,27 +96,19 @@ export function StoreList() {
           <Box w={"50%"}>
             <Flex alignItems={"center"}>
               <Heading>상품 리스트</Heading>
-              <Text color={"red"} onClick={() => navigate("cart")}>
-                {" "}
-                <FontAwesomeIcon
-                  icon={faCartShopping}
-                  fontSize={"1.2rem"}
-                  cursor={"pointer"}
-                />
-              </Text>
             </Flex>
           </Box>
           <Box w={"50%"} textAlign={"right"}>
             <Button
               onClick={() => navigate("/store/add")}
               bgColor={"#e73426"}
+              _dark={{ bgColor: "#2d4c4c" }}
               color={"white"}
             >
               상품등록
             </Button>
           </Box>
         </Flex>
-
         <Flex
           w={"100%"}
           style={{
@@ -132,7 +122,9 @@ export function StoreList() {
             </StoreMenuText>
           </StoreMenuCursorBox>
           <StoreMenuCursorBox>
-            <StoreMenuText>Best</StoreMenuText>
+            <StoreMenuText onClick={() => setMenuTypeSelect("best")}>
+              Best
+            </StoreMenuText>
           </StoreMenuCursorBox>
           <StoreMenuCursorBox onClick={() => setMenuTypeSelect(1)}>
             <StoreMenuText>세트</StoreMenuText>

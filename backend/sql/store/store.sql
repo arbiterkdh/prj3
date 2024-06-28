@@ -18,6 +18,8 @@ CREATE TABLE product
     quantity INT      default 1,
     reg_date DATETIME DEFAULT NOW()
 );
+alter table product
+    modify column type varchar(10);
 
 CREATE TABLE product_cart
 (
@@ -202,5 +204,57 @@ FROM product_order po
 GROUP BY DATE(order_date)
 ORDER BY order_date desc;
 
-SELECT *
-FROM movie_file;
+
+CREATE TABLE payment_cancel
+(
+    id            INT PRIMARY KEY AUTO_INCREMENT,
+    order_number  varchar(50),
+    payment_id    INT REFERENCES payment (id),
+    cancel_reason VARCHAR(100),
+    requestor     VARCHAR(100),
+    amount        LONG,
+    cancelled_at  LONG,
+    receipt_url   VARCHAR(200),
+    card_name     VARCHAR(100),
+    name          VARCHAR(100),
+    imp_uid       VARCHAR(50),
+    card_number   VARCHAR(50)
+);
+
+select *
+from payment
+order by id desc;
+select *
+from payment_cancel;
+select *
+from product;
+select *
+from product_order
+order by id desc;
+
+select *
+from product_cart;
+
+select name, sum(quantity) as totalQuantity
+from product_order
+group by name
+order by totalQuantity desc
+limit 5;
+
+
+
+select p.id    as payment_id,
+       p.order_number,
+       p.status,
+       p.buyer_date,
+       p.qr_code,
+       p.buyer_name,
+       po.name as product_name,
+       po.quantity,
+       po.price,
+       po.total_price
+from payment p
+         join product_order po on po.payment_id = p.id
+where p.buyer_name = '계영'
+order by p.buyer_date desc
+limit 0, 10;

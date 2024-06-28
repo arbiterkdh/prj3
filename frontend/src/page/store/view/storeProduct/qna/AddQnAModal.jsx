@@ -39,7 +39,7 @@ function AddQnAModal({
         toast({
           status: "success",
           description: "작성 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         setTitleQnA("");
         setContentQnA("");

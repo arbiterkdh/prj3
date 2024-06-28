@@ -2,6 +2,7 @@ package com.backend.controller.store;
 
 
 import com.backend.domain.store.Payment;
+import com.backend.domain.store.PaymentCancel;
 import com.backend.service.store.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/store/payment")
 public class PaymentController {
+
 
     private final PaymentService service;
 
@@ -31,4 +33,21 @@ public class PaymentController {
 
         return service.getData(memberNumber, paymentId);
     }
+
+    @GetMapping("/getToken")
+    public String getToken() throws Exception {
+
+        System.out.println("token정보 = " + service.getToken());
+
+        return service.getToken();
+    }
+
+
+    @PostMapping("/cancel")
+    public void paymentCancel(@RequestBody PaymentCancel paymentCancel) throws Exception {
+
+        service.cancelPayment(paymentCancel);
+    }
+
+
 }

@@ -61,7 +61,7 @@ export function StoreAdd() {
         toast({
           status: "success",
           description: "상품 등록 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         navigate("/store");
       })
@@ -69,7 +69,7 @@ export function StoreAdd() {
         toast({
           status: "error",
           description: "상품 등록 오류",
-          position: "bottom",
+          position: "bottom-right",
         });
       })
       .finally(() => {

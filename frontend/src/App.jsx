@@ -38,6 +38,7 @@ import { MemberMyPage } from "./member/MemberMyPage.jsx";
 import MemberUpdate from "./member/MemberUpdate.jsx";
 import { PromoResultAdd } from "./page/promotion/add/PromoResultAdd.jsx";
 import { PromoResultModify } from "./page/promotion/modify/PromoResultModify.jsx";
+import { CartProvider } from "./component/CartProvider.jsx";
 
 const exceptionHost = [
   "http://www.kobis.or.kr",
@@ -203,7 +204,9 @@ function App() {
   return (
     <>
       <LoginProvider>
-        <RouterProvider router={router} />
+        <CartProvider>
+          <RouterProvider router={router} />
+        </CartProvider>
       </LoginProvider>
     </>
   );

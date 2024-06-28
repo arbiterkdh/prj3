@@ -14,6 +14,9 @@ public class Product {
     private String fileName;
     private Integer quantity;
     private LocalDateTime regDate;
-    private Integer type;
+    private String type;
     private ProductImage image;
+
+    private Integer rank;
+    private String menuType;
 }

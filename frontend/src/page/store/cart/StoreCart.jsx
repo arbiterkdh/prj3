@@ -32,6 +32,7 @@ import Payment from "../payment/Payment.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { ModifyCartModal } from "./ModifyCartModal.jsx";
+import { CartContext } from "../../../component/CartProvider.jsx";
 
 export function StoreCart() {
   const [productCartList, setProductCartList] = useState([]);
@@ -45,6 +46,9 @@ export function StoreCart() {
   const [changeTotalPrice, setChangeTotalPrice] = useState(1);
 
   const [isDisabled, setIsDisabled] = useState(false);
+
+  const { setCartCount } = useContext(CartContext);
+  const Login = useContext(LoginContext);
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -60,8 +64,6 @@ export function StoreCart() {
     onOpen: onPayOpen,
     onClose: onPayClose,
   } = useDisclosure();
-
-  const Login = useContext(LoginContext);
 
   const updateQuantity = (productId, quantityItem) => {
     setProductCartList((itemList) =>
@@ -108,6 +110,16 @@ export function StoreCart() {
         setProductCartList((cartList) =>
           cartList.filter((item) => item.productId !== productId),
         );
+
+        if (Login.id) {
+          axios
+            .get(`/api/store/cart/totalCount/${Login.id}`)
+            .then((res) => {
+              setCartCount(res.data);
+            })
+            .catch(() => {})
+            .finally(() => {});
+        }
       })
       .catch(() => {})
       .finally(() => {
@@ -164,9 +176,6 @@ export function StoreCart() {
               onClick={() => {
                 onModifyOpen();
                 setCartId(cartItem.id);
-                console.log("changeQuantity= " + changeQuantity);
-                console.log("changeTotalPrice= " + changeTotalPrice);
-                console.log("cartId= " + cartItem.id);
                 setIsDisabled(false);
               }}
             >
