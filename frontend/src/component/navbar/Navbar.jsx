@@ -1,18 +1,31 @@
-import { Box, Center, Flex, Heading, Image, useToast } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Center,
+  Flex,
+  Heading,
+  Image,
+  useToast,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../../member/MemberLogin.jsx";
 import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
-import { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../LoginProvider.jsx";
 import { MovieDrawer } from "./drawer/MovieDrawer.jsx";
 import { BookDrawer } from "./drawer/BookDrawer.jsx";
 import { TheaterDrawer } from "./drawer/TheaterDrawer.jsx";
 import { PromoDrawer } from "./drawer/PromoDrawer.jsx";
 import NavBox from "../../css/theme/component/box/NavBox.jsx";
+import axios from "axios";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { CartContext } from "../CartProvider.jsx";
 
 export function Navbar() {
   const account = useContext(LoginContext);
+  const { cartCount, setCartCount } = useContext(CartContext);
   const navigate = useNavigate();
   const toast = useToast();
   const [drawer, setDrawer] = useState(0);
@@ -26,6 +39,18 @@ export function Navbar() {
       position: "bottom-right",
     });
   }
+
+  useEffect(() => {
+    if (account.id) {
+      axios
+        .get(`/api/store/cart/totalCount/${account.id}`)
+        .then((res) => {
+          setCartCount(res.data);
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [account, setCartCount]);
 
   return (
     <Box _dark={{ bgColor: "#002827" }} bgColor={"whiteAlpha.900"}>
@@ -56,6 +81,20 @@ export function Navbar() {
                     />
                   )}
                   {/*<CursorBox onClick={() => navigate("mypage")}>*/}
+                  <CursorBox>
+                    <FontAwesomeIcon
+                      icon={faCartShopping}
+                      fontSize={"1.2rem"}
+                      cursor={"pointer"}
+                      onClick={() => navigate("/store/cart")}
+                    />
+                    <Badge
+                      _dark={{ bgColor: "#002827", color: "white" }}
+                      bgColor={"whiteAlpha.900"}
+                    >
+                      {cartCount}
+                    </Badge>
+                  </CursorBox>
                   <CursorBox
                     onClick={() => {
                       navigate("mypage", {

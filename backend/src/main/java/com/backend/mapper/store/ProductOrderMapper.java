@@ -1,6 +1,7 @@
 package com.backend.mapper.store;
 
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,5 +18,11 @@ public interface ProductOrderMapper {
             INSERT INTO product_order(product_id, quantity, payment_id, name, price, total_price, member_number)
             VALUES(#{productId}, #{quantity}, #{paymentId}, #{name}, #{price}, #{totalPrice}, #{memberNumber})
             """)
-    int addSinggleProductOrder(Integer productId, Integer quantity, Integer paymentId, String name, Integer price, Integer totalPrice, Integer memberNumber);
+    int addSinggleProductOrder(Integer productId, Integer quantity, Integer paymentId, String name, Long price, Long totalPrice, Integer memberNumber);
+
+    @Delete("""
+            DELETE FROM product_order
+            WHERE payment_id = #{paymentId}
+            """)
+    int deleteOrder(Integer paymentId);
 }

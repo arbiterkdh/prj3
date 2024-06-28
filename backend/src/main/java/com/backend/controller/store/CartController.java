@@ -29,6 +29,7 @@ public class CartController {
         return service.cartProductList();
     }
 
+
     @DeleteMapping("/delete/{productId}")
     public void deleteItem(@PathVariable Integer productId) {
 
@@ -41,5 +42,16 @@ public class CartController {
 
         service.modifyQuantity(productCart);
     }
+
+    @GetMapping("/totalCount/{memberNumber}")
+    public int totalCount(@PathVariable Integer memberNumber) {
+
+        System.out.println("memberNumber = " + memberNumber);
+
+        System.out.println("총 개수:" + service.totalCount(memberNumber));
+
+        return service.totalCount(memberNumber);
+    }
+
 
 }

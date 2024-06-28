@@ -29,7 +29,6 @@ function PaymentSuccess() {
       .get(`/api/store/payment/orderDataList/${Login.id}/${paymentId}`)
       .then((res) => {
         setPaymentData(res.data);
-        console.log("paymentData :" + res.data);
       })
       .catch(() => {})
       .finally(() => {});

@@ -29,8 +29,8 @@ public class QrService {
     public Object create(Payment payment) throws Exception {
 
 
-        int width = 200;
-        int height = 200;
+        int width = 150;
+        int height = 150;
 
         Gson gson = GsonConfig.createGson();
 

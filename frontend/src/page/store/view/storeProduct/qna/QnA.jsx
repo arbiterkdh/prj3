@@ -38,7 +38,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
         setPageInfo(res.data.pageInfo);
       })
       .catch((err) => {
-        console.error("Failed to fetch QnA list:", err);
+        console.error(err);
       });
   };
 

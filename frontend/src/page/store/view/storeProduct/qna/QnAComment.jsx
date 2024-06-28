@@ -10,9 +10,7 @@ export function QnAComment({ idQnA, refreshQnAComment }) {
       .then((res) => {
         setQnAComment(res.data);
       })
-      .catch((err) => {
-        console.error("Failed to fetch QnA comments:", err);
-      });
+      .catch((err) => {});
   }, [idQnA, refreshQnAComment]);
 
   return (

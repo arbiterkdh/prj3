@@ -32,7 +32,7 @@ function AddCommentModal({
         toast({
           status: "success",
           description: "한줄평 작성 성공",
-          position: "bottom",
+          position: "bottom-right",
         });
         commentListRefresh();
       })

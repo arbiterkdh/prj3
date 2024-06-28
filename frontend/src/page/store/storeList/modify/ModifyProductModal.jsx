@@ -42,8 +42,6 @@ function ModifyProductModal({
   file,
   setFile,
   image,
-  imageName,
-  setImageName,
 }) {
   const toast = useToast();
 

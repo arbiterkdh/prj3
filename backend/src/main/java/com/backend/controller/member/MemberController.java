@@ -1,6 +1,7 @@
 package com.backend.controller.member;
 
 import com.backend.domain.member.Member;
+import com.backend.domain.store.ProductOrder;
 import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,19 @@ public class MemberController {
     @GetMapping("/list-all")
     public List<Member> getAllMembers() {
         return service.getAllMembers();
+    }
+
+    @GetMapping("mypage/paymentCancelResult/{nickName}")
+    public Map<String, Object> paymentCancelResult(@PathVariable String nickName, @RequestParam(value = "page", defaultValue = "1") Integer page) {
+
+        return service.paymentCancelResult(nickName, page);
+    }
+
+    @GetMapping("mypage/paymentOrderItem/{paymentId}")
+    public List<ProductOrder> paymentOrderItem(@PathVariable Integer paymentId) {
+
+        return service.paymentOrderItem(paymentId);
+
     }
 
 }

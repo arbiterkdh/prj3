@@ -41,7 +41,7 @@ function ModifyQnAModal({
         toast({
           status: "success",
           description: "문의글 수정 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         listQnARefresh();
       })

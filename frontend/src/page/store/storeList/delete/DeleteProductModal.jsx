@@ -31,7 +31,7 @@ function DeleteProductModal({
         toast({
           status: "success",
           description: "삭제 성공",
-          position: "top",
+          position: "bottom-right",
         });
         setProductList(
           productList.filter((product) => product.id !== productId),

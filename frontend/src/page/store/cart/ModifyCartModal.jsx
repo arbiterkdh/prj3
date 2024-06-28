@@ -31,7 +31,7 @@ export function ModifyCartModal({
         toast({
           status: "success",
           description: "수정 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
       })
       .catch(() => {})

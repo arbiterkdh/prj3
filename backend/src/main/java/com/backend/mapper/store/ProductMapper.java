@@ -17,19 +17,48 @@ public interface ProductMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int add(Product product);
 
-    @Select(""" 
+    //    @Select("""
+//            <script>
+//            SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
+//            FROM product p
+//                     JOIN product_image pi
+//                          ON p.id = pi.product_id
+//            <if test="menuTypeSelect != 'all'">
+//                     JOIN product_type pt
+//                          ON pt.id = p.type
+//            WHERE pt.id = #{menuTypeSelect}
+//            </if>
+//            ORDER BY p.id DESC
+//            LIMIT #{offset}, 12
+//            </script>
+//            """)
+    @Select("""
             <script>
-            SELECT p.id, p.name, p.price, p.stock, pi.name fileName, p.quantity
-            FROM product p
-                     JOIN product_image pi
-                          ON p.id = pi.product_id
-            <if test="menuTypeSelect != 'all'">
-                     JOIN product_type pt
-                          ON pt.id = p.type
-            WHERE pt.id = #{menuTypeSelect}
-            </if>
-            ORDER BY p.id DESC
-            LIMIT #{offset}, 12
+            <choose>
+                <when test="menuTypeSelect == 'best'">
+                    SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, SUM(po.quantity) as totalQuantity,
+                           RANK() OVER (ORDER BY SUM(po.quantity) DESC) as rank,
+                           'best' as menuType
+                    FROM product p
+                    JOIN product_image pi ON p.id = pi.product_id
+                    JOIN product_order po ON p.id = po.product_id
+                    GROUP BY p.id, p.name, p.price, p.stock, pi.name
+                    ORDER BY totalQuantity DESC
+                    LIMIT 5
+                </when>
+                <otherwise>
+                    SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, p.quantity,
+                           'other' as menuType
+                    FROM product p
+                    JOIN product_image pi ON p.id = pi.product_id
+                    <if test="menuTypeSelect != 'all'">
+                        JOIN product_type pt ON pt.id = p.type
+                        WHERE pt.id = #{menuTypeSelect}
+                    </if>
+                    ORDER BY p.id DESC
+                    LIMIT #{offset}, 12
+                </otherwise>
+            </choose>
             </script>
             """)
     List<Product> productList(String menuTypeSelect, Integer offset);
@@ -85,4 +114,11 @@ public interface ProductMapper {
             WHERE id = #{productId}
             """)
     int updateStock(Integer productId, Integer getQuantity);
+
+    @Update("""
+            UPDATE product
+            SET stock = stock + #{quantity}
+            WHERE id = #{productId}
+            """)
+    int updateRefundStock(Integer productId, Integer quantity);
 }

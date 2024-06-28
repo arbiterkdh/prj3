@@ -21,7 +21,7 @@ function DeleteQnAModal({ itemQnAId, listQnARefresh }) {
         toast({
           status: "success",
           description: "문의 글 삭제 성공",
-          position: "bottom",
+          position: "bottom-right",
         });
         listQnARefresh();
       })

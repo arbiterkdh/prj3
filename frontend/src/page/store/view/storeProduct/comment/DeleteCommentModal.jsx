@@ -26,7 +26,7 @@ function DeleteCommentModal({
         toast({
           status: "success",
           description: "코멘트 삭제 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         commentListRefresh();
       })

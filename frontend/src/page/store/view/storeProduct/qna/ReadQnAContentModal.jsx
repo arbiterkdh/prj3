@@ -33,10 +33,6 @@ function ReadQnAContentModal({
   const toast = useToast();
 
   function handleAddAnswerComment(isAdmin) {
-    console.log("answerComment :" + answerComment);
-    console.log("idQnA :" + idQnA);
-    console.log("isAdmin :" + isAdmin);
-
     axios
       .post("/api/store/qna/comment/add", {
         productQnAId: idQnA,
@@ -47,7 +43,7 @@ function ReadQnAContentModal({
         toast({
           status: "success",
           description: "작성 완료",
-          position: "bottom",
+          position: "bottom-right",
         });
         setRefreshQnAComment(refreshQnAComment + 1);
       })
