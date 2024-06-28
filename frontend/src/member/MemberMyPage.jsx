@@ -77,6 +77,9 @@ export function MemberMyPage() {
   const [amount, setAmount] = useState(0);
 
   const [selectPaymentResult, setSelectPaymentResult] = useState([]);
+  const [selectPaymentCancelResult, setSelectPaymentCancelResult] = useState(
+    [],
+  );
 
   const {
     isOpen: isCancelOpen,
@@ -88,6 +91,12 @@ export function MemberMyPage() {
     isOpen: isPaymentResultOpen,
     onOpen: onPaymentResultOpen,
     onClose: onPaymentResultClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isPaymentCancelResultOpen,
+    onOpen: onPaymentCancelResultOpen,
+    onClose: onPaymentCancelResultClose,
   } = useDisclosure();
 
   const location = useLocation();
@@ -232,6 +241,17 @@ export function MemberMyPage() {
       .then((res) => {
         setSelectPaymentResult(res.data);
         onPaymentResultOpen();
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }
+
+  function handlePaymentCancelItem(cancelOrderNumber) {
+    axios
+      .get(`/api/member/mypage/paymentCancelItem/${cancelOrderNumber}`)
+      .then((res) => {
+        setSelectPaymentCancelResult(res.data);
+        onPaymentCancelResultOpen();
       })
       .catch(() => {})
       .finally(() => {});
@@ -448,7 +468,6 @@ export function MemberMyPage() {
                 <Thead>
                   <Tr>
                     <Th>주문 번호</Th>
-                    <Th>상품명</Th>
                     <Th>가격</Th>
                     <Th>결제카드</Th>
                     <Th>카드번호</Th>
@@ -463,8 +482,13 @@ export function MemberMyPage() {
                         (item) => item.orderNumber === resultItem.orderNumber,
                       ) === index && (
                         <Tr key={index}>
-                          <Td>{resultItem.orderNumber}</Td>
-                          <Td>{resultItem.name}</Td>
+                          <Td
+                            onClick={() => {
+                              handlePaymentCancelItem(resultItem.orderNumber);
+                            }}
+                          >
+                            {resultItem.orderNumber}
+                          </Td>
                           <Td>{resultItem.amount}원</Td>
                           <Td>{resultItem.cardName}</Td>
                           <Td>{resultItem.cardNumber}</Td>
@@ -629,6 +653,40 @@ export function MemberMyPage() {
             </ModalBody>
             <ModalFooter>
               <Button onClick={onPaymentResultClose}>확인</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Modal
+          isOpen={isPaymentCancelResultOpen}
+          onClose={onPaymentCancelResultClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>알림</ModalHeader>
+            <ModalBody>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>상품명</Th>
+                    <Th>수량</Th>
+                    <Th>가격</Th>
+                    <Th>합계</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {selectPaymentCancelResult.map((resultItem, itemIndex) => (
+                    <Tr key={itemIndex}>
+                      <Td>{resultItem.cancelName}</Td>
+                      <Td>{resultItem.cancelQuantity}</Td>
+                      <Td>{resultItem.cancelPrice}원</Td>
+                      <Td>{resultItem.cancelTotalPrice}원</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onPaymentCancelResultClose}>확인</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>

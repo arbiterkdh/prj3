@@ -1,6 +1,7 @@
 package com.backend.service.member;
 
 import com.backend.domain.member.Member;
+import com.backend.domain.store.PaymentCancel;
 import com.backend.domain.store.ProductOrder;
 import com.backend.mapper.member.MemberMapper;
 import com.backend.mapper.store.PaymentCancelMapper;
@@ -152,5 +153,10 @@ public class MemberService {
     public List<ProductOrder> paymentOrderItem(Integer paymentId) {
 
         return mapper.paymentOrderItem(paymentId);
+    }
+
+    public List<PaymentCancel> paymentCancelItem(String orderNumber) {
+
+        return mapper.paymentCancelItem(orderNumber);
     }
 }

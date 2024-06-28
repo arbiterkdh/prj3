@@ -1,6 +1,7 @@
 package com.backend.controller.member;
 
 import com.backend.domain.member.Member;
+import com.backend.domain.store.PaymentCancel;
 import com.backend.domain.store.ProductOrder;
 import com.backend.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -77,7 +78,12 @@ public class MemberController {
     public List<ProductOrder> paymentOrderItem(@PathVariable Integer paymentId) {
 
         return service.paymentOrderItem(paymentId);
+    }
 
+    @GetMapping("mypage/paymentCancelItem/{orderNumber}")
+    public List<PaymentCancel> paymentCancelItem(@PathVariable String orderNumber) {
+
+        return service.paymentCancelItem(orderNumber);
     }
 
 }

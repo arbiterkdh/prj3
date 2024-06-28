@@ -90,4 +90,19 @@ public interface MemberMapper {
             WHERE payment_id = #{paymentId}
             """)
     List<ProductOrder> paymentOrderItem(Integer paymentId);
+
+
+    @Select("""
+            select distinct (po.name)      as cancelName,
+                            po.quantity    as cancelQuantity,
+                            po.price       as cancelPrice,
+                            po.total_price as cancelTotalPrice
+            from payment_cancel pc
+                     join payment p
+                          on pc.order_number = p.order_number
+                     join product_order po
+                          on po.payment_id = p.id
+            WHERE p.order_number = #{orderNumber}
+            """)
+    List<PaymentCancel> paymentCancelItem(String orderNumber);
 }
