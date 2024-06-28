@@ -14,16 +14,6 @@ ALTER TABLE promo
 ALTER TABLE promo
     ADD COLUMN isApplyButtonVisible BOOLEAN NOT NULL DEFAULT FALSE;
 
-ALTER TABLE promo
-    DROP COLUMN isRecommended;
-
-ALTER TABLE promo
-    ADD COLUMN isRecommended BOOLEAN NULL;
-
-ALTER TABLE promo
-    DROP COLUMN isRecommended,
-    DROP COLUMN isApplyButtonVisible;
-
 CREATE TABLE promo_file
 (
     promo_id INT          NOT NULL REFERENCES promo (id),
@@ -52,12 +42,12 @@ CREATE TABLE promo_winner
 
 DROP TABLE IF EXISTS promo_winner;
 DROP TABLE IF EXISTS promo_result;
+DROP TABLE IF EXISTS user_promo_application;
 
 DESC promo;
 DESC promo_file;
 DESC promo_result;
 DESC promo_winner;
-DESC user_promo_application;
 
 SELECT *
 FROM promo;
@@ -67,6 +57,10 @@ SELECT *
 FROM promo_result;
 SELECT *
 FROM promo_winner;
+
+DELETE
+FROM promo
+WHERE id BETWEEN 1 AND 136;
 
 INSERT INTO promo
     (title, eventType, eventStartDate, eventEndDate, content)

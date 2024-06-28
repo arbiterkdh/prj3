@@ -242,7 +242,6 @@ export function MemberMyPage() {
             <Tab>예매내역</Tab>
             <Tab>결제내역({pageInfoPaymentResult.totalCount})</Tab>
             <Tab>취소내역({pageInfoPaymentCancelResult.totalCount})</Tab>
-            <Tab>응모결과확인</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -536,27 +535,6 @@ export function MemberMyPage() {
                         </>
                       )}
                     </Td>
-                  </Tr>
-                </Tbody>
-              </Table>
-            </TabPanel>
-            <TabPanel>
-              <Heading>나의 응모 내역</Heading>
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>번호</Th>
-                    <Th>분류</Th>
-                    <Th>이벤트명</Th>
-                    <Th>당첨자 발표</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  <Tr>
-                    <Td></Td>
-                    <Td></Td>
-                    <Td></Td>
-                    <Td></Td>
                   </Tr>
                 </Tbody>
               </Table>

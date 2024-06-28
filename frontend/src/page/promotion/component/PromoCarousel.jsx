@@ -11,37 +11,51 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-const SampleNextArrow = ({ onClick }) => {
+const NextArrow = ({ onClick }) => {
   return (
     <IconButton
       icon={<FontAwesomeIcon icon={faChevronRight} />}
       onClick={onClick}
       position="absolute"
-      top="40%"
-      right="0"
-      transform="translateY(-50%)"
-      backgroundColor="gray.300"
+      top="45%"
+      right="-5"
+      transform="translateY(-60%)"
+      color="whiteAlpha.900"
+      bg="red.500"
+      _hover={{ bg: "red.600" }}
+      _active={{ bg: "red.800" }}
+      _dark={{
+        bg: "red.700",
+        _hover: { bg: "red.600" },
+        _active: { bg: "red.500" },
+      }}
       borderRadius="40%"
-      _hover={{ backgroundColor: "gray.400" }}
-      _active={{ backgroundColor: "gray.500" }}
+      boxShadow="0 0 10px rgba(0, 0, 0, 0.5)"
       zIndex={1}
     />
   );
 };
 
-const SamplePrevArrow = ({ onClick }) => {
+const PrevArrow = ({ onClick }) => {
   return (
     <IconButton
       icon={<FontAwesomeIcon icon={faChevronLeft} />}
       onClick={onClick}
       position="absolute"
-      top="40%"
-      left="0"
-      transform="translateY(-50%)"
-      backgroundColor="gray.300"
+      top="45%"
+      left="-5"
+      transform="translateY(-60%)"
+      color="whiteAlpha.900"
+      bg="red.500"
+      _hover={{ bg: "red.600" }}
+      _active={{ bg: "red.800" }}
+      _dark={{
+        bg: "red.700",
+        _hover: { bg: "red.600" },
+        _active: { bg: "red.500" },
+      }}
       borderRadius="40%"
-      _hover={{ backgroundColor: "gray.400" }}
-      _active={{ backgroundColor: "gray.500" }}
+      boxShadow="0 0 10px rgba(0, 0, 0, 0.5)"
       zIndex={1}
     />
   );
@@ -72,8 +86,8 @@ const PromoCarousel = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   const formatDate = (dateString) => {
@@ -96,7 +110,8 @@ const PromoCarousel = () => {
             <Image
               src={promo.fileList[0].src}
               alt={promo.title}
-              borderRadius="md"
+              borderRadius="lg"
+              boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
             />
           )}
           <Box p={2}>

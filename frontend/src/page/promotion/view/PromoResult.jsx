@@ -126,28 +126,26 @@ export function PromoResult() {
           당첨자 발표
         </Heading>
         <Box width="100%">
-          <Flex justify="flex-end" mb={5}>
-            <Button
-              size="sm"
-              colorScheme="green"
-              onClick={handleAddClick}
-              mr={2}
-            >
-              당첨자 발표 추가
-            </Button>
-          </Flex>
-          <Box>
-            <Flex alignItems="center">
-              <Box mb={5}>
+          <Box mb={5} mt={10}>
+            <Flex justify="space-between" alignItems="center">
+              <Box>
                 <Text>
-                  -응모하신 이벤트의 당첨 여부는 나의 응모결과 확인을 통해
-                  확인하실 수 있습니다.
+                  -응모하신 이벤트의 당첨 여부는 결과 확인을 통해 확인하실 수
+                  있습니다.
                 </Text>
                 <Text>
                   -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
                   발표내역을 확인할 수 있습니다.
                 </Text>
               </Box>
+              <Button
+                size="sm"
+                colorScheme="green"
+                onClick={handleAddClick}
+                ml={2}
+              >
+                당첨자 발표 추가
+              </Button>
             </Flex>
           </Box>
           <Box borderBottom={"2px solid black"} />

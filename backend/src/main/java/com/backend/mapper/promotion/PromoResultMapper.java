@@ -11,7 +11,7 @@ public interface PromoResultMapper {
             INSERT INTO promo_result (promotion_id, announcement_date, winners)
             VALUES (#{promotionId}, #{announcementDate}, #{winnersJson})
             """)
-    int insertPromotionResult(PromoResult promoResult);
+    int insertPromoResult(PromoResult promoResult);
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
@@ -20,17 +20,17 @@ public interface PromoResultMapper {
             JOIN promo p ON pr.promotion_id = p.id
             LIMIT #{offset}, #{pageSize}
             """)
-    List<PromoResult> selectPromotionResults(int offset, int pageSize);
+    List<PromoResult> selectPromoResults(int offset, int pageSize);
 
     @Select("""
             SELECT COUNT(*) FROM promo_result
             """)
-    int countPromotionResults();
+    int countPromoResults();
 
     @Delete("""
             DELETE FROM promo_result WHERE id = #{id}
             """)
-    int deletePromotionResult(Integer id);
+    int deletePromoResult(Integer id);
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
@@ -39,21 +39,21 @@ public interface PromoResultMapper {
             JOIN promo p ON pr.promotion_id = p.id
             WHERE pr.promotion_id = #{promotionId}
             """)
-    PromoResult selectPromotionResultByPromotionId(Integer promotionId);
+    PromoResult selectPromoResultByPromotionId(Integer promotionId);
 
     @Update("""
             UPDATE promo_result
-            SET promotion_id = #{promotionResult.promotionId},
-                announcement_date = #{promotionResult.announcementDate},
-                winners = #{promotionResult.winnersJson}
+            SET promotion_id = #{promoResult.promotionId},
+                announcement_date = #{promoResult.announcementDate},
+                winners = #{promoResult.winnersJson}
             WHERE promotion_id = #{id}
             """)
-    int updatePromotionResult(int id, PromoResult promoResult);
+    int updatePromoResult(int id, PromoResult promoResult);
 
     @Select("""
             SELECT *
             FROM promo_result
             WHERE id = #{id}
             """)
-    PromoResult selectPromotionResultById(int id);
+    PromoResult selectPromoResultById(int id);
 }

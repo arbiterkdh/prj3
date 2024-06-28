@@ -31,16 +31,32 @@ const PromoSearchBar = ({ onSearch }) => {
 
   return (
     <Box display="flex">
-      <InputGroup mb={3} w={"300px"} size="md">
+      <InputGroup mb={5} w={"300px"} size="md">
         <Input
-          borderColor={"black"}
-          placeholder="이벤트명을 입력해 주세요."
+          border={"3px solid #FF4357"}
+          borderRadius={"20px"}
           value={promoSearch}
-          onChange={(e) => setPromoSearch(e.target.value)}
           onKeyDown={handleKeyDown}
+          onChange={(e) => setPromoSearch(e.target.value)}
+          placeholder="이벤트명을 입력해 주세요."
         />
         <InputRightElement width="4.5rem">
-          <Button onClick={handleSearch} h="1.75rem" size="sm">
+          <Button
+            bgColor={"white"}
+            _hover={{
+              bgColor: "white",
+            }}
+            _dark={{
+              color: "lightgray",
+              bgColor: "#121212",
+              _hover: {
+                bgColor: "#121212",
+              },
+            }}
+            onClick={handleSearch}
+            h="1.75rem"
+            size="md"
+          >
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </Button>
         </InputRightElement>

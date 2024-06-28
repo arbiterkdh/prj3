@@ -92,8 +92,8 @@ export function PromoEnd() {
           </Heading>
           <Box height="30px" />
           <Text>
-            -응모하신 이벤트의 당첨 여부는 당첨자발표의 나의 응모결과 확인을
-            통해 확인하실 수 있습니다.
+            -응모하신 이벤트의 당첨 여부는 당첨자발표의 결과 확인을 통해
+            확인하실 수 있습니다.
           </Text>
           <Box borderBottom={"2px solid black"} padding="20px" />
           <Flex>
@@ -111,7 +111,7 @@ export function PromoEnd() {
                 <Table variant="simple">
                   <Thead>
                     <Tr>
-                      <Th width={"10%"}>이벤트 이미지</Th>
+                      <Th width={"20%"}>이벤트 이미지</Th>
                       <Th>이벤트 정보</Th>
                     </Tr>
                   </Thead>

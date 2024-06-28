@@ -59,7 +59,7 @@ export function PromoNavbar() {
           </Box>
         </Box>
         <Tabs isFitted variant="enclosed" width="100%" index={tabIndex}>
-          <TabList mb="2em">
+          <TabList mb="2em" borderColor={"red"}>
             <Tab onClick={() => handleTabClick("/promotion/all")}>전체</Tab>
             <Tab onClick={() => handleTabClick("/promotion/movie")}>영화</Tab>
             <Tab onClick={() => handleTabClick("/promotion/theater")}>극장</Tab>
