@@ -46,8 +46,9 @@ function ModifyProductModal({
   const toast = useToast();
 
   const handleNumberInputChange = (value) => {
-    const val = parseInt(value, 10);
-    setStock(isNaN(val) ? 0 : val);
+    // const val = parseInt(value, 10);
+    // setStock(isNaN(val) ? 0 : val);
+    setStock(value);
   };
 
   function handleProductModify(productId, name, price, file, stock) {
@@ -91,7 +92,7 @@ function ModifyProductModal({
                 className="file-input"
                 onChange={(e) => setFile(e.target.files[0])}
               />
-              {fileName}
+              {/*{fileName}*/}
             </FormControl>
             <FormControl mb={3}>
               <FormLabel>상품명</FormLabel>
@@ -124,7 +125,8 @@ function ModifyProductModal({
                 value={stock}
                 min={1}
                 max={2000}
-                onChange={(e) => setStock(e.target.value)}
+                onChange={handleNumberInputChange}
+                // onChange={(e) => setStock(e.target.value)}
               >
                 <SliderTrack>
                   <SliderFilledTrack />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import MarginBox from "../../../../css/theme/component/box/MarginBox.jsx";
 import {
   Box,
@@ -31,6 +31,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Payment from "../../payment/Payment.jsx";
 import GapFlex from "../../../../css/theme/component/flex/GapFlex.jsx";
+import { LoginContext } from "../../../../component/LoginProvider.jsx";
 
 function ProductItemList({
   productList,
@@ -54,6 +55,8 @@ function ProductItemList({
 }) {
   const navigate = useNavigate();
   const [product, setProduct] = useState();
+
+  const Login = useContext(LoginContext);
 
   function handleModifyModal(id, fileName, name, price, stock, imgSrc) {
     setProductId(id);
@@ -209,43 +212,43 @@ function ProductItemList({
                   </Button>
                 </Box>
 
-                <Stack align={"center"} gap={"1px"}>
-                  <Button
-                    p={0}
-                    m={"1px"}
-                    color={"red"}
-                    size={"xs"}
-                    onClick={() => {
-                      handleModifyModal(
-                        product.id,
-                        product.fileName,
-                        product.name,
-                        product.price,
-                        product.stock,
-                        product.image.src,
-                      );
-                      console.log("name:" + product.fileName);
-                    }}
-                  >
-                    {" "}
-                    <FontAwesomeIcon
-                      icon={faWrench}
-                      size={"sm"}
-                      cursor={"pointer"}
-                    />
-                  </Button>
-                  <Button
-                    p={0}
-                    m={"1px"}
-                    size={"xs"}
-                    onClick={() => {
-                      onDelOpen();
-                      setProductId(product.id);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faX} />
-                  </Button>
-                </Stack>
+                {Login.nickName === "생존코딩" && (
+                  <Stack align={"center"} gap={"1px"}>
+                    <Button
+                      p={0}
+                      m={"1px"}
+                      color={"red"}
+                      size={"xs"}
+                      onClick={() => {
+                        handleModifyModal(
+                          product.id,
+                          product.fileName,
+                          product.name,
+                          product.price,
+                          product.stock,
+                          product.image.src,
+                        );
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faWrench}
+                        size={"sm"}
+                        cursor={"pointer"}
+                      />
+                    </Button>
+                    <Button
+                      p={0}
+                      m={"1px"}
+                      size={"xs"}
+                      onClick={() => {
+                        onDelOpen();
+                        setProductId(product.id);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faX} />
+                    </Button>
+                  </Stack>
+                )}
               </Flex>
             )}
           </CardFooter>

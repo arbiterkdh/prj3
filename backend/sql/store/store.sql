@@ -258,3 +258,6 @@ from payment p
 where p.buyer_name = '계영'
 order by p.buyer_date desc
 limit 0, 10;
+
+select *
+from member;
