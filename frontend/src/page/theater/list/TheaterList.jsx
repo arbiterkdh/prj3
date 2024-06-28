@@ -91,20 +91,40 @@ export function TheaterList({
   }
 
   return (
-    <Box w={"100%"} border={"1px solid"}>
-      <Flex width={"100%"} mb={4}>
-        {cityList.map((city) => (
-          <TheaterListBox
-            key={city}
-            bgColor={checkedCity === city ? "red.500" : ""}
-            _dark={checkedCity === city ? { bgColor: "red.700" } : {}}
-            color={checkedCity === city ? "whiteAlpha.900" : ""}
-            fontWeight={checkedCity === city ? "600" : ""}
-            onClick={() => handleClick(city)}
-          >
-            {city}
-          </TheaterListBox>
-        ))}
+    <Box w={"100%"} pt={1}>
+      <Flex width={"100%"} mb={4} borderTop={"1px"} pt={1}>
+        {cityList.map((city) => {
+          let isSameCity = checkedCity === city;
+          return (
+            <TheaterListBox
+              key={city}
+              fontSize={city.length < 6 ? "17px" : ""}
+              fontWeight={isSameCity ? "600" : ""}
+              bgColor={isSameCity ? "red.500" : ""}
+              color={isSameCity ? "whiteAlpha.900" : ""}
+              _hover={
+                isSameCity
+                  ? {}
+                  : {
+                      color: "whiteAlpha.900",
+                      bgColor: "red.600",
+                    }
+              }
+              _dark={
+                isSameCity
+                  ? { bgColor: "red.700" }
+                  : {
+                      _hover: {
+                        bgColor: "red.600",
+                      },
+                    }
+              }
+              onClick={() => handleClick(city)}
+            >
+              {city}
+            </TheaterListBox>
+          );
+        })}
       </Flex>
       <Box my={5}>
         <Flex justifyContent={"left"} flexWrap={"wrap"}>
