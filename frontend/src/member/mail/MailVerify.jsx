@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Heading,
+  Image,
   Input,
   Select,
   useDisclosure,
@@ -26,6 +27,9 @@ export function MailVerify() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
+  const [productImages, setProductImages] = useState({});
+  const [adImage, setAdImage] = useState("");
+
   useEffect(() => {
     if (selected !== "") {
       setDomain(selected);
@@ -33,6 +37,27 @@ export function MailVerify() {
       setDomain("");
     }
   }, [selected]);
+
+  useEffect(() => {
+    axios
+      .get(`/api/store/product/list/all`)
+      .then((res) => {
+        const images = res.data.productList.map(
+          (productItem) => productItem.image.src,
+        );
+        setProductImages(images);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (productImages.length > 0) {
+      const randomImage =
+        productImages[Math.floor(Math.random() * productImages.length)];
+      setAdImage(randomImage);
+    }
+  }, [productImages]);
 
   function handleClick() {
     axios
@@ -135,7 +160,7 @@ export function MailVerify() {
         />
         <Box w={"985px"} mt={10} mb={3} align={"center"}>
           <Box w={"960px"} h={"180px"} border={"1px solid"}>
-            광고
+            <Image src={adImage} w={"100%"} h={"100%"} />
           </Box>
         </Box>
       </CenterBox>
