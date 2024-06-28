@@ -104,7 +104,7 @@ export function StoreCart() {
   function handleItemDelete(productId) {
     setIsLoading(true);
     axios
-      .delete(`/api/store/cart/delete/${productId}`)
+      .delete(`/api/store/cart/delete/${Login.id}/${productId}`)
       .then((res) => {
         toast({
           status: "success",

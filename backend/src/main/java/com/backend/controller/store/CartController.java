@@ -19,9 +19,6 @@ public class CartController {
     @PostMapping("/add")
     public void addCart(Product product, @RequestParam("memberNumber") Integer memberNumber) {
 
-        System.out.println("product = " + product);
-        System.out.println("memberNumber = " + memberNumber);
-
         service.addCart(product, memberNumber);
     }
 
@@ -32,10 +29,10 @@ public class CartController {
     }
 
 
-    @DeleteMapping("/delete/{productId}")
-    public void deleteItem(@PathVariable Integer productId) {
+    @DeleteMapping("/delete/{memberNumber}/{productId}")
+    public void deleteItem(@PathVariable Integer productId, @PathVariable Integer memberNumber) {
 
-        service.deleteItem(productId);
+        service.deleteItem(productId, memberNumber);
     }
 
     @PutMapping("/modifyQuantity")

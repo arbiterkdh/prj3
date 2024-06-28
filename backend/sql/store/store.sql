@@ -262,5 +262,12 @@ limit 0, 10;
 select *
 from member;
 
+drop table product_cart;
+
 select *
 from product_cart;
+
+
+delete
+from product_cart
+where id = 2;

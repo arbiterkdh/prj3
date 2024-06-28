@@ -33,10 +33,28 @@ public class CartService {
     public void addCart(Product product, Integer memberNumber) {
 
 
-//        ProductCart existCart = mapper.getExistItem(memberNumber); //맴버번호로
-
+        ProductCart existCart = mapper.getExistItem(memberNumber, product.getId());
 
         List<ProductCart> memberCartList = mapper.cartProductList(memberNumber); // 회원의 장바구니 상품 조회
+
+        if (existCart != null) {
+            mapper.updateQuantity(product.getId(), memberNumber);
+        } else {
+            ProductCart productCart = new ProductCart();
+
+            productCart.setName(product.getName());
+            productCart.setProductId(product.getId());
+            productCart.setFileName(product.getFileName());
+            productCart.setQuantity(product.getQuantity());
+            productCart.setPrice(product.getPrice());
+            productCart.setTotalPrice(product.getPrice());
+            productCart.setMemberNumber(memberNumber);
+
+            mapper.addCart(productCart);
+        }
+
+/*
+        ProductCart productCart = null;
 
         for (int i = 0; i < memberCartList.size(); i++) {
 
@@ -46,8 +64,23 @@ public class CartService {
 
             } else {
                 System.out.println("없는 상품입니다");
+
+                productCart = new ProductCart();
+
+                productCart.setName(product.getName());
+                productCart.setProductId(product.getId());
+                productCart.setPrice(product.getPrice());
+                productCart.setFileName(product.getFileName());
+                productCart.setQuantity(product.getQuantity());
+                productCart.setMemberNumber(memberNumber);
+                productCart.setTotalPrice(product.getPrice());
+
             }
         }
+        mapper.addCart(productCart);
+
+ */
+
 
 
         /*
@@ -77,7 +110,9 @@ public class CartService {
 
         for (ProductCart cartItem : productCartList) {
 
-            String fileName = mapper.selectFileName(cartItem.getProductId());
+            System.out.println("cartItem = " + cartItem);
+
+            String fileName = mapper.selectFileName(cartItem.getProductId(), memberNumber);
 
             ProductImage imageFile = new ProductImage(fileName, STR."\{srcPrefix}/store/\{cartItem.getProductId()}/\{fileName}");
             cartItem.setImage(imageFile);
@@ -86,9 +121,9 @@ public class CartService {
         return productCartList;
     }
 
-    public void deleteItem(Integer productId) {
+    public void deleteItem(Integer productId, Integer memberNumber) {
 
-        mapper.deleteItem(productId);
+        mapper.deleteItem(productId, memberNumber);
     }
 
     public void modifyQuantity(ProductCart productCart) {
