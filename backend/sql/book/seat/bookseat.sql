@@ -4,10 +4,16 @@ CREATE TABLE book_seat
 (
     book_seat_book_place_time_id INT         NOT NULL REFERENCES book_place_time (book_place_time_id),
     row_col                      VARCHAR(10) NOT NULL,
+    book_seat_member_number      INT REFERENCES member (number),
+    is_paid                      BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (book_seat_book_place_time_id, row_col)
 );
 
 DROP TABLE book_seat;
+
+SELECT *
+FROM book_place_time
+WHERE book_place_time_id = 85;
 
 SELECT *
 FROM book_place_time bpt

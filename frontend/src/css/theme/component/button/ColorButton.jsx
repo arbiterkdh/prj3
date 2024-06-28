@@ -5,12 +5,14 @@ const ColorButton = (props) => {
     <Button
       variant="solid"
       color={"white"}
-      bgColor={"#ff4357"}
+      bgColor={"red.500"}
       _hover={{
-        bgColor: "#ff7889",
+        color: "red.500",
+        bgColor: "whiteAlpha.200",
+        border: "3px solid",
       }}
       _dark={{
-        bgColor: "#ad303a",
+        bgColor: "red.700",
         _hover: {
           bgColor: "#a86669",
         },

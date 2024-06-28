@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,15 +60,29 @@ public class BookSeatService {
         return data;
     }
 
-    public BookSeat getBookSeat(BookPlaceTime bookPlaceTime, String rowCol) {
-        return bookSeatMapper.selectBookSeat(bookPlaceTime.getBookPlaceTimeId(), rowCol);
+    public String handleBookSeat(BookSeat bookSeat) {
+        boolean bookedSeatBySameMember = bookSeatMapper.checkBookSeatHasSameMemberNumber(bookSeat) == 1;
+        boolean bookedSeat = bookSeatMapper.selectBookSeat(bookSeat) != null;
+
+        if (bookedSeatBySameMember) {
+            bookSeatMapper.deleteBookSeat(bookSeat);
+            return "deleted";
+        } else if (bookedSeat) {
+            return "alreadyBooked";
+        } else {
+            bookSeatMapper.insertBookSeat(bookSeat);
+            return "added";
+        }
     }
 
     public List<String> getRowColList(BookPlaceTime bookPlaceTime) {
-        return bookSeatMapper.selectAllRowColByBookPlaceTimeId(bookPlaceTime.getBookPlaceTimeId());
+        if (bookPlaceTime != null) {
+            return bookSeatMapper.selectAllRowColByBookPlaceTimeId(bookPlaceTime.getBookPlaceTimeId());
+        }
+        return new ArrayList<String>();
     }
 
-    public void addBookSeat(BookPlaceTime bookPlaceTime, String rowCol) {
-        bookSeatMapper.insertBookSeat(bookPlaceTime.getBookPlaceTimeId(), rowCol);
+    public void deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber) {
+        bookSeatMapper.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
     }
 }

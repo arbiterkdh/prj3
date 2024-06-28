@@ -2,7 +2,6 @@ package com.backend.controller.book.seat;
 
 import com.backend.domain.book.BookPlaceTime;
 import com.backend.domain.book.seat.BookSeat;
-import com.backend.domain.book.seat.request.BookSeatRequest;
 import com.backend.service.book.BookService;
 import com.backend.service.book.seat.BookSeatService;
 import lombok.RequiredArgsConstructor;
@@ -27,26 +26,30 @@ public class BookSeatController {
     }
 
     @PostMapping("state")
-    public ResponseEntity handleBookSeatState(@RequestBody BookSeatRequest requestBody) {
-        BookPlaceTime bookPlaceTime = requestBody.getBookPlaceTime();
-        String rowCol = requestBody.getRowCol();
+    public ResponseEntity handleBookSeatState(@RequestBody BookSeat bookSeat) {
+        Integer bookPlaceTimeId = bookSeat.getBookPlaceTimeId();
+        String rowCol = bookSeat.getRowCol();
+        BookPlaceTime bookPlaceTime = bookService.getBookPlaceTimeByBookPlaceTimeId(bookPlaceTimeId);
 
-        boolean timeRemain = bookService.checkTimeByBookPlaceTimeId(bookPlaceTime.getBookPlaceTimeId());
+        boolean timeRemain = bookService.checkTimeByBookPlaceTimeId(bookPlaceTimeId);
 
         if (!timeRemain) return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).build();
         // 504 예매가능 시간초과시 응답.
 
-        BookSeat bookedSeat = bookSeatService.getBookSeat(bookPlaceTime, rowCol);
+        String bookSeatState = bookSeatService.handleBookSeat(bookSeat);
         List<String> rowColList = bookSeatService.getRowColList(bookPlaceTime);
 
-        if (bookedSeat != null) {
+        if (bookSeatState.equals("alreadyBooked")) { // 409
             return ResponseEntity.status(HttpStatus.CONFLICT).body(rowColList);
-            // 409 예매중이거나, 이미 예매된 좌석.
+        } else if (bookSeatState.equals("deleted") || bookSeatState.equals("added")) {
+            return ResponseEntity.ok(rowColList);
         }
-
-        bookSeatService.addBookSeat(bookPlaceTime, rowCol);
-
         return null;
+    }
+
+    @DeleteMapping("{bookSeatMemberNumber}/delete")
+    public void cancelBookSoDeleteAllBookSeat(@PathVariable Integer bookSeatMemberNumber) {
+        bookSeatService.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
     }
 
 }

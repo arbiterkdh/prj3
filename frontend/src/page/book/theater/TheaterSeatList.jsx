@@ -33,6 +33,7 @@ import axios from "axios";
 import EmptySeatBox from "../../../css/theme/component/box/EmptySeatBox.jsx";
 import SmallFontBox from "../../../css/theme/component/box/SmallFontBox.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function TheaterSeatList() {
   const { setBookProgress } = useOutletContext();
@@ -92,7 +93,7 @@ export function TheaterSeatList() {
     return setSeatFocused(alphabet + "-" + number);
   }
 
-  async function handleSeatSelect(alphabet, number) {
+  async function handleSeatSelect(alphabet, number, bookSeatMemberNumber) {
     if (numberOfPeople === 0) {
       toast({
         status: "warning",
@@ -105,46 +106,59 @@ export function TheaterSeatList() {
     let seatSelectedList = [...seatSelected];
     let rowCol = alphabet + "-" + number;
 
-    try {
-      const response = await axios.post("/api/book/theaterseat/state", {
-        bookPlaceTime,
-        rowCol,
+    if (
+      !seatSelectedList.includes(rowCol) &&
+      seatSelected.length === numberOfPeople
+    ) {
+      toast({
+        status: "warning",
+        description: "더 이상 선택할 수 없습니다.",
+        position: "bottom-right",
       });
-    } catch (err) {
-      if (err.response.status === 504) {
-        toast({
-          status: "warning",
-          description: "예매 가능 시간이 초과되었습니다.",
-          position: "bottom-right",
-        });
-        navigate("/book");
-      } else if (err.response.status === 409) {
-        toast({
-          status: "warning",
-          description: "예매중이거나, 예매된 좌석입니다.",
-          position: "bottom-right",
-        });
-        setSeatBooked(err.response.data);
-        setSeatSelected((prev) => prev.filter((seat) => seat !== rowCol));
-      }
-      return;
-    }
-
-    if (!seatSelectedList.includes(rowCol)) {
-      if (seatSelected.length === numberOfPeople) {
-        toast({
-          status: "warning",
-          description: "더 이상 선택할 수 없습니다.",
-          position: "bottom-right",
-        });
-        return;
-      }
-      seatSelectedList.push(rowCol);
     } else {
-      seatSelectedList = seatSelectedList.filter((seat) => seat !== rowCol);
+      try {
+        const response = await axios.post("/api/book/theaterseat/state", {
+          bookPlaceTimeId: bookPlaceTime.bookPlaceTimeId,
+          rowCol,
+          bookSeatMemberNumber,
+        });
+        const rowColList = response.data;
+        if (rowColList.includes(rowCol)) {
+          setSeatSelected((prev) => {
+            let newSeatSelected = [...prev];
+            newSeatSelected.push(rowCol);
+            return newSeatSelected;
+          });
+        } else {
+          setSeatSelected((prev) => {
+            let newSeatSelected = [...prev];
+            newSeatSelected = newSeatSelected.filter((seat) => seat !== rowCol);
+            return newSeatSelected;
+          });
+        }
+      } catch (err) {
+        if (err.response.status === 504) {
+          toast({
+            status: "warning",
+            description: "예매 가능 시간이 초과되었습니다.",
+            position: "bottom-right",
+          });
+          navigate("/book");
+        } else if (err.response.status === 409) {
+          toast({
+            status: "warning",
+            description: "예매중이거나, 예매된 좌석입니다.",
+            position: "bottom-right",
+          });
+          setSeatBooked(err.response.data);
+          setSeatSelected((prev) => prev.filter((seat) => seat !== rowCol));
+        }
+      }
     }
+  }
 
-    setSeatSelected(seatSelectedList);
+  function handleClickRemoveBookSeatData(bookSeatMemberNumber) {
+    axios.delete(`/api/book/theaterseat/${bookSeatMemberNumber}/delete`);
   }
 
   return (
@@ -155,7 +169,13 @@ export function TheaterSeatList() {
           <Box fontSize={"lg"} fontWeight={"600"} alignContent={"center"}>
             CCV {theater.location}점 {theaterBox.boxNumber}관 인원/좌석 선택
           </Box>
-          <CloseButton m={1} onClick={() => navigate("/book")} />
+          <CloseButton
+            m={1}
+            onClick={() => {
+              handleClickRemoveBookSeatData(account.id);
+              navigate("/book");
+            }}
+          />
         </Flex>
       </BorderBox>
       <BorderBox
@@ -329,6 +349,17 @@ export function TheaterSeatList() {
           {movieInfoButton ? "좌석보기" : "영화소개"}
         </Button>
       </Box>
+      <Box
+        display={movieInfoButton ? "none" : "block"}
+        zIndex={4}
+        top={"840px"}
+        left={"860px"}
+        position={"absolute"}
+      >
+        <ColorButton w={"100px"} h={"100px"} fontSize={"18px"} rounded={"full"}>
+          예매확정
+        </ColorButton>
+      </Box>
 
       <Flex
         zIndex={movieInfoButton ? 3 : 0}
@@ -499,12 +530,7 @@ export function TheaterSeatList() {
           _dark={{ bgColor: "gray" }}
           zIndex={2}
         >
-          <Box
-            h={"368px"}
-            color={"blackAlpha.600"}
-            position={"absolute"}
-            left={"288px"}
-          >
+          <Box h={"368px"} color={"blackAlpha.600"} left={"288px"}>
             <Flex pt={"55px"} w={"530px"} h={"280px"}>
               <Stack align={"center"}>
                 {seatList.map((row, index) => {
@@ -551,7 +577,11 @@ export function TheaterSeatList() {
                                     setSeatFocused("");
                                   }}
                                   onClick={() =>
-                                    handleSeatSelect(row.alphabet, col)
+                                    handleSeatSelect(
+                                      row.alphabet,
+                                      col,
+                                      account.id,
+                                    )
                                   }
                                   icon={faCouch}
                                 />

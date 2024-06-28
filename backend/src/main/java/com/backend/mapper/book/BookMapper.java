@@ -199,7 +199,7 @@ public interface BookMapper {
             SELECT COUNT(*)
             FROM book_place_time
             WHERE book_place_time_id = #{bookPlaceTimeId}
-            AND start_time > DATE_ADD(CURRENT_TIME(), INTERVAL 10 MINUTE)
+            AND start_time > DATE_ADD(NOW(), INTERVAL 10 MINUTE)
             """)
     int compareStartTimeAndCurrentTimeByBookPlaceTimeId(Integer bookPlaceTimeId);
 }

@@ -145,4 +145,8 @@ public class BookService {
     public boolean checkTimeByBookPlaceTimeId(Integer bookPlaceTimeId) {
         return bookMapper.compareStartTimeAndCurrentTimeByBookPlaceTimeId(bookPlaceTimeId) > 0;
     }
+
+    public BookPlaceTime getBookPlaceTimeByBookPlaceTimeId(Integer bookPlaceTimeId) {
+        return bookMapper.selectBookPlaceTime(bookPlaceTimeId);
+    }
 }
