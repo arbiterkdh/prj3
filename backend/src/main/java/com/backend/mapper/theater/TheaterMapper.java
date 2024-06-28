@@ -50,4 +50,11 @@ public interface TheaterMapper {
             WHERE number = #{theaterNumber}
             """)
     Theater selectTheaterByTheaterNumber(Integer theaterNumber);
+
+    @Select("""
+            SELECT location
+            FROM theater
+            WHERE city = #{city}
+            """)
+    List<String> selectAllLocationByCity(String city);
 }

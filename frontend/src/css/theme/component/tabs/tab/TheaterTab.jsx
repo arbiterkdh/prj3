@@ -5,6 +5,9 @@ const TheaterTab = (props) => {
     <Tab
       fontSize={"sm"}
       _selected={{
+        color: "",
+      }}
+      _hover={{
         color: "red.400",
         borderBottomColor: "red.400",
         fontWeight: "bold",

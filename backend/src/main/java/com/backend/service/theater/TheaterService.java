@@ -6,42 +6,59 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 public class TheaterService {
 
-    private final TheaterMapper mapper;
     private final TheaterMapper theaterMapper;
 
     public List<Theater> get(String city) {
 
-        return mapper.selectAllByCity(city);
+        return theaterMapper.selectAllByCity(city);
     }
 
     public boolean validate(Theater theater) {
 
-        if (mapper.selectTheaterByCityAndLocation(theater.getCity(), theater.getLocation()) == null) {
+        if (theaterMapper.selectTheaterByCityAndLocation(theater.getCity(), theater.getLocation()) == null) {
             return true;
         }
         return false;
     }
 
     public void add(Theater theater) {
-        mapper.insert(theater);
+        theaterMapper.insert(theater);
     }
 
     public List<String> getCityList() {
-        return mapper.selectAllCity();
+        return theaterMapper.selectAllCity();
     }
 
     public void delete(Integer number) {
-        mapper.deleteTheaterByNumber(number);
+        theaterMapper.deleteTheaterByNumber(number);
     }
 
     public Theater getTheaterByNumber(Integer theaterNumber) {
         return theaterMapper.selectTheaterByTheaterNumber(theaterNumber);
+    }
+
+    public List<Map<String, Object>> getAllCitiesIncludesLocation() {
+        List<String> cityList = theaterMapper.selectAllCity();
+        List<Map<String, Object>> cityListIncludesLocation = new ArrayList<>();
+
+        for (String city : cityList) {
+            Map<String, Object> cityMap = new HashMap<>();
+            List<Theater> theaterList = theaterMapper.selectAllByCity(city);
+            cityMap.put("city", city);
+            cityMap.put("theaterList", theaterList);
+            cityListIncludesLocation.add(cityMap);
+        }
+
+        return cityListIncludesLocation;
     }
 }
