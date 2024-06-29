@@ -75,5 +75,21 @@ public interface BookSeatMapper {
             WHERE is_paid = FALSE
             AND DATE_ADD(selected_time, INTERVAL 10 MINUTE ) < NOW()
             """)
-    List<BookPlaceTime> selectBookSeatByTimeoutExpiredWithoutPayment();
+    List<BookPlaceTime> selectAllBookPlaceTimeByTimeoutExpiredWithoutPayment();
+
+    @Select("""
+            SELECT COUNT(*)
+            FROM book_seat 
+            WHERE book_seat_member_number = #{bookSeatMemberNumber}
+            AND book_seat_book_place_time_id = #{bookPlaceTimeId}
+            AND is_paid = FALSE
+            """)
+    Integer countAllBookSeatByBookSeatMemberNumberAndBookPlaceTimeIdWithoutPayment(Integer bookSeatMemberNumber, Integer bookPlaceTimeId);
+
+    @Update("""
+            UPDATE book_place_time
+            SET vacancy = vacancy + #{count}
+            WHERE book_place_time_id = #{bookPlaceTimeId}
+            """)
+    int updateBookPlaceTimeVacancyByBookPlaceTimeIdUsingBookSeatMemberNumberWithoutPaymentCounted(Integer count, Integer bookPlaceTimeId);
 }

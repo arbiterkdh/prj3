@@ -57,6 +57,10 @@ export function TheaterSeatList() {
   const [seatSelected, setSeatSelected] = useState([]);
   const [seatBooked, setSeatBooked] = useState([]);
 
+  const [updatingSeat, setUpdatingSeat] = useState("");
+  const [isSelecting, setIsSelecting] = useState(false);
+  const [clickedCloseButton, setClickedCloseButton] = useState(-1);
+
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -101,6 +105,7 @@ export function TheaterSeatList() {
         description: "인원을 먼저 선택해주세요.",
         position: "bottom-right",
       });
+      setIsSelecting(false);
       return;
     }
 
@@ -117,6 +122,7 @@ export function TheaterSeatList() {
         position: "bottom-right",
       });
     } else {
+      setUpdatingSeat(rowCol);
       try {
         const response = await axios.post("/api/book/theaterseat/state", {
           bookPlaceTimeId: bookPlaceTime.bookPlaceTimeId,
@@ -138,6 +144,7 @@ export function TheaterSeatList() {
             return newSeatSelected;
           });
         }
+        setUpdatingSeat("");
       } catch (err) {
         if (err.response.status === 504) {
           toast({
@@ -155,12 +162,19 @@ export function TheaterSeatList() {
           setSeatBooked(err.response.data);
           setSeatSelected((prev) => prev.filter((seat) => seat !== rowCol));
         }
+        setUpdatingSeat("");
       }
     }
+    setIsSelecting(false);
   }
 
-  function handleClickRemoveBookSeatData(bookSeatMemberNumber) {
-    axios.delete(`/api/book/theaterseat/${bookSeatMemberNumber}/delete`);
+  function handleClickRemoveBookSeatData(
+    bookSeatMemberNumber,
+    bookPlaceTimeId,
+  ) {
+    axios.delete(
+      `/api/book/theaterseat/delete?bookseatmembernumber=${bookSeatMemberNumber}&bookplacetimeid=${bookPlaceTimeId}`,
+    );
   }
 
   return (
@@ -174,7 +188,10 @@ export function TheaterSeatList() {
           <CloseButton
             m={1}
             onClick={() => {
-              handleClickRemoveBookSeatData(account.id);
+              handleClickRemoveBookSeatData(
+                account.id,
+                bookPlaceTime.bookPlaceTimeId,
+              );
               navigate("/book");
             }}
           />
@@ -312,6 +329,8 @@ export function TheaterSeatList() {
                     {selectedSeat}
                   </Box>
                   <CloseButton
+                    isDisabled={clickedCloseButton === selectedSeat}
+                    _disabled={{ cursor: "default" }}
                     w={"12px"}
                     h={"12px"}
                     fontSize={"10px"}
@@ -321,6 +340,8 @@ export function TheaterSeatList() {
                       opacity: "0.6",
                     }}
                     onClick={() => {
+                      setClickedCloseButton(selectedSeat);
+
                       let rowCol = seatSelected[index].split("-");
                       let alphabet = rowCol[0];
                       let number = rowCol[1];
@@ -582,23 +603,35 @@ export function TheaterSeatList() {
                                     : {}
                                 }
                               >
-                                <FontAwesomeIcon
-                                  cursor={"pointer"}
-                                  onMouseEnter={() =>
-                                    handleSeatFocus(row.alphabet, col)
-                                  }
-                                  onMouseLeave={() => {
-                                    setSeatFocused("");
-                                  }}
-                                  onClick={() =>
-                                    handleSeatSelect(
-                                      row.alphabet,
-                                      col,
-                                      account.id,
-                                    )
-                                  }
-                                  icon={faCouch}
-                                />
+                                {isSelecting && updatingSeat !== rowCol ? (
+                                  <FontAwesomeIcon
+                                    icon={faCouch}
+                                    opacity={"0.4"}
+                                    color={"#001514"}
+                                    onMouseEnter={() => setSeatFocused("")}
+                                  />
+                                ) : updatingSeat !== rowCol ? (
+                                  <FontAwesomeIcon
+                                    cursor={"pointer"}
+                                    onMouseEnter={() =>
+                                      handleSeatFocus(row.alphabet, col)
+                                    }
+                                    onMouseLeave={() => {
+                                      setSeatFocused("");
+                                    }}
+                                    onClick={() => {
+                                      setIsSelecting(true);
+                                      handleSeatSelect(
+                                        row.alphabet,
+                                        col,
+                                        account.id,
+                                      );
+                                    }}
+                                    icon={faCouch}
+                                  />
+                                ) : (
+                                  <Spinner size={"sm"} />
+                                )}
                               </EmptySeatBox>
                             ) : (
                               <EmptySeatBox>

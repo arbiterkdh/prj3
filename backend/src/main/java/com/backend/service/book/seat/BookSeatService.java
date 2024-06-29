@@ -86,17 +86,24 @@ public class BookSeatService {
         return new ArrayList<String>();
     }
 
-    public void deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber) {
+    public void deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber, Integer bookPlaceTimeId) {
+        Integer count = bookSeatMapper.countAllBookSeatByBookSeatMemberNumberAndBookPlaceTimeIdWithoutPayment(bookSeatMemberNumber, bookPlaceTimeId);
+
+        bookSeatMapper.updateBookPlaceTimeVacancyByBookPlaceTimeIdUsingBookSeatMemberNumberWithoutPaymentCounted(count, bookPlaceTimeId);
+
         bookSeatMapper.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
     }
 
     public void removeBookSeatByTimeoutExpiredWithoutPayment() {
-        List<BookPlaceTime> bookPlaceTimeList = bookSeatMapper.selectBookSeatByTimeoutExpiredWithoutPayment();
+        List<BookPlaceTime> bookPlaceTimeList = bookSeatMapper.selectAllBookPlaceTimeByTimeoutExpiredWithoutPayment();
 
-        for (BookPlaceTime bookPlaceTime : bookPlaceTimeList) {
-            bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTime.getBookPlaceTimeId(), 1);
+        if (bookPlaceTimeList != null) {
+
+            for (BookPlaceTime bookPlaceTime : bookPlaceTimeList) {
+                bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTime.getBookPlaceTimeId(), 1);
+            }
+
+            bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
         }
-
-        bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
     }
 }

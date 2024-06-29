@@ -54,9 +54,11 @@ public class BookSeatController {
         return null;
     }
 
-    @DeleteMapping("{bookSeatMemberNumber}/delete")
-    public void cancelBookSoDeleteAllBookSeat(@PathVariable Integer bookSeatMemberNumber) {
-        bookSeatService.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
+    @DeleteMapping("delete")
+    public void deleteAllBookSeatByClickingCloseButton(
+            @RequestParam("bookseatmembernumber") Integer bookSeatMemberNumber,
+            @RequestParam("bookplacetimeid") Integer bookPlaceTimeId) {
+        bookSeatService.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber, bookPlaceTimeId);
     }
 
 }
