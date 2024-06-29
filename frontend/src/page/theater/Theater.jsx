@@ -22,7 +22,7 @@ export function Theater() {
   const [isModifying, setIsModifying] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [cityList, setCityList] = useState([]);
-  const [cityName, setCityName] = useState("");
+  const [cityName, setCityName] = useState("서울");
 
   const [recommendedPromos, setRecommendedPromos] = useState([]);
 

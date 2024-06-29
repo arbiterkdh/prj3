@@ -49,7 +49,16 @@ export function Home() {
     >
       <Navbar />
       <Outlet
-        context={{ dailyBoxOffice, KMDbKey, KOFICKey, today, year, month, day }}
+        context={{
+          dailyBoxOffice,
+          KMDbKey,
+          KOFICKey,
+          today,
+          dateString,
+          year,
+          month,
+          day,
+        }}
       />
       <IconButton
         aria-label={"toggle theme"}

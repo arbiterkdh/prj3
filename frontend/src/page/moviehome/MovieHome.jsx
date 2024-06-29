@@ -7,9 +7,31 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export function MovieHome() {
-  const { dailyBoxOffice, KMDbKey, KOFICKey, today, year, month, day } =
-    useOutletContext();
+  const {
+    dailyBoxOffice,
+    KMDbKey,
+    KOFICKey,
+    today,
+    dateString,
+    year,
+    month,
+    day,
+  } = useOutletContext();
   const KMDbMovieInfoURL = `http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y`;
+
+  const beforeSixtyDaysDate = new Date(today.setDate(today.getDate() - 60));
+  const afterSixtyDaysDate = new Date(today.setDate(today.getDate() + 60));
+
+  const dtsYear = beforeSixtyDaysDate.getFullYear();
+  const dtsMonth = ("0" + (beforeSixtyDaysDate.getMonth() + 1)).slice(-2);
+  const dtsDay = ("0" + beforeSixtyDaysDate.getDate()).slice(-2);
+
+  const dteYear = afterSixtyDaysDate.getFullYear();
+  const dteMonth = ("0" + (afterSixtyDaysDate.getMonth() + 1)).slice(-2);
+  const dteDay = ("0" + afterSixtyDaysDate.getDate()).slice(-2);
+
+  const releaseDtsKeyword = `${dtsYear + dtsMonth + dtsDay}`;
+  const releaseDteKeyword = `${dteYear + dteMonth + dtsDay}`;
 
   const [PosterUrlList, setPosterUrlList] = useState([]);
 
@@ -19,7 +41,7 @@ export function MovieHome() {
         .slice(0, 4)
         .map((movie) =>
           axios.get(
-            `${KMDbMovieInfoURL}&title=${movie.movieNm}&ServiceKey=${KMDbKey}`,
+            `${KMDbMovieInfoURL}&releaseDts=${releaseDtsKeyword}&releaseDte=${releaseDteKeyword}&title=${movie.movieNm}&ServiceKey=${KMDbKey}`,
           ),
         );
 
@@ -47,7 +69,7 @@ export function MovieHome() {
     <Box align={"center"} overflow={"hidden"}>
       <Image
         minWidth={"100%"}
-        minHeight={"86%"}
+        minHeight={"100%"}
         position={"fixed"}
         src={
           "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/ccvtheaterbg.jpg"
