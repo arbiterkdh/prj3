@@ -92,6 +92,7 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
         if (!isBookComponent) {
           navigate("/");
         }
+        setEmail("");
       })
       .catch(() => {
         account.logout();
@@ -102,7 +103,6 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
         });
       })
       .finally(() => {
-        setEmail("");
         setPassword("");
       });
   }
@@ -137,7 +137,9 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
               <Box>
                 <Input
                   placeholder={"이메일"}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
                 <InputGroup display={"inherit"}>
                   <Input

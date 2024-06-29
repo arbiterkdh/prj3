@@ -143,13 +143,13 @@ export function TheaterList({
         _dark={{ borderColor: "whiteAlpha.300" }}
         py={4}
       >
-        <Flex justifyContent={"left"} flexWrap={"wrap"}>
+        <Flex w={"980px"} justifyContent={"left"} flexWrap={"wrap"}>
           {theaterList.map((theater, index) => (
             <Flex
               borderLeft={index % 4 !== 0 ? "1px solid" : "0px"}
               borderColor={"blackAlpha.400"}
               _dark={{ borderColor: "whiteAlpha.300" }}
-              width={"25%"}
+              width={"240px"}
               m={0}
               pl={2}
               h={8}
@@ -157,23 +157,20 @@ export function TheaterList({
               justifyContent={"space-between"}
             >
               <CursorBox
-                onClick={() =>
-                  navigate("/theater/" + theater.number, {
-                    state: {
-                      theaterNumber: theater.number,
-                      theaterLocation: theater.location,
-                    },
-                  })
-                }
+                onClick={() => navigate("/theater/" + theater.number)}
                 textIndent={"5px"}
-                fontSize={"15px"}
+                fontSize={theater.location.length > 10 ? "12.5px" : "15px"}
+                w={"200px"}
+                overflow={"hidden"}
+                whiteSpace={"nowrap"}
+                textOverflow={"ellipsis"}
               >
                 <Tooltip hasArrow label={theater.location + " 상세보기"}>
                   {theater.location}
                 </Tooltip>
               </CursorBox>
               {account.isAdmin() && (
-                <Flex>
+                <Flex w={"50px"}>
                   <CursorBox
                     color={"gray"}
                     onClick={() =>

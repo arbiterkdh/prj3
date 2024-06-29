@@ -91,6 +91,12 @@ public class BookSeatService {
     }
 
     public void removeBookSeatByTimeoutExpiredWithoutPayment() {
+        List<BookPlaceTime> bookPlaceTimeList = bookSeatMapper.selectBookSeatByTimeoutExpiredWithoutPayment();
+
+        for (BookPlaceTime bookPlaceTime : bookPlaceTimeList) {
+            bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTime.getBookPlaceTimeId(), 1);
+        }
+
         bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
     }
 }

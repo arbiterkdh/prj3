@@ -40,11 +40,16 @@ public class BookSeatController {
 
         String bookSeatState = bookSeatService.handleBookSeat(bookSeat);
         List<String> rowColList = bookSeatService.getRowColList(bookPlaceTime);
+        BookPlaceTime updatedBookPlaceTime = bookService.getBookPlaceTimeByBookPlaceTimeId(bookPlaceTimeId);
+
+        Map<String, Object> data = Map.of(
+                "rowColList", rowColList,
+                "bookPlaceTime", updatedBookPlaceTime);
 
         if (bookSeatState.equals("alreadyBooked")) { // 409
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(rowColList);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(data);
         } else if (bookSeatState.equals("deleted") || bookSeatState.equals("added")) {
-            return ResponseEntity.ok(rowColList);
+            return ResponseEntity.ok(data);
         }
         return null;
     }

@@ -33,3 +33,6 @@ VALUES (85, 'A-5');
 
 SELECT *
 FROM book_seat;
+
+UPDATE book_place_time
+SET vacancy = 186;

@@ -123,7 +123,8 @@ export function TheaterSeatList() {
           rowCol,
           bookSeatMemberNumber,
         });
-        const rowColList = response.data;
+        const rowColList = response.data.rowColList;
+        setBookPlaceTime(response.data.bookPlaceTime);
         if (rowColList.includes(rowCol)) {
           setSeatSelected((prev) => {
             let newSeatSelected = [...prev];
@@ -163,7 +164,7 @@ export function TheaterSeatList() {
   }
 
   return (
-    <Box>
+    <Box position={"relative"}>
       <BorderBox alignContent={"center"} textAlign={"center"} h={"50px"}>
         <Flex justifyContent={"space-between"} m={1}>
           <Box />
@@ -313,15 +314,18 @@ export function TheaterSeatList() {
                   <CloseButton
                     w={"12px"}
                     h={"12px"}
+                    fontSize={"10px"}
                     borderRadius={"none"}
                     border={"1px solid"}
                     _hover={{
                       opacity: "0.6",
                     }}
                     onClick={() => {
-                      setSeatSelected((prevSeats) => {
-                        return prevSeats.filter((_, idx) => idx !== index);
-                      });
+                      let rowCol = seatSelected[index].split("-");
+                      let alphabet = rowCol[0];
+                      let number = rowCol[1];
+
+                      handleSeatSelect(alphabet, number, account.id);
                     }}
                   />
                 </Flex>
@@ -358,9 +362,9 @@ export function TheaterSeatList() {
               ? "block"
               : "none"
         }
-        zIndex={4}
-        top={"840px"}
-        left={"860px"}
+        zIndex={3}
+        top={"575px"}
+        left={"750px"}
         position={"absolute"}
       >
         <ColorButton w={"100px"} h={"100px"} fontSize={"16px"} rounded={"full"}>
@@ -527,7 +531,7 @@ export function TheaterSeatList() {
           position={"absolute"}
           bgColor={"blackAlpha.500"}
           h={"400px"}
-        ></Box>
+        />
         <Box
           borderTop={"1px solid"}
           color={"blackAlpha.600"}

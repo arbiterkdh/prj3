@@ -7,11 +7,6 @@ const TheaterTab = (props) => {
       _selected={{
         color: "",
       }}
-      _hover={{
-        color: "red.400",
-        borderBottomColor: "red.400",
-        fontWeight: "bold",
-      }}
       _active={{ bgColor: "" }}
       {...props}
     />

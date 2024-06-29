@@ -28,7 +28,8 @@ export function TheaterLocation() {
 
   const [cityList, setCityList] = useState([]);
 
-  const [mouseLocation, setMouseLocation] = useState(0);
+  const [mouseOnCity, setMouseOnCity] = useState(0);
+  const [mouseOnLocation, setMouseOnLocation] = useState(0);
 
   const navigate = useNavigate();
 
@@ -59,11 +60,21 @@ export function TheaterLocation() {
             <TabList color={"whiteAlpha.900"} mt={"35px"}>
               {cityList.length > 0 &&
                 cityList.map((city, index) => {
+                  let isSameCity = index + 1 === mouseOnCity;
                   return (
                     <TheaterTab
                       key={index}
-                      onMouseEnter={() => setMouseLocation(index + 1)}
-                      onMouseLeave={() => setMouseLocation(0)}
+                      sx={
+                        isSameCity
+                          ? {
+                              color: "red.400",
+                              borderBottomColor: "red.400",
+                              fontWeight: "bold",
+                            }
+                          : {}
+                      }
+                      onMouseEnter={() => setMouseOnCity(index + 1)}
+                      onMouseLeave={() => setMouseOnCity(0)}
                     >
                       {city.city}
                     </TheaterTab>
@@ -74,7 +85,11 @@ export function TheaterLocation() {
           <Flex justifyContent="space-between" w={"1000px"} mt={"30px"}>
             <Box w={"30%"} />
             <Box>
-              <Heading textAlign={"center"} color={"white"}>
+              <Heading
+                textAlign={"center"}
+                color={"white"}
+                textShadow={"1px 1px 1px rgba(0, 0, 0, 1)"}
+              >
                 {theaterLocation}
               </Heading>
             </Box>
@@ -89,20 +104,20 @@ export function TheaterLocation() {
           </Flex>
           <Box position={"absolute"}>
             {cityList.map((city, index) => {
-              let isSameIndex = mouseLocation === index + 1;
+              let isSameIndex = mouseOnCity === index + 1;
               return (
                 <Box
                   key={index}
                   w={"1000px"}
                   position={"absolute"}
-                  top={"65px"}
+                  top={"74px"}
                   left={"-500px"}
                   zIndex={1}
-                  onMouseEnter={() => setMouseLocation(index + 1)}
-                  onMouseLeave={() => setMouseLocation(0)}
+                  onMouseEnter={() => setMouseOnCity(index + 1)}
+                  onMouseLeave={() => setMouseOnCity(0)}
                 >
                   <Flex
-                    mt={"20px"}
+                    mt={"0px"}
                     color={"whiteAlpha.800"}
                     bgColor={"blackAlpha.900"}
                     display={isSameIndex ? "flex" : "none"}
@@ -110,11 +125,23 @@ export function TheaterLocation() {
                   >
                     {isSameIndex &&
                       city.theaterList.map((theater, index) => {
+                        let isSameLocation = index + 1 === mouseOnLocation;
                         return (
                           <CursorBox
                             w={"24%"}
                             h={"30px"}
                             key={index}
+                            sx={
+                              isSameLocation
+                                ? {
+                                    color: "red.400",
+                                    borderBottomColor: "red.400",
+                                    fontWeight: "bold",
+                                  }
+                                : {}
+                            }
+                            onMouseEnter={() => setMouseOnLocation(index + 1)}
+                            onMouseLeave={() => setMouseOnLocation(0)}
                             onClick={() => {
                               setTheaterNumber(theater.number);
                               navigate(`/theater/${theater.number}`);
