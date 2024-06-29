@@ -38,10 +38,11 @@ public class BookSeatService {
     private final TheaterMapper theaterMapper;
     private final MovieMapper movieMapper;
 
-    public Map<String, Object> getDataByBookPlaceTimeId(Integer bookPlaceTimeId) {
+    public Map<String, Object> getDataByBookPlaceTimeId(Integer bookPlaceTimeId, Integer bookSeatMemberNumber) {
         Map<String, Object> data = new HashMap<>();
 
         List<String> rowColList = bookSeatMapper.selectAllRowColByBookPlaceTimeId(bookPlaceTimeId);
+        List<String> selectedList = bookSeatMapper.selectAllRowColByBookPlaceTimeIdAndBookSeatMemberNumberWithoutPayment(bookPlaceTimeId, bookSeatMemberNumber);
         BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookPlaceTimeId);
         TheaterBoxMovie theaterBoxMovie = theaterBoxMapper.selectTheaterBoxMovieByBookPlaceTimeId(bookPlaceTimeId);
         TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(theaterBoxMovie.getId());
@@ -51,6 +52,7 @@ public class BookSeatService {
         movie.setMovieImageFile(file);
 
         data.put("rowColList", rowColList);
+        data.put("selectedList", selectedList);
         data.put("bookPlaceTime", bookPlaceTime);
         data.put("theaterBoxMovie", theaterBoxMovie);
         data.put("theaterBox", theaterBox);

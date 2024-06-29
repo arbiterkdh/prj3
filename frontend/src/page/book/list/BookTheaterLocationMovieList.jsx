@@ -53,9 +53,6 @@ export function BookTheaterLocationMovieList({
     }
   }, [checkedTheaterNumber, selectedDay]);
 
-  // 영화 시작시간 아침 9시
-  // 영화 마감시간 밤 12시
-
   function handleBookDataClick(bookPlaceTime) {
     if (!account.isLoggedIn()) {
       toast({

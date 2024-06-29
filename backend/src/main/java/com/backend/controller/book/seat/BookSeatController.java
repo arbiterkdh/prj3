@@ -20,12 +20,14 @@ public class BookSeatController {
     private final BookSeatService bookSeatService;
     private final BookService bookService;
 
-    @GetMapping("{bookPlaceTimeId}")
-    public Map<String, Object> bookTheaterSeat(@PathVariable Integer bookPlaceTimeId) {
+    @GetMapping("")
+    public Map<String, Object> bookTheaterSeat(
+            @RequestParam("bookplacetimeid") Integer bookPlaceTimeId,
+            @RequestParam("bookseatmembernumber") Integer bookSeatMemberNumber) {
 
         bookSeatService.removeBookSeatByTimeoutExpiredWithoutPayment();
 
-        return bookSeatService.getDataByBookPlaceTimeId(bookPlaceTimeId);
+        return bookSeatService.getDataByBookPlaceTimeId(bookPlaceTimeId, bookSeatMemberNumber);
     }
 
     @PostMapping("state")

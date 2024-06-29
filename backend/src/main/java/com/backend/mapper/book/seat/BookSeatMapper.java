@@ -18,6 +18,15 @@ public interface BookSeatMapper {
     List<String> selectAllRowColByBookPlaceTimeId(Integer bookPlaceTimeId);
 
     @Select("""
+            SELECT row_col
+            FROM book_seat
+            WHERE book_seat_book_place_time_id = #{bookPlaceTimeId}
+            AND book_seat_member_number = #{bookSeatMemberNumber}
+            AND is_paid = FALSE
+            """)
+    List<String> selectAllRowColByBookPlaceTimeIdAndBookSeatMemberNumberWithoutPayment(Integer bookPlaceTimeId, Integer bookSeatMemberNumber);
+
+    @Select("""
             SELECT *
             FROM book_seat
             WHERE book_seat_book_place_time_id = #{bookPlaceTimeId}
