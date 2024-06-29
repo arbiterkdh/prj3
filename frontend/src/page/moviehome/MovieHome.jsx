@@ -31,7 +31,7 @@ export function MovieHome() {
   const dteDay = ("0" + afterSixtyDaysDate.getDate()).slice(-2);
 
   const releaseDtsKeyword = `${dtsYear + dtsMonth + dtsDay}`;
-  const releaseDteKeyword = `${dteYear + dteMonth + dtsDay}`;
+  const releaseDteKeyword = `${dteYear + dteMonth + dteDay}`;
 
   const [PosterUrlList, setPosterUrlList] = useState([]);
 
