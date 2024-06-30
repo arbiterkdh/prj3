@@ -22,6 +22,9 @@ import {
 import PromoeventTypeLabels from "../component/PromoeventTypeLabels.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import { faMinus, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 export function PromoView() {
   const { promoId } = useParams();
@@ -157,23 +160,25 @@ export function PromoView() {
           </Box>
           {account.isAdmin() && (
             <Box>
-              <Button
-                colorScheme={"purple"}
-                onClick={() => navigate(`/promotion/modify/${promo.id}`)}
-              >
-                수정
+              <Button onClick={() => navigate(`/promotion/modify/${promo.id}`)}>
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  style={{ color: "#366ece" }}
+                />
               </Button>
-              <Button colorScheme={"red"} onClick={onOpen}>
-                삭제
+              <Button onClick={onOpen}>
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  style={{ color: "#db0f0f" }}
+                />
               </Button>
-              <Button colorScheme={"blue"} onClick={handleAddRecommendation}>
-                추천 이벤트 추가
+              <Button onClick={handleAddRecommendation}>
+                추천 이벤트
+                <FontAwesomeIcon icon={faPlus} />
               </Button>
-              <Button
-                colorScheme={"yellow"}
-                onClick={handleRemoveRecommendation}
-              >
-                추천 이벤트 삭제
+              <Button onClick={handleRemoveRecommendation}>
+                추천 이벤트
+                <FontAwesomeIcon icon={faMinus} />
               </Button>
             </Box>
           )}

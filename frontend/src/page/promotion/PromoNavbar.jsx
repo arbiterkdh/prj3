@@ -6,6 +6,7 @@ import {
   Tab,
   TabList,
   Tabs,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
@@ -36,42 +37,75 @@ export function PromoNavbar() {
 
   return (
     <Center>
-      <CenterBox>
+      <CenterBox
+        p={6}
+        borderRadius="10px"
+        boxShadow="md"
+        bg={useColorModeValue("white", "gray.800")}
+      >
         <Box
           display="flex"
           alignItems="center"
           justifyContent="space-between"
           mb={4}
+          pb={2}
         >
           <Heading
             onClick={() => navigate("/promotion/all")}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", color: "red.500" }}
+            fontSize="2xl"
+            fontWeight="bold"
           >
             진행중인 이벤트
           </Heading>
           {account.isAdmin() && (
             <Box display="flex" gap={2}>
               <Button
-                bg={"green"}
-                color={"white"}
-                _hover={{ bg: "darkred" }}
+                colorScheme="red"
+                _hover={{ bg: "red.600" }}
                 onClick={() => navigate("/promotion/add")}
                 size="sm"
               >
-                새글작성
+                새글등록
               </Button>
             </Box>
           )}
         </Box>
         <Tabs isFitted variant="enclosed" width="100%" index={tabIndex}>
-          <TabList mb="2em" borderColor={"red"}>
-            <Tab onClick={() => handleTabClick("/promotion/all")}>전체</Tab>
-            <Tab onClick={() => handleTabClick("/promotion/movie")}>영화</Tab>
-            <Tab onClick={() => handleTabClick("/promotion/theater")}>극장</Tab>
-            <Tab onClick={() => handleTabClick("/promotion/membership")}>
+          <TabList mb="2em" borderBottom="2px solid" borderColor="red.500">
+            <Tab
+              onClick={() => handleTabClick("/promotion/all")}
+              _selected={{ color: "white", bg: "red.500" }}
+              _hover={{ bg: "red.400" }}
+            >
+              전체
+            </Tab>
+            <Tab
+              onClick={() => handleTabClick("/promotion/movie")}
+              _selected={{ color: "white", bg: "red.500" }}
+              _hover={{ bg: "red.400" }}
+            >
+              영화
+            </Tab>
+            <Tab
+              onClick={() => handleTabClick("/promotion/theater")}
+              _selected={{ color: "white", bg: "red.500" }}
+              _hover={{ bg: "red.400" }}
+            >
+              극장
+            </Tab>
+            <Tab
+              onClick={() => handleTabClick("/promotion/membership")}
+              _selected={{ color: "white", bg: "red.500" }}
+              _hover={{ bg: "red.400" }}
+            >
               멤버십
             </Tab>
-            <Tab onClick={() => handleTabClick("/promotion/discount")}>
+            <Tab
+              onClick={() => handleTabClick("/promotion/discount")}
+              _selected={{ color: "white", bg: "red.500" }}
+              _hover={{ bg: "red.400" }}
+            >
               제휴/할인
             </Tab>
           </TabList>

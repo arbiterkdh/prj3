@@ -30,6 +30,9 @@ import PromoResultPagination from "../component/PromoResultPagination.jsx";
 import PromoSearchBar from "../component/PromoSearchBar.jsx";
 import EventTypeLabel from "../component/PromoeventTypeLabels.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 export function PromoResult() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -145,7 +148,7 @@ export function PromoResult() {
                   position="absolute"
                   right={0}
                 >
-                  당첨자 발표 추가
+                  당첨자 발표 등록
                 </Button>
               )}
             </Flex>
@@ -192,7 +195,11 @@ export function PromoResult() {
                         </Td>
                         <Td>
                           <Button
-                            colorScheme={"blue"}
+                            border={"2px solid red"}
+                            borderRadius={"10px"}
+                            bg={"red.500"}
+                            color={"white"}
+                            _hover={{ bg: "darkred" }}
                             onClick={() => handleResultClick(event)}
                           >
                             결과확인
@@ -201,24 +208,28 @@ export function PromoResult() {
                         {account.isAdmin() && (
                           <Td>
                             <Button
-                              colorScheme={"yellow"}
                               onClick={() =>
                                 handleModifyClick(event.promotionId)
                               }
                             >
-                              수정
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                style={{ color: "#366ece" }}
+                              />
                             </Button>
                           </Td>
                         )}
                         {account.isAdmin() && (
                           <Td>
                             <Button
-                              colorScheme={"red"}
                               onClick={() =>
                                 handleDeleteClick(event.promotionId)
                               }
                             >
-                              삭제
+                              <FontAwesomeIcon
+                                icon={faTrashCan}
+                                style={{ color: "#db0f0f" }}
+                              />
                             </Button>
                           </Td>
                         )}

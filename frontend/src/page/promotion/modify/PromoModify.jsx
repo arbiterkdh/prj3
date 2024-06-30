@@ -136,28 +136,79 @@ export function PromoModify() {
   }
 
   return (
-    <Box>
-      <Box>
-        <Box>{promo.id}번 게시물 수정</Box>
-        <Box>
-          <FormControl>
-            <FormLabel>이벤트 제목</FormLabel>
+    <Box display="flex" justifyContent="center" py={6}>
+      <Box
+        width="70%"
+        maxWidth="800px"
+        border="2px solid"
+        borderColor="blue.300"
+        borderRadius="10px"
+        p={6}
+        boxShadow="md"
+        bg="white"
+      >
+        <Box mb={4} textAlign="center" fontWeight="bold" fontSize="xl">
+          {promo.id}번 게시물 수정
+        </Box>
+        <Box display="flex" justifyContent="space-between" mb={4}>
+          <FormControl flex="7" mr={2}>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              이벤트 제목
+            </FormLabel>
             <Input
               defaultValue={promo.title}
               onChange={(e) => setPromo({ ...promo, title: e.target.value })}
               placeholder="제목을 입력하세요."
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
             />
           </FormControl>
         </Box>
-        <Box>
-          <FormControl>
-            <FormLabel>이벤트 타입</FormLabel>
+        <Box display="flex" justifyContent="space-between" mb={4}>
+          <FormControl flex="3" mr={2}>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              시작일
+            </FormLabel>
+            <Input
+              defaultValue={promo.eventStartDate}
+              type="date"
+              onChange={(e) =>
+                setPromo({ ...promo, eventStartDate: e.target.value })
+              }
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
+            />
+          </FormControl>
+          <FormControl flex="3" mr={2}>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              종료일
+            </FormLabel>
+            <Input
+              defaultValue={promo.eventEndDate}
+              type="date"
+              onChange={(e) =>
+                setPromo({ ...promo, eventEndDate: e.target.value })
+              }
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
+            />
+          </FormControl>
+          <FormControl flex="2">
+            <FormLabel fontWeight="bold" fontSize="lg">
+              이벤트 타입
+            </FormLabel>
             <Select
               defaultValue={promo.eventType}
               onChange={(e) =>
                 setPromo({ ...promo, eventType: e.target.value })
               }
-              placeholder="이벤트 타입을 선택하세요."
+              placeholder="선택"
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
             >
               <option value="movie">영화</option>
               <option value="theater">극장</option>
@@ -166,42 +217,27 @@ export function PromoModify() {
             </Select>
           </FormControl>
         </Box>
-        <Box>
-          <FormControl>
-            <FormLabel>시작일</FormLabel>
-            <Input
-              defaultValue={promo.eventStartDate}
-              type={"date"}
-              onChange={(e) =>
-                setPromo({ ...promo, eventStartDate: e.target.value })
-              }
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>종료일</FormLabel>
-            <Input
-              defaultValue={promo.eventEndDate}
-              type={"date"}
-              onChange={(e) =>
-                setPromo({ ...promo, eventEndDate: e.target.value })
-              }
-            />
-          </FormControl>
-        </Box>
-        <Box>
+        <Box mb={4}>
           {promo.fileList &&
             promo.fileList.map((file) => (
-              <Box border={"2px solid black"} m={3} key={file.fileName}>
-                <Flex>
-                  <FontAwesomeIcon icon={faTrashCan} />
+              <Box
+                border="2px solid black"
+                borderRadius="md"
+                p={3}
+                mb={3}
+                key={file.fileName}
+              >
+                <Flex alignItems="center">
+                  <FontAwesomeIcon icon={faTrashCan} cursor="pointer" />
                   <Switch
                     onChange={(e) =>
                       handleRemoveSwitchChange(file.fileName, e.target.checked)
                     }
+                    ml={3}
                   />
-                  <Text>{file.fileName}</Text>
+                  <Text ml={3}>{file.fileName}</Text>
                 </Flex>
-                <Box>
+                <Box mt={2}>
                   <Image
                     sx={
                       removeFileList.includes(file.fileName)
@@ -209,47 +245,63 @@ export function PromoModify() {
                         : {}
                     }
                     src={file.filePath}
+                    borderRadius="md"
                   />
                 </Box>
               </Box>
             ))}
         </Box>
-        <Box>
+        <Box mb={4}>
           <FormControl>
-            <FormLabel>추가할 상세 이미지 파일</FormLabel>
-            <Input
-              multiple
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleFileChange(e, setAddDetailFiles)}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel>추가할 추천 이미지 파일</FormLabel>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              추가할 추천 이미지 파일 (추가시 기존 파일삭제바람)
+            </FormLabel>
             <Input
               multiple
               type="file"
               accept="image/*"
               onChange={(e) => handleFileChange(e, setAddRecommendedFiles)}
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
             />
           </FormControl>
-          <FormControl>
-            <FormLabel>추가할 썸네일 이미지 파일</FormLabel>
+          <FormControl mt={4}>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              추가할 썸네일 이미지 파일 (추가시 기존 파일삭제바람)
+            </FormLabel>
             <Input
               multiple
               type="file"
               accept="image/*"
               onChange={(e) => handleFileChange(e, setAddThumbnailFiles)}
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
             />
           </FormControl>
-          <ul>
-            {Array.from(addDetailFiles).map((file) => (
-              <li key={file.name}>{file.name}</li>
-            ))}
+          <FormControl mt={4}>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              추가할 상세 이미지 파일
+            </FormLabel>
+            <Input
+              multiple
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, setAddDetailFiles)}
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
+            />
+          </FormControl>
+          <ul mt={2}>
             {Array.from(addRecommendedFiles).map((file) => (
               <li key={file.name}>{file.name}</li>
             ))}
             {Array.from(addThumbnailFiles).map((file) => (
+              <li key={file.name}>{file.name}</li>
+            ))}
+            {Array.from(addDetailFiles).map((file) => (
               <li key={file.name}>{file.name}</li>
             ))}
             {duplicateFiles.map((file) => (
@@ -259,17 +311,28 @@ export function PromoModify() {
             ))}
           </ul>
         </Box>
-        <Box>
+        <Box mb={4}>
           <FormControl>
-            <FormLabel>이벤트 설명</FormLabel>
+            <FormLabel fontWeight="bold" fontSize="lg">
+              이벤트 설명
+            </FormLabel>
             <Textarea
               defaultValue={promo.content}
               onChange={(e) => setPromo({ ...promo, content: e.target.value })}
               placeholder="설명을 입력하세요."
+              borderColor="gray.300"
+              focusBorderColor="blue.300"
+              _hover={{ borderColor: "blue.300" }}
             />
           </FormControl>
         </Box>
-        <Button colorScheme="teal" onClick={onOpen}>
+        <Button
+          colorScheme="teal"
+          onClick={onOpen}
+          width="100%"
+          fontSize="lg"
+          py={6}
+        >
           저장
         </Button>
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -281,7 +344,7 @@ export function PromoModify() {
               <Button mr={2} onClick={onClose}>
                 취소
               </Button>
-              <Button onClick={handleModifyClick} colorScheme={"blue"}>
+              <Button onClick={handleModifyClick} colorScheme="blue">
                 확인
               </Button>
             </ModalFooter>
