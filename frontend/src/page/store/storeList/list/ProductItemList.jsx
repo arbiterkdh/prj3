@@ -20,6 +20,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -57,6 +58,7 @@ function ProductItemList({
   const [product, setProduct] = useState();
 
   const Login = useContext(LoginContext);
+  const toast = useToast();
 
   function handleModifyModal(id, fileName, name, price, stock, imgSrc) {
     setProductId(id);
@@ -85,6 +87,22 @@ function ProductItemList({
       </MarginBox>
     );
   };
+
+  function handleControl(method) {
+    if (Login.isLoggedIn()) {
+      if (method === onPayOpen) {
+        method();
+      } else if (method === onCartOpen) {
+        method();
+      }
+    } else {
+      toast({
+        status: "error",
+        description: "로그인 후 이용하세요",
+        position: "bottom-right",
+      });
+    }
+  }
 
   const ProductItem = ({ product, rank }) => {
     return (
@@ -178,7 +196,8 @@ function ProductItemList({
                     colorScheme="blue"
                     _dark={{ bgColor: "#021514", color: "#e8ebeb" }}
                     onClick={() => {
-                      onPayOpen();
+                      handleControl(onPayOpen);
+
                       setProductId(product.id);
                       setName(product.name);
                       setPrice(product.price);
@@ -199,7 +218,7 @@ function ProductItemList({
                     colorScheme="red"
                     _dark={{ bgColor: "#ee3125", color: "#e8ebeb" }}
                     onClick={() => {
-                      onCartOpen();
+                      handleControl(onCartOpen);
                       setProductId(product.id);
                       setName(product.name);
                       setPrice(product.price);
