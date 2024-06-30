@@ -17,49 +17,50 @@ import {
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import PromoPagination from "../component/PromoPagination.jsx";
 import PromoeventTypeLabels from "../component/PromoeventTypeLabels.jsx";
-import PromoSearchBar from "../component/PromoSearchBar.jsx"; // 추가된 import
+import PromoSearchBar from "../component/PromoSearchBar.jsx";
 
 export function PromoEnd() {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [pageInfo, setPageInfo] = useState({});
+  const [pageInfo, setPageInfo] = useState({
+    currentPageNumber: 1,
+    lastPageNumber: 1,
+    totalItems: 0,
+  });
   const navigate = useNavigate();
-  const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [promoSearch, setPromoSearch] = useState("");
-  const [page, setPage] = useState(1);
 
-  const fetchPromotions = (searchTerm, page) => {
+  const fetchPromotions = async (searchTerm, page, append = false) => {
+    setLoading(true);
     const query = searchTerm ? `&search=${searchTerm}` : "";
-    axios
-      .get(`/api/promotion/list?page=${page}&pageSize=15&type=ended${query}`)
-      .then((res) => {
-        setPromoList((prevList) => [...prevList, ...res.data.promotionList]);
-        setPageInfo(res.data.pageInfo);
-      })
-      .catch((error) => {
-        console.error("프로모션 데이터 가져오기 에러:", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    try {
+      const res = await axios.get(
+        `/api/promotion/list?page=${page}&pageSize=8&type=ended${query}`,
+      );
+      setPromoList((prevList) =>
+        append
+          ? [...prevList, ...res.data.promotionList]
+          : res.data.promotionList,
+      );
+      setPageInfo(res.data.pageInfo);
+    } catch (error) {
+      console.error("프로모션 데이터 가져오기 에러:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchPromotions(promoSearch, page);
-  }, [searchParams, promoSearch, page]);
-
-  useEffect(() => {
-    setPromoSearch(""); // 위치가 변경될 때 검색 상태 초기화
-  }, [location]);
-
-  if (loading && page === 1) {
-    return <Spinner />;
-  }
+    const searchTerm = searchParams.get("search") || "";
+    const page = parseInt(searchParams.get("page"), 10) || 1;
+    setPromoSearch(searchTerm);
+    fetchPromotions(searchTerm, page, page !== 1);
+  }, [searchParams]);
 
   function handleTableClick(promoId) {
     navigate(`/promotion/view/${promoId}`);
@@ -67,13 +68,11 @@ export function PromoEnd() {
 
   const handleSearch = (searchTerm) => {
     setSearchParams({ page: 1, search: searchTerm });
-    setPromoList([]); // 기존 리스트 초기화
-    setPage(1); // 페이지를 1로 리셋
-    fetchPromotions(searchTerm, 1); // Perform search when the search term changes
   };
 
   const handleLoadMore = () => {
-    setPage((prevPage) => prevPage + 1);
+    const nextPage = pageInfo.currentPageNumber + 1;
+    setSearchParams({ page: nextPage, search: promoSearch });
   };
 
   const formatDate = (dateString) => {
@@ -92,8 +91,8 @@ export function PromoEnd() {
           </Heading>
           <Box height="30px" />
           <Text>
-            -응모하신 이벤트의 당첨 여부는 당첨자발표의 결과 확인을 통해
-            확인하실 수 있습니다.
+            -이벤트의 당첨 여부는 당첨자발표의 결과 확인을 통해 확인하실 수
+            있습니다.
           </Text>
           <Box borderBottom={"2px solid black"} padding="20px" />
           <Flex>
@@ -101,10 +100,10 @@ export function PromoEnd() {
               전체 {pageInfo.totalItems}건
             </Text>
             <Spacer />
-            <PromoSearchBar onSearch={handleSearch} />
+            <PromoSearchBar searchValue={promoSearch} onSearch={handleSearch} />
           </Flex>
           <Box border="1px solid #e2e8f0" borderRadius="8px" padding="20px">
-            {promoList.length === 0 ? (
+            {promoList.length === 0 && !loading ? (
               <Text>해당 이벤트가 없습니다.</Text>
             ) : (
               <TableContainer>
@@ -125,7 +124,11 @@ export function PromoEnd() {
                         <Td width={"15%"}>
                           {promo.fileList && promo.fileList.length > 0 && (
                             <Image
-                              src={promo.fileList[0].src}
+                              src={
+                                promo.fileList.find(
+                                  (file) => file.fileType === "thumbnail",
+                                )?.filePath || promo.fileList[0].filePath
+                              }
                               alt="이벤트 이미지"
                               width="100"
                               height="100"
@@ -149,6 +152,7 @@ export function PromoEnd() {
               </TableContainer>
             )}
           </Box>
+          {loading && <Spinner />}
           <PromoPagination pageInfo={pageInfo} onLoadMore={handleLoadMore} />
         </Box>
       </CenterBox>

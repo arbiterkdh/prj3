@@ -4,6 +4,7 @@ import com.backend.domain.promotion.PromoResult;
 import com.backend.service.promotion.PromoResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -16,6 +17,7 @@ public class PromoResultController {
     private final PromoResultService promoResultService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Void> addPromoResult(@RequestBody PromoResult promoResult) {
         promoResultService.addPromoResult(promoResult);
         return ResponseEntity.ok().build();
@@ -36,12 +38,14 @@ public class PromoResultController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Void> updatePromoResult(@PathVariable Integer id, @RequestBody PromoResult promoResult) {
         promoResultService.updatePromoResult(id, promoResult);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Void> deletePromoResult(@PathVariable Integer id) {
         promoResultService.deletePromoResult(id);
         return ResponseEntity.ok().build();

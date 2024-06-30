@@ -168,7 +168,7 @@ export function PromoResultModify() {
                   : "로딩 중..."}
               </Text>
             </FormControl>
-            <Flex mb={4}>
+            <Flex mt={4}>
               <FormControl id="member" mr={4} isRequired>
                 <FormLabel>이메일과 닉네임 선택</FormLabel>
                 <Select

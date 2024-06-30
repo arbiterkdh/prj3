@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Flex,
@@ -31,7 +30,10 @@ export function PromoModify() {
   const { promoId } = useParams();
   const [promo, setPromo] = useState(null);
   const [removeFileList, setRemoveFileList] = useState([]);
-  const [addFileList, setAddFileList] = useState([]);
+  const [addDetailFiles, setAddDetailFiles] = useState([]);
+  const [addRecommendedFiles, setAddRecommendedFiles] = useState([]);
+  const [addThumbnailFiles, setAddThumbnailFiles] = useState([]);
+  const [duplicateFiles, setDuplicateFiles] = useState([]);
   const toast = useToast();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -40,18 +42,47 @@ export function PromoModify() {
     axios.get(`/api/promotion/${promoId}`).then((res) => setPromo(res.data));
   }, [promoId]);
 
+  const handleFileChange = (event, setFiles) => {
+    const files = Array.from(event.target.files);
+    const existingFileNames = promo.fileList.map((file) => file.fileName);
+    const newFiles = [];
+    const duplicates = [];
+
+    files.forEach((file) => {
+      if (existingFileNames.includes(file.name)) {
+        duplicates.push(file.name);
+      } else {
+        newFiles.push(file);
+      }
+    });
+
+    setFiles(newFiles);
+    setDuplicateFiles(duplicates);
+  };
+
   function handleModifyClick() {
+    const formData = new FormData();
+    formData.append("id", promo.id);
+    formData.append("title", promo.title);
+    formData.append("eventType", promo.eventType);
+    formData.append("eventStartDate", promo.eventStartDate);
+    formData.append("eventEndDate", promo.eventEndDate);
+    formData.append("content", promo.content);
+
+    removeFileList.forEach((file) => formData.append("removeFileList[]", file));
+    addDetailFiles.forEach((file) => formData.append("addDetailFiles", file));
+    addRecommendedFiles.forEach((file) =>
+      formData.append("addRecommendedFiles", file),
+    );
+    addThumbnailFiles.forEach((file) =>
+      formData.append("addThumbnailFiles", file),
+    );
+
     axios
-      .putForm("/api/promotion/modify", {
-        id: promo.id,
-        title: promo.title,
-        eventType: promo.eventType,
-        eventStartDate: promo.eventStartDate,
-        eventEndDate: promo.eventEndDate,
-        content: promo.content,
-        isApplyButtonVisible: promo.isApplyButtonVisible,
-        removeFileList,
-        addFileList,
+      .put("/api/promotion/modify", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then(() => {
         toast({
@@ -80,24 +111,6 @@ export function PromoModify() {
       .finally(() => {
         onClose();
       });
-  }
-
-  const fileNameList = [];
-  for (let addFile of addFileList) {
-    // 이미 있는 파일과 중복된 파일명인지?
-    let duplicate = false;
-    for (let file of promo.fileList) {
-      if (file.name === addFile.name) {
-        duplicate = true;
-        break;
-      }
-    }
-    fileNameList.push(
-      <li key={addFile.name}>
-        {addFile.name}
-        {duplicate && <Badge colorScheme="red">override</Badge>}
-      </li>,
-    );
   }
 
   function handleRemoveSwitchChange(name, checked) {
@@ -178,24 +191,24 @@ export function PromoModify() {
         <Box>
           {promo.fileList &&
             promo.fileList.map((file) => (
-              <Box border={"2px solid black"} m={3} key={file.name}>
+              <Box border={"2px solid black"} m={3} key={file.fileName}>
                 <Flex>
                   <FontAwesomeIcon icon={faTrashCan} />
                   <Switch
                     onChange={(e) =>
-                      handleRemoveSwitchChange(file.name, e.target.checked)
+                      handleRemoveSwitchChange(file.fileName, e.target.checked)
                     }
                   />
-                  <Text>{file.name}</Text>
+                  <Text>{file.fileName}</Text>
                 </Flex>
                 <Box>
                   <Image
                     sx={
-                      removeFileList.includes(file.name)
+                      removeFileList.includes(file.fileName)
                         ? { filter: "blur(8px)" }
                         : {}
                     }
-                    src={file.src}
+                    src={file.filePath}
                   />
                 </Box>
               </Box>
@@ -203,15 +216,48 @@ export function PromoModify() {
         </Box>
         <Box>
           <FormControl>
-            <FormLabel>사진파일</FormLabel>
+            <FormLabel>추가할 상세 이미지 파일</FormLabel>
             <Input
               multiple
               type="file"
               accept="image/*"
-              onChange={(e) => setAddFileList(e.target.files)}
+              onChange={(e) => handleFileChange(e, setAddDetailFiles)}
             />
           </FormControl>
-          <ul>{fileNameList}</ul>
+          <FormControl>
+            <FormLabel>추가할 추천 이미지 파일</FormLabel>
+            <Input
+              multiple
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, setAddRecommendedFiles)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>추가할 썸네일 이미지 파일</FormLabel>
+            <Input
+              multiple
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, setAddThumbnailFiles)}
+            />
+          </FormControl>
+          <ul>
+            {Array.from(addDetailFiles).map((file) => (
+              <li key={file.name}>{file.name}</li>
+            ))}
+            {Array.from(addRecommendedFiles).map((file) => (
+              <li key={file.name}>{file.name}</li>
+            ))}
+            {Array.from(addThumbnailFiles).map((file) => (
+              <li key={file.name}>{file.name}</li>
+            ))}
+            {duplicateFiles.map((file) => (
+              <li key={file} style={{ color: "red" }}>
+                {file} (중복 파일)
+              </li>
+            ))}
+          </ul>
         </Box>
         <Box>
           <FormControl>
@@ -220,17 +266,6 @@ export function PromoModify() {
               defaultValue={promo.content}
               onChange={(e) => setPromo({ ...promo, content: e.target.value })}
               placeholder="설명을 입력하세요."
-            />
-          </FormControl>
-        </Box>
-        <Box>
-          <FormControl display="flex" alignItems="center" mt={4}>
-            <FormLabel mb="0">응모하기 버튼 활성화</FormLabel>
-            <Switch
-              isChecked={promo.isApplyButtonVisible}
-              onChange={(e) =>
-                setPromo({ ...promo, isApplyButtonVisible: e.target.checked })
-              }
             />
           </FormControl>
         </Box>

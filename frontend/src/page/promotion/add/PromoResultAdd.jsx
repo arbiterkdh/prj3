@@ -232,7 +232,7 @@ export function PromoResultAdd() {
                 />
               </FormControl>
             </Flex>
-            <Button mt={4} colorScheme="green" onClick={handleAddWinner}>
+            <Button colorScheme="green" onClick={handleAddWinner}>
               당첨자 추가
             </Button>
             <Table mt={4}>

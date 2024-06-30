@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -29,6 +29,7 @@ import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import PromoResultPagination from "../component/PromoResultPagination.jsx";
 import PromoSearchBar from "../component/PromoSearchBar.jsx";
 import EventTypeLabel from "../component/PromoeventTypeLabels.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 export function PromoResult() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,6 +43,7 @@ export function PromoResult() {
   const searchQuery = searchParams.get("search") || "";
   const pageSize = 10;
   const toast = useToast();
+  const account = useContext(LoginContext);
 
   const fetchEventResults = async (page, search) => {
     try {
@@ -86,7 +88,6 @@ export function PromoResult() {
         isClosable: true,
       });
     } catch (error) {
-      console.error("당첨자 발표를 삭제하는데 실패했습니다.", error);
       toast({
         title: "삭제 실패",
         description: "당첨자 발표 삭제에 실패했습니다.",
@@ -127,28 +128,29 @@ export function PromoResult() {
         </Heading>
         <Box width="100%">
           <Box mb={5} mt={10}>
-            <Flex justify="space-between" alignItems="center">
-              <Box>
-                <Text>
-                  -응모하신 이벤트의 당첨 여부는 결과 확인을 통해 확인하실 수
-                  있습니다.
-                </Text>
-                <Text>
-                  -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
-                  발표내역을 확인할 수 있습니다.
-                </Text>
-              </Box>
-              <Button
-                size="sm"
-                colorScheme="green"
-                onClick={handleAddClick}
-                ml={2}
-              >
-                당첨자 발표 추가
-              </Button>
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              position="relative"
+            >
+              <Text textAlign="center">
+                -이벤트의 당첨 여부는 결과 확인을 통해 확인하실 수 있습니다.
+              </Text>
+              {account.isAdmin() && (
+                <Button
+                  size="sm"
+                  colorScheme="green"
+                  onClick={handleAddClick}
+                  ml={2}
+                  position="absolute"
+                  right={0}
+                >
+                  당첨자 발표 추가
+                </Button>
+              )}
             </Flex>
           </Box>
-          <Box borderBottom={"2px solid black"} />
+          <Box borderBottom={"2px solid black"} mt={10} />
           <Flex>
             <Text as={"b"} mt={4} ml={"20px"}>
               전체 {pageInfo.totalItems}건
@@ -166,8 +168,8 @@ export function PromoResult() {
                     <Th>이벤트명</Th>
                     <Th>발표일</Th>
                     <Th>당첨자 발표</Th>
-                    <Th>수정</Th>
-                    <Th>삭제</Th>
+                    {account.isAdmin() && <Th>수정</Th>}
+                    {account.isAdmin() && <Th>삭제</Th>}
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -196,22 +198,30 @@ export function PromoResult() {
                             결과확인
                           </Button>
                         </Td>
-                        <Td>
-                          <Button
-                            colorScheme={"yellow"}
-                            onClick={() => handleModifyClick(event.promotionId)}
-                          >
-                            수정
-                          </Button>
-                        </Td>
-                        <Td>
-                          <Button
-                            colorScheme={"red"}
-                            onClick={() => handleDeleteClick(event.promotionId)}
-                          >
-                            삭제
-                          </Button>
-                        </Td>
+                        {account.isAdmin() && (
+                          <Td>
+                            <Button
+                              colorScheme={"yellow"}
+                              onClick={() =>
+                                handleModifyClick(event.promotionId)
+                              }
+                            >
+                              수정
+                            </Button>
+                          </Td>
+                        )}
+                        {account.isAdmin() && (
+                          <Td>
+                            <Button
+                              colorScheme={"red"}
+                              onClick={() =>
+                                handleDeleteClick(event.promotionId)
+                              }
+                            >
+                              삭제
+                            </Button>
+                          </Td>
+                        )}
                       </Tr>
                     ))
                   ) : (

@@ -1,17 +1,17 @@
 package com.backend.mapper.promotion;
 
 import com.backend.domain.promotion.Promo;
+import com.backend.domain.promotion.PromoFile;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
 @Mapper
 public interface PromoMapper {
-
     @Insert("""
             INSERT INTO promo
-            (id, title, eventType, eventStartDate, eventEndDate, content, isRecommended, isApplyButtonVisible)
-            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended}, #{isApplyButtonVisible})
+            (id, title, eventType, eventStartDate, eventEndDate, content, isRecommended)
+            VALUES (#{id}, #{title}, #{eventType}, #{eventStartDate}, #{eventEndDate}, #{content}, #{isRecommended})
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertPromo(Promo promo);
@@ -43,24 +43,23 @@ public interface PromoMapper {
                 eventStartDate = #{eventStartDate},
                 eventEndDate = #{eventEndDate},
                 content = #{content},
-                isRecommended = #{isRecommended},
-                isApplyButtonVisible = #{isApplyButtonVisible}
+                isRecommended = #{isRecommended}
             WHERE id = #{id}
             """)
     int update(Promo promo);
 
     @Insert("""
-            INSERT INTO promo_file (promo_id, name)
-            VALUES (#{promoId}, #{name})
+            INSERT INTO promo_file (promo_id, file_type, file_name)
+            VALUES (#{promoId}, #{fileType}, #{fileName})
             """)
-    int insertFileName(int promoId, String name);
+    int insertFileName(int promoId, String fileType, String fileName);
 
     @Select("""
-            SELECT name
+            SELECT file_type, file_name
             FROM promo_file
-            WHERE promo_id=#{promoId}
+            WHERE promo_id = #{promoId}
             """)
-    List<String> selectFileNameByPromoId(int promoId);
+    List<PromoFile> selectFileNamesByPromoId(int promoId);
 
     @Delete("""
             DELETE FROM promo_file
@@ -71,7 +70,7 @@ public interface PromoMapper {
     @Delete("""
             DELETE FROM promo_file
             WHERE promo_id=#{promoId}
-              AND name=#{fileName}
+              AND file_name=#{fileName}
             """)
     int deleteFileByPromoIdAndName(int promoId, String fileName);
 
@@ -144,13 +143,6 @@ public interface PromoMapper {
             """)
     int updateRecommendation(Integer id, boolean isRecommended);
 
-    @Update("""
-            UPDATE promo
-            SET isApplyButtonVisible = #{isApplyButtonVisible}
-            WHERE id = #{id}
-            """)
-    int updateApplyButtonVisibility(Integer id, boolean isApplyButtonVisible);
-
     @Select("""
             SELECT *
             FROM promo
@@ -158,10 +150,5 @@ public interface PromoMapper {
             """)
     List<Promo> selectRecommendedPromotions();
 
-    @Select("""
-            SELECT *
-            FROM promo
-            WHERE isApplyButtonVisible = true
-            """)
-    List<Promo> selectPromotionsWithVisibleApplyButton();
 }
+

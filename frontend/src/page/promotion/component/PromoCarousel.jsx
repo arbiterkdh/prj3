@@ -99,49 +99,55 @@ const PromoCarousel = () => {
 
   return (
     <Slider {...settings}>
-      {recommendedPromos.map((promo) => (
-        <Box
-          key={promo.id}
-          onClick={() => navigate(`/promotion/view/${promo.id}`)}
-          p={2}
-          cursor="pointer"
-        >
-          {promo.fileList?.length > 0 && (
-            <Image
-              src={promo.fileList[0].src}
-              alt={promo.title}
-              borderRadius="lg"
-              boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
-            />
-          )}
-          <Box p={2}>
-            <Flex alignItems="center">
-              <Text
-                fontSize="sm"
-                fontWeight="bold"
-                isTruncated
-                maxWidth="calc(100% - 150px)"
-                display="inline-block"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                textOverflow="ellipsis"
-              >
-                {promo.title}
-              </Text>
-              <Text
-                fontSize="sm"
-                color="gray.500"
-                whiteSpace="nowrap"
-                display="inline-block"
-                marginLeft="auto"
-              >
-                {formatDate(promo.eventStartDate)} ~{" "}
-                {formatDate(promo.eventEndDate)}
-              </Text>
-            </Flex>
+      {recommendedPromos.map((promo) => {
+        const recommendedFile = promo.fileList.find(
+          (file) => file.fileType === "recommended",
+        );
+
+        return (
+          <Box
+            key={promo.id}
+            onClick={() => navigate(`/promotion/view/${promo.id}`)}
+            p={2}
+            cursor="pointer"
+          >
+            {recommendedFile && (
+              <Image
+                src={recommendedFile.filePath}
+                alt={promo.title}
+                borderRadius="lg"
+                boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
+              />
+            )}
+            <Box p={2}>
+              <Flex alignItems="center">
+                <Text
+                  fontSize="sm"
+                  fontWeight="bold"
+                  isTruncated
+                  maxWidth="calc(100% - 150px)"
+                  display="inline-block"
+                  whiteSpace="nowrap"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                >
+                  {promo.title}
+                </Text>
+                <Text
+                  fontSize="sm"
+                  color="gray.500"
+                  whiteSpace="nowrap"
+                  display="inline-block"
+                  marginLeft="auto"
+                >
+                  {formatDate(promo.eventStartDate)} ~{" "}
+                  {formatDate(promo.eventEndDate)}
+                </Text>
+              </Flex>
+            </Box>
           </Box>
-        </Box>
-      ))}
+        );
+      })}
     </Slider>
   );
 };

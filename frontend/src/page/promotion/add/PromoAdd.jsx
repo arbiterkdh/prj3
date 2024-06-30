@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Checkbox,
   FormControl,
   FormLabel,
   Input,
@@ -19,24 +18,39 @@ export function PromoAdd() {
   const [eventStartDate, setEventStartDate] = useState("");
   const [eventEndDate, setEventEndDate] = useState("");
   const [content, setContent] = useState("");
-  const [files, setFiles] = useState([]);
+  const [promoRecommendedFile, setPromoRecommendedFile] = useState([]);
+  const [promoThumbnailFile, setPromoThumbnailFile] = useState([]);
+  const [promoDetailFile, setPromoDetailFile] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isApplyButtonVisible, setIsApplyButtonVisible] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
 
   const handleAddEvent = async () => {
     setLoading(true);
     try {
-      await axios.postForm("/api/promotion/add", {
-        title,
-        content,
-        eventType,
-        eventStartDate,
-        eventEndDate,
-        files,
-        isApplyButtonVisible,
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("eventType", eventType);
+      formData.append("eventStartDate", eventStartDate);
+      formData.append("eventEndDate", eventEndDate);
+
+      promoRecommendedFile.forEach((file) => {
+        formData.append("promoRecommendedFile", file);
       });
+      promoThumbnailFile.forEach((file) => {
+        formData.append("promoThumbnailFile", file);
+      });
+      promoDetailFile.forEach((file) => {
+        formData.append("promoDetailFile", file);
+      });
+
+      await axios.post("/api/promotion/add", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       toast({
         status: "success",
         description: "새 글이 등록되었습니다.",
@@ -61,7 +75,8 @@ export function PromoAdd() {
     !eventType ||
     !eventStartDate ||
     !eventEndDate ||
-    files.length === 0;
+    promoThumbnailFile.length === 0 ||
+    promoDetailFile.length === 0;
 
   return (
     <Box>
@@ -103,17 +118,47 @@ export function PromoAdd() {
         />
       </FormControl>
       <FormControl>
-        <FormLabel>사진파일</FormLabel>
+        <FormLabel>추천 이벤트 이미지 (추천 이벤트 요약 이미지)</FormLabel>
         <Input
           multiple
           type="file"
           accept="image/*"
-          onChange={(e) => setFiles(Array.from(e.target.files))}
+          onChange={(e) => setPromoRecommendedFile(Array.from(e.target.files))}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>
+          프로모션 목록 이미지 (프로모션 상세 내용을 보기 전의 요약 이미지)
+        </FormLabel>
+        <Input
+          multiple
+          type="file"
+          accept="image/*"
+          onChange={(e) => setPromoThumbnailFile(Array.from(e.target.files))}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>상세 프로모션 이미지 (프로모션 상세 내용 이미지)</FormLabel>
+        <Input
+          multiple
+          type="file"
+          accept="image/*"
+          onChange={(e) => setPromoDetailFile(Array.from(e.target.files))}
         />
       </FormControl>
       <Box>
         <ul>
-          {Array.from(files).map((file, index) => (
+          {Array.from(promoRecommendedFile).map((file, index) => (
+            <li key={index}>{file.name}</li>
+          ))}
+        </ul>
+        <ul>
+          {Array.from(promoThumbnailFile).map((file, index) => (
+            <li key={index}>{file.name}</li>
+          ))}
+        </ul>
+        <ul>
+          {Array.from(promoDetailFile).map((file, index) => (
             <li key={index}>{file.name}</li>
           ))}
         </ul>
@@ -126,15 +171,6 @@ export function PromoAdd() {
           placeholder="설명을 입력하세요."
         />
       </FormControl>
-      <Box mb={5}>
-        <Checkbox
-          isInvalid
-          isChecked={isApplyButtonVisible}
-          onChange={(e) => setIsApplyButtonVisible(e.target.checked)}
-        >
-          응모하기 버튼 활성화
-        </Checkbox>
-      </Box>
       <Button
         colorScheme="teal"
         isLoading={loading}

@@ -9,10 +9,13 @@ import {
 } from "@chakra-ui/react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
+import { LoginContext } from "../../component/LoginProvider.jsx";
+import { useContext } from "react";
 
 export function PromoNavbar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const account = useContext(LoginContext);
 
   const tabIndex =
     {
@@ -46,17 +49,19 @@ export function PromoNavbar() {
           >
             진행중인 이벤트
           </Heading>
-          <Box display="flex" gap={2}>
-            <Button
-              bg={"green"}
-              color={"white"}
-              _hover={{ bg: "darkred" }}
-              onClick={() => navigate("/promotion/add")}
-              size="sm"
-            >
-              새글작성
-            </Button>
-          </Box>
+          {account.isAdmin() && (
+            <Box display="flex" gap={2}>
+              <Button
+                bg={"green"}
+                color={"white"}
+                _hover={{ bg: "darkred" }}
+                onClick={() => navigate("/promotion/add")}
+                size="sm"
+              >
+                새글작성
+              </Button>
+            </Box>
+          )}
         </Box>
         <Tabs isFitted variant="enclosed" width="100%" index={tabIndex}>
           <TabList mb="2em" borderColor={"red"}>

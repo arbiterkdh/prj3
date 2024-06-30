@@ -33,13 +33,13 @@ public class PromoResultService {
 
     public Map<String, Object> getPromoResults(int page, Integer pageSize) {
         if (pageSize == null) {
-            pageSize = 10; // 기본값을 10으로 설정
+            pageSize = 10;
         }
 
         int totalItems = promoResultMapper.countPromoResults();
         int offset = (page - 1) * pageSize;
         List<PromoResult> results = promoResultMapper.selectPromoResults(offset, pageSize);
-        results.forEach(result -> deserializeWinners(result));
+        results.forEach(this::deserializeWinners);
 
         Map<String, Object> response = new HashMap<>();
         response.put("results", results);
@@ -64,9 +64,6 @@ public class PromoResultService {
             if (rowsAffected == 0) {
                 throw new RuntimeException("Update failed, no rows affected.");
             }
-            // 업데이트 후 결과 확인 로그 추가
-            PromoResult updatedResult = promoResultMapper.selectPromoResultById(id);
-            System.out.println("Updated Promotion Result from DB: " + updatedResult);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize winners list", e);
         }
@@ -99,8 +96,7 @@ public class PromoResultService {
 
     private void deserializeWinners(PromoResult result) {
         try {
-            List<PromoResult.Winner> winners = objectMapper.readValue(result.getWinnersJson(), new TypeReference<List<PromoResult.Winner>>() {
-            });
+            List<PromoResult.Winner> winners = objectMapper.readValue(result.getWinnersJson(), new TypeReference<List<PromoResult.Winner>>() {});
             result.setWinners(winners);
         } catch (IOException e) {
             throw new RuntimeException("Failed to deserialize winners list", e);

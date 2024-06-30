@@ -15,6 +15,11 @@ const PromoCard = ({ promo }) => {
       .replace(/\.$/, "");
   };
 
+  // fileList에서 fileType이 "thumbnail"인 파일을 찾습니다.
+  const thumbnailFile = promo.fileList.find(
+    (file) => file.fileType === "thumbnail",
+  );
+
   return (
     <Card
       key={promo.id}
@@ -28,26 +33,15 @@ const PromoCard = ({ promo }) => {
       height="330px" // 고정 카드 높이
     >
       <CardBody display="flex" flexDirection="column" p={0}>
-        {promo.isRecommended === true && promo.fileList?.length > 1 ? (
+        {thumbnailFile && (
           <Box mb={0} height="230px" overflow="hidden" borderTopRadius="15px">
             <Image
-              src={promo.fileList[1].src}
+              src={thumbnailFile.filePath}
               objectFit="cover"
               height="100%"
               width="100%"
             />
           </Box>
-        ) : (
-          promo.fileList?.length > 0 && (
-            <Box mb={0} height="230px" overflow="hidden" borderTopRadius="15px">
-              <Image
-                src={promo.fileList[0].src}
-                objectFit="cover"
-                height="100%"
-                width="100%"
-              />
-            </Box>
-          )
         )}
         <Box flex={1} p={1}>
           <Heading

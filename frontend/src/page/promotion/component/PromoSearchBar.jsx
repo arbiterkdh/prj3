@@ -5,18 +5,19 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const PromoSearchBar = ({ onSearch }) => {
+const PromoSearchBar = ({ searchValue, onSearch }) => {
   const [promoSearch, setPromoSearch] = useState("");
-  const location = useLocation();
+
+  useEffect(() => {
+    setPromoSearch(searchValue);
+  }, [searchValue]);
 
   const handleSearch = () => {
     onSearch(promoSearch);
-    setPromoSearch(""); // 검색 후 서치바 리셋
   };
 
   const handleKeyDown = (e) => {
@@ -24,10 +25,6 @@ const PromoSearchBar = ({ onSearch }) => {
       handleSearch();
     }
   };
-
-  useEffect(() => {
-    setPromoSearch("");
-  }, [location.pathname]);
 
   return (
     <Box display="flex">
@@ -43,15 +40,11 @@ const PromoSearchBar = ({ onSearch }) => {
         <InputRightElement width="4.5rem">
           <Button
             bgColor={"white"}
-            _hover={{
-              bgColor: "white",
-            }}
+            _hover={{ bgColor: "white" }}
             _dark={{
               color: "lightgray",
               bgColor: "#121212",
-              _hover: {
-                bgColor: "#121212",
-              },
+              _hover: { bgColor: "#121212" },
             }}
             onClick={handleSearch}
             h="1.75rem"
