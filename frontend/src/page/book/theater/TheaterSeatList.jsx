@@ -96,7 +96,15 @@ export function TheaterSeatList() {
         let rowColList = res.data.rowColList;
 
         if (prevSelectedList.length > 0) {
-          setSeatSelected(prevSelectedList);
+          setSeatSelected(
+            prevSelectedList.sort((a, b) => {
+              if (a.slice(0, 1) !== b.slice(0, 1)) {
+                return a - b;
+              } else {
+                return Number(a.slice(2, 4)) - Number(b.slice(2, 4));
+              }
+            }),
+          );
           setNumberOfPeople(prevSelectedList.length);
 
           let exceptSelectedRowColList = rowColList.filter(
@@ -191,7 +199,13 @@ export function TheaterSeatList() {
           setSeatSelected((prev) => {
             let newSeatSelected = [...prev];
             newSeatSelected.push(rowCol);
-            return newSeatSelected;
+            return newSeatSelected.sort((a, b) => {
+              if (a.slice(0, 1) !== b.slice(0, 1)) {
+                return a - b;
+              } else {
+                return Number(a.slice(2, 4)) - Number(b.slice(2, 4));
+              }
+            });
           });
         } else {
           setSeatSelected((prev) => {
@@ -296,11 +310,21 @@ export function TheaterSeatList() {
                     size="sm"
                     maxW={20}
                     min={0}
-                    max={bookPlaceTime.vacancy}
+                    max={
+                      bookPlaceTime.vacancy < 12 ? bookPlaceTime.vacancy : 13
+                    }
                     value={numberOfPeople}
                     isDisabled={isSelecting}
                     _disabled={{ cursor: "default" }}
                     onChange={(e) => {
+                      if (Number(e) === 13) {
+                        toast({
+                          status: "info",
+                          description: "선택 가능한 인원은 최대 12명입니다.",
+                          position: "bottom-right",
+                        });
+                        return 12;
+                      }
                       let prevPeopleCount = Number(numberOfPeople);
                       if (
                         prevPeopleCount > Number(e) &&
@@ -350,16 +374,7 @@ export function TheaterSeatList() {
 
             <InputGroup w={"120px"} ml={-8} mr={-4} size={"sm"}>
               <Input
-                value={
-                  numberOfPeople > 71
-                    ? (numberOfPeople * 14 + "").slice(0, 1) +
-                      "," +
-                      (numberOfPeople * 14 + "").slice(1, 4) +
-                      ",000"
-                    : numberOfPeople > 0
-                      ? numberOfPeople * 14 + ",000"
-                      : 0
-                }
+                value={numberOfPeople > 0 ? numberOfPeople * 14 + ",000" : 0}
                 textAlign={"right"}
                 border={"none"}
                 bgColor={"whiteAlpha.50"}
@@ -372,15 +387,15 @@ export function TheaterSeatList() {
           <Flex
             bgColor={"gray.200"}
             _dark={{ bgColor: "blackAlpha.400" }}
-            w={"280px"}
+            w={"260px"}
             h={"90px"}
             overflowY={"scroll"}
             flexWrap={"wrap"}
             alignContent={"start"}
             p={2}
             pl={2}
-            ml={2}
-            columnGap={3}
+            mx={"5px"}
+            columnGap={2}
           >
             {numberOfPeople === 0 ? (
               <Box>인원을 선택해주세요.</Box>
@@ -392,7 +407,6 @@ export function TheaterSeatList() {
                   w={"53px"}
                   align={"center"}
                   justifyContent={"space-between"}
-                  gap={"3px"}
                 >
                   <Box w={"36px"} h={"24px"} textAlign={"center"}>
                     {selectedSeat}
@@ -471,7 +485,28 @@ export function TheaterSeatList() {
         left={"750px"}
         position={"absolute"}
       >
-        <ColorButton w={"100px"} h={"100px"} fontSize={"16px"} rounded={"full"}>
+        <ColorButton
+          w={"100px"}
+          h={"100px"}
+          fontSize={"16px"}
+          rounded={"full"}
+          onClick={() =>
+            navigate("/book/movie/payment", {
+              state: {
+                bookSeatBookPlaceTimeId: bookPlaceTime.bookPlaceTimeId,
+                seatSelected: seatSelected,
+                numberOfPeople: numberOfPeople,
+                totalAmount: totalAmount,
+                movie: movie,
+                city: theater.city,
+                boxNumber: theaterBox.boxNumber,
+                location: theater.location,
+                startTime: bookPlaceTime.startTime,
+                endTime: bookPlaceTime.endTime,
+              },
+            })
+          }
+        >
           <Flex align={"center"} gap={1}>
             <Box>결제</Box>
             <FontAwesomeIcon icon={faCreditCard} beat />

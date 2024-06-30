@@ -7,7 +7,7 @@ public class BookSeat {
     private Integer bookSeatBookPlaceTimeId;
     private String rowCol;
     private Integer bookSeatMemberNumber;
-    private boolean isPaid;
+    private boolean isPaying;
 
     // axios 요청용
     private Integer bookPlaceTimeId;

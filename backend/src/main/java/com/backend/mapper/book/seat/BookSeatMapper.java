@@ -22,7 +22,7 @@ public interface BookSeatMapper {
             FROM book_seat
             WHERE book_seat_book_place_time_id = #{bookPlaceTimeId}
             AND book_seat_member_number = #{bookSeatMemberNumber}
-            AND is_paid = FALSE
+            AND is_paying = FALSE
             """)
     List<String> selectAllRowColByBookPlaceTimeIdAndBookSeatMemberNumberWithoutPayment(Integer bookPlaceTimeId, Integer bookSeatMemberNumber);
 
@@ -60,7 +60,7 @@ public interface BookSeatMapper {
     @Delete("""
             DELETE FROM book_seat
             WHERE book_seat_member_number = #{bookSeatMemberNumber}
-            AND is_paid = FALSE
+            AND is_paying = FALSE
             """)
     int deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber);
 
@@ -73,7 +73,7 @@ public interface BookSeatMapper {
 
     @Delete("""
             DELETE FROM book_seat
-            WHERE is_paid = FALSE
+            WHERE is_paying = FALSE
             AND DATE_ADD(selected_time, INTERVAL 10 MINUTE ) < NOW()
             """)
     int deleteBookSeatByCompareSelectedTimeWithCurrentTime();
@@ -81,7 +81,7 @@ public interface BookSeatMapper {
     @Select("""
             SELECT bpt.book_place_time_id, bpt.theater_box_movie_id, bpt.vacancy, bpt.start_time, bpt.end_time
             FROM book_seat bs JOIN book_place_time bpt ON bs.book_seat_book_place_time_id = bpt.book_place_time_id
-            WHERE is_paid = FALSE
+            WHERE is_paying = FALSE
             AND DATE_ADD(selected_time, INTERVAL 10 MINUTE ) < NOW()
             """)
     List<BookPlaceTime> selectAllBookPlaceTimeByTimeoutExpiredWithoutPayment();
@@ -91,7 +91,7 @@ public interface BookSeatMapper {
             FROM book_seat 
             WHERE book_seat_member_number = #{bookSeatMemberNumber}
             AND book_seat_book_place_time_id = #{bookPlaceTimeId}
-            AND is_paid = FALSE
+            AND is_paying = FALSE
             """)
     Integer countAllBookSeatByBookSeatMemberNumberAndBookPlaceTimeIdWithoutPayment(Integer bookSeatMemberNumber, Integer bookPlaceTimeId);
 
