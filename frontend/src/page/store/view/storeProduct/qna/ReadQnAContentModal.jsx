@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  Divider,
   Flex,
   FormControl,
   FormLabel,
@@ -19,8 +21,8 @@ import axios from "axios";
 import { QnAComment } from "./QnAComment.jsx";
 
 function ReadQnAContentModal({
-  isQnAContentOpen,
   onQnAContentClose,
+  isQnAContentOpen,
   titleQnA,
   contentQnA,
   writerQnA,
@@ -57,23 +59,50 @@ function ReadQnAContentModal({
     <Td>
       <Modal isOpen={isQnAContentOpen} onClose={onQnAContentClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{titleQnA}</ModalHeader>
+        <ModalContent borderRadius="lg" boxShadow="lg">
+          <ModalHeader
+            bg="blue.500"
+            color="white"
+            borderTopRadius="lg"
+            py={4}
+            px={6}
+          >
+            {titleQnA}
+          </ModalHeader>
           <hr />
-          <ModalBody>
-            <FormControl>
+          <ModalBody px={6} py={4}>
+            <FormControl mb={4}>
               <FormLabel>내용</FormLabel>
-              <Textarea readOnly resize={"none"} defaultValue={contentQnA} />
+              <Textarea
+                readOnly
+                resize="none"
+                bg="gray.100"
+                borderRadius="md"
+                p={4}
+                _dark={{ bg: "gray.700" }}
+                defaultValue={contentQnA}
+              />
             </FormControl>
-            <hr />
+            <Divider mb={4} />
             <FormControl>
               <FormLabel>답변 내용</FormLabel>
-              <QnAComment idQnA={idQnA} refreshQnAComment={refreshQnAComment} />
+              <Box
+                mb={4}
+                p={2}
+                bg="gray.50"
+                borderRadius="md"
+                _dark={{ bg: "gray.800" }}
+              >
+                <QnAComment
+                  idQnA={idQnA}
+                  refreshQnAComment={refreshQnAComment}
+                />
+              </Box>
 
-              {Login.nickName === writerQnA && (
+              {Login.nickName === `${writerQnA}` && (
                 <>
                   <FormLabel>추가 문의글 작성</FormLabel>
-                  <Flex>
+                  <Flex mb={4} align="center">
                     <Textarea
                       placeholder={"추가 문의글을 작성하세요"}
                       resize={"none"}
@@ -82,11 +111,19 @@ function ReadQnAContentModal({
                         setAnswerComment(e.target.value);
                         setIsAdmin(false);
                       }}
+                      mr={2}
+                      bg="white"
+                      borderRadius="md"
+                      p={4}
+                      _dark={{ bg: "gray.700" }}
                     />
                     <Button
+                      colorScheme="blue"
                       onClick={() => {
                         handleAddAnswerComment(isAdmin);
                       }}
+                      borderRadius="md"
+                      boxShadow="md"
                     >
                       확인
                     </Button>
@@ -105,6 +142,11 @@ function ReadQnAContentModal({
                         setAnswerComment(e.target.value);
                         setIsAdmin(true);
                       }}
+                      mr={2}
+                      bg="white"
+                      borderRadius="md"
+                      p={4}
+                      _dark={{ bg: "gray.700" }}
                     />
                     <Button
                       onClick={() => {
@@ -118,10 +160,19 @@ function ReadQnAContentModal({
               )}
             </FormControl>
           </ModalBody>
-          <hr />
-          <ModalFooter>
+          <ModalFooter
+            bg="gray.100"
+            borderBottomRadius="lg"
+            _dark={{ bg: "gray.700" }}
+          >
             <Flex>
-              <Button onClick={onQnAContentClose}>확인</Button>
+              <Button
+                colorScheme="gray"
+                onClick={onQnAContentClose}
+                borderRadius={"md"}
+              >
+                확인
+              </Button>
             </Flex>
           </ModalFooter>
         </ModalContent>
