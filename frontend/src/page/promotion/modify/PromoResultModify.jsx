@@ -163,7 +163,6 @@ export function PromoResultModify() {
         borderRadius="10px"
         p={6}
         boxShadow="md"
-        bg="white"
       >
         <Heading textAlign="center" mb={6} fontWeight="bold" fontSize="2xl">
           당첨자 발표 수정
@@ -172,7 +171,7 @@ export function PromoResultModify() {
           <form onSubmit={handleSubmit}>
             <FormControl id="promotion" mb={4}>
               <FormLabel fontWeight="bold" fontSize="lg">
-                프로모션 선택
+                이벤트 선택
               </FormLabel>
               <Text>
                 {promotion

@@ -88,7 +88,6 @@ export function PromoAdd() {
         borderRadius="10px"
         p={6}
         boxShadow="md"
-        bg="white"
       >
         <Box display="flex" justifyContent="space-between" mb={4}>
           <FormControl flex="7" mr={2}>

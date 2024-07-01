@@ -171,7 +171,6 @@ export function PromoResultAdd() {
         borderRadius="10px"
         p={6}
         boxShadow="md"
-        bg="white"
       >
         <Heading textAlign="center" mb={6} fontWeight="bold" fontSize="2xl">
           당첨자 발표 추가
@@ -181,10 +180,10 @@ export function PromoResultAdd() {
             <Flex mb={4}>
               <FormControl id="promotionId" isRequired mr={4}>
                 <FormLabel fontWeight="bold" fontSize="lg">
-                  프로모션 선택
+                  이벤트 선택
                 </FormLabel>
                 <Select
-                  placeholder="프로모션을 선택하세요"
+                  placeholder="이벤트를 선택하세요"
                   value={promotionId}
                   onChange={(e) => handlePromotionChange(e.target.value)}
                   borderColor="gray.300"
@@ -200,10 +199,10 @@ export function PromoResultAdd() {
               </FormControl>
               <FormControl id="searchQuery">
                 <FormLabel fontWeight="bold" fontSize="lg">
-                  프로모션 검색
+                  이벤트 검색
                 </FormLabel>
                 <Input
-                  placeholder="프로모션을 입력하세요"
+                  placeholder="이벤트명을 입력하세요"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   borderColor="gray.300"

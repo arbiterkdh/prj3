@@ -145,7 +145,6 @@ export function PromoModify() {
         borderRadius="10px"
         p={6}
         boxShadow="md"
-        bg="white"
       >
         <Box mb={4} textAlign="center" fontWeight="bold" fontSize="xl">
           {promo.id}번 게시물 수정
