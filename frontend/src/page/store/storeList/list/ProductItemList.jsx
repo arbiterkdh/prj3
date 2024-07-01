@@ -32,6 +32,7 @@ import { useNavigate } from "react-router-dom";
 import Payment from "../../payment/Payment.jsx";
 import GapFlex from "../../../../css/theme/component/flex/GapFlex.jsx";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 function ProductItemList({
   productList,
@@ -188,15 +189,13 @@ function ProductItemList({
                 }}
               >
                 <Box>
-                  <Button
+                  <ColorButton
                     p={3}
                     size={"lg"}
                     variant="solid"
                     colorScheme="blue"
-                    _dark={{ bgColor: "#021514", color: "#e8ebeb" }}
                     onClick={() => {
                       handleControl(onPayOpen);
-
                       setProductId(product.id);
                       setName(product.name);
                       setPrice(product.price);
@@ -207,15 +206,22 @@ function ProductItemList({
                   >
                     <FontAwesomeIcon icon={faCreditCard} />
                     <Text textIndent={"10px"}>구매</Text>
-                  </Button>
+                  </ColorButton>
                 </Box>
                 <Box>
                   <Button
                     p={3}
                     size={"lg"}
                     variant="solid"
-                    colorScheme="red"
-                    _dark={{ bgColor: "#ee3125", color: "#e8ebeb" }}
+                    colorScheme="blue"
+                    _dark={{
+                      bgColor: "#3e6969",
+                      color: "#e8ebeb",
+                      _hover: {
+                        color: "whiteAlpha.900",
+                        bgColor: "#3e6969",
+                      },
+                    }}
                     onClick={() => {
                       handleControl(onCartOpen);
                       setProductId(product.id);

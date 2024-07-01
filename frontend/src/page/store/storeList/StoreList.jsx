@@ -24,6 +24,7 @@ import ProductItemList from "./list/ProductItemList.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import AddCartModal from "./cart/AddCartModal.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -103,14 +104,15 @@ export function StoreList() {
           </Box>
           {Login.nickName === "생존코딩" && (
             <Box w={"50%"} textAlign={"right"}>
-              <Button
+              <ColorButton
+                size={"sm"}
+                left={"5px"}
+                top={"-15px"}
+                colorScheme={"blue"}
                 onClick={() => navigate("/store/add")}
-                bgColor={"#e73426"}
-                _dark={{ bgColor: "#2d4c4c" }}
-                color={"white"}
               >
                 상품등록
-              </Button>
+              </ColorButton>
             </Box>
           )}
         </Flex>

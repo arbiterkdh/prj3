@@ -145,7 +145,7 @@ export function MemberMyPage() {
       })
       .catch(() => {})
       .finally(() => {});
-  }, [nickName, page]);
+  }, [nickName, page, paymentCancelResult]);
 
   useEffect(() => {
     // 당첨자 결과 데이터 가져오기
@@ -231,6 +231,22 @@ export function MemberMyPage() {
               : result,
           ),
         );
+
+        const cardName = res.data.cardName || "카카오페이";
+        const cardNumber = res.data.cardNumber || "N/A";
+
+        setPaymentCancelResult((prevResults) => [
+          ...prevResults,
+          {
+            orderNumber,
+            amount,
+            cardName,
+            cardNumber,
+            receiptUrl: res.data.receiptUrl,
+            status: "cancelled",
+          },
+        ]);
+
         toast({
           description: "결제가 성공적으로 취소되었습니다.",
           status: "success",
