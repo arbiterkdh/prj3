@@ -4,13 +4,24 @@ import { Box } from "@chakra-ui/react";
 const StoreMenuCursorBox = (props) => {
   return (
     <Box
+      variant="solid"
+      color={"black"}
+      bgColor={"white"}
+      _hover={{
+        bgColor: "red.600",
+        color: "white",
+      }}
+      _dark={{
+        bgColor: "#1f3032",
+        color: "white",
+        _hover: {
+          color: "whiteAlpha.900",
+          bgColor: "red.600",
+        },
+      }}
       cursor={"pointer"}
       m={1}
       w={"25%"}
-      _hover={{
-        bgColor: "#c5302f",
-        color: "white",
-      }}
       {...props}
     />
   );
