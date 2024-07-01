@@ -5,7 +5,7 @@ CREATE TABLE book_seat
     book_seat_book_place_time_id INT         NOT NULL REFERENCES book_place_time (book_place_time_id),
     row_col                      VARCHAR(10) NOT NULL,
     book_seat_member_number      INT REFERENCES member (number),
-    is_paid                      BOOLEAN              DEFAULT FALSE,
+    is_paying                    BOOLEAN              DEFAULT FALSE,
     selected_time                DATETIME    NOT NULL DEFAULT NOW(),
     PRIMARY KEY (book_seat_book_place_time_id, row_col)
 );
@@ -18,7 +18,7 @@ WHERE book_place_time_id = 85;
 
 DELETE
 FROM book_seat
-WHERE is_paid = FALSE
+WHERE is_paying = FALSE
   AND DATE_ADD(selected_time, INTERVAL 10 MINUTE) < NOW();
 
 SELECT *
@@ -33,3 +33,6 @@ VALUES (85, 'A-5');
 
 SELECT *
 FROM book_seat;
+
+UPDATE book_place_time
+SET vacancy = 186;

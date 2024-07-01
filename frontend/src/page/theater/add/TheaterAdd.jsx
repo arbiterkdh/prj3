@@ -50,7 +50,15 @@ export function TheaterAdd({ setCityName, cityList, setIsModifying }) {
           position: "bottom-right",
         });
       })
-      .catch(() => {})
+      .catch((err) => {
+        if (err.response.status === 409) {
+          toast({
+            status: "warning",
+            description: "이미 존재하는 지점입니다.",
+            position: "bottom-right",
+          });
+        }
+      })
       .finally(() => {
         setLocation("");
         setIsModifying(false);
@@ -67,7 +75,10 @@ export function TheaterAdd({ setCityName, cityList, setIsModifying }) {
             placeholder={"선택"}
             border={"1px solid"}
             borderRadius={"none"}
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) => {
+              setCity(e.target.value);
+              setCityName(e.target.value);
+            }}
           >
             {cityList.map((city) => (
               <option key={city} value={city} style={{ borderRadius: "none" }}>

@@ -38,10 +38,11 @@ public class BookSeatService {
     private final TheaterMapper theaterMapper;
     private final MovieMapper movieMapper;
 
-    public Map<String, Object> getDataByBookPlaceTimeId(Integer bookPlaceTimeId) {
+    public Map<String, Object> getDataByBookPlaceTimeId(Integer bookPlaceTimeId, Integer bookSeatMemberNumber) {
         Map<String, Object> data = new HashMap<>();
 
         List<String> rowColList = bookSeatMapper.selectAllRowColByBookPlaceTimeId(bookPlaceTimeId);
+        List<String> selectedList = bookSeatMapper.selectAllRowColByBookPlaceTimeIdAndBookSeatMemberNumberWithoutPayment(bookPlaceTimeId, bookSeatMemberNumber);
         BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookPlaceTimeId);
         TheaterBoxMovie theaterBoxMovie = theaterBoxMapper.selectTheaterBoxMovieByBookPlaceTimeId(bookPlaceTimeId);
         TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(theaterBoxMovie.getId());
@@ -51,6 +52,7 @@ public class BookSeatService {
         movie.setMovieImageFile(file);
 
         data.put("rowColList", rowColList);
+        data.put("selectedList", selectedList);
         data.put("bookPlaceTime", bookPlaceTime);
         data.put("theaterBoxMovie", theaterBoxMovie);
         data.put("theaterBox", theaterBox);
@@ -86,11 +88,24 @@ public class BookSeatService {
         return new ArrayList<String>();
     }
 
-    public void deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber) {
+    public void deleteAllBookSeatByBookSeatMemberNumber(Integer bookSeatMemberNumber, Integer bookPlaceTimeId) {
+        Integer count = bookSeatMapper.countAllBookSeatByBookSeatMemberNumberAndBookPlaceTimeIdWithoutPayment(bookSeatMemberNumber, bookPlaceTimeId);
+
+        bookSeatMapper.updateBookPlaceTimeVacancyByBookPlaceTimeIdUsingBookSeatMemberNumberWithoutPaymentCounted(count, bookPlaceTimeId);
+
         bookSeatMapper.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
     }
 
     public void removeBookSeatByTimeoutExpiredWithoutPayment() {
-        bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
+        List<BookPlaceTime> bookPlaceTimeList = bookSeatMapper.selectAllBookPlaceTimeByTimeoutExpiredWithoutPayment();
+
+        if (bookPlaceTimeList != null) {
+
+            for (BookPlaceTime bookPlaceTime : bookPlaceTimeList) {
+                bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTime.getBookPlaceTimeId(), 1);
+            }
+
+            bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
+        }
     }
 }

@@ -20,12 +20,14 @@ public class BookSeatController {
     private final BookSeatService bookSeatService;
     private final BookService bookService;
 
-    @GetMapping("{bookPlaceTimeId}")
-    public Map<String, Object> bookTheaterSeat(@PathVariable Integer bookPlaceTimeId) {
+    @GetMapping("")
+    public Map<String, Object> bookTheaterSeat(
+            @RequestParam("bookplacetimeid") Integer bookPlaceTimeId,
+            @RequestParam("bookseatmembernumber") Integer bookSeatMemberNumber) {
 
         bookSeatService.removeBookSeatByTimeoutExpiredWithoutPayment();
 
-        return bookSeatService.getDataByBookPlaceTimeId(bookPlaceTimeId);
+        return bookSeatService.getDataByBookPlaceTimeId(bookPlaceTimeId, bookSeatMemberNumber);
     }
 
     @PostMapping("state")
@@ -40,18 +42,25 @@ public class BookSeatController {
 
         String bookSeatState = bookSeatService.handleBookSeat(bookSeat);
         List<String> rowColList = bookSeatService.getRowColList(bookPlaceTime);
+        BookPlaceTime updatedBookPlaceTime = bookService.getBookPlaceTimeByBookPlaceTimeId(bookPlaceTimeId);
+
+        Map<String, Object> data = Map.of(
+                "rowColList", rowColList,
+                "bookPlaceTime", updatedBookPlaceTime);
 
         if (bookSeatState.equals("alreadyBooked")) { // 409
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(rowColList);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(data);
         } else if (bookSeatState.equals("deleted") || bookSeatState.equals("added")) {
-            return ResponseEntity.ok(rowColList);
+            return ResponseEntity.ok(data);
         }
         return null;
     }
 
-    @DeleteMapping("{bookSeatMemberNumber}/delete")
-    public void cancelBookSoDeleteAllBookSeat(@PathVariable Integer bookSeatMemberNumber) {
-        bookSeatService.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber);
+    @DeleteMapping("delete")
+    public void deleteAllBookSeatByClickingCloseButton(
+            @RequestParam("bookseatmembernumber") Integer bookSeatMemberNumber,
+            @RequestParam("bookplacetimeid") Integer bookPlaceTimeId) {
+        bookSeatService.deleteAllBookSeatByBookSeatMemberNumber(bookSeatMemberNumber, bookPlaceTimeId);
     }
 
 }

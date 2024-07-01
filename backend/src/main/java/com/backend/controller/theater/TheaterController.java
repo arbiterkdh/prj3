@@ -38,7 +38,7 @@ public class TheaterController {
             theaterService.add(theater);
             return ResponseEntity.ok().build();
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
     @GetMapping("list")
