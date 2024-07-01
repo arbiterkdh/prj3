@@ -22,6 +22,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -47,6 +48,7 @@ export function PromoResult() {
   const pageSize = 10;
   const toast = useToast();
   const account = useContext(LoginContext);
+  const tableBg = useColorModeValue("gray.100", "gray.700");
 
   const fetchEventResults = async (page, search) => {
     try {
@@ -123,6 +125,25 @@ export function PromoResult() {
       event.eventName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  const maskEmail = (email) => {
+    const [localPart, domain] = email.split("@");
+    const domainPart = domain.split(".");
+    if (localPart.length <= 4) {
+      return email; // 로컬 파트가 너무 짧은 경우 마스킹하지 않음
+    }
+    const maskedLocalPart = localPart.slice(0, localPart.length - 2) + "**";
+    const maskedDomainPart =
+      "**" + domainPart[0].slice(2) + "." + domainPart[1];
+    return `${maskedLocalPart}@${maskedDomainPart}`;
+  };
+
+  const maskNickName = (nickName) => {
+    if (nickName.length <= 1) {
+      return "*"; // 닉네임이 너무 짧은 경우 전체를 마스킹
+    }
+    return "*" + nickName.slice(1);
+  };
+
   return (
     <Center>
       <CenterBox>
@@ -196,10 +217,14 @@ export function PromoResult() {
                         <Td>
                           <Button
                             border={"2px solid red"}
-                            borderRadius={"10px"}
+                            borderRadius={"20px"}
                             bg={"red.500"}
                             color={"white"}
                             _hover={{ bg: "darkred" }}
+                            _dark={{
+                              bgColor: "red.800",
+                              _hover: { bg: "red.900" },
+                            }}
                             onClick={() => handleResultClick(event)}
                           >
                             결과확인
@@ -254,24 +279,26 @@ export function PromoResult() {
           )}
         </Box>
         {selectedEvent && (
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>{selectedEvent.eventName} 당첨자</ModalHeader>
+            <ModalContent borderRadius="md" boxShadow="xl">
+              <ModalHeader fontSize="2xl" fontWeight="bold">
+                {selectedEvent.eventName} 당첨자
+              </ModalHeader>
               <ModalBody>
                 <TableContainer>
                   <Table variant="simple">
                     <Thead>
-                      <Tr>
+                      <Tr bg={useColorModeValue("gray.200", "gray.600")}>
                         <Th>이메일</Th>
                         <Th>당첨자 닉네임</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {selectedEvent.winners.map((winner, index) => (
-                        <Tr key={index}>
-                          <Td>{winner.email}</Td>
-                          <Td>{winner.nickName}</Td>
+                        <Tr key={index} _hover={{ bg: tableBg }}>
+                          <Td>{maskEmail(winner.email)}</Td>
+                          <Td>{maskNickName(winner.nickName)}</Td>
                         </Tr>
                       ))}
                     </Tbody>
@@ -279,7 +306,9 @@ export function PromoResult() {
                 </TableContainer>
               </ModalBody>
               <ModalFooter>
-                <Button onClick={onClose}>닫기</Button>
+                <Button onClick={onClose} colorScheme="red" mr={3}>
+                  닫기
+                </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>

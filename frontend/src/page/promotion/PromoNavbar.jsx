@@ -72,11 +72,25 @@ export function PromoNavbar() {
           )}
         </Box>
         <Tabs isFitted variant="enclosed" width="100%" index={tabIndex}>
-          <TabList mb="2em" borderBottom="2px solid" borderColor="red.500">
+          <TabList
+            mb="2em"
+            borderBottom="2px solid"
+            borderColor="red.500"
+            _dark={{
+              borderColor: "red.800",
+            }}
+            borderRadius="10px 10px 0 0"
+            overflow="hidden" // 탭의 모서리가 둥글게 보이도록 하기 위해 추가
+          >
             <Tab
               onClick={() => handleTabClick("/promotion/all")}
               _selected={{ color: "white", bg: "red.500" }}
               _hover={{ bg: "red.400" }}
+              borderRadius="10px 0 0 0"
+              _dark={{
+                _selected: { color: "white", bg: "red.700" },
+                _hover: { bg: "red.800" },
+              }}
             >
               전체
             </Tab>
@@ -84,6 +98,10 @@ export function PromoNavbar() {
               onClick={() => handleTabClick("/promotion/movie")}
               _selected={{ color: "white", bg: "red.500" }}
               _hover={{ bg: "red.400" }}
+              _dark={{
+                _selected: { color: "white", bg: "red.700" },
+                _hover: { bg: "red.800" },
+              }}
             >
               영화
             </Tab>
@@ -91,6 +109,10 @@ export function PromoNavbar() {
               onClick={() => handleTabClick("/promotion/theater")}
               _selected={{ color: "white", bg: "red.500" }}
               _hover={{ bg: "red.400" }}
+              _dark={{
+                _selected: { color: "white", bg: "red.700" },
+                _hover: { bg: "red.800" },
+              }}
             >
               극장
             </Tab>
@@ -98,6 +120,10 @@ export function PromoNavbar() {
               onClick={() => handleTabClick("/promotion/membership")}
               _selected={{ color: "white", bg: "red.500" }}
               _hover={{ bg: "red.400" }}
+              _dark={{
+                _selected: { color: "white", bg: "red.700" },
+                _hover: { bg: "red.800" },
+              }}
             >
               멤버십
             </Tab>
@@ -105,6 +131,11 @@ export function PromoNavbar() {
               onClick={() => handleTabClick("/promotion/discount")}
               _selected={{ color: "white", bg: "red.500" }}
               _hover={{ bg: "red.400" }}
+              borderRadius="0 10px 0 0"
+              _dark={{
+                _selected: { color: "white", bg: "red.700" },
+                _hover: { bg: "red.800" },
+              }}
             >
               제휴/할인
             </Tab>

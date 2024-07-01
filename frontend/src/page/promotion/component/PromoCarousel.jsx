@@ -29,7 +29,7 @@ const NextArrow = ({ onClick }) => {
         _hover: { bg: "red.600" },
         _active: { bg: "red.500" },
       }}
-      borderRadius="40%"
+      borderRadius="50%"
       boxShadow="0 0 10px rgba(0, 0, 0, 0.5)"
       zIndex={1}
     />
@@ -54,7 +54,7 @@ const PrevArrow = ({ onClick }) => {
         _hover: { bg: "red.600" },
         _active: { bg: "red.500" },
       }}
-      borderRadius="40%"
+      borderRadius="50%"
       boxShadow="0 0 10px rgba(0, 0, 0, 0.5)"
       zIndex={1}
     />
@@ -98,57 +98,63 @@ const PromoCarousel = () => {
   };
 
   return (
-    <Slider {...settings}>
-      {recommendedPromos.map((promo) => {
-        const recommendedFile = promo.fileList.find(
-          (file) => file.fileType === "recommended",
-        );
+    <Box width="100%" mx="auto" mt={5}>
+      <Slider {...settings}>
+        {recommendedPromos.map((promo) => {
+          const recommendedFile = promo.fileList.find(
+            (file) => file.fileType === "recommended",
+          );
 
-        return (
-          <Box
-            key={promo.id}
-            onClick={() => navigate(`/promotion/view/${promo.id}`)}
-            p={2}
-            cursor="pointer"
-          >
-            {recommendedFile && (
-              <Image
-                src={recommendedFile.filePath}
-                alt={promo.title}
-                borderRadius="lg"
-                boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
-              />
-            )}
-            <Box p={2}>
-              <Flex alignItems="center">
-                <Text
-                  fontSize="sm"
-                  fontWeight="bold"
-                  isTruncated
-                  maxWidth="calc(100% - 150px)"
-                  display="inline-block"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  textOverflow="ellipsis"
-                >
-                  {promo.title}
-                </Text>
-                <Text
-                  fontSize="sm"
-                  color="gray.500"
-                  whiteSpace="nowrap"
-                  display="inline-block"
-                  marginLeft="auto"
-                >
-                  {formatDate(promo.eventStartDate)} ~{" "}
-                  {formatDate(promo.eventEndDate)}
-                </Text>
-              </Flex>
+          return (
+            <Box
+              key={promo.id}
+              onClick={() => navigate(`/promotion/view/${promo.id}`)}
+              p={2}
+              cursor="pointer"
+              width="100%"
+            >
+              {recommendedFile && (
+                <Image
+                  src={recommendedFile.filePath}
+                  alt={promo.title}
+                  borderRadius="lg"
+                  boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
+                  width="100%"
+                  height="250px"
+                  objectFit="fill"
+                />
+              )}
+              <Box p={2}>
+                <Flex alignItems="center">
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    isTruncated
+                    maxWidth="calc(100% - 150px)"
+                    display="inline-block"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                  >
+                    {promo.title}
+                  </Text>
+                  <Text
+                    fontSize="sm"
+                    color="gray.500"
+                    whiteSpace="nowrap"
+                    display="inline-block"
+                    marginLeft="auto"
+                  >
+                    {formatDate(promo.eventStartDate)} ~{" "}
+                    {formatDate(promo.eventEndDate)}
+                  </Text>
+                </Flex>
+              </Box>
             </Box>
-          </Box>
-        );
-      })}
-    </Slider>
+          );
+        })}
+      </Slider>
+    </Box>
   );
 };
 

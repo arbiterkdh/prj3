@@ -9,10 +9,14 @@ const ShowMoreButton = ({ buttonOnclick }) => {
         onClick={buttonOnclick}
         size={"sm"}
         border={"2px solid #FF4357"}
+        _hover={{ bg: "red.500", color: "white" }}
         borderRadius={"20px"}
         display="flex"
         alignItems="center"
         justifyContent="center"
+        _dark={{
+          _hover: { bg: "red.800" },
+        }}
       >
         <span style={{ marginRight: "8px" }}>더보기</span>
         <FontAwesomeIcon icon={faAngleRight} />
