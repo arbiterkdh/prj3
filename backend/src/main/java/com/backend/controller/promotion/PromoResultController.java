@@ -4,6 +4,7 @@ import com.backend.domain.promotion.PromoResult;
 import com.backend.service.promotion.PromoResultService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -16,6 +17,7 @@ public class PromoResultController {
     private final PromoResultService promoResultService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Void> addPromoResult(@RequestBody PromoResult promoResult) {
         promoResultService.addPromoResult(promoResult);
         return ResponseEntity.ok().build();
@@ -24,9 +26,8 @@ public class PromoResultController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> getPromoResults(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(required = false) Integer memberNumber) { // 멤버 번호 파라미터 추가
-        Map<String, Object> results = promoResultService.getPromoResults(page, pageSize, memberNumber);
+            @RequestParam(defaultValue = "10") int pageSize) {
+        Map<String, Object> results = promoResultService.getPromoResults(page, pageSize);
         return ResponseEntity.ok(results);
     }
 
@@ -37,12 +38,14 @@ public class PromoResultController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Void> updatePromoResult(@PathVariable Integer id, @RequestBody PromoResult promoResult) {
         promoResultService.updatePromoResult(id, promoResult);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity<Void> deletePromoResult(@PathVariable Integer id) {
         promoResultService.deletePromoResult(id);
         return ResponseEntity.ok().build();

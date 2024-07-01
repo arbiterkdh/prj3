@@ -1,6 +1,6 @@
 import { Box, Flex, SimpleGrid, Spacer, Spinner, Text } from "@chakra-ui/react";
 import PromoSearchBar from "../component/PromoSearchBar.jsx";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PromoCard from "../component/PromoCard.jsx";
 import usePromoList from "../component/UsePromoList.jsx";
@@ -15,32 +15,32 @@ export function PromoList({
   showPagination = true,
   pageSize = 20,
 }) {
-  const [promoSearch, setPromoSearch] = useState("");
   const eventType = propEventType || useParams().eventType;
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [page, setPage] = useState(1);
-  const [allPromos, setAllPromos] = useState([]);
-
-  const { promoList, loading, pageInfo } = usePromoList(
+  const [promoSearch, setPromoSearch] = useState(
+    searchParams.get("search") || "",
+  );
+  const [page, setPage] = useState(parseInt(searchParams.get("page"), 10) || 1);
+  const { promoList, loading, pageInfo, setPromoList } = usePromoList(
     eventType === "all" ? "" : eventType,
-    eventStatusList,
     promoSearch,
     page,
     pageSize,
   );
 
   useEffect(() => {
-    if (!loading) {
-      setAllPromos((prevPromos) => [...prevPromos, ...promoList]);
-    }
-  }, [promoList, loading]);
+    setPromoList([]);
+  }, [promoSearch, setPromoList]);
 
   const handleSearch = (searchTerm) => {
-    setSearchParams({ page: 1, search: searchTerm });
-    setPromoSearch(searchTerm);
+    if (searchTerm.trim() === "") {
+      setSearchParams({});
+      setPromoSearch("");
+    } else {
+      setSearchParams({ page: 1, search: searchTerm });
+      setPromoSearch(searchTerm);
+    }
     setPage(1);
-    setAllPromos([]);
   };
 
   const handleLoadMore = () => {
@@ -49,7 +49,9 @@ export function PromoList({
 
   useEffect(() => {
     const searchTerm = searchParams.get("search") || "";
+    const currentPage = parseInt(searchParams.get("page"), 10) || 1;
     setPromoSearch(searchTerm);
+    setPage(currentPage);
   }, [searchParams]);
 
   if (loading && page === 1) {
@@ -65,15 +67,17 @@ export function PromoList({
           </Text>
         )}
         <Spacer />
-        {showSearch && <PromoSearchBar onSearch={handleSearch} />}
+        {showSearch && (
+          <PromoSearchBar searchValue={promoSearch} onSearch={handleSearch} />
+        )}
       </Flex>
-      {allPromos.length === 0 ? (
+      {promoList.length === 0 ? (
         <Text textAlign="center" mt={5} p={10}>
           해당 이벤트가 없습니다.
         </Text>
       ) : (
         <SimpleGrid spacing={6} templateColumns="repeat(4, 1fr)" mb={6}>
-          {allPromos.slice(0.4).map((promo) => (
+          {promoList.map((promo) => (
             <PromoCard key={promo.id} promo={promo} />
           ))}
         </SimpleGrid>
@@ -89,3 +93,5 @@ export function PromoList({
     </Box>
   );
 }
+
+export default PromoList;

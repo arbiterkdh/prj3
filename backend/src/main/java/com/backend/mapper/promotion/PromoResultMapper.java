@@ -1,6 +1,5 @@
 package com.backend.mapper.promotion;
 
-import com.backend.domain.promotion.Promo;
 import com.backend.domain.promotion.PromoResult;
 import org.apache.ibatis.annotations.*;
 
@@ -8,25 +7,11 @@ import java.util.List;
 
 @Mapper
 public interface PromoResultMapper {
-
     @Insert("""
             INSERT INTO promo_result (promotion_id, announcement_date, winners)
             VALUES (#{promotionId}, #{announcementDate}, #{winnersJson})
             """)
-    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insertPromoResult(PromoResult promoResult);
-
-    @Insert("""
-            INSERT INTO promo_winner (promo_result_id, member_id)
-            VALUES (#{promoResultId}, (SELECT number FROM member WHERE email = #{email} AND nick_name = #{nickName}))
-            """)
-    int insertWinner(int promoResultId, String email, String nickName);
-
-    @Select("""
-            SELECT eventType, title FROM promo
-            WHERE id = #{promotionId}
-            """)
-    Promo getPromoById(int promotionId);
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
@@ -43,10 +28,9 @@ public interface PromoResultMapper {
     int countPromoResults();
 
     @Delete("""
-            DELETE FROM promo_result
-            WHERE promotion_id = #{promotionId}
+            DELETE FROM promo_result WHERE id = #{id}
             """)
-    int deletePromoResult(int promotionId);
+    int deletePromoResult(Integer id);
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
@@ -72,25 +56,4 @@ public interface PromoResultMapper {
             WHERE id = #{id}
             """)
     PromoResult selectPromoResultById(int id);
-
-    // 멤버 번호로 결과를 필터링하는 쿼리 추가
-    @Select("""
-            SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,
-                   p.eventType as eventType, p.title as eventName
-            FROM promo_result pr
-            JOIN promo p ON pr.promotion_id = p.id
-            JOIN promo_winner pw ON pr.id = pw.promo_result_id
-            WHERE pw.member_id = #{memberNumber}
-            LIMIT #{offset}, #{pageSize}
-            """)
-    List<PromoResult> selectPromoResultsByMemberNumber(int memberNumber, int offset, int pageSize);
-
-    @Select("""
-            SELECT COUNT(*)
-            FROM promo_result pr
-            JOIN promo_winner pw ON pr.id = pw.promo_result_id
-            WHERE pw.member_id = #{memberNumber}
-            """)
-    int countPromoResultsByMemberNumber(int memberNumber);
-    
 }

@@ -5,6 +5,7 @@ import com.backend.service.promotion.PromoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +21,12 @@ public class PromoController {
     private final PromoService promoService;
 
     @PostMapping("add")
-    public ResponseEntity addPromo(Promo promo, @RequestParam(value = "files[]", required = false) MultipartFile[] files) throws IOException {
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
+    public ResponseEntity addPromo(Promo promo, @RequestParam(value = "promoDetailFile", required = false) MultipartFile[] promoDetailFile,
+                                   @RequestParam(value = "promoRecommendedFile", required = false) MultipartFile[] promoRecommendedFile,
+                                   @RequestParam(value = "promoThumbnailFile", required = false) MultipartFile[] promoThumbnailFile) throws IOException {
         if (promoService.validate(promo)) {
-            promoService.addPromo(promo, files);
+            promoService.addPromo(promo, promoDetailFile, promoRecommendedFile, promoThumbnailFile);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
@@ -52,14 +56,18 @@ public class PromoController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public void deletePromo(@PathVariable Integer id) {
         promoService.promoRemove(id);
     }
 
     @PutMapping("modify")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity modifyPromo(Promo promo,
                                       @RequestParam(value = "removeFileList[]", required = false) List<String> removeFileList,
-                                      @RequestParam(value = "addFileList[]", required = false) MultipartFile[] addFileList) throws IOException {
+                                      @RequestParam(value = "addDetailFiles", required = false) MultipartFile[] addDetailFiles,
+                                      @RequestParam(value = "addRecommendedFiles", required = false) MultipartFile[] addRecommendedFiles,
+                                      @RequestParam(value = "addThumbnailFiles", required = false) MultipartFile[] addThumbnailFiles) throws IOException {
         Promo existingPromo = promoService.get(promo.getId());
         if (existingPromo == null) {
             return ResponseEntity.notFound().build();
@@ -67,7 +75,7 @@ public class PromoController {
         promo.setIsRecommended(existingPromo.getIsRecommended());
 
         if (promoService.validate(promo)) {
-            promoService.modify(promo, removeFileList, addFileList);
+            promoService.modify(promo, removeFileList, addDetailFiles, addRecommendedFiles, addThumbnailFiles);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
@@ -75,6 +83,7 @@ public class PromoController {
     }
 
     @PutMapping("{id}/add-recommendation")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity addRecommendation(@PathVariable Integer id) {
         try {
             promoService.addRecommendation(id);
@@ -85,20 +94,9 @@ public class PromoController {
     }
 
     @PutMapping("{id}/remove-recommendation")
+    @PreAuthorize("hasAuthority('SCOPE_admin')")
     public ResponseEntity removeRecommendation(@PathVariable Integer id) {
         promoService.updateRecommendation(id, false);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("{id}/enable-apply-button")
-    public ResponseEntity enableApplyButton(@PathVariable Integer id) {
-        promoService.updateApplyButtonVisibility(id, true);
-        return ResponseEntity.ok().build();
-    }
-
-    @PutMapping("{id}/disable-apply-button")
-    public ResponseEntity disableApplyButton(@PathVariable Integer id) {
-        promoService.updateApplyButtonVisibility(id, false);
         return ResponseEntity.ok().build();
     }
 
@@ -106,11 +104,5 @@ public class PromoController {
     public ResponseEntity<List<Promo>> getRecommendations() {
         List<Promo> recommendedPromos = promoService.getRecommendedPromotions();
         return ResponseEntity.ok(recommendedPromos);
-    }
-
-    @GetMapping("list-apply-button-visible")
-    public ResponseEntity<List<Promo>> getPromosWithVisibleApplyButton() {
-        List<Promo> promos = promoService.getPromotionsWithVisibleApplyButton();
-        return ResponseEntity.ok(promos);
     }
 }

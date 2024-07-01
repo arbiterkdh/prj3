@@ -33,23 +33,28 @@ public class PromoService {
     @Value("${image.src.prefix}")
     String srcPrefix;
 
-    public void addPromo(Promo promo, MultipartFile[] files) throws IOException {
+    public void addPromo(Promo promo, MultipartFile[] detailFile, MultipartFile[] recommendedFile, MultipartFile[] thumbnailFile) throws IOException {
         if (promo.getIsRecommended() == null) {
             promo.setIsRecommended(false);
         }
         promoMapper.insertPromo(promo);
+
+        uploadFiles(promo.getId(), "detail", detailFile);
+        uploadFiles(promo.getId(), "recommended", recommendedFile);
+        uploadFiles(promo.getId(), "thumbnail", thumbnailFile);
+    }
+
+    private void uploadFiles(int promoId, String fileType, MultipartFile[] files) throws IOException {
         if (files != null) {
             for (MultipartFile file : files) {
-                promoMapper.insertFileName(promo.getId(), file.getOriginalFilename());
-
-                String key = STR."prj3/promo/\{promo.getId()}/\{file.getOriginalFilename()}";
+                promoMapper.insertFileName(promoId, fileType, file.getOriginalFilename());
+                String key = STR."prj3/promo/\{promoId}/\{file.getOriginalFilename()}";
                 PutObjectRequest objectRequest = PutObjectRequest.builder()
                         .bucket(bucketName)
                         .key(key)
                         .acl(ObjectCannedACL.PUBLIC_READ)
                         .build();
-                s3Client.putObject(objectRequest,
-                        RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+                s3Client.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
             }
         }
     }
@@ -102,10 +107,10 @@ public class PromoService {
     private void setPromotionFiles(List<Promo> promos) {
         LocalDate now = LocalDate.now();
         for (Promo promo : promos) {
-            List<String> fileNames = promoMapper.selectFileNameByPromoId(promo.getId());
-            List<PromoFile> files = fileNames.stream()
-                    .map(name -> new PromoFile(name, STR."\{srcPrefix}/promo/\{promo.getId()}/\{name}"))
-                    .toList();
+            List<PromoFile> files = promoMapper.selectFileNamesByPromoId(promo.getId());
+            for (PromoFile file : files) {
+                file.setFilePath(String.format("%s/promo/%d/%s", srcPrefix, promo.getId(), file.getFileName()));
+            }
             promo.setFileList(files);
 
             if (promo.getEventEndDate().isBefore(now)) {
@@ -134,9 +139,9 @@ public class PromoService {
     }
 
     public void promoRemove(Integer id) {
-        List<String> fileNames = promoMapper.selectFileNameByPromoId(id);
-
-        for (String fileName : fileNames) {
+        List<PromoFile> promoFiles = promoMapper.selectFileNamesByPromoId(id);
+        for (PromoFile promoFile : promoFiles) {
+            String fileName = promoFile.getFileName();
             String key = STR."prj3/promo/\{id}/\{fileName}";
             DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
                     .bucket(bucketName)
@@ -148,7 +153,7 @@ public class PromoService {
         promoMapper.deleteById(id);
     }
 
-    public void modify(Promo promo, List<String> removeFileList, MultipartFile[] addFileList) throws IOException {
+    public void modify(Promo promo, List<String> removeFileList, MultipartFile[] addDetailFiles, MultipartFile[] addRecommendedFiles, MultipartFile[] addThumbnailFiles) throws IOException {
         if (removeFileList != null && !removeFileList.isEmpty()) {
             for (String fileName : removeFileList) {
                 String key = STR."prj3/promo/\{promo.getId()}/\{fileName}";
@@ -161,23 +166,9 @@ public class PromoService {
                 promoMapper.deleteFileByPromoIdAndName(promo.getId(), fileName);
             }
         }
-        if (addFileList != null && addFileList.length > 0) {
-            List<String> fileNameList = promoMapper.selectFileNameByPromoId(promo.getId());
-            for (MultipartFile file : addFileList) {
-                String fileName = file.getOriginalFilename();
-                if (!fileNameList.contains(fileName)) {
-                    promoMapper.insertFileName(promo.getId(), fileName);
-                }
-                String key = STR."prj3/promo/\{promo.getId()}/\{fileName}";
-                PutObjectRequest objectRequest = PutObjectRequest.builder()
-                        .bucket(bucketName)
-                        .key(key)
-                        .acl(ObjectCannedACL.PUBLIC_READ)
-                        .build();
-
-                s3Client.putObject(objectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-            }
-        }
+        uploadFiles(promo.getId(), "detail", addDetailFiles);
+        uploadFiles(promo.getId(), "recommended", addRecommendedFiles);
+        uploadFiles(promo.getId(), "thumbnail", addThumbnailFiles);
         promoMapper.update(promo);
     }
 
@@ -191,12 +182,6 @@ public class PromoService {
         return promos;
     }
 
-    public List<Promo> getPromotionsWithVisibleApplyButton() {
-        List<Promo> promos = promoMapper.selectPromotionsWithVisibleApplyButton();
-        setPromotionFiles(promos);
-        return promos;
-    }
-
     public void addRecommendation(Integer id) {
         Promo promo = promoMapper.selectById(id);
         if (promo.getIsRecommended()) {
@@ -205,13 +190,9 @@ public class PromoService {
         promoMapper.updateRecommendation(id, true);
     }
 
-    // 추천 이벤트에서 삭제하는 메서드 추가
     public void removeRecommendation(Integer id) {
         promoMapper.updateRecommendation(id, false);
     }
 
-    public void updateApplyButtonVisibility(Integer id, boolean isApplyButtonVisible) {
-        promoMapper.updateApplyButtonVisibility(id, isApplyButtonVisible);
-    }
-
 }
+

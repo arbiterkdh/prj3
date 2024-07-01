@@ -47,7 +47,6 @@ import {
 import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
-import EventTypeLabel from "../page/promotion/component/PromoeventTypeLabels.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -147,20 +146,15 @@ export function MemberMyPage() {
   }, [nickName, page]);
 
   useEffect(() => {
-    if (member.number) {
-      axios
-        .get(`/api/promotion/eventResult`, {
-          params: {
-            memberNumber: member.number,
-          },
-        })
-        .then((res) => {
-          setPromoResults(res.data.results);
-        })
-        .catch(() => {})
-        .finally(() => {});
-    }
-  }, [member.number]);
+    // 당첨자 결과 데이터 가져오기
+    axios
+      .get(`/api/promotion/eventResult?search=${member.email}`)
+      .then((res) => {
+        setPromoResults(res.data.results);
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }, [member.email]);
 
   function handleClick() {
     axios
@@ -268,7 +262,6 @@ export function MemberMyPage() {
             <Tab>예매내역</Tab>
             <Tab>결제내역({pageInfoPaymentResult.totalCount})</Tab>
             <Tab>취소내역({pageInfoPaymentCancelResult.totalCount})</Tab>
-            <Tab>응모결과확인</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -572,38 +565,6 @@ export function MemberMyPage() {
                       </Td>
                     </Tr>
                   )}
-                </Tbody>
-              </Table>
-            </TabPanel>
-            <TabPanel>
-              <Heading>나의 응모 내역</Heading>
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>번호</Th>
-                    <Th>분류</Th>
-                    <Th>이벤트명</Th>
-                    <Th>당첨자 발표</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {promoResults.map((result, index) => (
-                    <Tr key={index}>
-                      <Td>{index + 1}</Td>
-                      <Td>
-                        <EventTypeLabel eventType={result.eventType} />
-                      </Td>
-                      <Td>{result.eventName}</Td>
-                      <Td>
-                        <Button
-                          colorScheme={"blue"}
-                          onClick={() => navigate("/promotion/eventResult")}
-                        >
-                          결과확인
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
                 </Tbody>
               </Table>
             </TabPanel>

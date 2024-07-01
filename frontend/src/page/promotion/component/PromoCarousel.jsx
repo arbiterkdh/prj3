@@ -11,37 +11,51 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-const SampleNextArrow = ({ onClick }) => {
+const NextArrow = ({ onClick }) => {
   return (
     <IconButton
       icon={<FontAwesomeIcon icon={faChevronRight} />}
       onClick={onClick}
       position="absolute"
-      top="40%"
-      right="0"
-      transform="translateY(-50%)"
-      backgroundColor="gray.300"
-      borderRadius="40%"
-      _hover={{ backgroundColor: "gray.400" }}
-      _active={{ backgroundColor: "gray.500" }}
+      top="45%"
+      right="-5"
+      transform="translateY(-60%)"
+      color="whiteAlpha.900"
+      bg="red.500"
+      _hover={{ bg: "red.600" }}
+      _active={{ bg: "red.800" }}
+      _dark={{
+        bg: "red.700",
+        _hover: { bg: "red.600" },
+        _active: { bg: "red.500" },
+      }}
+      borderRadius="50%"
+      boxShadow="0 0 10px rgba(0, 0, 0, 0.5)"
       zIndex={1}
     />
   );
 };
 
-const SamplePrevArrow = ({ onClick }) => {
+const PrevArrow = ({ onClick }) => {
   return (
     <IconButton
       icon={<FontAwesomeIcon icon={faChevronLeft} />}
       onClick={onClick}
       position="absolute"
-      top="40%"
-      left="0"
-      transform="translateY(-50%)"
-      backgroundColor="gray.300"
-      borderRadius="40%"
-      _hover={{ backgroundColor: "gray.400" }}
-      _active={{ backgroundColor: "gray.500" }}
+      top="45%"
+      left="-5"
+      transform="translateY(-60%)"
+      color="whiteAlpha.900"
+      bg="red.500"
+      _hover={{ bg: "red.600" }}
+      _active={{ bg: "red.800" }}
+      _dark={{
+        bg: "red.700",
+        _hover: { bg: "red.600" },
+        _active: { bg: "red.500" },
+      }}
+      borderRadius="50%"
+      boxShadow="0 0 10px rgba(0, 0, 0, 0.5)"
       zIndex={1}
     />
   );
@@ -72,8 +86,8 @@ const PromoCarousel = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   const formatDate = (dateString) => {
@@ -84,50 +98,63 @@ const PromoCarousel = () => {
   };
 
   return (
-    <Slider {...settings}>
-      {recommendedPromos.map((promo) => (
-        <Box
-          key={promo.id}
-          onClick={() => navigate(`/promotion/view/${promo.id}`)}
-          p={2}
-          cursor="pointer"
-        >
-          {promo.fileList?.length > 0 && (
-            <Image
-              src={promo.fileList[0].src}
-              alt={promo.title}
-              borderRadius="md"
-            />
-          )}
-          <Box p={2}>
-            <Flex alignItems="center">
-              <Text
-                fontSize="sm"
-                fontWeight="bold"
-                isTruncated
-                maxWidth="calc(100% - 150px)"
-                display="inline-block"
-                whiteSpace="nowrap"
-                overflow="hidden"
-                textOverflow="ellipsis"
-              >
-                {promo.title}
-              </Text>
-              <Text
-                fontSize="sm"
-                color="gray.500"
-                whiteSpace="nowrap"
-                display="inline-block"
-                marginLeft="auto"
-              >
-                {formatDate(promo.eventStartDate)} ~{" "}
-                {formatDate(promo.eventEndDate)}
-              </Text>
-            </Flex>
-          </Box>
-        </Box>
-      ))}
-    </Slider>
+    <Box width="100%" mx="auto" mt={5}>
+      <Slider {...settings}>
+        {recommendedPromos.map((promo) => {
+          const recommendedFile = promo.fileList.find(
+            (file) => file.fileType === "recommended",
+          );
+
+          return (
+            <Box
+              key={promo.id}
+              onClick={() => navigate(`/promotion/view/${promo.id}`)}
+              p={2}
+              cursor="pointer"
+              width="100%"
+            >
+              {recommendedFile && (
+                <Image
+                  src={recommendedFile.filePath}
+                  alt={promo.title}
+                  borderRadius="lg"
+                  boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
+                  width="100%"
+                  height="250px"
+                  objectFit="fill"
+                />
+              )}
+              <Box p={2}>
+                <Flex alignItems="center">
+                  <Text
+                    fontSize="lg"
+                    fontWeight="bold"
+                    isTruncated
+                    maxWidth="calc(100% - 150px)"
+                    display="inline-block"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                  >
+                    {promo.title}
+                  </Text>
+                  <Text
+                    fontSize="sm"
+                    color="gray.500"
+                    whiteSpace="nowrap"
+                    display="inline-block"
+                    marginLeft="auto"
+                  >
+                    {formatDate(promo.eventStartDate)} ~{" "}
+                    {formatDate(promo.eventEndDate)}
+                  </Text>
+                </Flex>
+              </Box>
+            </Box>
+          );
+        })}
+      </Slider>
+    </Box>
   );
 };
 

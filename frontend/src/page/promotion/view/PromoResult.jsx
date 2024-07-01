@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -22,6 +22,7 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -29,6 +30,10 @@ import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import PromoResultPagination from "../component/PromoResultPagination.jsx";
 import PromoSearchBar from "../component/PromoSearchBar.jsx";
 import EventTypeLabel from "../component/PromoeventTypeLabels.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 export function PromoResult() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,6 +47,8 @@ export function PromoResult() {
   const searchQuery = searchParams.get("search") || "";
   const pageSize = 10;
   const toast = useToast();
+  const account = useContext(LoginContext);
+  const tableBg = useColorModeValue("gray.100", "gray.700");
 
   const fetchEventResults = async (page, search) => {
     try {
@@ -86,7 +93,6 @@ export function PromoResult() {
         isClosable: true,
       });
     } catch (error) {
-      console.error("당첨자 발표를 삭제하는데 실패했습니다.", error);
       toast({
         title: "삭제 실패",
         description: "당첨자 발표 삭제에 실패했습니다.",
@@ -119,6 +125,25 @@ export function PromoResult() {
       event.eventName.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  const maskEmail = (email) => {
+    const [localPart, domain] = email.split("@");
+    const domainPart = domain.split(".");
+    if (localPart.length <= 4) {
+      return email; // 로컬 파트가 너무 짧은 경우 마스킹하지 않음
+    }
+    const maskedLocalPart = localPart.slice(0, localPart.length - 2) + "**";
+    const maskedDomainPart =
+      "**" + domainPart[0].slice(2) + "." + domainPart[1];
+    return `${maskedLocalPart}@${maskedDomainPart}`;
+  };
+
+  const maskNickName = (nickName) => {
+    if (nickName.length <= 1) {
+      return "*"; // 닉네임이 너무 짧은 경우 전체를 마스킹
+    }
+    return "*" + nickName.slice(1);
+  };
+
   return (
     <Center>
       <CenterBox>
@@ -126,39 +151,30 @@ export function PromoResult() {
           당첨자 발표
         </Heading>
         <Box width="100%">
-          <Flex justify="flex-end" mb={5}>
-            <Button
-              size="sm"
-              colorScheme="green"
-              onClick={handleAddClick}
-              mr={2}
+          <Box mb={5} mt={10}>
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              position="relative"
             >
-              당첨자 발표 추가
-            </Button>
-          </Flex>
-          <Box>
-            <Flex alignItems="center">
-              <Box mb={5}>
-                <Text>
-                  -응모하신 이벤트의 당첨 여부는 나의 응모결과 확인을 통해
-                  확인하실 수 있습니다.
-                </Text>
-                <Text>
-                  -개인정보 처리방침에 따라 당첨자 발표일로 부터 6개월간 당첨자
-                  발표내역을 확인할 수 있습니다.
-                </Text>
-              </Box>
-              <Spacer />
-              <Button
-                size="sm"
-                bg="gray.300"
-                onClick={() => navigate(`/mypage?nickName=${nickName}`)}
-              >
-                나의 응모결과 확인
-              </Button>
+              <Text textAlign="center">
+                -이벤트의 당첨 여부는 결과 확인을 통해 확인하실 수 있습니다.
+              </Text>
+              {account.isAdmin() && (
+                <Button
+                  size="sm"
+                  colorScheme="green"
+                  onClick={handleAddClick}
+                  ml={2}
+                  position="absolute"
+                  right={0}
+                >
+                  당첨자 발표 등록
+                </Button>
+              )}
             </Flex>
           </Box>
-          <Box borderBottom={"2px solid black"} />
+          <Box borderBottom={"2px solid black"} mt={10} />
           <Flex>
             <Text as={"b"} mt={4} ml={"20px"}>
               전체 {pageInfo.totalItems}건
@@ -176,8 +192,8 @@ export function PromoResult() {
                     <Th>이벤트명</Th>
                     <Th>발표일</Th>
                     <Th>당첨자 발표</Th>
-                    <Th>수정</Th>
-                    <Th>삭제</Th>
+                    {account.isAdmin() && <Th>수정</Th>}
+                    {account.isAdmin() && <Th>삭제</Th>}
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -200,28 +216,48 @@ export function PromoResult() {
                         </Td>
                         <Td>
                           <Button
-                            colorScheme={"blue"}
+                            border={"2px solid red"}
+                            borderRadius={"20px"}
+                            bg={"red.500"}
+                            color={"white"}
+                            _hover={{ bg: "darkred" }}
+                            _dark={{
+                              bgColor: "red.800",
+                              _hover: { bg: "red.900" },
+                            }}
                             onClick={() => handleResultClick(event)}
                           >
                             결과확인
                           </Button>
                         </Td>
-                        <Td>
-                          <Button
-                            colorScheme={"yellow"}
-                            onClick={() => handleModifyClick(event.promotionId)}
-                          >
-                            수정
-                          </Button>
-                        </Td>
-                        <Td>
-                          <Button
-                            colorScheme={"red"}
-                            onClick={() => handleDeleteClick(event.promotionId)}
-                          >
-                            삭제
-                          </Button>
-                        </Td>
+                        {account.isAdmin() && (
+                          <Td>
+                            <Button
+                              onClick={() =>
+                                handleModifyClick(event.promotionId)
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                style={{ color: "#366ece" }}
+                              />
+                            </Button>
+                          </Td>
+                        )}
+                        {account.isAdmin() && (
+                          <Td>
+                            <Button
+                              onClick={() =>
+                                handleDeleteClick(event.promotionId)
+                              }
+                            >
+                              <FontAwesomeIcon
+                                icon={faTrashCan}
+                                style={{ color: "#db0f0f" }}
+                              />
+                            </Button>
+                          </Td>
+                        )}
                       </Tr>
                     ))
                   ) : (
@@ -243,24 +279,26 @@ export function PromoResult() {
           )}
         </Box>
         {selectedEvent && (
-          <Modal isOpen={isOpen} onClose={onClose}>
+          <Modal isOpen={isOpen} onClose={onClose} size="xl">
             <ModalOverlay />
-            <ModalContent>
-              <ModalHeader>{selectedEvent.eventName} 당첨자</ModalHeader>
+            <ModalContent borderRadius="md" boxShadow="xl">
+              <ModalHeader fontSize="2xl" fontWeight="bold">
+                {selectedEvent.eventName} 당첨자
+              </ModalHeader>
               <ModalBody>
                 <TableContainer>
                   <Table variant="simple">
                     <Thead>
-                      <Tr>
+                      <Tr bg={useColorModeValue("gray.200", "gray.600")}>
                         <Th>이메일</Th>
                         <Th>당첨자 닉네임</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
                       {selectedEvent.winners.map((winner, index) => (
-                        <Tr key={index}>
-                          <Td>{winner.email}</Td>
-                          <Td>{winner.nickName}</Td>
+                        <Tr key={index} _hover={{ bg: tableBg }}>
+                          <Td>{maskEmail(winner.email)}</Td>
+                          <Td>{maskNickName(winner.nickName)}</Td>
                         </Tr>
                       ))}
                     </Tbody>
@@ -268,7 +306,9 @@ export function PromoResult() {
                 </TableContainer>
               </ModalBody>
               <ModalFooter>
-                <Button onClick={onClose}>닫기</Button>
+                <Button onClick={onClose} colorScheme="red" mr={3}>
+                  닫기
+                </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>

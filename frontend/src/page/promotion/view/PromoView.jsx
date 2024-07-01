@@ -1,3 +1,6 @@
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import {
   Box,
   Button,
@@ -16,19 +19,20 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
 import PromoeventTypeLabels from "../component/PromoeventTypeLabels.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
+import { faMinus, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 export function PromoView() {
   const { promoId } = useParams();
   const [promo, setPromo] = useState(null);
-  const [isApplying, setIsApplying] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const account = useContext(LoginContext);
 
   useEffect(() => {
     const fetchPromotion = async () => {
@@ -114,24 +118,6 @@ export function PromoView() {
     }
   };
 
-  const handleApply = () => {
-    if (isApplying) {
-      toast({
-        status: "warning",
-        description: "이미 응모되었습니다.",
-        position: "top",
-      });
-    } else {
-      setIsApplying(true);
-      // 응모 로직을 여기에 추가하세요.
-      toast({
-        status: "success",
-        description: "응모가 완료되었습니다.",
-        position: "top",
-      });
-    }
-  };
-
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString)
@@ -161,44 +147,41 @@ export function PromoView() {
           </Box>
           <Box m={1} borderBottom={"1px solid black"} />
           <Box mt={4}>
-            {promo.isRecommended === true
-              ? promo.fileList?.slice(2).map((file) => (
-                  <Box key={file.name}>
-                    <Image src={file.src} />
-                  </Box>
-                ))
-              : promo.fileList?.slice(1).map((file) => (
-                  <Box key={file.name}>
-                    <Image src={file.src} />
-                  </Box>
-                ))}
+            {promo.fileList
+              ?.filter((file) => file.fileType === "detail")
+              .map((file) => (
+                <Box key={file.fileName} mb={4}>
+                  <Image src={file.filePath} alt={file.fileName} />
+                </Box>
+              ))}
           </Box>
           <Box mt={4}>
             <Text>{promo.content}</Text>
           </Box>
-          {promo.isApplyButtonVisible && (
-            <Center mt={20}>
-              <Button size="lg" colorScheme="blue" onClick={handleApply}>
-                응모하기
+          {account.isAdmin() && (
+            <Box>
+              <Button onClick={() => navigate(`/promotion/modify/${promo.id}`)}>
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  style={{ color: "#366ece" }}
+                />
               </Button>
-            </Center>
+              <Button onClick={onOpen}>
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  style={{ color: "#db0f0f" }}
+                />
+              </Button>
+              <Button onClick={handleAddRecommendation}>
+                추천 이벤트
+                <FontAwesomeIcon icon={faPlus} />
+              </Button>
+              <Button onClick={handleRemoveRecommendation}>
+                추천 이벤트
+                <FontAwesomeIcon icon={faMinus} />
+              </Button>
+            </Box>
           )}
-          <Button
-            colorScheme={"purple"}
-            onClick={() => navigate(`/promotion/modify/${promo.id}`)}
-          >
-            수정
-          </Button>
-          <Button colorScheme={"red"} onClick={onOpen}>
-            삭제
-          </Button>
-          <Button colorScheme={"blue"} onClick={handleAddRecommendation}>
-            추천 이벤트 추가
-          </Button>
-          <Button colorScheme={"yellow"} onClick={handleRemoveRecommendation}>
-            추천 이벤트 삭제
-          </Button>
-
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>

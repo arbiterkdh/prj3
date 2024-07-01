@@ -18,15 +18,14 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { useNavigate } from "react-router-dom";
 
 export function PromoResultAdd() {
   const [promotionId, setPromotionId] = useState("");
-  const [searchQuery, setSearchQuery] = useState(""); // 검색어 상태 추가
+  const [searchQuery, setSearchQuery] = useState("");
   const [announcementDate, setAnnouncementDate] = useState("");
   const [selectedMember, setSelectedMember] = useState(null);
-  const [memberSearchQuery, setMemberSearchQuery] = useState(""); // 회원 검색어 상태 추가
+  const [memberSearchQuery, setMemberSearchQuery] = useState("");
   const [winners, setWinners] = useState([]);
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] = useState(true);
   const toast = useToast();
@@ -164,17 +163,33 @@ export function PromoResultAdd() {
 
   return (
     <Center>
-      <CenterBox>
-        <Heading textAlign="center">당첨자 발표 추가</Heading>
+      <Box
+        width="70%"
+        maxWidth="800px"
+        border="2px solid"
+        borderColor="blue.300"
+        borderRadius="10px"
+        p={6}
+        boxShadow="md"
+        bg="white"
+      >
+        <Heading textAlign="center" mb={6} fontWeight="bold" fontSize="2xl">
+          당첨자 발표 추가
+        </Heading>
         <Box width="100%">
           <form onSubmit={handleSubmit}>
             <Flex mb={4}>
               <FormControl id="promotionId" isRequired mr={4}>
-                <FormLabel>프로모션 선택</FormLabel>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  프로모션 선택
+                </FormLabel>
                 <Select
                   placeholder="프로모션을 선택하세요"
                   value={promotionId}
                   onChange={(e) => handlePromotionChange(e.target.value)}
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
                 >
                   {filteredPromotions.map((promo) => (
                     <option key={promo.id} value={promo.id}>
@@ -184,17 +199,24 @@ export function PromoResultAdd() {
                 </Select>
               </FormControl>
               <FormControl id="searchQuery">
-                <FormLabel>프로모션 검색</FormLabel>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  프로모션 검색
+                </FormLabel>
                 <Input
                   placeholder="프로모션을 입력하세요"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
                 />
               </FormControl>
             </Flex>
             <Flex mb={4}>
               <FormControl id="member" mr={4} isRequired>
-                <FormLabel>이메일과 닉네임 선택</FormLabel>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  이메일과 닉네임 선택
+                </FormLabel>
                 <Select
                   placeholder="당첨자를 선택하세요"
                   value={
@@ -212,6 +234,9 @@ export function PromoResultAdd() {
                       ),
                     );
                   }}
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
                 >
                   {filteredMembers.map((member) => (
                     <option
@@ -224,15 +249,20 @@ export function PromoResultAdd() {
                 </Select>
               </FormControl>
               <FormControl id="memberSearchQuery">
-                <FormLabel>회원 검색</FormLabel>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  회원 검색
+                </FormLabel>
                 <Input
                   placeholder="이메일 또는 닉네임을 입력하세요"
                   value={memberSearchQuery}
                   onChange={(e) => setMemberSearchQuery(e.target.value)}
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
                 />
               </FormControl>
             </Flex>
-            <Button mt={4} colorScheme="green" onClick={handleAddWinner}>
+            <Button colorScheme="green" onClick={handleAddWinner} mb={4}>
               당첨자 추가
             </Button>
             <Table mt={4}>
@@ -266,12 +296,14 @@ export function PromoResultAdd() {
               mt={6}
               width="full"
               isDisabled={isSubmitButtonDisabled}
+              fontSize="lg"
+              py={6}
             >
               추가하기
             </Button>
           </form>
         </Box>
-      </CenterBox>
+      </Box>
     </Center>
   );
 }
