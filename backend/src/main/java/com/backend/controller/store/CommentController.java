@@ -41,5 +41,15 @@ public class CommentController {
         service.deleteComment(commentId);
     }
 
+    @GetMapping("/isBuyer/{memberNumber}/{productId}")
+    public Boolean isBuyer(@PathVariable Integer memberNumber, @PathVariable Integer productId) {
+
+        Boolean isBuyer = service.isBuyer(memberNumber, productId);
+
+        System.out.println("isBuyer = " + isBuyer);
+
+        return isBuyer;
+    }
+
 
 }

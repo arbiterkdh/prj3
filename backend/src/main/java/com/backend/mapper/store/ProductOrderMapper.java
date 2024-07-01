@@ -4,6 +4,7 @@ package com.backend.mapper.store;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface ProductOrderMapper {
@@ -25,4 +26,16 @@ public interface ProductOrderMapper {
             WHERE payment_id = #{paymentId}
             """)
     int deleteOrder(Integer paymentId);
+
+    @Select("""
+            select count(*)
+            from product_order po
+                     join payment p
+                          on po.payment_id = p.id
+            where po.member_number = #{memberNumber}
+              and po.product_id = #{productId}
+              and p.status = 'paid'
+            order by po.id desc
+            """)
+    Integer isBuyer(Integer memberNumber, Integer productId);
 }

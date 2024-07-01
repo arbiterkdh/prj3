@@ -27,6 +27,10 @@ function Comment({ Login, productId, commentList, setCommentList }) {
   const [commentContent, setCommentContent] = useState("");
   const [commentId, setCommentId] = useState(0);
 
+  const [isBuyer, setIsBuyer] = useState(false);
+
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const {
     isOpen: isAddOpen,
     onOpen: onAddOpen,
@@ -63,6 +67,21 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       .catch(() => {})
       .finally(() => {});
   };
+
+  useEffect(() => {
+    if (Login.id && productId) {
+      axios
+        .get(`/api/store/product/comment/isBuyer/${Login.id}/${productId}`)
+        .then((res) => {
+          if (res.data) {
+            setIsBuyer(res.data);
+            setIsDisabled(false);
+          }
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [Login.id, productId]);
 
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -174,18 +193,31 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       <Text fontSize={"lg"}>한줄평</Text>
       <Flex w={"100%"}>
         <Box w={"70%"} style={{}}>
-          <Box w={"100%"}>
-            <FormControl>
-              <Input
-                color="teal"
-                placeholder="내용을 작성하세요"
-                _placeholder={{ opacity: 1, color: "gray.500" }}
-                onChange={(e) => {
-                  setCommentContent(e.target.value);
-                }}
-              />
-            </FormControl>
-          </Box>
+          {isBuyer ? (
+            <Box w={"100%"}>
+              <FormControl>
+                <Input
+                  color="teal"
+                  placeholder="내용을 작성하세요"
+                  _placeholder={{ opacity: 1, color: "gray.500" }}
+                  onChange={(e) => {
+                    setCommentContent(e.target.value);
+                  }}
+                />
+              </FormControl>
+            </Box>
+          ) : (
+            <Box w={"100%"}>
+              <FormControl>
+                <Input
+                  color="teal"
+                  placeholder="구매후 작성해주세요"
+                  _placeholder={{ opacity: 1, color: "gray.500" }}
+                  readOnly
+                />
+              </FormControl>
+            </Box>
+          )}
         </Box>
         <Box
           w={"30%"}
@@ -198,6 +230,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
         >
           <Box>
             <Button
+              isDisabled={isDisabled}
               colorScheme={"red"}
               onClick={() => {
                 setCommentContent(commentContent);

@@ -278,3 +278,26 @@ from payment_cancel pc
          join product_order po
               on po.payment_id = p.id
 where pc.order_number = 'OrderNo_15370';
+
+select *
+from product_order
+where member_number = 9
+  and product_id = 7
+order by id desc;
+
+select *
+from product;
+
+select *
+from payment
+order by id desc;
+
+
+select count(*)
+from product_order po
+         join payment p
+              on po.payment_id = p.id
+where po.member_number = 9
+#   and po.product_id = 11
+  and p.status = 'paid'
+order by po.id desc;
