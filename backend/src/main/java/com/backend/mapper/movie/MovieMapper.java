@@ -36,7 +36,7 @@ public interface MovieMapper {
                     <bind name="pattern" value="'%' + keyword + '%'" />
                     AND title LIKE #{pattern}
                 </if>
-            ORDER BY id DESC
+            ORDER BY start_date DESC
             LIMIT 0, #{endset}
             </script>
             """)
@@ -52,7 +52,7 @@ public interface MovieMapper {
                     <bind name="pattern" value="'%' + keyword + '%'" />
                     AND title LIKE #{pattern}
                 </if>
-            ORDER BY id DESC
+            ORDER BY start_date
             LIMIT 0, #{endset}
             </script>
             """)

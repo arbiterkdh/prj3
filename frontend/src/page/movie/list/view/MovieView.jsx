@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
 import {
   Box,
@@ -36,6 +36,7 @@ export function MovieView() {
   });
   const toast = useToast();
   const [posterUrl, setPosterUrl] = useState("");
+  const navigate = useNavigate();
 
   const kmdbKey = import.meta.env.VITE_KMDb_APP_KEY;
   const kmdbUrl =
@@ -78,6 +79,10 @@ export function MovieView() {
           position: "bottom-right",
         }),
       );
+  }
+
+  function handleBookingClick() {
+    navigate("/book");
   }
 
   if (movie === null) {
@@ -154,7 +159,11 @@ export function MovieView() {
                 >
                   {like.count}
                 </HeartButton>
-                <ColorButton zIndex={"10"} w={"200px"}>
+                <ColorButton
+                  onClick={handleBookingClick}
+                  zIndex={"10"}
+                  w={"200px"}
+                >
                   예매
                 </ColorButton>
               </Box>
