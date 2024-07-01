@@ -53,7 +53,15 @@ export function Navbar() {
   }, [account, setCartCount]);
 
   return (
-    <Box _dark={{ bgColor: "#002827" }} bgColor={"whiteAlpha.900"}>
+    <Box
+      position={"fixed"}
+      top={0}
+      left={0}
+      right={0}
+      zIndex={1000}
+      _dark={{ bgColor: "#002827" }}
+      bgColor={"whiteAlpha.900"}
+    >
       <Center>
         <Box w={"1000px"}>
           <GapFlex justifyContent={"space-between"} width={"100%"}>
