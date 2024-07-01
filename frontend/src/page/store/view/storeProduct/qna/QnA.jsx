@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Td, Text, Tr, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Td,
+  Text,
+  Tr,
+  useDisclosure,
+} from "@chakra-ui/react";
 import axios from "axios";
 import AddQnAModal from "./AddQnAModal.jsx";
 import DeleteQnAModal from "./DeleteQnAModal.jsx";
@@ -57,39 +65,43 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
               <QnAItem itemQnA={itemQnA} key={itemQnA.id} />
             ))}
             <Tr>
-              <Td>
-                {pageInfo.prevPageNumber > 0 && (
-                  <>
-                    <Button onClick={() => setPage(1)}>처음</Button>
-                    <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
-                      이전
-                    </Button>
-                  </>
-                )}
-                {pageNumbers.map(
-                  (pageNumber) =>
-                    pageNumber !== 0 && (
-                      <Button
-                        onClick={() => setPage(pageNumber)}
-                        key={pageNumber}
-                        colorScheme={
-                          pageNumber === pageInfo.currentPage ? "blue" : "gray"
-                        }
-                      >
-                        {pageNumber}
+              <Td colSpan={3}>
+                <Flex justifyContent={"center"} my={4}>
+                  {pageInfo.prevPageNumber > 0 && (
+                    <>
+                      <Button onClick={() => setPage(1)}>처음</Button>
+                      <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                        이전
                       </Button>
-                    ),
-                )}
-                {pageInfo.nextPageNumber && (
-                  <>
-                    <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-                      다음
-                    </Button>
-                    <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
-                      맨끝
-                    </Button>
-                  </>
-                )}
+                    </>
+                  )}
+                  {pageNumbers.map(
+                    (pageNumber) =>
+                      pageNumber !== 0 && (
+                        <Button
+                          onClick={() => setPage(pageNumber)}
+                          key={pageNumber}
+                          colorScheme={
+                            pageNumber === pageInfo.currentPage
+                              ? "blue"
+                              : "gray"
+                          }
+                        >
+                          {pageNumber}
+                        </Button>
+                      ),
+                  )}
+                  {pageInfo.nextPageNumber && (
+                    <>
+                      <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                        다음
+                      </Button>
+                      <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
+                        맨끝
+                      </Button>
+                    </>
+                  )}
+                </Flex>
               </Td>
             </Tr>
           </>

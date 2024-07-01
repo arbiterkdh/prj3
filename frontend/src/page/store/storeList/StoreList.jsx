@@ -179,39 +179,43 @@ export function StoreList() {
           onPayClose={onPayClose}
         />
 
-        {pageInfo.prevPageNumber && (
-          <>
-            <Button onClick={() => setPage(1)}>
-              <FontAwesomeIcon icon={faAnglesLeft} />
-            </Button>
-            <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </Button>
-          </>
-        )}
+        <Box display="flex" justifyContent="center" my={4}>
+          {pageInfo.prevPageNumber && (
+            <>
+              <Button onClick={() => setPage(1)}>
+                <FontAwesomeIcon icon={faAnglesLeft} />
+              </Button>
+              <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </Button>
+            </>
+          )}
 
-        {pageNumbers.map((pageNumber) => (
-          <Button
-            onClick={() => {
-              setPage(pageNumber);
-            }}
-            key={pageNumber}
-            colorScheme={pageNumber === pageInfo.currentPage ? "blue" : "gray"}
-          >
-            {pageNumber}
-          </Button>
-        ))}
+          {pageNumbers.map((pageNumber) => (
+            <Button
+              onClick={() => {
+                setPage(pageNumber);
+              }}
+              key={pageNumber}
+              colorScheme={
+                pageNumber === pageInfo.currentPage ? "blue" : "gray"
+              }
+            >
+              {pageNumber}
+            </Button>
+          ))}
 
-        {pageInfo.nextPageNumber && (
-          <>
-            <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-              <FontAwesomeIcon icon={faAngleRight} />
-            </Button>
-            <Button onClick={() => setPage(pageInfo.rightPageNumber)}>
-              <FontAwesomeIcon icon={faAnglesRight} />
-            </Button>
-          </>
-        )}
+          {pageInfo.nextPageNumber && (
+            <>
+              <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                <FontAwesomeIcon icon={faAngleRight} />
+              </Button>
+              <Button onClick={() => setPage(pageInfo.rightPageNumber)}>
+                <FontAwesomeIcon icon={faAnglesRight} />
+              </Button>
+            </>
+          )}
+        </Box>
 
         <DeleteProductModal
           isDelOpen={isDelOpen}

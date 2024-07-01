@@ -97,7 +97,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
               <CommentItem key={commentItem.id} commentItem={commentItem} />
             ))}
 
-            <Box>
+            <Flex justifyContent={"center"} my={4}>
               {pageInfo.prevPageNumber && (
                 <>
                   <Button onClick={() => setPage(1)}>
@@ -135,7 +135,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                   </Button>
                 </>
               )}
-            </Box>
+            </Flex>
           </>
         ) : (
           <Text>댓글이 없습니다</Text>
@@ -192,7 +192,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       <hr />
       <Text fontSize={"lg"}>한줄평</Text>
       <Flex w={"100%"}>
-        <Box w={"70%"} style={{}}>
+        <Box w={"70%"}>
           {isBuyer ? (
             <Box w={"100%"}>
               <FormControl>
