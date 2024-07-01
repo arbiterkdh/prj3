@@ -60,7 +60,7 @@ export function Navbar() {
       right={0}
       zIndex={1000}
       _dark={{ bgColor: "#002827" }}
-      bgColor={"whiteAlpha.900"}
+      bgColor={"white"}
     >
       <Center>
         <Box w={"1000px"}>

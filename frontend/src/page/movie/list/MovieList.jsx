@@ -129,9 +129,9 @@ export function MovieList() {
           <Box mt={"-50px"}>
             <ColorButton
               size={"sm"}
-              left={"5px"}
-              top={"-15px"}
-              colorScheme={"blue"}
+              top={"135px"}
+              left={"600px"}
+              zIndex={999}
               onClick={handleAddClick}
             >
               추가

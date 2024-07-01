@@ -48,9 +48,19 @@ export function Home() {
       }}
     >
       <Navbar />
-      <Outlet
-        context={{ dailyBoxOffice, KMDbKey, KOFICKey, today, year, month, day }}
-      />
+      <Box mt={"110px"}>
+        <Outlet
+          context={{
+            dailyBoxOffice,
+            KMDbKey,
+            KOFICKey,
+            today,
+            year,
+            month,
+            day,
+          }}
+        />
+      </Box>
       <IconButton
         aria-label={"toggle theme"}
         rounded={"full"}
