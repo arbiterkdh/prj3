@@ -7,7 +7,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import StoreMenuText from "../../../css/theme/component/text/StoreMenuText.jsx";
 import StoreMenuCursorBox from "../../../css/theme/component/box/StoreMenuCursorBox.jsx";
@@ -23,6 +23,7 @@ import DeleteProductModal from "./delete/DeleteProductModal.jsx";
 import ProductItemList from "./list/ProductItemList.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import AddCartModal from "./cart/AddCartModal.jsx";
+import { LoginContext } from "../../../component/LoginProvider.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -39,6 +40,8 @@ export function StoreList() {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
+
+  const Login = useContext(LoginContext);
 
   const {
     isOpen: isDelOpen,
@@ -98,16 +101,18 @@ export function StoreList() {
               <Heading>상품 리스트</Heading>
             </Flex>
           </Box>
-          <Box w={"50%"} textAlign={"right"}>
-            <Button
-              onClick={() => navigate("/store/add")}
-              bgColor={"#e73426"}
-              _dark={{ bgColor: "#2d4c4c" }}
-              color={"white"}
-            >
-              상품등록
-            </Button>
-          </Box>
+          {Login.nickName === "생존코딩" && (
+            <Box w={"50%"} textAlign={"right"}>
+              <Button
+                onClick={() => navigate("/store/add")}
+                bgColor={"#e73426"}
+                _dark={{ bgColor: "#2d4c4c" }}
+                color={"white"}
+              >
+                상품등록
+              </Button>
+            </Box>
+          )}
         </Flex>
         <Flex
           w={"100%"}

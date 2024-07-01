@@ -19,5 +19,8 @@ public class PaymentCancel {
     private String cardNumber;
     private String name;
 
-
+    private String cancelName;
+    private Integer cancelQuantity;
+    private Integer cancelPrice;
+    private Integer cancelTotalPrice;
 }

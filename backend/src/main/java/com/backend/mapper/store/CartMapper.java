@@ -11,44 +11,45 @@ public interface CartMapper {
 
     @Insert("""
             INSERT INTO product_cart(name, product_id, price, quantity, fileName, member_number,total_price)
-            VALUES(#{name}, #{id}, #{price}, #{quantity}, #{fileName}, #{memberNumber}, #{price})
+            VALUES(#{name}, #{productId}, #{price}, #{quantity}, #{fileName}, #{memberNumber}, #{price})
             """)
     int addCart(ProductCart productCart);
 
     @Select("""
             SELECT *
             FROM product_cart
+            WHERE member_number = #{memberNumber}
             """)
-    List<ProductCart> cartProductList();
+    List<ProductCart> cartProductList(Integer memberNumber);
 
 
     @Update("""
             UPDATE product_cart
             SET quantity = quantity +1
-            WHERE id = #{id}
+            WHERE product_id = #{productId} and member_number = #{memberNumber}
             """)
-    int updateQuantity(Integer id);
+    int updateQuantity(Integer productId, Integer memberNumber);
 
     @Select("""
             SELECT *
             FROM product_cart
-            WHERE product_id = #{productId}
+            WHERE member_number = #{memberNumber} and product_id = #{productId}
             """)
-    ProductCart getExistItem(Integer productId);
+    ProductCart getExistItem(Integer memberNumber, Integer productId);
 
 
     @Delete("""
             DELETE FROM product_cart
-            WHERE product_id = #{productId}
+            WHERE product_id = #{productId} and member_number = #{memberNumber}
             """)
-    int deleteItem(Integer productId);
+    int deleteItem(Integer productId, Integer memberNumber);
 
     @Select("""
             SELECT fileName
             FROM product_cart
-            WHERE product_id = #{productId}
+            WHERE product_id = #{productId} and member_number = #{memberNumber}
             """)
-    String selectFileName(Integer productId);
+    String selectFileName(Integer productId, Integer memberNumber);
 
     @Select("""
             SELECT *

@@ -10,6 +10,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
   const [pageInfo, setPageInfo] = useState({});
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
+  const [writerQnA, setWriterQnA] = useState("");
   const [page, setPage] = useState(1);
 
   const {
@@ -118,6 +119,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
             onQnAContentOpen();
             setContentQnA(itemQnA.content);
             setTitleQnA(itemQnA.title);
+            setWriterQnA(itemQnA.writer);
           }}
           style={{ cursor: "pointer" }}
         >
@@ -149,7 +151,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
           onQnAContentClose={onQnAContentClose}
           titleQnA={titleQnA}
           contentQnA={contentQnA}
-          writerQnA={itemQnA.writer}
+          writerQnA={writerQnA}
           idQnA={itemQnA.id}
         />
       </Tr>

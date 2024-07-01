@@ -225,7 +225,8 @@ select *
 from payment
 order by id desc;
 select *
-from payment_cancel;
+from payment_cancel
+order by id desc;
 select *
 from product;
 select *
@@ -258,3 +259,22 @@ from payment p
 where p.buyer_name = '계영'
 order by p.buyer_date desc
 limit 0, 10;
+
+select *
+from member;
+
+drop table product_cart;
+
+select *
+from product_cart;
+
+select distinct (po.name)      as cancelName,
+                po.quantity    as cancelQuantity,
+                po.price       as cancelPrice,
+                po.total_price as cancelTotalPrice
+from payment_cancel pc
+         join payment p
+              on pc.order_number = p.order_number
+         join product_order po
+              on po.payment_id = p.id
+where pc.order_number = 'OrderNo_15370';

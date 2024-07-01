@@ -19,21 +19,20 @@ public class CartController {
     @PostMapping("/add")
     public void addCart(Product product, @RequestParam("memberNumber") Integer memberNumber) {
 
-
         service.addCart(product, memberNumber);
     }
 
-    @GetMapping("/list")
-    public List<ProductCart> cartList() {
+    @GetMapping("/list/{memberNumber}")
+    public List<ProductCart> cartList(@PathVariable Integer memberNumber) {
 
-        return service.cartProductList();
+        return service.cartProductList(memberNumber);
     }
 
 
-    @DeleteMapping("/delete/{productId}")
-    public void deleteItem(@PathVariable Integer productId) {
+    @DeleteMapping("/delete/{memberNumber}/{productId}")
+    public void deleteItem(@PathVariable Integer productId, @PathVariable Integer memberNumber) {
 
-        service.deleteItem(productId);
+        service.deleteItem(productId, memberNumber);
     }
 
     @PutMapping("/modifyQuantity")

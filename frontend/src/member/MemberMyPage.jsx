@@ -77,6 +77,9 @@ export function MemberMyPage() {
   const [amount, setAmount] = useState(0);
 
   const [selectPaymentResult, setSelectPaymentResult] = useState([]);
+  const [selectPaymentCancelResult, setSelectPaymentCancelResult] = useState(
+    [],
+  );
 
   const {
     isOpen: isCancelOpen,
@@ -88,6 +91,12 @@ export function MemberMyPage() {
     isOpen: isPaymentResultOpen,
     onOpen: onPaymentResultOpen,
     onClose: onPaymentResultClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isPaymentCancelResultOpen,
+    onOpen: onPaymentCancelResultOpen,
+    onClose: onPaymentCancelResultClose,
   } = useDisclosure();
 
   const location = useLocation();
@@ -232,6 +241,17 @@ export function MemberMyPage() {
       .then((res) => {
         setSelectPaymentResult(res.data);
         onPaymentResultOpen();
+      })
+      .catch(() => {})
+      .finally(() => {});
+  }
+
+  function handlePaymentCancelItem(cancelOrderNumber) {
+    axios
+      .get(`/api/member/mypage/paymentCancelItem/${cancelOrderNumber}`)
+      .then((res) => {
+        setSelectPaymentCancelResult(res.data);
+        onPaymentCancelResultOpen();
       })
       .catch(() => {})
       .finally(() => {});
@@ -383,60 +403,62 @@ export function MemberMyPage() {
                       )}
                     </Tr>
                   ))}
-                  <Tr>
-                    <Td>
-                      {pageInfoPaymentResult.prevPageNumber && (
-                        <>
-                          <Button onClick={() => setPage(1)}>
-                            <FontAwesomeIcon icon={faAnglesLeft} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(pageInfoPaymentResult.prevPageNumber)
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleLeft} />
-                          </Button>
-                        </>
-                      )}
-                      {pageNumbersPaymentResult.map(
-                        (pageNumber) =>
-                          pageNumber !== 0 && (
+                  {paymentResult.length > 0 && (
+                    <Tr>
+                      <Td>
+                        {pageInfoPaymentResult.prevPageNumber && (
+                          <>
+                            <Button onClick={() => setPage(1)}>
+                              <FontAwesomeIcon icon={faAnglesLeft} />
+                            </Button>
                             <Button
-                              onClick={() => setPage(pageNumber)}
-                              key={pageNumber}
-                              colorScheme={
-                                pageNumber ===
-                                pageInfoPaymentResult.currentPageNumber
-                                  ? "blue"
-                                  : "gray"
+                              onClick={() =>
+                                setPage(pageInfoPaymentResult.prevPageNumber)
                               }
                             >
-                              {pageNumber}
+                              <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
-                          ),
-                      )}
+                          </>
+                        )}
+                        {pageNumbersPaymentResult.map(
+                          (pageNumber) =>
+                            pageNumber !== 0 && (
+                              <Button
+                                onClick={() => setPage(pageNumber)}
+                                key={pageNumber}
+                                colorScheme={
+                                  pageNumber ===
+                                  pageInfoPaymentResult.currentPageNumber
+                                    ? "blue"
+                                    : "gray"
+                                }
+                              >
+                                {pageNumber}
+                              </Button>
+                            ),
+                        )}
 
-                      {pageInfoPaymentResult.nextPageNumber && (
-                        <>
-                          <Button
-                            onClick={() =>
-                              setPage(pageInfoPaymentResult.nextPageNumber)
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleRight} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(pageInfoPaymentResult.lastPageNumber)
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                          </Button>
-                        </>
-                      )}
-                    </Td>
-                  </Tr>
+                        {pageInfoPaymentResult.nextPageNumber && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                setPage(pageInfoPaymentResult.nextPageNumber)
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAngleRight} />
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                setPage(pageInfoPaymentResult.lastPageNumber)
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                            </Button>
+                          </>
+                        )}
+                      </Td>
+                    </Tr>
+                  )}
                 </Tbody>
               </Table>
             </TabPanel>
@@ -446,7 +468,6 @@ export function MemberMyPage() {
                 <Thead>
                   <Tr>
                     <Th>주문 번호</Th>
-                    <Th>상품명</Th>
                     <Th>가격</Th>
                     <Th>결제카드</Th>
                     <Th>카드번호</Th>
@@ -461,8 +482,14 @@ export function MemberMyPage() {
                         (item) => item.orderNumber === resultItem.orderNumber,
                       ) === index && (
                         <Tr key={index}>
-                          <Td>{resultItem.orderNumber}</Td>
-                          <Td>{resultItem.name}</Td>
+                          <Td
+                            onClick={() => {
+                              handlePaymentCancelItem(resultItem.orderNumber);
+                            }}
+                            cursor={"pointer"}
+                          >
+                            {resultItem.orderNumber}
+                          </Td>
                           <Td>{resultItem.amount}원</Td>
                           <Td>{resultItem.cardName}</Td>
                           <Td>{resultItem.cardNumber}</Td>
@@ -483,66 +510,68 @@ export function MemberMyPage() {
                       ),
                   )}
 
-                  <Tr>
-                    <Td>
-                      {pageInfoPaymentCancelResult.prevPageNumber && (
-                        <>
-                          <Button onClick={() => setPage(1)}>
-                            <FontAwesomeIcon icon={faAnglesLeft} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(
-                                pageInfoPaymentCancelResult.prevPageNumber,
-                              )
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleLeft} />
-                          </Button>
-                        </>
-                      )}
-                      {pageNumbersPaymentCancelResult.map(
-                        (pageNumber) =>
-                          pageNumber !== 0 && (
+                  {paymentCancelResult.length > 0 && (
+                    <Tr>
+                      <Td>
+                        {pageInfoPaymentCancelResult.prevPageNumber && (
+                          <>
+                            <Button onClick={() => setPage(1)}>
+                              <FontAwesomeIcon icon={faAnglesLeft} />
+                            </Button>
                             <Button
-                              onClick={() => setPage(pageNumber)}
-                              key={pageNumber}
-                              colorScheme={
-                                pageNumber ===
-                                pageInfoPaymentCancelResult.currentPageNumber
-                                  ? "blue"
-                                  : "gray"
+                              onClick={() =>
+                                setPage(
+                                  pageInfoPaymentCancelResult.prevPageNumber,
+                                )
                               }
                             >
-                              {pageNumber}
+                              <FontAwesomeIcon icon={faAngleLeft} />
                             </Button>
-                          ),
-                      )}
+                          </>
+                        )}
+                        {pageNumbersPaymentCancelResult.map(
+                          (pageNumber) =>
+                            pageNumber !== 0 && (
+                              <Button
+                                onClick={() => setPage(pageNumber)}
+                                key={pageNumber}
+                                colorScheme={
+                                  pageNumber ===
+                                  pageInfoPaymentCancelResult.currentPageNumber
+                                    ? "blue"
+                                    : "gray"
+                                }
+                              >
+                                {pageNumber}
+                              </Button>
+                            ),
+                        )}
 
-                      {pageInfoPaymentCancelResult.nextPageNumber && (
-                        <>
-                          <Button
-                            onClick={() =>
-                              setPage(
-                                pageInfoPaymentCancelResult.nextPageNumber,
-                              )
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAngleRight} />
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              setPage(
-                                pageInfoPaymentCancelResult.lastPageNumber,
-                              )
-                            }
-                          >
-                            <FontAwesomeIcon icon={faAnglesRight} />
-                          </Button>
-                        </>
-                      )}
-                    </Td>
-                  </Tr>
+                        {pageInfoPaymentCancelResult.nextPageNumber && (
+                          <>
+                            <Button
+                              onClick={() =>
+                                setPage(
+                                  pageInfoPaymentCancelResult.nextPageNumber,
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAngleRight} />
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                setPage(
+                                  pageInfoPaymentCancelResult.lastPageNumber,
+                                )
+                              }
+                            >
+                              <FontAwesomeIcon icon={faAnglesRight} />
+                            </Button>
+                          </>
+                        )}
+                      </Td>
+                    </Tr>
+                  )}
                 </Tbody>
               </Table>
             </TabPanel>
@@ -625,6 +654,40 @@ export function MemberMyPage() {
             </ModalBody>
             <ModalFooter>
               <Button onClick={onPaymentResultClose}>확인</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+        <Modal
+          isOpen={isPaymentCancelResultOpen}
+          onClose={onPaymentCancelResultClose}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>알림</ModalHeader>
+            <ModalBody>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>상품명</Th>
+                    <Th>수량</Th>
+                    <Th>가격</Th>
+                    <Th>합계</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {selectPaymentCancelResult.map((resultItem, itemIndex) => (
+                    <Tr key={itemIndex}>
+                      <Td>{resultItem.cancelName}</Td>
+                      <Td>{resultItem.cancelQuantity}</Td>
+                      <Td>{resultItem.cancelPrice}원</Td>
+                      <Td>{resultItem.cancelTotalPrice}원</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onPaymentCancelResultClose}>확인</Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
