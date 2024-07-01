@@ -113,7 +113,7 @@ export function MemberMyPage() {
         .catch(() => {})
         .finally(() => {});
     }
-  }, [nickName]);
+  }, [nickName, page]);
 
   useEffect(() => {
     if (nickName) {
@@ -224,6 +224,18 @@ export function MemberMyPage() {
       })
       .then((res) => {
         console.log("취소:" + res.data);
+        setPaymentResult((prevResults) =>
+          prevResults.map((result) =>
+            result.id === paymentId
+              ? { ...result, status: "cancelled" }
+              : result,
+          ),
+        );
+        toast({
+          description: "결제가 성공적으로 취소되었습니다.",
+          status: "success",
+          position: "bottom-right",
+        });
       })
       .catch((err) => {
         console.error("취소 오류:" + err);
