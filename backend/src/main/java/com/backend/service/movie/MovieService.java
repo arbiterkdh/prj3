@@ -209,8 +209,24 @@ public class MovieService {
         commentMapper.deleteCommentByMovieId(movieId);
         // 영화 좋아요 삭제
         movieMapper.deleteMovieLikeByMovieId(movieId);
+        // movie_location 삭제
+        movieMapper.deleteMovieLocationByMovieId(movieId);
+        // theater_box_movie 삭제
+        // book_place_time 삭제
+        List<Integer> id = movieMapper.selectTheaterBoxMovieByMovieId(movieId);
+        for (Integer i : id) {
+            // book_seat 삭제
+            List<Integer> bookPlaceTimeList = movieMapper.selectBookPlaceTimeId(i);
+            for (Integer j : bookPlaceTimeList) {
+                movieMapper.deleteBookSeat(j);
+            }
+            movieMapper.deleteBookPlaceTime(i);
+            movieMapper.deleteTheaterBoxMovie(i);
+        }
+
         // 영화 삭제
         movieMapper.deleteMovieByMovieId(movieId);
+
     }
 
     public void editMovie(Movie movie, MultipartFile file) throws IOException {

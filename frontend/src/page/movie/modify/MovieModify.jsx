@@ -26,6 +26,7 @@ import { ko } from "date-fns/locale";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function MovieModify() {
   const { id } = useParams();
@@ -177,6 +178,16 @@ export function MovieModify() {
               <CheckboxGroup defaultValue={movieTypes}>
                 <Stack spacing={[1, 5]} direction={["column", "row"]}>
                   <Checkbox
+                    ml={"3px"}
+                    _checked={{
+                      "& .chakra-checkbox__control": {
+                        backgroundColor: "#ff4357",
+                        borderColor: "#ff4357",
+                        _hover: {
+                          backgroundColor: "#ff4357",
+                        },
+                      },
+                    }}
                     value="2D"
                     onChange={(e) =>
                       handleMovieType(e.target.value, e.target.checked)
@@ -185,6 +196,15 @@ export function MovieModify() {
                     2D
                   </Checkbox>
                   <Checkbox
+                    _checked={{
+                      "& .chakra-checkbox__control": {
+                        backgroundColor: "#ff4357",
+                        borderColor: "#ff4357",
+                        _hover: {
+                          backgroundColor: "#ff4357",
+                        },
+                      },
+                    }}
                     value="3D"
                     onChange={(e) =>
                       handleMovieType(e.target.value, e.target.checked)
@@ -235,24 +255,42 @@ export function MovieModify() {
               />
             </Box>
             <Box>
-              <Button onClick={handleCancelClick}>취소</Button>
-              <Button onClick={onOpen} colorScheme={"blue"}>
-                수정
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={handleCancelClick}
+              >
+                취소
               </Button>
+              <ColorButton onClick={onOpen} colorScheme={"blue"}>
+                수정
+              </ColorButton>
             </Box>
           </Stack>
         </Box>
       </CenterBox>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>수정 확인</ModalHeader>
           <ModalBody>수정 하시겠습니까?</ModalBody>
           <ModalFooter>
-            <Button onClick={onClose}>취소</Button>
-            <Button onClick={handleModifyClick} colorScheme={"blue"}>
-              수정
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              onClick={onClose}
+            >
+              취소
             </Button>
+            <ColorButton onClick={handleModifyClick} colorScheme={"blue"}>
+              수정
+            </ColorButton>
           </ModalFooter>
         </ModalContent>
       </Modal>

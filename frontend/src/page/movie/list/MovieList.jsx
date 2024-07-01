@@ -122,10 +122,16 @@ export function MovieList() {
     <Center>
       <CenterBox mb={10}>
         {account.isAdmin() && (
-          <Box mt={"-50px"} mb={10} ml={"930px"}>
-            <Button colorScheme={"blue"} onClick={handleAddClick}>
+          <Box mt={"-50px"}>
+            <ColorButton
+              size={"sm"}
+              left={"5px"}
+              top={"-15px"}
+              colorScheme={"blue"}
+              onClick={handleAddClick}
+            >
               추가
-            </Button>
+            </ColorButton>
           </Box>
         )}
         <Tabs isFitted variant="enclosed">

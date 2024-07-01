@@ -117,9 +117,14 @@ export function MovieView() {
                 p={10}
                 zIndex={"10"}
                 mt={"20px"}
+                maxW={"550px"}
+                lineHeight={"1.2"}
                 fontSize={"5xl"}
                 textAlign={"center"}
                 color={"white"}
+                textShadow={
+                  "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000"
+                }
               >
                 {movie.title}
               </Heading>
