@@ -164,10 +164,16 @@ function Payment({
               quantity,
               name,
             })
-            .then((res) => {})
+            .then((res) => {
+              const paymentId = res.data;
+              setPaymentId(paymentId);
+              console.log("payment id 값 " + paymentId);
+              navigate("/store/payment/payment-success", {
+                state: { paymentId },
+              });
+            })
             .catch(() => {})
             .finally(() => {});
-          navigate("/store/payment/payment-success");
         } else {
           console.log(rsp + "결제 실패");
         }

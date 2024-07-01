@@ -162,31 +162,45 @@ public class PaymentService {
 
                 JSONObject responseObj = (JSONObject) jsonResponse.get("response");
                 paymentCancel.setCancelledAt((Long) responseObj.get("cancelled_at"));
-                paymentCancel.setCardName((String) responseObj.get("card_name"));
+                paymentCancel.setCardName((String) responseObj.get("card_name") != null ? (String) responseObj.get("card_name") : "카카오페이");
                 paymentCancel.setName((String) responseObj.get("name"));
                 paymentCancel.setImpUid((String) responseObj.get("imp_uid"));
-                paymentCancel.setCardNumber((String) responseObj.get("card_number"));
+                paymentCancel.setCardNumber((String) responseObj.get("card_number") != null ? (String) responseObj.get("card_number") : "N/A");
                 paymentCancel.setReceiptUrl((String) responseObj.get("receipt_url"));
 
                 paymentCancelMapper.insert(paymentCancel);
 
-                productMapper.updateRefundStock(payment.getProductId(), payment.getQuantity());
+                productMapper.updateRefundStock(paymentCancel.getProductId(), payment.getQuantity());
 
 //                productOrderMapper.deleteOrder(payment.getId());
             } else {
                 for (Payment payment : payments) {
+
+                    System.out.println("payment.getOrderNumber" + payment.getOrderNumber());
+                    System.out.println("payment.getProductId() = " + payment.getProductId());
+                    System.out.println("payment.getQuantity() = " + payment.getQuantity());
+
                     payment.setStatus("cancelled");
                     paymentMapper.updatePaymentStatus(payment);
 
-                    JSONObject responseObj = (JSONObject) jsonResponse.get("response");
-                    paymentCancel.setCancelledAt((Long) responseObj.get("cancelled_at"));
-                    paymentCancel.setCardName((String) responseObj.get("card_name"));
-                    paymentCancel.setName((String) responseObj.get("name"));
-                    paymentCancel.setImpUid((String) responseObj.get("imp_uid"));
-                    paymentCancel.setCardNumber((String) responseObj.get("card_number"));
-                    paymentCancel.setReceiptUrl((String) responseObj.get("receipt_url"));
+                    PaymentCancel multiPaymentCancel = new PaymentCancel();
 
-                    paymentCancelMapper.insert(paymentCancel);
+                    JSONObject responseObj = (JSONObject) jsonResponse.get("response");
+
+                    multiPaymentCancel.setPaymentId(paymentCancel.getPaymentId());
+                    multiPaymentCancel.setOrderNumber(paymentCancel.getOrderNumber());
+                    multiPaymentCancel.setAmount(paymentCancel.getAmount());
+                    multiPaymentCancel.setCancelReason(paymentCancel.getCancelReason());
+                    multiPaymentCancel.setRequestor(paymentCancel.getRequestor());
+                    multiPaymentCancel.setCancelledAt((Long) responseObj.get("cancelled_at"));
+                    multiPaymentCancel.setCardName((String) responseObj.get("card_name") != null ? (String) responseObj.get("card_name") : "카카오페이");
+                    multiPaymentCancel.setName((String) responseObj.get("name"));
+                    multiPaymentCancel.setImpUid((String) responseObj.get("imp_uid"));
+                    multiPaymentCancel.setCardNumber((String) responseObj.get("card_number") != null ? (String) responseObj.get("card_number") : "N/A");
+                    multiPaymentCancel.setReceiptUrl((String) responseObj.get("receipt_url"));
+
+                    paymentCancelMapper.insert(multiPaymentCancel);
+
 
                     productMapper.updateRefundStock(payment.getProductId(), payment.getQuantity());
                 }

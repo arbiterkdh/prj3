@@ -42,7 +42,7 @@ public interface PaymentMapper {
     List<Payment> getData(Integer memberNumber, Integer paymentId);
 
     @Select("""
-            SELECT p.*, po.quantity as quantity
+            SELECT p.*, po.quantity as quantity, po.product_id as productId
             FROM payment p JOIN product_order po
             ON p.id = po.payment_id
             WHERE order_number = #{orderNumber}

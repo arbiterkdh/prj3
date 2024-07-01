@@ -110,10 +110,10 @@ public interface ProductMapper {
 
     @Update("""
             UPDATE product
-            SET stock = stock - #{getQuantity}
+            SET stock = stock - #{quantity}
             WHERE id = #{productId}
             """)
-    int updateStock(Integer productId, Integer getQuantity);
+    int updateStock(Integer productId, Integer quantity);
 
     @Update("""
             UPDATE product

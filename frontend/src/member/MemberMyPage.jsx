@@ -74,6 +74,8 @@ export function MemberMyPage() {
   const [paymentId, setPaymentId] = useState(null);
   const [buyerName, setBuyerName] = useState("");
   const [amount, setAmount] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const [productId, setProductId] = useState(0);
 
   const [selectPaymentResult, setSelectPaymentResult] = useState([]);
   const [selectPaymentCancelResult, setSelectPaymentCancelResult] = useState(
@@ -209,6 +211,7 @@ export function MemberMyPage() {
   }
 
   function handlePaymentCancel() {
+    console.log("handlePaymentCancel:" + productId);
     axios
       .post("/api/store/payment/cancel", {
         orderNumber,
@@ -216,6 +219,8 @@ export function MemberMyPage() {
         requestor: buyerName,
         cancelReason,
         amount,
+        quantity,
+        productId,
       })
       .then((res) => {
         console.log("취소:" + res.data);
@@ -381,6 +386,8 @@ export function MemberMyPage() {
                               setPaymentId(resultItem.id);
                               setBuyerName(resultItem.buyerName);
                               setAmount(resultItem.amount);
+                              setQuantity(resultItem.quantity);
+                              setProductId(resultItem.productId);
                             }}
                           >
                             취소
@@ -462,7 +469,7 @@ export function MemberMyPage() {
                   <Tr>
                     <Th>주문 번호</Th>
                     <Th>가격</Th>
-                    <Th>결제카드</Th>
+                    <Th>결제방식</Th>
                     <Th>카드번호</Th>
                     <Th>영수증</Th>
                     <Th>승인상태</Th>
@@ -484,8 +491,8 @@ export function MemberMyPage() {
                             {resultItem.orderNumber}
                           </Td>
                           <Td>{resultItem.amount}원</Td>
-                          <Td>{resultItem.cardName}</Td>
-                          <Td>{resultItem.cardNumber}</Td>
+                          <Td>{resultItem.cardName || "카카오페이"}</Td>
+                          <Td>{resultItem.cardNumber || "N/A"}</Td>
                           <Td>
                             <Link
                               href={resultItem.receiptUrl}

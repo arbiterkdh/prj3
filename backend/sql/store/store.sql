@@ -292,6 +292,10 @@ select *
 from payment
 order by id desc;
 
+select *
+from product_order
+order by id desc;
+
 
 select count(*)
 from product_order po
@@ -301,3 +305,34 @@ where po.member_number = 9
 #   and po.product_id = 11
   and p.status = 'paid'
 order by po.id desc;
+
+select p.id,
+       p.order_number,
+       p.status,
+       p.buyer_date,
+       p.amount,
+       p.qr_code,
+       p.buyer_name,
+       po.name        as name,
+       po.quantity    as quantity,
+       po.price       as price,
+       po.total_price as totalPrice
+from payment p
+         join product_order po
+              on po.payment_id = p.id
+where p.buyer_name = '생존코딩'
+group by order_date
+order by order_date desc
+limit 0, 10;
+
+select *
+from payment_cancel
+order by id desc;
+
+select *
+from product_order
+order by id desc;
+
+select *
+from payment
+order by id desc;

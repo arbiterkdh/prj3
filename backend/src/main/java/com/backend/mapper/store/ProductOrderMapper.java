@@ -38,4 +38,11 @@ public interface ProductOrderMapper {
             order by po.id desc
             """)
     Integer isBuyer(Integer memberNumber, Integer productId);
+
+    @Select("""
+            select product_id
+            from product_order
+            where payment_id = 
+            """)
+    Integer selectProductId(String orderNumber);
 }
