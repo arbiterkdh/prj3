@@ -118,6 +118,10 @@ export function MovieList() {
     navigate(`/movie?page=1&tab=2`);
   }
 
+  function handleBookingClick() {
+    navigate("/book");
+  }
+
   return (
     <Center>
       <CenterBox mb={10}>
@@ -125,9 +129,9 @@ export function MovieList() {
           <Box mt={"-50px"}>
             <ColorButton
               size={"sm"}
-              left={"5px"}
-              top={"-15px"}
-              colorScheme={"blue"}
+              top={"135px"}
+              left={"600px"}
+              zIndex={999}
               onClick={handleAddClick}
             >
               추가
@@ -237,7 +241,7 @@ export function MovieList() {
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
                           <HeartButton
-                            w={"100px"}
+                            w={"50px"}
                             leftIcon={
                               movie.movieHeart.like ? (
                                 <FontAwesomeIcon icon={fullHeart} />
@@ -249,7 +253,9 @@ export function MovieList() {
                           >
                             {movie.movieHeart.count}
                           </HeartButton>
-                          <ColorButton w={"100px"}>예매</ColorButton>
+                          <ColorButton onClick={handleBookingClick} w={"130px"}>
+                            예매
+                          </ColorButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>
@@ -331,7 +337,7 @@ export function MovieList() {
                       <CardFooter mt={-6}>
                         <ButtonGroup spacing="2">
                           <HeartButton
-                            w={"100px"}
+                            w={"50px"}
                             leftIcon={
                               movie.movieHeart.like ? (
                                 <FontAwesomeIcon icon={fullHeart} />
@@ -343,7 +349,9 @@ export function MovieList() {
                           >
                             {movie.movieHeart.count}
                           </HeartButton>
-                          <ColorButton w={"100px"}>예매</ColorButton>
+                          <ColorButton onClick={handleBookingClick} w={"130px"}>
+                            예매
+                          </ColorButton>
                         </ButtonGroup>
                       </CardFooter>
                     </Center>

@@ -66,7 +66,7 @@ export function MovieModify() {
         genre: movie.genre,
         runningTime: movie.runningTime,
         rating: movie.rating,
-        startDate: movie.startDate,
+        startDate: movie.startDate.toISOString().split("T")[0],
         director: movie.director,
         actors: movie.actors,
         type: movieTypes,

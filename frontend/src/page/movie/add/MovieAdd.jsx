@@ -87,7 +87,11 @@ export function MovieAdd() {
   function handleSearchClick() {
     axios
       .get(`${kmdbUrl}&title=${searchKeyword}&ServiceKey=${kmdbKey}`)
-      .then((res) => setMovieList(res.data.Data[0].Result));
+      .then((res) => {
+        if (res.data.TotalCount > 0) {
+          setMovieList(res.data.Data[0].Result);
+        }
+      });
   }
 
   // 검색한 영화를 선택했을때 데이터 삽입...
