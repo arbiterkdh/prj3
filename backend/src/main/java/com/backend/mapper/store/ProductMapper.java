@@ -44,7 +44,7 @@ public interface ProductMapper {
                     JOIN product_order po ON p.id = po.product_id
                     GROUP BY p.id, p.name, p.price, p.stock, pi.name
                     ORDER BY totalQuantity DESC
-                    LIMIT 5
+                    LIMIT 8
                 </when>
                 <otherwise>
                     SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, p.quantity,

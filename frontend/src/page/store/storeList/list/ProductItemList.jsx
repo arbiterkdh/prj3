@@ -17,7 +17,6 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   useToast,
@@ -273,7 +272,7 @@ function ProductItemList({
           </CardFooter>
         </Card>
         <Modal isOpen={isPayOpen} onClose={onPayClose}>
-          <ModalOverlay />
+          {/*<ModalOverlay />*/}
           <ModalContent>
             <ModalHeader>알림</ModalHeader>
             <ModalBody>

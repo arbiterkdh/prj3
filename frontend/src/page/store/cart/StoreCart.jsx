@@ -18,6 +18,7 @@ import {
   Table,
   TableContainer,
   Tbody,
+  Td,
   Text,
   Thead,
   Tr,
@@ -92,7 +93,7 @@ export function StoreCart() {
         .catch(() => {})
         .finally(() => {});
     }
-  }, [account]);
+  }, [account, setCartCount]);
 
   const handleCheckBoxChange = (productId) => {
     setCheckItem((prev) => ({
@@ -205,6 +206,15 @@ export function StoreCart() {
   }
 
   const ProductCartList = () => {
+    if (productCartList.length === 0) {
+      return (
+        <Tr>
+          <Td w={"100%"} colSpan={"8"} textAlign={"center"}>
+            카트에 등록된 상품이 없습니다
+          </Td>
+        </Tr>
+      );
+    }
     return (
       <>
         {productCartList.map((cartItem) => (
