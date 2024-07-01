@@ -11,8 +11,8 @@ CREATE TABLE promo
 );
 CREATE TABLE promo_file
 (
-    promo_id INT NOT NULL REFERENCES promo(id),
-    file_type VARCHAR(50) NOT NULL,
+    promo_id  INT          NOT NULL REFERENCES promo (id),
+    file_type VARCHAR(50)  NOT NULL,
     file_name VARCHAR(500) NOT NULL,
     PRIMARY KEY (promo_id, file_type, file_name)
 );
@@ -25,6 +25,10 @@ CREATE TABLE promotion_result
     CONSTRAINT fk_promotion_id
         FOREIGN KEY (promotion_id) REFERENCES promo (id) ON DELETE CASCADE
 );
+
+DELETE
+FROM promo
+WHERE id > 0;
 
 DROP TABLE IF EXISTS promo;
 DROP TABLE IF EXISTS promo_file;
