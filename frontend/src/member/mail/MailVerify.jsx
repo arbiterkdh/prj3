@@ -2,10 +2,12 @@ import {
   Box,
   Button,
   Center,
+  Flex,
   Heading,
   Image,
   Input,
   Select,
+  Spinner,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -42,22 +44,15 @@ export function MailVerify() {
     axios
       .get(`/api/store/product/list/all`)
       .then((res) => {
-        const images = res.data.productList.map(
-          (productItem) => productItem.image.src,
-        );
+        const images = res.data.productList
+          .map((productItem) => productItem.image.src)
+          .sort((a, b) => Math.random() - 0.5)
+          .slice(0, 5);
         setProductImages(images);
       })
       .catch(() => {})
       .finally(() => {});
   }, []);
-
-  useEffect(() => {
-    if (productImages.length > 0) {
-      const randomImage =
-        productImages[Math.floor(Math.random() * productImages.length)];
-      setAdImage(randomImage);
-    }
-  }, [productImages]);
 
   function handleClick() {
     axios
@@ -159,9 +154,30 @@ export function MailVerify() {
           setVerifiedAddress={setVerifiedEmail}
         />
         <Box w={"985px"} mt={10} mb={3} align={"center"}>
-          <Box w={"960px"} h={"180px"} border={"1px solid"}>
-            <Image src={adImage} w={"100%"} h={"100%"} />
-          </Box>
+          <Flex
+            w={"960px"}
+            h={"180px"}
+            p={2}
+            bgColor={"red.600"}
+            _dark={{ opacity: "0.8" }}
+            gap={2}
+          >
+            {productImages.length > 0 ? (
+              productImages.map((image, index) => {
+                return (
+                  <Image
+                    borderRadius={"10px"}
+                    key={index}
+                    src={image}
+                    w={"100%"}
+                    h={"100%"}
+                  />
+                );
+              })
+            ) : (
+              <Spinner />
+            )}
+          </Flex>
         </Box>
       </CenterBox>
     </Center>
