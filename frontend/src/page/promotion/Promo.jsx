@@ -8,6 +8,8 @@ export function Promo() {
   const { promoId } = useParams();
 
   const excludeNavbarPaths = [
+    "/promotion/add",
+    `/promotion/modify/${promoId}`,
     "/promotion/eventResult",
     "/promotion/eventResult/add",
     `/promotion/eventResult/modify/${id}`,

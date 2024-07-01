@@ -17,6 +17,7 @@ import {
   Switch,
   Text,
   Textarea,
+  useColorModeValue,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -135,8 +136,17 @@ export function PromoModify() {
     return <Spinner />;
   }
 
+  const bgColor = useColorModeValue("white", "gray.800");
+  const textColor = useColorModeValue("black", "white");
+
   return (
-    <Box display="flex" justifyContent="center" py={6}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      py={6}
+      bg={bgColor}
+      color={textColor}
+    >
       <Box
         width="70%"
         maxWidth="800px"
@@ -145,6 +155,8 @@ export function PromoModify() {
         borderRadius="10px"
         p={6}
         boxShadow="md"
+        bg={bgColor}
+        color={textColor}
       >
         <Box mb={4} textAlign="center" fontWeight="bold" fontSize="xl">
           {promo.id}번 게시물 수정
