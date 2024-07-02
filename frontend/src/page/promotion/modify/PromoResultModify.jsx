@@ -71,29 +71,29 @@ export function PromoResultModify() {
   }, [winners]);
 
   const handleAddWinner = () => {
-    if (!selectedMember) {
-      toast({
-        title: "이메일과 닉네임을 모두 선택해 주세요.",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    const isAlreadyAdded = winners.some(
-      (winner) => winner.email === selectedMember.email,
-    );
-    if (isAlreadyAdded) {
-      toast({
-        title: "이미 추가된 당첨자입니다.",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-      });
+    if (selectedMember) {
+      const isAlreadyAdded = winners.some(
+        (winner) => winner.email === selectedMember.email,
+      );
+      if (isAlreadyAdded) {
+        toast({
+          title: "이미 추가된 당첨자입니다.",
+          status: "warning",
+          duration: 2000,
+          isClosable: true,
+        });
+      } else {
+        setWinners([...winners, selectedMember]);
+        setSelectedMember(null);
+      }
     } else {
-      setWinners([...winners, selectedMember]);
-      setSelectedMember(null);
+      setWinners([...winners, { email: "none", nickName: "none" }]);
+      toast({
+        title: "기본값으로 추가되었습니다.",
+        status: "info",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
@@ -104,16 +104,6 @@ export function PromoResultModify() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (winners.some((winner) => !winner.email || !winner.nickName)) {
-      toast({
-        title: "이메일과 닉네임을 모두 선택해 주세요.",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
 
     try {
       await axios.put(`/api/promotion/eventResult/${id}`, {
@@ -193,7 +183,7 @@ export function PromoResultModify() {
                 </Text>
               </FormControl>
               <Flex mb={4}>
-                <FormControl id="member" mr={4} isRequired>
+                <FormControl id="member" mr={4}>
                   <FormLabel fontWeight="bold" fontSize="lg">
                     이메일과 닉네임 선택
                   </FormLabel>
@@ -205,14 +195,18 @@ export function PromoResultModify() {
                         : ""
                     }
                     onChange={(e) => {
-                      const [email, nickName] = e.target.value.split(" (");
-                      setSelectedMember(
-                        members.find(
-                          (member) =>
-                            member.email === email &&
-                            member.nickName === nickName.slice(0, -1),
-                        ),
-                      );
+                      if (e.target.value === "") {
+                        setSelectedMember(null);
+                      } else {
+                        const [email, nickName] = e.target.value.split(" (");
+                        setSelectedMember(
+                          members.find(
+                            (member) =>
+                              member.email === email &&
+                              member.nickName === nickName.slice(0, -1),
+                          ),
+                        );
+                      }
                     }}
                     borderColor="gray.300"
                     focusBorderColor="blue.300"
