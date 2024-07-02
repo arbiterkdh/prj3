@@ -46,30 +46,36 @@ public class PaymentService {
 
         mapper.add(payment);
 
-        if (payment.getCheckCartId() != null && !payment.getCheckCartId().isEmpty()) {
+        if (payment.getBookData() == null) {
 
-            for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+            if (payment.getCheckCartId() != null && !payment.getCheckCartId().isEmpty()) {
 
-                orderMapper.copyCartData(payment.getCheckCartId().get(i), payment.getId());
-            }
+                for (int i = 0; i < payment.getCheckCartId().size(); i++) {
 
-            for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+                    orderMapper.copyCartData(payment.getCheckCartId().get(i), payment.getId());
+                }
 
-                Integer getQuantity = cartMapper.getQuantity(payment.getCheckCartId().get(i));
-                Integer productId = cartMapper.getProductId(payment.getCheckCartId().get(i));
-                productMapper.updateStock(productId, getQuantity);
-            }
+                for (int i = 0; i < payment.getCheckCartId().size(); i++) {
 
-            for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+                    Integer getQuantity = cartMapper.getQuantity(payment.getCheckCartId().get(i));
+                    Integer productId = cartMapper.getProductId(payment.getCheckCartId().get(i));
+                    productMapper.updateStock(productId, getQuantity);
+                }
 
-                cartMapper.deleteCartByCheckCartId(payment.getCheckCartId().get(i));
+                for (int i = 0; i < payment.getCheckCartId().size(); i++) {
+
+                    cartMapper.deleteCartByCheckCartId(payment.getCheckCartId().get(i));
+                }
+            } else {
+
+                orderMapper.addSinggleProductOrder(payment.getProductId(), payment.getQuantity(), payment.getId(), payment.getName(), payment.getAmount(), payment.getAmount(), payment.getMemberNumber());
+
+                productMapper.updateStock(payment.getProductId(), payment.getQuantity());
             }
         } else {
 
-            orderMapper.addSinggleProductOrder(payment.getProductId(), payment.getQuantity(), payment.getId(), payment.getName(), payment.getAmount(), payment.getAmount(), payment.getMemberNumber());
-
-            productMapper.updateStock(payment.getProductId(), payment.getQuantity());
         }
+
         return payment.getId();
     }
 
