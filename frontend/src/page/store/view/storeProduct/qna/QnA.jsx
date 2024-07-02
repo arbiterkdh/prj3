@@ -8,25 +8,26 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import axios from "axios";
-import AddQnAModal from "./AddQnAModal.jsx";
 import DeleteQnAModal from "./DeleteQnAModal.jsx";
 import ModifyQnAModal from "./ModifyQnAModal.jsx";
 import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
 import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
-function QnA({ productId, Login, listQnA, setListQnA }) {
-  const [pageInfo, setPageInfo] = useState({});
+function QnA({
+  productId,
+  Login,
+  listQnA,
+  setListQnA,
+  listQnARefresh,
+  onQnAOpen,
+  page,
+  setPage,
+  pageInfo,
+  setPageInfo,
+}) {
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
   const [writerQnA, setWriterQnA] = useState("");
-  const [page, setPage] = useState(1);
-
-  const {
-    isOpen: isQnAOpen,
-    onOpen: onQnAOpen,
-    onClose: onQnAClose,
-  } = useDisclosure();
 
   const {
     isOpen: isQnAContentOpen,
@@ -37,20 +38,6 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
   useEffect(() => {
     listQnARefresh();
   }, [page]);
-
-  const listQnARefresh = () => {
-    axios
-      .get(`/api/store/product/qna/list/${productId}`, {
-        params: { page },
-      })
-      .then((res) => {
-        setListQnA(res.data.listQnA);
-        setPageInfo(res.data.pageInfo);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
 
   const clicked = {
     variant: "solid",
@@ -194,14 +181,6 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
           </Box>
         </Td>
       </Tr>
-
-      <AddQnAModal
-        isQnAOpen={isQnAOpen}
-        onQnAClose={onQnAClose}
-        productId={productId}
-        Login={Login}
-        listQnARefresh={listQnARefresh}
-      />
     </>
   );
 }
