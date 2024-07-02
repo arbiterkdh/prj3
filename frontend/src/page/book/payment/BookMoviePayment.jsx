@@ -132,7 +132,6 @@ export function BookMoviePayment() {
             .then((res) => {
               const paymentId = res.data;
               setPaymentId(paymentId);
-              console.log("payment id 값 " + paymentId);
               navigate("/book/payment/payment-success", {
                 state: { paymentId },
               });
@@ -190,10 +189,15 @@ export function BookMoviePayment() {
               memberNumber: account.id,
               bookData,
             })
-            .then((res) => {})
+            .then((res) => {
+              const paymentId = res.data;
+              setPaymentId(paymentId);
+              navigate("/book/payment/payment-success", {
+                state: { paymentId },
+              });
+            })
             .catch(() => {})
             .finally(() => {});
-          navigate("/book/payment/payment-success");
         } else {
           console.log(rsp + "결제 실패");
         }

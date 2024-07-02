@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class BookTicket {
-    private Integer bookTicketId;
+    private Integer bookTicketPaymentId;
     private Integer bookTicketMovieId;
     private Integer bookTicketBookPlaceTimeId;
     private Integer bookTicketMemberNumber;

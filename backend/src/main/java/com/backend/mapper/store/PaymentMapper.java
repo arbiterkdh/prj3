@@ -56,4 +56,11 @@ public interface PaymentMapper {
             WHERE order_number = #{orderNumber}
             """)
     int updatePaymentStatus(Payment payment);
+
+    @Select("""
+            SELECT *
+            FROM payment
+            WHERE id = #{paymentId}
+            """)
+    Payment getPayment(Integer paymentId);
 }

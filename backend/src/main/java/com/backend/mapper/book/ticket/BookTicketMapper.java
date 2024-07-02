@@ -3,16 +3,23 @@ package com.backend.mapper.book.ticket;
 import com.backend.domain.book.ticket.BookTicket;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface BookTicketMapper {
 
     @Insert("""
             INSERT INTO book_ticket
-            (book_ticket_movie_id, book_ticket_book_place_time_id, book_ticket_member_number, book_ticket_row_cols, book_ticket_price)
-            VALUES (#{bookTicketMovieId}, #{bookTicketBookPlaceTimeId}, #{bookTicketMemberNumber}, #{bookTicketRowCols}, #{bookTicketPrice})
+            (book_ticket_payment_id, book_ticket_movie_id, book_ticket_book_place_time_id, book_ticket_member_number, book_ticket_row_cols, book_ticket_price)
+            VALUES (#{bookTicketPaymentId}, #{bookTicketMovieId}, #{bookTicketBookPlaceTimeId}, #{bookTicketMemberNumber}, #{bookTicketRowCols}, #{bookTicketPrice})
             """)
-    @Options(useGeneratedKeys = true, keyProperty = "bookTicketId")
     int addBookTicket(BookTicket bookTicket);
+
+    @Select("""
+            SELECT *
+            FROM book_ticket
+            WHERE book_ticket_payment_id = #{paymentId}
+            AND book_ticket_member_number = #{memberNumber}
+            """)
+    BookTicket getBookTicket(Integer memberNumber, Integer paymentId);
 }
