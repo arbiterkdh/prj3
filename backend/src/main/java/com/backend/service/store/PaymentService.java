@@ -1,7 +1,10 @@
 package com.backend.service.store;
 
+import com.backend.domain.book.BookData;
+import com.backend.domain.book.ticket.BookTicket;
 import com.backend.domain.store.Payment;
 import com.backend.domain.store.PaymentCancel;
+import com.backend.mapper.book.ticket.BookTicketMapper;
 import com.backend.mapper.store.*;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -23,7 +26,6 @@ import java.util.List;
 @Service
 public class PaymentService {
 
-    private final PaymentMapper mapper;
     private final CartMapper cartMapper;
     private final ProductOrderMapper orderMapper;
     private final ProductMapper productMapper;
@@ -31,6 +33,8 @@ public class PaymentService {
     private final QrService qrService;
     private final PaymentMapper paymentMapper;
     private final PaymentCancelMapper paymentCancelMapper;
+
+    private final BookTicketMapper bookTicketMapper;
 
     @Value("${payment.key}")
     private String apiKey;
@@ -44,7 +48,7 @@ public class PaymentService {
 
         payment.setQrCode(qrCode);
 
-        mapper.add(payment);
+        paymentMapper.add(payment);
 
         if (payment.getBookData() == null) {
 
@@ -73,7 +77,26 @@ public class PaymentService {
                 productMapper.updateStock(payment.getProductId(), payment.getQuantity());
             }
         } else {
+            BookData bookData = payment.getBookData();
+            BookTicket bookTicket = new BookTicket();
 
+            bookTicket.setBookTicketMovieId(bookData.getMovie().getId());
+            bookTicket.setBookTicketBookPlaceTimeId(bookData.getBookSeatBookPlaceTimeId());
+            bookTicket.setBookTicketMemberNumber(payment.getMemberNumber());
+
+            List<String> bookTicketRowColList = bookData.getSeatSelected();
+            StringBuilder bookTicketRowCols = new StringBuilder();
+
+            for (int i = 0; i < bookTicketRowColList.size(); i++) {
+                bookTicketRowCols.append(bookTicketRowColList.get(i));
+                if (i < bookTicketRowColList.size() - 1) {
+                    bookTicketRowCols.append(", ");
+                }
+            }
+            bookTicket.setBookTicketRowCols(bookTicketRowCols.toString());
+            bookTicket.setBookTicketPrice(bookData.getTotalAmount());
+
+            bookTicketMapper.addBookTicket(bookTicket);
         }
 
         return payment.getId();
@@ -81,7 +104,7 @@ public class PaymentService {
 
     public List<Payment> getData(Integer memberNumber, Integer paymentId) {
 
-        return mapper.getData(memberNumber, paymentId);
+        return paymentMapper.getData(memberNumber, paymentId);
     }
 
     public String getToken() throws Exception {

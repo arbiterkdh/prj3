@@ -1,16 +1,21 @@
 import {
   Box,
+  Button,
   CloseButton,
   Flex,
   Image,
   Stack,
+  Text,
   useToast,
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
 import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function BookMoviePayment() {
   const { setBookProgress } = useOutletContext();
@@ -183,8 +188,7 @@ export function BookMoviePayment() {
               buyerName: rsp.buyer_name,
               buyerEmail: rsp.buyer_email,
               memberNumber: account.id,
-              numberOfPeople: bookData.numberOfPeople,
-              bookDatas: bookData,
+              bookData,
             })
             .then((res) => {})
             .catch(() => {})
@@ -268,11 +272,28 @@ export function BookMoviePayment() {
                 원
               </Box>
               <Flex>
-                <ColorButton onClick={() => onClickKakaopay()}>
-                  카카오 결제
-                </ColorButton>
+                <Button
+                  bgColor={"yellow"}
+                  leftIcon={<RiKakaoTalkFill size={"20px"} />}
+                  _hover={{
+                    bgColor: "#e0e008",
+                  }}
+                  _dark={{
+                    bgColor: "#d6d604",
+                    color: "black",
+                    _hover: {
+                      bgColor: "#d3d334",
+                    },
+                  }}
+                  onClick={() => {
+                    onClickKakaopay();
+                  }}
+                >
+                  <Text>페이</Text>
+                </Button>
                 <ColorButton onClick={() => onClickInicsis()}>
-                  카드 결제
+                  <FontAwesomeIcon icon={faCreditCard} />
+                  <Box ml={2}>결제</Box>
                 </ColorButton>
               </Flex>
             </Stack>
