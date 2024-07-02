@@ -69,8 +69,8 @@ public class PromoResultService {
         }
     }
 
-    public void deletePromoResult(int id) {
-        promoResultMapper.deletePromoResult(id);
+    public void deletePromoResultById(int promotionId) {
+        promoResultMapper.deletePromoResultByPromotionId(promotionId);
     }
 
     private Map<String, Object> createPageInfo(int page, int countAll, int pageSize) {
@@ -96,7 +96,8 @@ public class PromoResultService {
 
     private void deserializeWinners(PromoResult result) {
         try {
-            List<PromoResult.Winner> winners = objectMapper.readValue(result.getWinnersJson(), new TypeReference<List<PromoResult.Winner>>() {});
+            List<PromoResult.Winner> winners = objectMapper.readValue(result.getWinnersJson(), new TypeReference<List<PromoResult.Winner>>() {
+            });
             result.setWinners(winners);
         } catch (IOException e) {
             throw new RuntimeException("Failed to deserialize winners list", e);

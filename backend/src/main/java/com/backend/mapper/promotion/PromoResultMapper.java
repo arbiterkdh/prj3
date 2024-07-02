@@ -28,9 +28,10 @@ public interface PromoResultMapper {
     int countPromoResults();
 
     @Delete("""
-            DELETE FROM promo_result WHERE id = #{id}
+            DELETE FROM promo_result
+            WHERE promotion_id = #{promotionId}
             """)
-    int deletePromoResult(Integer id);
+    int deletePromoResultByPromotionId(Integer promotionId);
 
     @Select("""
             SELECT pr.id, pr.promotion_id, pr.announcement_date, pr.winners as winnersJson,

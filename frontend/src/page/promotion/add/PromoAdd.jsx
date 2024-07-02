@@ -6,6 +6,7 @@ import {
   Input,
   Select,
   Textarea,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -78,8 +79,17 @@ export function PromoAdd() {
     promoThumbnailFile.length === 0 ||
     promoDetailFile.length === 0;
 
+  const bgColor = useColorModeValue("white", "gray.800");
+  const textColor = useColorModeValue("black", "white");
+
   return (
-    <Box display="flex" justifyContent="center" py={6}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      py={6}
+      bg={bgColor}
+      color={textColor}
+    >
       <Box
         width="70%"
         maxWidth="800px"
@@ -88,7 +98,8 @@ export function PromoAdd() {
         borderRadius="10px"
         p={6}
         boxShadow="md"
-        bg="white"
+        bg={bgColor}
+        color={textColor}
       >
         <Box display="flex" justifyContent="space-between" mb={4}>
           <FormControl flex="7" mr={2}>

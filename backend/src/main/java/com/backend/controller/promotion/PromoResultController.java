@@ -44,10 +44,10 @@ public class PromoResultController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{promotionId}")
     @PreAuthorize("hasAuthority('SCOPE_admin')")
-    public ResponseEntity<Void> deletePromoResult(@PathVariable Integer id) {
-        promoResultService.deletePromoResult(id);
+    public ResponseEntity<Void> deletePromoResult(@PathVariable Integer promotionId) {
+        promoResultService.deletePromoResultById(promotionId);
         return ResponseEntity.ok().build();
     }
 }

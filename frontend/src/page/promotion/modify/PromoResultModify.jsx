@@ -19,8 +19,10 @@ import {
   Th,
   Thead,
   Tr,
+  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 
 export function PromoResultModify() {
   const { id } = useParams();
@@ -69,29 +71,29 @@ export function PromoResultModify() {
   }, [winners]);
 
   const handleAddWinner = () => {
-    if (!selectedMember) {
-      toast({
-        title: "이메일과 닉네임을 모두 선택해 주세요.",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    const isAlreadyAdded = winners.some(
-      (winner) => winner.email === selectedMember.email,
-    );
-    if (isAlreadyAdded) {
-      toast({
-        title: "이미 추가된 당첨자입니다.",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-      });
+    if (selectedMember) {
+      const isAlreadyAdded = winners.some(
+        (winner) => winner.email === selectedMember.email,
+      );
+      if (isAlreadyAdded) {
+        toast({
+          title: "이미 추가된 당첨자입니다.",
+          status: "warning",
+          duration: 2000,
+          isClosable: true,
+        });
+      } else {
+        setWinners([...winners, selectedMember]);
+        setSelectedMember(null);
+      }
     } else {
-      setWinners([...winners, selectedMember]);
-      setSelectedMember(null);
+      setWinners([...winners, { email: "none", nickName: "none" }]);
+      toast({
+        title: "기본값으로 추가되었습니다.",
+        status: "info",
+        duration: 2000,
+        isClosable: true,
+      });
     }
   };
 
@@ -102,16 +104,6 @@ export function PromoResultModify() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (winners.some((winner) => !winner.email || !winner.nickName)) {
-      toast({
-        title: "이메일과 닉네임을 모두 선택해 주세요.",
-        status: "warning",
-        duration: 2000,
-        isClosable: true,
-      });
-      return;
-    }
 
     try {
       await axios.put(`/api/promotion/eventResult/${id}`, {
@@ -145,6 +137,9 @@ export function PromoResultModify() {
       member.nickName.toLowerCase().includes(memberSearchQuery.toLowerCase()),
   );
 
+  const bgColor = useColorModeValue("white", "gray.800");
+  const textColor = useColorModeValue("black", "white");
+
   if (loading) {
     return (
       <Center>
@@ -155,123 +150,135 @@ export function PromoResultModify() {
 
   return (
     <Center>
-      <Box
-        width="70%"
-        maxWidth="800px"
-        border="2px solid"
-        borderColor="blue.300"
-        borderRadius="10px"
-        p={6}
-        boxShadow="md"
-        bg="white"
+      <CenterBox
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        backgroundColor="gray.100"
       >
-        <Heading textAlign="center" mb={6} fontWeight="bold" fontSize="2xl">
-          당첨자 발표 수정
-        </Heading>
-        <Box width="100%">
-          <form onSubmit={handleSubmit}>
-            <FormControl id="promotion" mb={4}>
-              <FormLabel fontWeight="bold" fontSize="lg">
-                프로모션 선택
-              </FormLabel>
-              <Text>
-                {promotion
-                  ? `${promotion.eventName} - ${promotion.eventType} - ${announcementDate}`
-                  : "로딩 중..."}
-              </Text>
-            </FormControl>
-            <Flex mb={4}>
-              <FormControl id="member" mr={4} isRequired>
+        <Box
+          width="70%"
+          maxWidth="800px"
+          border="2px solid"
+          borderColor="blue.300"
+          borderRadius="10px"
+          p={6}
+          boxShadow="md"
+          bg={bgColor}
+          color={textColor}
+        >
+          <Heading textAlign="center" mb={6} fontWeight="bold" fontSize="2xl">
+            당첨자 발표 수정
+          </Heading>
+          <Box width="100%">
+            <form onSubmit={handleSubmit}>
+              <FormControl id="promotion" mb={4}>
                 <FormLabel fontWeight="bold" fontSize="lg">
-                  이메일과 닉네임 선택
+                  이벤트 선택
                 </FormLabel>
-                <Select
-                  placeholder="당첨자를 선택하세요"
-                  value={
-                    selectedMember
-                      ? `${selectedMember.email} (${selectedMember.nickName})`
-                      : ""
-                  }
-                  onChange={(e) => {
-                    const [email, nickName] = e.target.value.split(" (");
-                    setSelectedMember(
-                      members.find(
-                        (member) =>
-                          member.email === email &&
-                          member.nickName === nickName.slice(0, -1),
-                      ),
-                    );
-                  }}
-                  borderColor="gray.300"
-                  focusBorderColor="blue.300"
-                  _hover={{ borderColor: "blue.300" }}
-                >
-                  {filteredMembers.map((member) => (
-                    <option
-                      key={member.email}
-                      value={`${member.email} (${member.nickName})`}
-                    >
-                      {member.email} - {member.nickName}
-                    </option>
-                  ))}
-                </Select>
+                <Text>
+                  {promotion
+                    ? `${promotion.eventName} - ${promotion.eventType} - ${announcementDate}`
+                    : "로딩 중..."}
+                </Text>
               </FormControl>
-              <FormControl id="memberSearchQuery">
-                <FormLabel fontWeight="bold" fontSize="lg">
-                  회원 검색
-                </FormLabel>
-                <Input
-                  placeholder="이메일 또는 닉네임을 입력하세요"
-                  value={memberSearchQuery}
-                  onChange={(e) => setMemberSearchQuery(e.target.value)}
-                  borderColor="gray.300"
-                  focusBorderColor="blue.300"
-                  _hover={{ borderColor: "blue.300" }}
-                />
-              </FormControl>
-            </Flex>
-            <Button colorScheme="green" onClick={handleAddWinner} mb={4}>
-              당첨자 추가
-            </Button>
-            <Table mt={4}>
-              <Thead>
-                <Tr>
-                  <Th>이메일</Th>
-                  <Th>당첨자 닉네임</Th>
-                  <Th>삭제</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {winners.map((winner, index) => (
-                  <Tr key={index}>
-                    <Td>{winner.email}</Td>
-                    <Td>{winner.nickName}</Td>
-                    <Td>
-                      <Button
-                        colorScheme="red"
-                        onClick={() => handleRemoveWinner(index)}
+              <Flex mb={4}>
+                <FormControl id="member" mr={4}>
+                  <FormLabel fontWeight="bold" fontSize="lg">
+                    이메일과 닉네임 선택
+                  </FormLabel>
+                  <Select
+                    placeholder="당첨자를 선택하세요"
+                    value={
+                      selectedMember
+                        ? `${selectedMember.email} (${selectedMember.nickName})`
+                        : ""
+                    }
+                    onChange={(e) => {
+                      if (e.target.value === "") {
+                        setSelectedMember(null);
+                      } else {
+                        const [email, nickName] = e.target.value.split(" (");
+                        setSelectedMember(
+                          members.find(
+                            (member) =>
+                              member.email === email &&
+                              member.nickName === nickName.slice(0, -1),
+                          ),
+                        );
+                      }
+                    }}
+                    borderColor="gray.300"
+                    focusBorderColor="blue.300"
+                    _hover={{ borderColor: "blue.300" }}
+                  >
+                    {filteredMembers.map((member) => (
+                      <option
+                        key={member.email}
+                        value={`${member.email} (${member.nickName})`}
                       >
-                        삭제
-                      </Button>
-                    </Td>
+                        {member.email} - {member.nickName}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl id="memberSearchQuery">
+                  <FormLabel fontWeight="bold" fontSize="lg">
+                    회원 검색
+                  </FormLabel>
+                  <Input
+                    placeholder="이메일 또는 닉네임을 입력하세요"
+                    value={memberSearchQuery}
+                    onChange={(e) => setMemberSearchQuery(e.target.value)}
+                    borderColor="gray.300"
+                    focusBorderColor="blue.300"
+                    _hover={{ borderColor: "blue.300" }}
+                  />
+                </FormControl>
+              </Flex>
+              <Button colorScheme="green" onClick={handleAddWinner} mb={4}>
+                당첨자 추가
+              </Button>
+              <Table mt={4}>
+                <Thead>
+                  <Tr>
+                    <Th>이메일</Th>
+                    <Th>당첨자 닉네임</Th>
+                    <Th>삭제</Th>
                   </Tr>
-                ))}
-              </Tbody>
-            </Table>
-            <Button
-              type="submit"
-              colorScheme="blue"
-              mt={6}
-              width="full"
-              isDisabled={isSubmitButtonDisabled}
-              fontSize="lg"
-              py={6}
-            >
-              수정하기
-            </Button>
-          </form>
+                </Thead>
+                <Tbody>
+                  {winners.map((winner, index) => (
+                    <Tr key={index}>
+                      <Td>{winner.email}</Td>
+                      <Td>{winner.nickName}</Td>
+                      <Td>
+                        <Button
+                          colorScheme="red"
+                          onClick={() => handleRemoveWinner(index)}
+                        >
+                          삭제
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <Button
+                type="submit"
+                colorScheme="blue"
+                mt={6}
+                width="full"
+                isDisabled={isSubmitButtonDisabled}
+                fontSize="lg"
+                py={6}
+              >
+                수정하기
+              </Button>
+            </form>
+          </Box>
         </Box>
-      </Box>
+      </CenterBox>
     </Center>
   );
 }
