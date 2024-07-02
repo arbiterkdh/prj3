@@ -19,8 +19,6 @@ public class ProductQnAController {
     @PostMapping("/add")
     public void addQnA(@RequestBody ProductQnA productQnA) {
 
-        System.out.println("productQnA = " + productQnA);
-
         service.addQnA(productQnA);
     }
 

@@ -10,6 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function ModifyCartModal({
   isModifyOpen,
@@ -43,13 +44,22 @@ export function ModifyCartModal({
   return (
     <Modal isOpen={isModifyOpen} onClose={onModifyClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent _dark={{ bgColor: "#1F3032" }}>
         <ModalHeader>수량 변경 알림</ModalHeader>
         <ModalBody>수량을 변경하시겠습니까?</ModalBody>
         <ModalFooter>
           <Flex>
-            <Button onClick={handleModifyCart}>확인</Button>
-            <Button onClick={onModifyClose}>취소</Button>
+            <ColorButton onClick={handleModifyCart}>확인</ColorButton>
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              onClick={onModifyClose}
+            >
+              취소
+            </Button>
           </Flex>
         </ModalFooter>
       </ModalContent>

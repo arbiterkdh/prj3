@@ -1,7 +1,6 @@
 import {
   Alert,
   AlertDescription,
-  AlertIcon,
   Box,
   Button,
   Center,
@@ -34,6 +33,7 @@ import { LoginContext } from "../../../component/LoginProvider.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { ModifyCartModal } from "./ModifyCartModal.jsx";
 import { CartContext } from "../../../component/CartProvider.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function StoreCart() {
   const [productCartList, setProductCartList] = useState([]);
@@ -141,6 +141,16 @@ export function StoreCart() {
             <Checkbox
               isChecked={checkItem[cartItem.productId]}
               onChange={() => handleCheckBoxChange(cartItem.productId)}
+              ml={"3px"}
+              _checked={{
+                "& .chakra-checkbox__control": {
+                  backgroundColor: "#ff4357",
+                  borderColor: "#ff4357",
+                  _hover: {
+                    backgroundColor: "#ff4357",
+                  },
+                },
+              }}
             ></Checkbox>
           </CenterTd>
           <CenterTd>
@@ -177,7 +187,11 @@ export function StoreCart() {
           <CenterTd>{cartItem.price}원</CenterTd>
           <CenterTd>
             <Button
-              colorScheme={"blue"}
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
               onClick={() => {
                 onModifyOpen();
                 setCartId(cartItem.id);
@@ -188,8 +202,7 @@ export function StoreCart() {
             </Button>
           </CenterTd>
           <CenterTd>
-            <Button
-              colorScheme={"red"}
+            <ColorButton
               onClick={() => {
                 onOpen();
                 setProductId(cartItem.productId);
@@ -197,7 +210,7 @@ export function StoreCart() {
               }}
             >
               삭제
-            </Button>
+            </ColorButton>
           </CenterTd>
           <CenterTd>{cartItem.regDate}</CenterTd>
         </Tr>
@@ -256,6 +269,16 @@ export function StoreCart() {
               <Tr>
                 <CenterTh w={"10%"}>
                   <Checkbox
+                    ml={"3px"}
+                    _checked={{
+                      "& .chakra-checkbox__control": {
+                        backgroundColor: "#ff4357",
+                        borderColor: "#ff4357",
+                        _hover: {
+                          backgroundColor: "#ff4357",
+                        },
+                      },
+                    }}
                     isChecked={productCartList.every(
                       (item) => checkItem[item.productId],
                     )}
@@ -288,13 +311,22 @@ export function StoreCart() {
             </Tbody>
           </Table>
         </TableContainer>
-        <Box>
+        <Box mb={3}>
           <Box mb={10}>
             <Heading>최종 결제 금액</Heading>
           </Box>
-          <Alert status="info">
+          <Alert
+            status="info"
+            border={"1px solid #f2efef"}
+            bgColor={"#f2efef"}
+            _dark={{
+              border: "1px solid #2d4c4c",
+              bgColor: "#2d4c4c",
+            }}
+            borderRadius={"10px"}
+          >
             <Flex m={10} justifyContent={"flex-end"} w={"100%"}>
-              <AlertIcon />
+              {/*<AlertIcon />*/}
               <AlertDescription>
                 <Text fontSize={"1.3rem"}>
                   총 {totalSelectItem}개의 상품금액 = 합계 {totalSum}원
@@ -303,6 +335,7 @@ export function StoreCart() {
             </Flex>
           </Alert>
         </Box>
+
         <Payment
           totalSum={totalSum}
           productCartList={productCartList}
@@ -320,19 +353,28 @@ export function StoreCart() {
 
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent _dark={{ bgColor: "#1F3032" }}>
             <ModalHeader>장바구니 알림</ModalHeader>
             <ModalBody>{productName}을 삭제하시겠습니까?</ModalBody>
             <ModalFooter>
               <Flex>
-                <Button
+                <ColorButton
                   onClick={() => handleItemDelete(productId)}
                   colorScheme={"red"}
                   isLoading={isLoading}
                 >
                   확인
+                </ColorButton>
+                <Button
+                  bgColor={"dimgray"}
+                  color={"white"}
+                  _hover={{
+                    bgColor: "gray",
+                  }}
+                  onClick={onClose}
+                >
+                  취소
                 </Button>
-                <Button onClick={onClose}>취소</Button>
               </Flex>
             </ModalFooter>
           </ModalContent>

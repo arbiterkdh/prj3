@@ -314,7 +314,7 @@ export function MemberMyPage() {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Card>
+              <Card _dark={{ bgColor: "#1F3032" }}>
                 <CardHeader></CardHeader>
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">

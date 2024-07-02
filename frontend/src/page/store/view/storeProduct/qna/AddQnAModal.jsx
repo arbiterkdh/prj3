@@ -29,6 +29,7 @@ function AddQnAModal({
   const toast = useToast();
 
   function handleQnAAdd(title, content) {
+    console.log("dddd");
     axios
       .post("/api/store/product/qna/add", {
         productId,
@@ -56,7 +57,7 @@ function AddQnAModal({
     <>
       <Modal isOpen={isQnAOpen} onClose={onQnAClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>문의글 작성</ModalHeader>
           <ModalBody>
             <FormControl mb={3}>
