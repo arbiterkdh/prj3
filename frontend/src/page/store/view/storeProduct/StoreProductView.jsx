@@ -78,10 +78,55 @@ export function StoreProductView() {
 
         <Box>
           <Tabs isFitted variant="enclosed">
-            <TabList mb="1em">
-              <Tab>상세내용</Tab>
-              <Tab>코멘트</Tab>
-              <Tab>문의</Tab>
+            <TabList mb="1em" borderBottom={"none"}>
+              <Tab
+                borderBottom={"1px solid lightgray"}
+                _selected={{
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #FEFEFE",
+                }}
+                _dark={{
+                  _selected: {
+                    color: "white",
+                    border: "1px solid lightgray",
+                    borderBottom: "1px solid #1F3032",
+                  },
+                }}
+              >
+                상세내용
+              </Tab>
+              <Tab
+                borderBottom={"1px solid lightgray"}
+                _selected={{
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #FEFEFE",
+                }}
+                _dark={{
+                  _selected: {
+                    color: "white",
+                    border: "1px solid lightgray",
+                    borderBottom: "1px solid #1F3032",
+                  },
+                }}
+              >
+                코멘트
+              </Tab>
+              <Tab
+                borderBottom={"1px solid lightgray"}
+                _selected={{
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #FEFEFE",
+                }}
+                _dark={{
+                  _selected: {
+                    color: "white",
+                    border: "1px solid lightgray",
+                    borderBottom: "1px solid #1F3032",
+                  },
+                }}
+              >
+                문의
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>

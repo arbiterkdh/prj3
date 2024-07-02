@@ -11,6 +11,8 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function DeleteQnAModal({ itemQnAId, listQnARefresh }) {
   const toast = useToast();
@@ -33,15 +35,46 @@ function DeleteQnAModal({ itemQnAId, listQnARefresh }) {
     <>
       <Popover>
         <PopoverTrigger>
-          <Badge bgColor={"#e73426"} color={"white"} cursor={"pointer"}>
-            삭제
+          <Badge
+            color={"white"}
+            bgColor={"red.500"}
+            _hover={{
+              bgColor: "red.600",
+            }}
+            _dark={{
+              bgColor: "red.700",
+              _hover: {
+                color: "whiteAlpha.900",
+                bgColor: "red.600",
+              },
+            }}
+            color={"white"}
+            cursor={"pointer"}
+          >
+            <FontAwesomeIcon icon={faX} />
           </Badge>
         </PopoverTrigger>
         <PopoverContent>
           <PopoverHeader fontWeight="semibold">
-            <Flex>
-              <Text>삭제 하시겠습니까?</Text>
-              <Badge onClick={() => handleQnADelete(itemQnAId)}>확인</Badge>
+            <Flex gap={3}>
+              <Text>삭제 하시겠습니까? </Text>
+              <Badge
+                color={"white"}
+                bgColor={"red.500"}
+                _hover={{
+                  bgColor: "red.600",
+                }}
+                _dark={{
+                  bgColor: "red.700",
+                  _hover: {
+                    color: "whiteAlpha.900",
+                    bgColor: "red.600",
+                  },
+                }}
+                onClick={() => handleQnADelete(itemQnAId)}
+              >
+                확인
+              </Badge>
             </Flex>
           </PopoverHeader>
           <PopoverCloseButton />

@@ -16,6 +16,8 @@ import {
 import FocusLock from "react-focus-lock";
 import React, { useState } from "react";
 import axios from "axios";
+import { faWrench } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function ModifyQnAModal({
   isQnAModifyOpen,
@@ -59,18 +61,24 @@ function ModifyQnAModal({
       >
         <PopoverTrigger>
           <Badge
-            variant="outline"
-            bgColor={"green.500"}
-            color={"white"}
             cursor={"pointer"}
+            bgColor={"dimgray"}
+            color={"white"}
+            _hover={{
+              bgColor: "gray",
+            }}
           >
-            수정
+            <FontAwesomeIcon icon={faWrench} />
           </Badge>
         </PopoverTrigger>
-        <PopoverContent>
+        <PopoverContent _dark={{ bgColor: "#1F3032" }}>
           <FocusLock returnFocus persistentFocus={true}>
-            <PopoverHeader fontWeight="semibold">
+            <PopoverHeader fontWeight="semibold" mt={5}>
+              <FormControl>
+                <FormLabel>제목</FormLabel>
+              </FormControl>
               <Input
+                _dark={{ bgColor: "#1F3032" }}
                 value={currentTitle}
                 onChange={(e) => setCurrentTitle(e.target.value)}
               />
@@ -80,15 +88,28 @@ function ModifyQnAModal({
               <FormControl>
                 <FormLabel>내용</FormLabel>
                 <Textarea
+                  _dark={{ bgColor: "#1F3032" }}
                   value={currentContent}
+                  resize={"none"}
                   onChange={(e) => setCurrentContent(e.target.value)}
                 ></Textarea>
               </FormControl>
             </PopoverBody>
             <PopoverFooter>
               <Badge
-                variant="outline"
-                colorScheme="green"
+                color={"white"}
+                bgColor={"red.500"}
+                _hover={{
+                  bgColor: "red.600",
+                }}
+                _dark={{
+                  bgColor: "red.700",
+                  _hover: {
+                    color: "whiteAlpha.900",
+                    bgColor: "red.600",
+                  },
+                }}
+                cursor={"pointer"}
                 onClick={() => {
                   handleQnAModify(itemQnAId, currentTitle, currentContent);
                   onQnAModifyClose();

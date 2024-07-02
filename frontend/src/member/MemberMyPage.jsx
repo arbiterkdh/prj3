@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Center,
   Heading,
   Input,
@@ -305,17 +304,91 @@ export function MemberMyPage() {
       <CenterBox>
         <Heading size="md">마이페이지</Heading>
         <Tabs isFitted variant="enclosed">
-          <TabList mb="1em">
-            <Tab>회원정보</Tab>
-            <Tab>비밀번호 변경</Tab>
-            <Tab>예매내역</Tab>
-            <Tab>결제내역({pageInfoPaymentResult.totalCount})</Tab>
-            <Tab>취소내역({pageInfoPaymentCancelResult.totalCount})</Tab>
+          <TabList mb="1em" borderBottom={"none"}>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              회원정보
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              비밀번호 변경
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              예매내역
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              결제내역({pageInfoPaymentResult.totalCount})
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              취소내역({pageInfoPaymentCancelResult.totalCount})
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
               <Card _dark={{ bgColor: "#1F3032" }}>
-                <CardHeader></CardHeader>
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
                     <Box>
