@@ -284,6 +284,21 @@ export function MemberMyPage() {
       .finally(() => {});
   }
 
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
+
   return (
     <Center>
       <CenterBox>
@@ -431,6 +446,7 @@ export function MemberMyPage() {
                       )}
                     </Tr>
                   ))}
+
                   {paymentResult.length > 0 && (
                     <Tr>
                       <Td colSpan={5} style={{ textAlign: "center" }}>
@@ -453,14 +469,15 @@ export function MemberMyPage() {
                             (pageNumber) =>
                               pageNumber !== 0 && (
                                 <Button
+                                  size={"sm"}
                                   onClick={() => setPage(pageNumber)}
-                                  key={pageNumber}
-                                  colorScheme={
+                                  sx={
                                     pageNumber ===
                                     pageInfoPaymentResult.currentPageNumber
-                                      ? "blue"
-                                      : "gray"
+                                      ? clicked
+                                      : {}
                                   }
+                                  key={pageNumber}
                                 >
                                   {pageNumber}
                                 </Button>
@@ -564,13 +581,14 @@ export function MemberMyPage() {
                             (pageNumber) =>
                               pageNumber !== 0 && (
                                 <Button
+                                  size={"sm"}
                                   onClick={() => setPage(pageNumber)}
                                   key={pageNumber}
-                                  colorScheme={
+                                  sx={
                                     pageNumber ===
                                     pageInfoPaymentCancelResult.currentPageNumber
-                                      ? "blue"
-                                      : "gray"
+                                      ? clicked
+                                      : {}
                                   }
                                 >
                                   {pageNumber}

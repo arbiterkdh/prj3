@@ -83,6 +83,21 @@ function Comment({ Login, productId, commentList, setCommentList }) {
     }
   }, [Login.id, productId]);
 
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
+
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumbers.push(i);
@@ -114,10 +129,8 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     <Button
                       onClick={() => setPage(pageNumber)}
                       key={pageNumber}
-                      colorScheme={
-                        pageNumber === pageInfo.currentPageNumber
-                          ? "blue"
-                          : "gray"
+                      sx={
+                        pageNumber === pageInfo.currentPageNumber ? clicked : {}
                       }
                     >
                       {pageNumber}
