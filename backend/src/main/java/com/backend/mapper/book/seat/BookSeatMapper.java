@@ -101,4 +101,13 @@ public interface BookSeatMapper {
             WHERE book_place_time_id = #{bookPlaceTimeId}
             """)
     int updateBookPlaceTimeVacancyByBookPlaceTimeIdUsingBookSeatMemberNumberWithoutPaymentCounted(Integer count, Integer bookPlaceTimeId);
+
+    @Update("""
+            UPDATE book_seat
+            SET is_paying = #{isPaying}
+            WHERE book_seat_book_place_time_id = #{bookSeatBookPlaceTimeId}
+            AND row_col = #{rowCol}
+            AND book_seat_member_number = #{bookSeatMemberNumber}
+            """)
+    int updateBookSeatIsPayingByBookSeat(BookSeat bookSeat);
 }

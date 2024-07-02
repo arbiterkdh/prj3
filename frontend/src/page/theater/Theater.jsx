@@ -37,9 +37,9 @@ export function Theater() {
       .catch()
       .finally();
 
-    axios
-      .get("/api/promotion/recommendations")
-      .then((res) => setRecommendedPromos(res.data));
+    axios.get("/api/promotion/recommendations").then((res) => {
+      setRecommendedPromos(res.data);
+    });
   }, []);
 
   return (
@@ -89,7 +89,11 @@ export function Theater() {
               >
                 <Image
                   borderRadius={"30px"}
-                  src={recommendedPromos[0].fileList[0].src}
+                  src={
+                    recommendedPromos[0].fileList[
+                      recommendedPromos[0].fileList.length - 2
+                    ].filePath
+                  }
                 />
               </Box>
               <Box
@@ -105,7 +109,11 @@ export function Theater() {
               >
                 <Image
                   borderRadius={"30px"}
-                  src={recommendedPromos[1].fileList[0].src}
+                  src={
+                    recommendedPromos[1].fileList[
+                      recommendedPromos[1].fileList.length - 2
+                    ].filePath
+                  }
                 />
               </Box>
             </Flex>

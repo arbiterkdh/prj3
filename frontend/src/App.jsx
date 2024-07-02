@@ -105,7 +105,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Book /> },
           { path: "theaterseat", element: <TheaterSeatList /> },
-          { path: "movie/payment", element: <BookMoviePayment /> },
+          { path: "payment", element: <BookMoviePayment /> },
         ],
       },
 

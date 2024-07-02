@@ -56,6 +56,14 @@ public class BookSeatController {
         return null;
     }
 
+    @PutMapping("state/paying")
+    public ResponseEntity modifyBookSeatIsPaying(@RequestBody BookSeat bookSeat) {
+        boolean result = bookSeatService.modifyBookSeatIsPaying(bookSeat);
+        return result ?
+                ResponseEntity.status(HttpStatus.OK).build() :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @DeleteMapping("delete")
     public void deleteAllBookSeatByClickingCloseButton(
             @RequestParam("bookseatmembernumber") Integer bookSeatMemberNumber,

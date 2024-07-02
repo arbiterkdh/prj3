@@ -108,4 +108,15 @@ public class BookSeatService {
             bookSeatMapper.deleteBookSeatByCompareSelectedTimeWithCurrentTime();
         }
     }
+
+    public boolean modifyBookSeatIsPaying(BookSeat bookSeat) {
+        List<String> rowColList = bookSeat.getRowColList();
+        int result = 0;
+        for (String rowCol : rowColList) {
+            bookSeat.setRowCol(rowCol);
+            int count = bookSeatMapper.updateBookSeatIsPayingByBookSeat(bookSeat);
+            result += count;
+        }
+        return result == rowColList.size();
+    }
 }
