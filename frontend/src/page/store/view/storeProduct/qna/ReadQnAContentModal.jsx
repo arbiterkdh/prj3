@@ -14,7 +14,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../../../../component/LoginProvider.jsx";
 import axios from "axios";
 import { QnAComment } from "./QnAComment.jsx";
@@ -32,7 +32,12 @@ function ReadQnAContentModal({
   const [answerComment, setAnswerComment] = useState("");
   const [isAdmin, setIsAdmin] = useState(null);
   const [refreshQnAComment, setRefreshQnAComment] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(true);
   const toast = useToast();
+
+  useEffect(() => {
+    setIsDisabled(answerComment.trim() === "");
+  }, [answerComment]);
 
   function handleAddAnswerComment(isAdmin) {
     axios
@@ -122,6 +127,7 @@ function ReadQnAContentModal({
                         }}
                         borderRadius="md"
                         boxShadow="md"
+                        isDisabled={isDisabled}
                       >
                         확인
                       </ColorButton>
@@ -150,6 +156,7 @@ function ReadQnAContentModal({
                       onClick={() => {
                         handleAddAnswerComment(isAdmin);
                       }}
+                      isDisabled={isDisabled}
                     >
                       확인
                     </ColorButton>
