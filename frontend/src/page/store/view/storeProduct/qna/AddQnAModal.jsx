@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import axios from "axios";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function AddQnAModal({
   isQnAOpen,
@@ -77,10 +78,19 @@ function AddQnAModal({
           </ModalBody>
           <ModalFooter>
             <Flex>
-              <Button onClick={() => handleQnAAdd(titleQnA, contentQnA)}>
+              <ColorButton onClick={() => handleQnAAdd(titleQnA, contentQnA)}>
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onQnAClose}
+              >
+                취소
               </Button>
-              <Button onClick={onQnAClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

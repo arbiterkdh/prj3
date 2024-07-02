@@ -3,6 +3,7 @@ package com.backend.service.store;
 
 import com.backend.domain.store.ProductComment;
 import com.backend.mapper.store.CommentMapper;
+import com.backend.mapper.store.ProductOrderMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import java.util.Map;
 public class CommentService {
 
     private final CommentMapper mapper;
+
+    private final ProductOrderMapper productOrderMapper;
 
     public void addComment(ProductComment productComment) {
 
@@ -67,5 +70,20 @@ public class CommentService {
     public void deleteComment(Integer commentId) {
 
         mapper.deleteComment(commentId);
+    }
+
+    public Boolean isBuyer(Integer memberNumber, Integer productId) {
+
+        Boolean isBuyer = false;
+
+        Integer orderList = productOrderMapper.isBuyer(memberNumber, productId);
+
+        if (orderList > 0) {
+            isBuyer = true;
+        }
+
+        System.out.println("buyer = " + isBuyer);
+
+        return isBuyer;
     }
 }

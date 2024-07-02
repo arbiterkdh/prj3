@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function AddCommentModal({
   isAddOpen,
@@ -51,12 +52,21 @@ function AddCommentModal({
           <ModalBody>코멘트를 작성하시겠습니까?</ModalBody>
           <ModalFooter>
             <Flex>
-              <Button
+              <ColorButton
                 onClick={() => handleCommentAdd(productId, commentContent)}
               >
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onAddClose}
+              >
+                취소
               </Button>
-              <Button onClick={onAddClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

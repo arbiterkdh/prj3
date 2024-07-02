@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Td, Text, Tr, useDisclosure } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Td,
+  Text,
+  Tr,
+  useDisclosure,
+} from "@chakra-ui/react";
 import axios from "axios";
 import AddQnAModal from "./AddQnAModal.jsx";
 import DeleteQnAModal from "./DeleteQnAModal.jsx";
 import ModifyQnAModal from "./ModifyQnAModal.jsx";
 import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function QnA({ productId, Login, listQnA, setListQnA }) {
   const [pageInfo, setPageInfo] = useState({});
@@ -43,6 +52,21 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
       });
   };
 
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
+
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumbers.push(i);
@@ -57,39 +81,41 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
               <QnAItem itemQnA={itemQnA} key={itemQnA.id} />
             ))}
             <Tr>
-              <Td>
-                {pageInfo.prevPageNumber > 0 && (
-                  <>
-                    <Button onClick={() => setPage(1)}>처음</Button>
-                    <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
-                      이전
-                    </Button>
-                  </>
-                )}
-                {pageNumbers.map(
-                  (pageNumber) =>
-                    pageNumber !== 0 && (
-                      <Button
-                        onClick={() => setPage(pageNumber)}
-                        key={pageNumber}
-                        colorScheme={
-                          pageNumber === pageInfo.currentPage ? "blue" : "gray"
-                        }
-                      >
-                        {pageNumber}
+              <Td colSpan={3}>
+                <Flex justifyContent={"center"} my={4}>
+                  {pageInfo.prevPageNumber > 0 && (
+                    <>
+                      <Button onClick={() => setPage(1)}>처음</Button>
+                      <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                        이전
                       </Button>
-                    ),
-                )}
-                {pageInfo.nextPageNumber && (
-                  <>
-                    <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-                      다음
-                    </Button>
-                    <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
-                      맨끝
-                    </Button>
-                  </>
-                )}
+                    </>
+                  )}
+                  {pageNumbers.map(
+                    (pageNumber) =>
+                      pageNumber !== 0 && (
+                        <Button
+                          onClick={() => setPage(pageNumber)}
+                          key={pageNumber}
+                          sx={
+                            pageNumber === pageInfo.currentPage ? clicked : {}
+                          }
+                        >
+                          {pageNumber}
+                        </Button>
+                      ),
+                  )}
+                  {pageInfo.nextPageNumber && (
+                    <>
+                      <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                        다음
+                      </Button>
+                      <Button onClick={() => setPage(pageInfo.lastPageNumber)}>
+                        맨끝
+                      </Button>
+                    </>
+                  )}
+                </Flex>
               </Td>
             </Tr>
           </>
@@ -164,9 +190,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
       <Tr>
         <Td colSpan={3}>
           <Box w={"100%"}>
-            <Button colorScheme={"blue"} onClick={onQnAOpen}>
-              문의글 작성
-            </Button>
+            <ColorButton onClick={onQnAOpen}>문의글 작성</ColorButton>
           </Box>
         </Td>
       </Tr>

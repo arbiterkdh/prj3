@@ -23,4 +23,6 @@ public class PaymentCancel {
     private Integer cancelQuantity;
     private Integer cancelPrice;
     private Integer cancelTotalPrice;
+
+    private Integer productId;
 }

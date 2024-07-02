@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
 import { CartContext } from "../../../../component/CartProvider.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 function AddCartModal({
   isCartOpen,
@@ -64,20 +65,28 @@ function AddCartModal({
     <>
       <Modal isOpen={isCartOpen} onClose={onCartClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>카트 담기</ModalHeader>
           <ModalBody>{name}상품을 담으시겠습니까?</ModalBody>
           <ModalFooter>
             <Flex>
-              <Button
+              <ColorButton
                 onClick={() => {
                   handleCartAdd(productId, name, fileName, price, quantity);
                 }}
-                colorScheme={"green"}
               >
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onCartClose}
+              >
+                취소
               </Button>
-              <Button onClick={onCartClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

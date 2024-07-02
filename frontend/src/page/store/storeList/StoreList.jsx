@@ -24,6 +24,7 @@ import ProductItemList from "./list/ProductItemList.jsx";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import AddCartModal from "./cart/AddCartModal.jsx";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
@@ -86,6 +87,21 @@ export function StoreList() {
     productListRefresh();
   }, [menuTypeSelect, page]);
 
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
+
   const pageNumbers = [];
 
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -103,14 +119,15 @@ export function StoreList() {
           </Box>
           {Login.nickName === "생존코딩" && (
             <Box w={"50%"} textAlign={"right"}>
-              <Button
+              <ColorButton
+                size={"sm"}
+                left={"5px"}
+                top={"-15px"}
+                colorScheme={"blue"}
                 onClick={() => navigate("/store/add")}
-                bgColor={"#e73426"}
-                _dark={{ bgColor: "#2d4c4c" }}
-                color={"white"}
               >
                 상품등록
-              </Button>
+              </ColorButton>
             </Box>
           )}
         </Flex>
@@ -177,39 +194,41 @@ export function StoreList() {
           onPayClose={onPayClose}
         />
 
-        {pageInfo.prevPageNumber && (
-          <>
-            <Button onClick={() => setPage(1)}>
-              <FontAwesomeIcon icon={faAnglesLeft} />
-            </Button>
-            <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </Button>
-          </>
-        )}
+        <Box display="flex" justifyContent="center" my={4}>
+          {pageInfo.prevPageNumber && (
+            <>
+              <Button onClick={() => setPage(1)}>
+                <FontAwesomeIcon icon={faAnglesLeft} />
+              </Button>
+              <Button onClick={() => setPage(pageInfo.prevPageNumber)}>
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </Button>
+            </>
+          )}
 
-        {pageNumbers.map((pageNumber) => (
-          <Button
-            onClick={() => {
-              setPage(pageNumber);
-            }}
-            key={pageNumber}
-            colorScheme={pageNumber === pageInfo.currentPage ? "blue" : "gray"}
-          >
-            {pageNumber}
-          </Button>
-        ))}
+          {pageNumbers.map((pageNumber) => (
+            <Button
+              onClick={() => {
+                setPage(pageNumber);
+              }}
+              key={pageNumber}
+              sx={pageNumber === pageInfo.currentPage ? clicked : {}}
+            >
+              {pageNumber}
+            </Button>
+          ))}
 
-        {pageInfo.nextPageNumber && (
-          <>
-            <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
-              <FontAwesomeIcon icon={faAngleRight} />
-            </Button>
-            <Button onClick={() => setPage(pageInfo.rightPageNumber)}>
-              <FontAwesomeIcon icon={faAnglesRight} />
-            </Button>
-          </>
-        )}
+          {pageInfo.nextPageNumber && (
+            <>
+              <Button onClick={() => setPage(pageInfo.nextPageNumber)}>
+                <FontAwesomeIcon icon={faAngleRight} />
+              </Button>
+              <Button onClick={() => setPage(pageInfo.rightPageNumber)}>
+                <FontAwesomeIcon icon={faAnglesRight} />
+              </Button>
+            </>
+          )}
+        </Box>
 
         <DeleteProductModal
           isDelOpen={isDelOpen}

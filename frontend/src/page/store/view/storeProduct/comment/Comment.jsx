@@ -18,14 +18,21 @@ import {
   faAngleRight,
   faAnglesLeft,
   faAnglesRight,
+  faWrench,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function Comment({ Login, productId, commentList, setCommentList }) {
   const [page, setPage] = useState(1);
   const [pageInfo, setPageInfo] = useState({});
   const [commentContent, setCommentContent] = useState("");
   const [commentId, setCommentId] = useState(0);
+
+  const [isBuyer, setIsBuyer] = useState(false);
+
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const {
     isOpen: isAddOpen,
@@ -64,6 +71,36 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       .finally(() => {});
   };
 
+  useEffect(() => {
+    if (Login.id && productId) {
+      axios
+        .get(`/api/store/product/comment/isBuyer/${Login.id}/${productId}`)
+        .then((res) => {
+          if (res.data) {
+            setIsBuyer(res.data);
+            setIsDisabled(false);
+          }
+        })
+        .catch(() => {})
+        .finally(() => {});
+    }
+  }, [Login.id, productId]);
+
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
+
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
     pageNumbers.push(i);
@@ -78,7 +115,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
               <CommentItem key={commentItem.id} commentItem={commentItem} />
             ))}
 
-            <Box>
+            <Flex justifyContent={"center"} my={4}>
               {pageInfo.prevPageNumber && (
                 <>
                   <Button onClick={() => setPage(1)}>
@@ -95,10 +132,8 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     <Button
                       onClick={() => setPage(pageNumber)}
                       key={pageNumber}
-                      colorScheme={
-                        pageNumber === pageInfo.currentPageNumber
-                          ? "blue"
-                          : "gray"
+                      sx={
+                        pageNumber === pageInfo.currentPageNumber ? clicked : {}
                       }
                     >
                       {pageNumber}
@@ -116,7 +151,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                   </Button>
                 </>
               )}
-            </Box>
+            </Flex>
           </>
         ) : (
           <Text>댓글이 없습니다</Text>
@@ -141,10 +176,21 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     onDeleteOpen();
                   }}
                   cursor={"pointer"}
-                  bgColor={"#e73426"}
+                  variant="solid"
                   color={"white"}
+                  bgColor={"red.500"}
+                  _hover={{
+                    bgColor: "red.600",
+                  }}
+                  _dark={{
+                    bgColor: "red.700",
+                    _hover: {
+                      color: "whiteAlpha.900",
+                      bgColor: "red.600",
+                    },
+                  }}
                 >
-                  삭제
+                  <FontAwesomeIcon icon={faX} />
                 </Badge>
                 <Badge
                   onClick={() => {
@@ -153,10 +199,13 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     setCommentId(commentItem.id);
                   }}
                   cursor={"pointer"}
-                  bgColor={"green.500"}
+                  bgColor={"dimgray"}
                   color={"white"}
+                  _hover={{
+                    bgColor: "gray",
+                  }}
                 >
-                  수정
+                  <FontAwesomeIcon icon={faWrench} />
                 </Badge>
               </>
             )}
@@ -173,19 +222,32 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       <hr />
       <Text fontSize={"lg"}>한줄평</Text>
       <Flex w={"100%"}>
-        <Box w={"70%"} style={{}}>
-          <Box w={"100%"}>
-            <FormControl>
-              <Input
-                color="teal"
-                placeholder="내용을 작성하세요"
-                _placeholder={{ opacity: 1, color: "gray.500" }}
-                onChange={(e) => {
-                  setCommentContent(e.target.value);
-                }}
-              />
-            </FormControl>
-          </Box>
+        <Box w={"70%"}>
+          {isBuyer ? (
+            <Box w={"100%"}>
+              <FormControl>
+                <Input
+                  color="teal"
+                  placeholder="내용을 작성하세요"
+                  _placeholder={{ opacity: 1, color: "gray.500" }}
+                  onChange={(e) => {
+                    setCommentContent(e.target.value);
+                  }}
+                />
+              </FormControl>
+            </Box>
+          ) : (
+            <Box w={"100%"}>
+              <FormControl>
+                <Input
+                  color="teal"
+                  placeholder="구매후 작성해주세요"
+                  _placeholder={{ opacity: 1, color: "gray.500" }}
+                  readOnly
+                />
+              </FormControl>
+            </Box>
+          )}
         </Box>
         <Box
           w={"30%"}
@@ -197,15 +259,15 @@ function Comment({ Login, productId, commentList, setCommentList }) {
           }}
         >
           <Box>
-            <Button
-              colorScheme={"red"}
+            <ColorButton
+              isDisabled={isDisabled}
               onClick={() => {
                 setCommentContent(commentContent);
                 onAddOpen();
               }}
             >
               확인
-            </Button>
+            </ColorButton>
           </Box>
         </Box>
       </Flex>

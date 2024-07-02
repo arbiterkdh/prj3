@@ -56,7 +56,7 @@ public interface MemberMapper {
 
 
     @Select("""
-            select p.id, p.order_number, p.status, p.buyer_date, p.amount, p.qr_code, p.buyer_name, po.name as name, po.quantity as quantity, po.price as price, po.total_price as totalPrice
+            select p.id, p.order_number, p.status, p.buyer_date, p.amount, p.qr_code, p.buyer_name, po.name as name, po.quantity as quantity, po.price as price, po.total_price as totalPrice, po.product_id as productId
                                      from payment p
                                               join product_order po
                                                    on po.payment_id = p.id

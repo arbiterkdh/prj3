@@ -44,7 +44,7 @@ public interface ProductMapper {
                     JOIN product_order po ON p.id = po.product_id
                     GROUP BY p.id, p.name, p.price, p.stock, pi.name
                     ORDER BY totalQuantity DESC
-                    LIMIT 5
+                    LIMIT 8
                 </when>
                 <otherwise>
                     SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, p.quantity,
@@ -110,10 +110,10 @@ public interface ProductMapper {
 
     @Update("""
             UPDATE product
-            SET stock = stock - #{getQuantity}
+            SET stock = stock - #{quantity}
             WHERE id = #{productId}
             """)
-    int updateStock(Integer productId, Integer getQuantity);
+    int updateStock(Integer productId, Integer quantity);
 
     @Update("""
             UPDATE product

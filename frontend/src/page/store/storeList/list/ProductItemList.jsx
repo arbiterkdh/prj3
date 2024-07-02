@@ -17,12 +17,12 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faCartShopping,
   faCreditCard,
@@ -33,6 +33,7 @@ import { useNavigate } from "react-router-dom";
 import Payment from "../../payment/Payment.jsx";
 import GapFlex from "../../../../css/theme/component/flex/GapFlex.jsx";
 import { LoginContext } from "../../../../component/LoginProvider.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 function ProductItemList({
   productList,
@@ -189,15 +190,13 @@ function ProductItemList({
                 }}
               >
                 <Box>
-                  <Button
+                  <ColorButton
                     p={3}
                     size={"lg"}
                     variant="solid"
                     colorScheme="blue"
-                    _dark={{ bgColor: "#021514", color: "#e8ebeb" }}
                     onClick={() => {
                       handleControl(onPayOpen);
-
                       setProductId(product.id);
                       setName(product.name);
                       setPrice(product.price);
@@ -208,15 +207,18 @@ function ProductItemList({
                   >
                     <FontAwesomeIcon icon={faCreditCard} />
                     <Text textIndent={"10px"}>구매</Text>
-                  </Button>
+                  </ColorButton>
                 </Box>
                 <Box>
                   <Button
                     p={3}
                     size={"lg"}
                     variant="solid"
-                    colorScheme="red"
-                    _dark={{ bgColor: "#ee3125", color: "#e8ebeb" }}
+                    bgColor={"dimgray"}
+                    color={"white"}
+                    _hover={{
+                      bgColor: "gray",
+                    }}
                     onClick={() => {
                       handleControl(onCartOpen);
                       setProductId(product.id);
@@ -273,8 +275,8 @@ function ProductItemList({
           </CardFooter>
         </Card>
         <Modal isOpen={isPayOpen} onClose={onPayClose}>
-          <ModalOverlay />
-          <ModalContent>
+          {/*<ModalOverlay />*/}
+          <ModalContent _dark={{ bgColor: "#1F3032" }}>
             <ModalHeader>알림</ModalHeader>
             <ModalBody>
               <FormControl>
@@ -297,7 +299,16 @@ function ProductItemList({
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button onClick={onPayClose}>취소</Button>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onPayClose}
+              >
+                취소
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
