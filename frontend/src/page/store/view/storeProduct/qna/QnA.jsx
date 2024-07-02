@@ -8,10 +8,10 @@ import {
   Tr,
   useDisclosure,
 } from "@chakra-ui/react";
-import DeleteQnAModal from "./DeleteQnAModal.jsx";
-import ModifyQnAModal from "./ModifyQnAModal.jsx";
 import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
 import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
+import DeleteQnAModal from "./DeleteQnAModal.jsx";
+import ModifyQnAModal from "./ModifyQnAModal.jsx";
 
 function QnA({
   productId,
@@ -137,15 +137,8 @@ function QnA({
           style={{ cursor: "pointer" }}
         >
           {itemQnA.title}
-        </Td>
-        <Td w={"20%"}>
-          {itemQnA.writer}
           {itemQnA.writer === Login.nickName && (
             <>
-              <DeleteQnAModal
-                itemQnAId={itemQnA.id}
-                listQnARefresh={listQnARefresh}
-              />
               <ModifyQnAModal
                 isQnAModifyOpen={isQnAModifyOpen}
                 onQnAModifyOpen={onQnAModifyOpen}
@@ -155,9 +148,14 @@ function QnA({
                 itemQnAId={itemQnA.id}
                 listQnARefresh={listQnARefresh}
               />
+              <DeleteQnAModal
+                itemQnAId={itemQnA.id}
+                listQnARefresh={listQnARefresh}
+              />
             </>
           )}
         </Td>
+        <Td w={"20%"}>{itemQnA.writer}</Td>
         <Td w={"10%"}>{itemQnA.regDate}</Td>
         <ReadQnAContentModal
           isQnAContentOpen={isQnAContentOpen}

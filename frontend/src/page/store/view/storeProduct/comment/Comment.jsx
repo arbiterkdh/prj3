@@ -33,7 +33,6 @@ function Comment({ Login, productId, commentList, setCommentList }) {
   const [commentId, setCommentId] = useState(0);
 
   const [isBuyer, setIsBuyer] = useState(false);
-
   const [isDisabled, setIsDisabled] = useState(true);
 
   const {
@@ -57,6 +56,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
   useEffect(() => {
     commentListRefresh();
   }, [page]);
+
   const commentListRefresh = () => {
     axios
       .get(`/api/store/product/comment/list/${productId}`, {
@@ -79,13 +79,16 @@ function Comment({ Login, productId, commentList, setCommentList }) {
         .then((res) => {
           if (res.data) {
             setIsBuyer(res.data);
-            setIsDisabled(false);
           }
         })
         .catch(() => {})
         .finally(() => {});
     }
   }, [Login.id, productId]);
+
+  useEffect(() => {
+    setIsDisabled(commentContent.trim() === "");
+  }, [commentContent]);
 
   const clicked = {
     variant: "solid",
@@ -167,13 +170,10 @@ function Comment({ Login, productId, commentList, setCommentList }) {
     return (
       <Flex
         direction="row"
-        // bg="gray.800"
-        // p={2}
         rounded="md"
         mb={1}
         shadow="md"
         borderWidth="1px"
-        // borderColor="gray.700"
         alignItems="center"
         justifyContent="space-between"
         bgColor={"white"}
