@@ -47,6 +47,7 @@ import {
 import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
+import ColorButton from "../css/theme/component/button/ColorButton.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
@@ -400,10 +401,10 @@ export function MemberMyPage() {
               <Table>
                 <Thead>
                   <Tr>
-                    <Th w={"30%"}>주문 번호</Th>
+                    <Th w={"20%"}>주문 번호</Th>
                     <Th w={"30%"}>주문일</Th>
                     <Th w={"10%"}>합계</Th>
-                    <Th w={"10%"}>취소</Th>
+                    <Th w={"20%"}>취소</Th>
                     <Th w={"20%"}>상태</Th>
                   </Tr>
                 </Thead>
@@ -422,7 +423,7 @@ export function MemberMyPage() {
                       <Td>{resultItem.amount}원</Td>
                       <Td>
                         {resultItem.status === "paid" ? (
-                          <Button
+                          <ColorButton
                             onClick={() => {
                               onCancelOpen();
                               setOrderNumber(resultItem.orderNumber);
@@ -434,7 +435,7 @@ export function MemberMyPage() {
                             }}
                           >
                             취소
-                          </Button>
+                          </ColorButton>
                         ) : (
                           <Text>취소완료</Text>
                         )}
@@ -545,7 +546,7 @@ export function MemberMyPage() {
                               href={resultItem.receiptUrl}
                               target={"_blank"}
                             >
-                              <Button>확인</Button>
+                              <ColorButton>확인</ColorButton>
                             </Link>
                           </Td>
                           {resultItem.status === "paid" ? (

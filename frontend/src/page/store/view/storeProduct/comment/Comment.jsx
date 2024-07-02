@@ -20,6 +20,7 @@ import {
   faAnglesRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function Comment({ Login, productId, commentList, setCommentList }) {
   const [page, setPage] = useState(1);
@@ -242,16 +243,15 @@ function Comment({ Login, productId, commentList, setCommentList }) {
           }}
         >
           <Box>
-            <Button
+            <ColorButton
               isDisabled={isDisabled}
-              colorScheme={"red"}
               onClick={() => {
                 setCommentContent(commentContent);
                 onAddOpen();
               }}
             >
               확인
-            </Button>
+            </ColorButton>
           </Box>
         </Box>
       </Flex>
