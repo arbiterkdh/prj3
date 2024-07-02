@@ -1,5 +1,6 @@
 package com.backend.domain.store;
 
+import com.backend.domain.book.BookData;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,9 @@ public class Payment {
     private String buyerDate;
     private Integer memberNumber;
     private List<Integer> checkCartId;
+
+    // 예매쪽에만 필요 정보
+    private BookData bookData;
 
 
     //추가컬럼
