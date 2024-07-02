@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 function DeleteProductModal({
   isDelOpen,
@@ -48,19 +49,28 @@ function DeleteProductModal({
     <>
       <Modal isOpen={isDelOpen} onClose={onDelClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>알림</ModalHeader>
           <ModalBody>상품을 삭제하시겠습니까?</ModalBody>
           <ModalFooter>
             <Flex>
-              <Button
+              <ColorButton
                 colorScheme={"green"}
                 onClick={handleProductDelete}
                 isLoading={isLoading}
               >
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onDelClose}
+              >
+                취소
               </Button>
-              <Button onClick={onDelClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

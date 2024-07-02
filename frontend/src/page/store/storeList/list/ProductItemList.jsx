@@ -22,6 +22,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faCartShopping,
   faCreditCard,
@@ -213,14 +214,10 @@ function ProductItemList({
                     p={3}
                     size={"lg"}
                     variant="solid"
-                    colorScheme="blue"
-                    _dark={{
-                      bgColor: "#3e6969",
-                      color: "#e8ebeb",
-                      _hover: {
-                        color: "whiteAlpha.900",
-                        bgColor: "#3e6969",
-                      },
+                    bgColor={"dimgray"}
+                    color={"white"}
+                    _hover={{
+                      bgColor: "gray",
                     }}
                     onClick={() => {
                       handleControl(onCartOpen);
@@ -279,7 +276,7 @@ function ProductItemList({
         </Card>
         <Modal isOpen={isPayOpen} onClose={onPayClose}>
           {/*<ModalOverlay />*/}
-          <ModalContent>
+          <ModalContent _dark={{ bgColor: "#1F3032" }}>
             <ModalHeader>알림</ModalHeader>
             <ModalBody>
               <FormControl>
@@ -302,7 +299,16 @@ function ProductItemList({
               </FormControl>
             </ModalBody>
             <ModalFooter>
-              <Button onClick={onPayClose}>취소</Button>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onPayClose}
+              >
+                취소
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>

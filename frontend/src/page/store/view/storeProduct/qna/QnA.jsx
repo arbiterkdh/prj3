@@ -13,6 +13,7 @@ import AddQnAModal from "./AddQnAModal.jsx";
 import DeleteQnAModal from "./DeleteQnAModal.jsx";
 import ModifyQnAModal from "./ModifyQnAModal.jsx";
 import ReadQnAContentModal from "./ReadQnAContentModal.jsx";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function QnA({ productId, Login, listQnA, setListQnA }) {
   const [pageInfo, setPageInfo] = useState({});
@@ -189,9 +190,7 @@ function QnA({ productId, Login, listQnA, setListQnA }) {
       <Tr>
         <Td colSpan={3}>
           <Box w={"100%"}>
-            <Button colorScheme={"blue"} onClick={onQnAOpen}>
-              문의글 작성
-            </Button>
+            <ColorButton onClick={onQnAOpen}>문의글 작성</ColorButton>
           </Box>
         </Td>
       </Tr>

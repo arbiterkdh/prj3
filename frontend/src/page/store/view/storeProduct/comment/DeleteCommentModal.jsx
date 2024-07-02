@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function DeleteCommentModal({
   isDeleteOpen,
@@ -19,6 +20,7 @@ function DeleteCommentModal({
   commentId,
 }) {
   const toast = useToast();
+
   function handleCommentDelete(commentId) {
     axios
       .delete(`/api/store/product/comment/delete/${commentId}`)
@@ -45,14 +47,23 @@ function DeleteCommentModal({
           <ModalBody>코멘트 삭제하시겠습니까?</ModalBody>
           <ModalFooter>
             <Flex>
-              <Button
+              <ColorButton
                 onClick={() => {
                   handleCommentDelete(commentId);
                 }}
               >
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onDeleteClose}
+              >
+                취소
               </Button>
-              <Button onClick={onDeleteClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

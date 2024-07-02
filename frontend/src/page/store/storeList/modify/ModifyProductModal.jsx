@@ -24,6 +24,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import axios from "axios";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 function ModifyProductModal({
   isModifyOpen,
@@ -77,7 +78,7 @@ function ModifyProductModal({
     <>
       <Modal isOpen={isModifyOpen} onClose={onModifyOpen}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>상품 수정</ModalHeader>
           <ModalBody>
             <FormControl mb={3}>
@@ -146,7 +147,7 @@ function ModifyProductModal({
           </ModalBody>
           <ModalFooter>
             <Flex>
-              <Button
+              <ColorButton
                 colorScheme={"green"}
                 onClick={() =>
                   handleProductModify(productId, name, price, file, stock)
@@ -154,8 +155,17 @@ function ModifyProductModal({
                 isLoading={isLoading}
               >
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onModifyClose}
+              >
+                취소
               </Button>
-              <Button onClick={onModifyClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

@@ -1,8 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { RiKakaoTalkFill } from "react-icons/ri";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Payment({
   totalSum,
@@ -183,21 +187,34 @@ function Payment({
 
   return (
     <Box>
-      <Button
+      <ColorButton
+        leftIcon={<FontAwesomeIcon icon={faCartShopping} />}
         isDisabled={isDisabled}
         onClick={() => {
           onClickInicsis();
         }}
       >
-        카드결제
-      </Button>
+        카드
+      </ColorButton>
       <Button
+        bgColor={"yellow"}
+        leftIcon={<RiKakaoTalkFill size={"20px"} />}
+        _hover={{
+          bgColor: "#e0e008",
+        }}
         isDisabled={isDisabled}
+        _dark={{
+          bgColor: "#d6d604",
+          color: "black",
+          _hover: {
+            bgColor: "#d3d334",
+          },
+        }}
         onClick={() => {
           onClickKakaopay();
         }}
       >
-        카카오페이 결제
+        <Text>페이</Text>
       </Button>
     </Box>
   );

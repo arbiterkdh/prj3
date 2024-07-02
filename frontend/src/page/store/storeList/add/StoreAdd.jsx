@@ -1,11 +1,10 @@
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Center,
   Flex,
+  FormControl,
+  FormLabel,
   Heading,
   Input,
   Modal,
@@ -17,7 +16,6 @@ import {
   Select,
   Stack,
   StackDivider,
-  Text,
   Textarea,
   useDisclosure,
   useToast,
@@ -26,6 +24,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
+import ColorButton from "../../../../css/theme/component/button/ColorButton.jsx";
 
 export function StoreAdd() {
   const [name, setName] = useState("");
@@ -91,116 +90,98 @@ export function StoreAdd() {
   return (
     <Center>
       <CenterBox>
-        <Card>
-          <CardHeader>
-            <Heading>상품 등록</Heading>
-          </CardHeader>
+        <Heading mb={10}>상품 등록</Heading>
+
+        <Stack divider={<StackDivider />} spacing="4">
           <Box>
-            <hr />
+            <FormControl>
+              <FormLabel>상품명</FormLabel>
+            </FormControl>
+            <Input
+              type={"text"}
+              placeholder={"상품명을 작성해주세요"}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Box>
+          <Box>
+            <FormControl>
+              <FormLabel>이미지</FormLabel>
+            </FormControl>
+            <input
+              type={"file"}
+              accept="image/*"
+              placeholder={"이미지를 등록하세요"}
+              onChange={(e) => setFile(e.target.files[0])}
+            />
           </Box>
 
-          <CardBody>
-            <Stack divider={<StackDivider />} spacing="4">
-              <Box>
-                <Heading size="xs" textTransform="uppercase">
-                  상품명
-                </Heading>
-                <Text pt="2" fontSize="sm">
-                  <Input
-                    type={"text"}
-                    placeholder={"상품명을 작성해주세요"}
-                    onChange={(e) => setName(e.target.value)}
-                  />
-                </Text>
-              </Box>
-              <Flex>
-                <Box>
-                  <Heading size="xs" textTransform="uppercase">
-                    상품이미지
-                  </Heading>
-                  <Text pt="2" fontSize="sm">
-                    <input
-                      type={"file"}
-                      accept="image/*"
-                      placeholder={"이미지를 등록하세요"}
-                      onChange={(e) => setFile(e.target.files[0])}
-                    />
-                  </Text>
-                </Box>
+          <Box>
+            <FormControl>
+              <FormLabel>분류</FormLabel>
+            </FormControl>
 
-                <Box>
-                  <Select
-                    placeholder="분류선택"
-                    onFocus={typeOptions}
-                    onChange={(e) => {
-                      setSelectType(e.target.value);
-                    }}
-                  >
-                    {typeOption.map((typeItem) => (
-                      <option key={typeItem.id} value={typeItem.id}>
-                        {typeItem.name}
-                      </option>
-                    ))}
-                  </Select>
-                </Box>
-              </Flex>
-              <Box>
-                <Heading size="xs" textTransform="uppercase">
-                  재고수량
-                </Heading>
-                <Text pt="2" fontSize="sm">
-                  <Input
-                    type={"number"}
-                    onChange={(e) => setStock(e.target.value)}
-                  />
-                </Text>
-              </Box>
+            <Select
+              placeholder="분류선택"
+              onFocus={typeOptions}
+              onChange={(e) => {
+                setSelectType(e.target.value);
+              }}
+            >
+              {typeOption.map((typeItem) => (
+                <option key={typeItem.id} value={typeItem.id}>
+                  {typeItem.name}
+                </option>
+              ))}
+            </Select>
+          </Box>
 
-              <Box>
-                <Heading size="xs" textTransform="uppercase">
-                  가격
-                </Heading>
-                <Text pt="2" fontSize="sm">
-                  <Input
-                    type={"number"}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
-                </Text>
-              </Box>
-              <Box>
-                <Heading size="xs" textTransform="uppercase">
-                  상세내용
-                </Heading>
-                <Text pt="2" fontSize="sm">
-                  <Textarea
-                    placeholder={"상세내용을 작성하세요"}
-                    resize={"none"}
-                    onChange={(e) => setContent(e.target.value)}
-                  ></Textarea>
-                </Text>
-              </Box>
-            </Stack>
-          </CardBody>
-          <Flex w={"100%"} gap={3} justifyContent={"center"}>
-            <Box w={"50%"}>
-              <Button
-                colorScheme={"green"}
-                w={"100%"}
-                p={10}
-                onClick={onOpen}
-                isDisabled={disabled}
-                isLoading={isLoading}
-              >
-                등록
-              </Button>
-            </Box>
-            <Box w={"50%"}>
-              <Button colorScheme={"gray"} w={"100%"} p={10}>
-                목록
-              </Button>
-            </Box>
-          </Flex>
-        </Card>
+          <Box>
+            <FormControl>
+              <FormLabel>재고수량</FormLabel>
+            </FormControl>
+            <Input type={"number"} onChange={(e) => setStock(e.target.value)} />
+          </Box>
+
+          <Box>
+            <FormControl>
+              <FormLabel>가격</FormLabel>
+            </FormControl>
+            <Input type={"number"} onChange={(e) => setPrice(e.target.value)} />
+          </Box>
+          <Box>
+            <FormControl>
+              <FormLabel>설명</FormLabel>
+            </FormControl>
+            <Textarea
+              placeholder={"상세내용을 작성하세요"}
+              resize={"none"}
+              onChange={(e) => setContent(e.target.value)}
+            ></Textarea>
+          </Box>
+        </Stack>
+        <Flex>
+          <Box>
+            <ColorButton
+              onClick={onOpen}
+              isDisabled={disabled}
+              isLoading={isLoading}
+            >
+              등록
+            </ColorButton>
+          </Box>
+          <Box>
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              w={"100%"}
+            >
+              목록
+            </Button>
+          </Box>
+        </Flex>
 
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
@@ -209,10 +190,19 @@ export function StoreAdd() {
             <ModalBody>상품을 등록하시겠습니까?</ModalBody>
             <ModalFooter>
               <Flex gap={3}>
-                <Button colorScheme={"green"} onClick={handleProductAdd}>
+                <ColorButton colorScheme={"green"} onClick={handleProductAdd}>
                   확인
+                </ColorButton>
+                <Button
+                  bgColor={"dimgray"}
+                  color={"white"}
+                  _hover={{
+                    bgColor: "gray",
+                  }}
+                  onClick={onClose}
+                >
+                  취소
                 </Button>
-                <Button onClick={onClose}>취소</Button>
               </Flex>
             </ModalFooter>
           </ModalContent>

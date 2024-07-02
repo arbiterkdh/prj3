@@ -12,6 +12,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function ModifyCommentModal({
   isModifyOpen,
@@ -56,12 +57,21 @@ function ModifyCommentModal({
           </ModalBody>
           <ModalFooter>
             <Flex>
-              <Button
+              <ColorButton
                 onClick={() => handleCommentModify(commentId, commentContent)}
               >
                 확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={onModifyClose}
+              >
+                취소
               </Button>
-              <Button onClick={onModifyClose}>취소</Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

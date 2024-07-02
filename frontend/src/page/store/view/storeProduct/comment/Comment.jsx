@@ -18,6 +18,8 @@ import {
   faAngleRight,
   faAnglesLeft,
   faAnglesRight,
+  faWrench,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
@@ -174,10 +176,21 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     onDeleteOpen();
                   }}
                   cursor={"pointer"}
-                  bgColor={"#e73426"}
+                  variant="solid"
                   color={"white"}
+                  bgColor={"red.500"}
+                  _hover={{
+                    bgColor: "red.600",
+                  }}
+                  _dark={{
+                    bgColor: "red.700",
+                    _hover: {
+                      color: "whiteAlpha.900",
+                      bgColor: "red.600",
+                    },
+                  }}
                 >
-                  삭제
+                  <FontAwesomeIcon icon={faX} />
                 </Badge>
                 <Badge
                   onClick={() => {
@@ -186,10 +199,13 @@ function Comment({ Login, productId, commentList, setCommentList }) {
                     setCommentId(commentItem.id);
                   }}
                   cursor={"pointer"}
-                  bgColor={"green.500"}
+                  bgColor={"dimgray"}
                   color={"white"}
+                  _hover={{
+                    bgColor: "gray",
+                  }}
                 >
-                  수정
+                  <FontAwesomeIcon icon={faWrench} />
                 </Badge>
               </>
             )}
