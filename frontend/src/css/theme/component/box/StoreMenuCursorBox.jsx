@@ -6,17 +6,15 @@ const StoreMenuCursorBox = (props) => {
     <Box
       variant="solid"
       color={"black"}
-      bgColor={"white"}
       _hover={{
-        bgColor: "red.600",
-        color: "white",
+        bgColor: "red.500",
       }}
       _dark={{
-        bgColor: "#1f3032",
+        bgColor: "#red.700",
         color: "white",
         _hover: {
           color: "whiteAlpha.900",
-          bgColor: "red.600",
+          bgColor: "red.800",
         },
       }}
       cursor={"pointer"}
