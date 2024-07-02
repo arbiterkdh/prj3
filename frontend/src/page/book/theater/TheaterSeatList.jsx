@@ -106,6 +106,7 @@ export function TheaterSeatList() {
             }),
           );
           setNumberOfPeople(prevSelectedList.length);
+          setTotalAmount(prevSelectedList.length * 14000);
 
           let exceptSelectedRowColList = rowColList.filter(
             (rowCol) => !prevSelectedList.includes(rowCol),
@@ -491,7 +492,7 @@ export function TheaterSeatList() {
           fontSize={"16px"}
           rounded={"full"}
           onClick={() =>
-            navigate("/book/movie/payment", {
+            navigate("/book/payment", {
               state: {
                 bookSeatBookPlaceTimeId: bookPlaceTime.bookPlaceTimeId,
                 seatSelected: seatSelected,
@@ -499,8 +500,8 @@ export function TheaterSeatList() {
                 totalAmount: totalAmount,
                 movie: movie,
                 city: theater.city,
-                boxNumber: theaterBox.boxNumber,
                 location: theater.location,
+                boxNumber: theaterBox.boxNumber,
                 startTime: bookPlaceTime.startTime,
                 endTime: bookPlaceTime.endTime,
               },
