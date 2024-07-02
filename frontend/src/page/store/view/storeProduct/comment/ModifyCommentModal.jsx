@@ -46,7 +46,7 @@ function ModifyCommentModal({
     <>
       <Modal isOpen={isModifyOpen} onClose={onModifyClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>코멘트를 수정하시겠습니까?</ModalHeader>
           <ModalBody>
             <Input

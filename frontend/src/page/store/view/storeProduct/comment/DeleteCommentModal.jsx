@@ -42,7 +42,7 @@ function DeleteCommentModal({
     <>
       <Modal isOpen={isDeleteOpen} onClose={onDeleteClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>삭제 알림</ModalHeader>
           <ModalBody>코멘트 삭제하시겠습니까?</ModalBody>
           <ModalFooter>
