@@ -703,17 +703,29 @@ export function MemberMyPage() {
         </Tabs>
         <Modal isOpen={isCancelOpen} onClose={onCancelClose}>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent _dark={{ bgColor: "#1F3032" }}>
             <ModalBody>
               <ModalHeader>취소사유 입력</ModalHeader>
               <Textarea
                 placeholder={"취소사유를 작성해주세요"}
                 onChange={(e) => setCancelReason(e.target.value)}
+                resize={"none"}
               />
             </ModalBody>
             <ModalFooter>
-              <Button onClick={() => handlePaymentCancel()}>확인</Button>
-              <Button onClick={() => onCancelClose()}>취소</Button>
+              <ColorButton onClick={() => handlePaymentCancel()}>
+                확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={() => onCancelClose()}
+              >
+                취소
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
