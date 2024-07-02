@@ -1,8 +1,10 @@
 import {
   Box,
   Button,
+  Center,
   FormControl,
   FormLabel,
+  Heading,
   Input,
   Select,
   Textarea,
@@ -12,6 +14,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 
 export function PromoAdd() {
   const [title, setTitle] = useState("");
@@ -83,175 +86,182 @@ export function PromoAdd() {
   const textColor = useColorModeValue("black", "white");
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      py={6}
-      bg={bgColor}
-      color={textColor}
-    >
-      <Box
-        width="70%"
-        maxWidth="800px"
-        border="2px solid"
-        borderColor="blue.300"
-        borderRadius="10px"
-        p={6}
-        boxShadow="md"
-        bg={bgColor}
-        color={textColor}
-      >
-        <Box display="flex" justifyContent="space-between" mb={4}>
-          <FormControl flex="7" mr={2}>
-            <FormLabel fontWeight="bold" fontSize="lg">
-              이벤트 제목
-            </FormLabel>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="제목을 입력하세요."
-              borderColor="gray.300"
-              focusBorderColor="blue.300"
-              _hover={{ borderColor: "blue.300" }}
-            />
-          </FormControl>
-        </Box>
-        <Box display="flex" justifyContent="space-between" mb={4}>
-          <FormControl flex="3" mr={2}>
-            <FormLabel fontWeight="bold" fontSize="lg">
-              시작일
-            </FormLabel>
-            <Input
-              type="date"
-              value={eventStartDate}
-              onChange={(e) => setEventStartDate(e.target.value)}
-              borderColor="gray.300"
-              focusBorderColor="blue.300"
-              _hover={{ borderColor: "blue.300" }}
-            />
-          </FormControl>
-          <FormControl flex="3" mr={2}>
-            <FormLabel fontWeight="bold" fontSize="lg">
-              종료일
-            </FormLabel>
-            <Input
-              type="date"
-              value={eventEndDate}
-              onChange={(e) => setEventEndDate(e.target.value)}
-              borderColor="gray.300"
-              focusBorderColor="blue.300"
-              _hover={{ borderColor: "blue.300" }}
-            />
-          </FormControl>
-          <FormControl flex="2">
-            <FormLabel fontWeight="bold" fontSize="lg">
-              이벤트 타입
-            </FormLabel>
-            <Select
-              value={eventType}
-              onChange={(e) => setEventType(e.target.value)}
-              placeholder="선택"
-              borderColor="gray.300"
-              focusBorderColor="blue.300"
-              _hover={{ borderColor: "blue.300" }}
-            >
-              <option value="movie">영화</option>
-              <option value="theater">극장</option>
-              <option value="membership">멤버십</option>
-              <option value="discount">제휴/할인</option>
-            </Select>
-          </FormControl>
-        </Box>
-        <Box display="flex" justifyContent="space-between" mb={4}>
-          <FormControl mr={2}>
-            <FormLabel fontWeight="bold" fontSize="lg">
-              추천 이벤트 이미지
-            </FormLabel>
-            <Input
-              multiple
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setPromoRecommendedFile(Array.from(e.target.files))
-              }
-              borderColor="gray.300"
-              focusBorderColor="blue.300"
-              _hover={{ borderColor: "blue.300" }}
-            />
-          </FormControl>
-          <FormControl>
-            <FormLabel fontWeight="bold" fontSize="lg">
-              이벤트 썸네일 이미지
-            </FormLabel>
-            <Input
-              multiple
-              type="file"
-              accept="image/*"
-              onChange={(e) =>
-                setPromoThumbnailFile(Array.from(e.target.files))
-              }
-              borderColor="gray.300"
-              focusBorderColor="blue.300"
-              _hover={{ borderColor: "blue.300" }}
-            />
-          </FormControl>
-        </Box>
-        <FormControl mb={4}>
-          <FormLabel fontWeight="bold" fontSize="lg">
-            이벤트 상세 내용 이미지
-          </FormLabel>
-          <Input
-            multiple
-            type="file"
-            accept="image/*"
-            onChange={(e) => setPromoDetailFile(Array.from(e.target.files))}
-            borderColor="gray.300"
-            focusBorderColor="blue.300"
-            _hover={{ borderColor: "blue.300" }}
-          />
-        </FormControl>
-        <Box mb={4}>
-          <ul>
-            {Array.from(promoRecommendedFile).map((file, index) => (
-              <li key={index}>{file.name}</li>
-            ))}
-          </ul>
-          <ul>
-            {Array.from(promoThumbnailFile).map((file, index) => (
-              <li key={index}>{file.name}</li>
-            ))}
-          </ul>
-          <ul>
-            {Array.from(promoDetailFile).map((file, index) => (
-              <li key={index}>{file.name}</li>
-            ))}
-          </ul>
-        </Box>
-        <FormControl mb={4}>
-          <FormLabel fontWeight="bold" fontSize="lg">
-            이벤트 설명
-          </FormLabel>
-          <Textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="설명을 입력하세요."
-            borderColor="gray.300"
-            focusBorderColor="blue.300"
-            _hover={{ borderColor: "blue.300" }}
-          />
-        </FormControl>
-        <Button
-          colorScheme="teal"
-          isLoading={loading}
-          isDisabled={disableSaveButton}
-          onClick={handleAddEvent}
-          width="100%"
-          fontSize="lg"
+    <Center>
+      <CenterBox>
+        <Box
+          display="flex"
+          justifyContent="center"
           py={6}
+          bg={bgColor}
+          color={textColor}
         >
-          저장
-        </Button>
-      </Box>
-    </Box>
+          <Box
+            width="70%"
+            maxWidth="800px"
+            border="2px solid"
+            borderColor="blue.300"
+            borderRadius="10px"
+            p={6}
+            boxShadow="md"
+            bg={bgColor}
+            color={textColor}
+          >
+            <Heading textAlign="center" fontWeight="bold" fontSize="2xl">
+              이벤트 추가
+            </Heading>
+            <Box display="flex" justifyContent="space-between" mb={4}>
+              <FormControl flex="7" mr={2}>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  이벤트 제목
+                </FormLabel>
+                <Input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="제목을 입력하세요."
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
+                />
+              </FormControl>
+            </Box>
+            <Box display="flex" justifyContent="space-between" mb={4}>
+              <FormControl flex="3" mr={2}>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  시작일
+                </FormLabel>
+                <Input
+                  type="date"
+                  value={eventStartDate}
+                  onChange={(e) => setEventStartDate(e.target.value)}
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
+                />
+              </FormControl>
+              <FormControl flex="3" mr={2}>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  종료일
+                </FormLabel>
+                <Input
+                  type="date"
+                  value={eventEndDate}
+                  onChange={(e) => setEventEndDate(e.target.value)}
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
+                />
+              </FormControl>
+              <FormControl flex="2">
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  이벤트 타입
+                </FormLabel>
+                <Select
+                  value={eventType}
+                  onChange={(e) => setEventType(e.target.value)}
+                  placeholder="선택"
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
+                >
+                  <option value="movie">영화</option>
+                  <option value="theater">극장</option>
+                  <option value="membership">멤버십</option>
+                  <option value="discount">제휴/할인</option>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box display="flex" justifyContent="space-between" mb={4}>
+              <FormControl mr={2}>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  추천 이벤트 이미지
+                </FormLabel>
+                <Input
+                  multiple
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setPromoRecommendedFile(Array.from(e.target.files))
+                  }
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel fontWeight="bold" fontSize="lg">
+                  이벤트 썸네일 이미지
+                </FormLabel>
+                <Input
+                  multiple
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setPromoThumbnailFile(Array.from(e.target.files))
+                  }
+                  borderColor="gray.300"
+                  focusBorderColor="blue.300"
+                  _hover={{ borderColor: "blue.300" }}
+                />
+              </FormControl>
+            </Box>
+            <FormControl mb={4}>
+              <FormLabel fontWeight="bold" fontSize="lg">
+                이벤트 상세 내용 이미지
+              </FormLabel>
+              <Input
+                multiple
+                type="file"
+                accept="image/*"
+                onChange={(e) => setPromoDetailFile(Array.from(e.target.files))}
+                borderColor="gray.300"
+                focusBorderColor="blue.300"
+                _hover={{ borderColor: "blue.300" }}
+              />
+            </FormControl>
+            <Box mb={4}>
+              <ul>
+                {Array.from(promoRecommendedFile).map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+              <ul>
+                {Array.from(promoThumbnailFile).map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+              <ul>
+                {Array.from(promoDetailFile).map((file, index) => (
+                  <li key={index}>{file.name}</li>
+                ))}
+              </ul>
+            </Box>
+            <FormControl mb={4}>
+              <FormLabel fontWeight="bold" fontSize="lg">
+                이벤트 설명
+              </FormLabel>
+              <Textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="설명을 입력하세요."
+                borderColor="gray.300"
+                focusBorderColor="blue.300"
+                _hover={{ borderColor: "blue.300" }}
+              />
+            </FormControl>
+            <Button
+              colorScheme="teal"
+              isLoading={loading}
+              isDisabled={disableSaveButton}
+              onClick={handleAddEvent}
+              width="100%"
+              fontSize="lg"
+              py={6}
+            >
+              저장
+            </Button>
+          </Box>
+        </Box>
+      </CenterBox>
+    </Center>
   );
 }
