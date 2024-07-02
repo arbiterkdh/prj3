@@ -13,7 +13,7 @@ import {
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
@@ -26,10 +26,15 @@ function AddQnAModal({
 }) {
   const [titleQnA, setTitleQnA] = useState("");
   const [contentQnA, setContentQnA] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
   const toast = useToast();
 
+  useEffect(() => {
+    // 제목과 내용이 모두 비어있지 않은 경우에만 버튼을 활성화
+    setIsDisabled(titleQnA.trim() === "" || contentQnA.trim() === "");
+  }, [titleQnA, contentQnA]);
+
   function handleQnAAdd(title, content) {
-    console.log("dddd");
     axios
       .post("/api/store/product/qna/add", {
         productId,
@@ -65,6 +70,7 @@ function AddQnAModal({
               <Input
                 type={"text"}
                 placeholder={"제목을 작성해주세요"}
+                value={titleQnA}
                 onChange={(e) => setTitleQnA(e.target.value)}
               />
             </FormControl>
@@ -73,13 +79,17 @@ function AddQnAModal({
               <Textarea
                 resize={"none"}
                 placeholder={"내용을 작성해주세요"}
+                value={contentQnA}
                 onChange={(e) => setContentQnA(e.target.value)}
               ></Textarea>
             </FormControl>
           </ModalBody>
           <ModalFooter>
             <Flex>
-              <ColorButton onClick={() => handleQnAAdd(titleQnA, contentQnA)}>
+              <ColorButton
+                onClick={() => handleQnAAdd(titleQnA, contentQnA)}
+                isDisabled={isDisabled}
+              >
                 확인
               </ColorButton>
               <Button
