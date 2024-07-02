@@ -73,7 +73,6 @@ export function PromoNavbar() {
         </Box>
         <Tabs isFitted variant="enclosed" width="100%" index={tabIndex}>
           <TabList
-            mb="2em"
             borderBottom="2px solid"
             borderColor="red.500"
             _dark={{

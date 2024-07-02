@@ -18,7 +18,7 @@ const NextArrow = ({ onClick }) => {
       onClick={onClick}
       position="absolute"
       top="45%"
-      right="-1"
+      right="-6"
       transform="translateY(-60%)"
       color="whiteAlpha.900"
       bg="red.500"
@@ -43,7 +43,7 @@ const PrevArrow = ({ onClick }) => {
       onClick={onClick}
       position="absolute"
       top="45%"
-      left="-1"
+      left="-6"
       transform="translateY(-60%)"
       color="whiteAlpha.900"
       bg="red.500"
@@ -99,7 +99,7 @@ const PromoCarousel = () => {
 
   return (
     <Center>
-      <Box width="105%" mx="auto" mt={5}>
+      <Box width="100%" mx="auto" mt={5}>
         <Slider {...settings}>
           {recommendedPromos.map((promo) => {
             const recommendedFile = promo.fileList.find(
@@ -121,14 +121,14 @@ const PromoCarousel = () => {
                     borderRadius="lg"
                     boxShadow="0 0 10px rgba(0, 0, 0, 0.9)"
                     width="100%"
-                    height="245px"
+                    height="230px"
                     objectFit="fill"
                   />
                 )}
                 <Box p={2}>
                   <Flex alignItems="center">
                     <Text
-                      fontSize="lg"
+                      fontSize="md"
                       fontWeight="bold"
                       isTruncated
                       maxWidth="calc(100% - 150px)"

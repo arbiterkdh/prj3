@@ -137,7 +137,7 @@ export function PromoEnd() {
                         </Td>
                         <Td>
                           <Text fontWeight="bold">{promo.title}</Text>
-                          <Text color="gray.500">
+                          <Text color="gray.500" mt={2}>
                             <PromoeventTypeLabels eventType={promo.eventType} />
                           </Text>
                           <Text color="gray.500">

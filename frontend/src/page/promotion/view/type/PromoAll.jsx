@@ -56,7 +56,7 @@ export function PromoAll() {
   const renderPromoSection = (title, promos, eventType) => (
     <Box mb={50}>
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="25px">
+        <Heading mt={5} style={{ whiteSpace: "nowrap" }} fontSize="20px">
           {title}
         </Heading>
         <ShowMoreButton
@@ -81,8 +81,8 @@ export function PromoAll() {
 
   return (
     <Box>
-      <Box mb={20} />
-      <Heading>추천 이벤트</Heading>
+      <Box mb={10} />
+      <Heading fontSize="22px">추천 이벤트</Heading>
       <Box mb={50}>
         <PromoCarousel promoList={recommendedList} />
       </Box>
