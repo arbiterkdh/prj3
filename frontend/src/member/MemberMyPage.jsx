@@ -151,7 +151,7 @@ export function MemberMyPage() {
       })
       .catch(() => {})
       .finally(() => {});
-  }, [nickName, page, paymentCancelResult]);
+  }, [nickName, page, paymentResult, setPaymentResult]);
 
   function handleClick() {
     axios
