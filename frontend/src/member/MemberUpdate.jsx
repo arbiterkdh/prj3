@@ -32,6 +32,7 @@ import {
 import MarginBox from "../css/theme/component/box/MarginBox.jsx";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import ColorButton from "../css/theme/component/button/ColorButton.jsx";
 
 function MemberUpdate() {
   const location = useLocation();
@@ -154,12 +155,21 @@ function MemberUpdate() {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent _dark={{ bgColor: "#1F3032" }}>
           <ModalHeader>변경 알림</ModalHeader>
           <ModalBody>변경하시겠습니까?</ModalBody>
           <ModalFooter>
-            <Button onClick={handleUpdatePw}>확인</Button>
-            <Button onClick={() => onClose()}>취소</Button>
+            <ColorButton onClick={handleUpdatePw}>확인</ColorButton>
+            <Button
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              onClick={() => onClose()}
+            >
+              취소
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
