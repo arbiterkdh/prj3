@@ -82,6 +82,7 @@ export function MemberMyPage() {
   );
 
   const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     isOpen: isCancelOpen,
@@ -491,6 +492,7 @@ export function MemberMyPage() {
                       <Td>
                         {resultItem.status === "paid" ? (
                           <ColorButton
+                            isLoading={isLoading}
                             onClick={() => {
                               onCancelOpen();
                               setOrderNumber(resultItem.orderNumber);
@@ -499,6 +501,7 @@ export function MemberMyPage() {
                               setAmount(resultItem.amount);
                               setQuantity(resultItem.quantity);
                               setProductId(resultItem.productId);
+                              setIsLoading(true);
                             }}
                           >
                             취소
@@ -709,7 +712,10 @@ export function MemberMyPage() {
             <ModalFooter>
               <ColorButton
                 isDisabled={isDisabled}
-                onClick={() => handlePaymentCancel()}
+                onClick={() => {
+                  handlePaymentCancel();
+                  setIsLoading(false);
+                }}
               >
                 확인
               </ColorButton>
@@ -719,7 +725,10 @@ export function MemberMyPage() {
                 _hover={{
                   bgColor: "gray",
                 }}
-                onClick={() => onCancelClose()}
+                onClick={() => {
+                  onCancelClose();
+                  setIsLoading(false);
+                }}
               >
                 취소
               </Button>

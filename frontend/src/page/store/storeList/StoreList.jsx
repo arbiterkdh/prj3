@@ -28,7 +28,7 @@ import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 export function StoreList() {
   const [productList, setProductList] = useState([]);
-  const [menuTypeSelect, setMenuTypeSelect] = useState("all");
+  const [menuTypeSelect, setMenuTypeSelect] = useState("best");
   const [pageInfo, setPageInfo] = useState({});
   const [productId, setProductId] = useState(0);
   const [fileName, setFileName] = useState("");
