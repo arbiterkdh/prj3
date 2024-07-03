@@ -36,7 +36,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
@@ -66,8 +66,6 @@ export function MemberMyPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [page, setPage] = useState(1);
-  const [promoResults, setPromoResults] = useState([]);
-  const navigate = useNavigate();
 
   const [paymentCancelResult, setPaymentCancelResult] = useState([]);
   const [cancelReason, setCancelReason] = useState("");
@@ -153,17 +151,6 @@ export function MemberMyPage() {
       .catch(() => {})
       .finally(() => {});
   }, [nickName, page, paymentCancelResult]);
-
-  useEffect(() => {
-    // 당첨자 결과 데이터 가져오기
-    axios
-      .get(`/api/promotion/eventResult?search=${member.email}`)
-      .then((res) => {
-        setPromoResults(res.data.results);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, [member.email]);
 
   function handleClick() {
     axios
