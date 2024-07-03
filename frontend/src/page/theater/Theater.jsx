@@ -88,6 +88,7 @@ export function Theater() {
                 }
               >
                 <Image
+                  cursor={"pointer"}
                   borderRadius={"30px"}
                   src={
                     recommendedPromos[0].fileList[
@@ -108,6 +109,7 @@ export function Theater() {
                 }
               >
                 <Image
+                  cursor={"pointer"}
                   borderRadius={"30px"}
                   src={
                     recommendedPromos[1].fileList[

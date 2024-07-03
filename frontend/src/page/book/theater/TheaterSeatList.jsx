@@ -62,6 +62,7 @@ export function TheaterSeatList() {
   const [seatFocused, setSeatFocused] = useState("");
   const [seatSelected, setSeatSelected] = useState([]);
   const [seatBooked, setSeatBooked] = useState([]);
+  const [seatPaid, setSeatPaid] = useState([]);
 
   const [updatingSeat, setUpdatingSeat] = useState("");
   const [isSelecting, setIsSelecting] = useState(false);
@@ -94,6 +95,7 @@ export function TheaterSeatList() {
         setBookPlaceTime(res.data.bookPlaceTime);
         let prevSelectedList = res.data.selectedList;
         let rowColList = res.data.rowColList;
+        let isPaidRowColList = res.data.isPaidRowColList;
 
         if (prevSelectedList.length > 0) {
           setSeatSelected(
