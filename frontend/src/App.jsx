@@ -40,7 +40,7 @@ import { PromoResultAdd } from "./page/promotion/add/PromoResultAdd.jsx";
 import { PromoResultModify } from "./page/promotion/modify/PromoResultModify.jsx";
 import { CartProvider } from "./component/CartProvider.jsx";
 import { BookMoviePayment } from "./page/book/payment/BookMoviePayment.jsx";
-import { BookPaymentSuccess } from "./BookPaymentSuccess.jsx";
+import { BookPaymentSuccess } from "./page/book/payment/BookPaymentSuccess.jsx";
 
 const exceptionHost = [
   "http://www.kobis.or.kr",

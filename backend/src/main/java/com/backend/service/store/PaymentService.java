@@ -7,12 +7,16 @@ import com.backend.domain.member.Member;
 import com.backend.domain.movie.Movie;
 import com.backend.domain.store.Payment;
 import com.backend.domain.store.PaymentCancel;
+import com.backend.domain.theater.Theater;
+import com.backend.domain.theater.box.TheaterBox;
 import com.backend.mapper.book.BookMapper;
 import com.backend.mapper.book.seat.BookSeatMapper;
 import com.backend.mapper.book.ticket.BookTicketMapper;
 import com.backend.mapper.member.MemberMapper;
 import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.store.*;
+import com.backend.mapper.theater.TheaterMapper;
+import com.backend.mapper.theater.box.TheaterBoxMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -47,6 +51,8 @@ public class PaymentService {
     private final BookMapper bookMapper;
     private final MemberMapper memberMapper;
     private final BookSeatMapper bookSeatMapper;
+    private final TheaterBoxMapper theaterBoxMapper;
+    private final TheaterMapper theaterMapper;
 
     @Value("${payment.key}")
     private String apiKey;
@@ -126,16 +132,22 @@ public class PaymentService {
         BookTicket bookTicket = bookTicketMapper.getBookTicket(memberNumber, paymentId);
         Payment payment = paymentMapper.getPayment(paymentId);
         Movie movie = movieMapper.selectByMovieId(bookTicket.getBookTicketMovieId());
-        BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookTicket.getBookTicketBookPlaceTimeId());
         Member member = memberMapper.selectByMemberNumber(bookTicket.getBookTicketMemberNumber());
+        BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookTicket.getBookTicketBookPlaceTimeId());
+
+        TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(bookPlaceTime.getTheaterBoxMovieId());
+        Theater theater = theaterMapper.selectTheaterByTheaterNumber(theaterBox.getTheaterNumber());
 
 
         return Map.of(
                 "bookTicket", bookTicket,
                 "payment", payment,
                 "movie", movie,
+                "member", member,
                 "bookPlaceTime", bookPlaceTime,
-                "member", member);
+                "theaterBox", theaterBox,
+                "theater", theater
+        );
     }
 
     public String getToken() throws Exception {
