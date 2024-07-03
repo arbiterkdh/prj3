@@ -17,6 +17,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  SimpleGrid,
   Stack,
   StackDivider,
   Tab,
@@ -82,6 +83,8 @@ export function MemberMyPage() {
     [],
   );
 
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const {
     isOpen: isCancelOpen,
     onOpen: onCancelOpen,
@@ -102,6 +105,10 @@ export function MemberMyPage() {
 
   const location = useLocation();
   const { nickName } = location.state;
+
+  useEffect(() => {
+    setIsDisabled(cancelReason.trim() === "");
+  }, [cancelReason]);
 
   useEffect(() => {
     if (nickName) {
@@ -713,7 +720,10 @@ export function MemberMyPage() {
               />
             </ModalBody>
             <ModalFooter>
-              <ColorButton onClick={() => handlePaymentCancel()}>
+              <ColorButton
+                isDisabled={isDisabled}
+                onClick={() => handlePaymentCancel()}
+              >
                 확인
               </ColorButton>
               <Button
@@ -769,29 +779,52 @@ export function MemberMyPage() {
           <ModalContent>
             <ModalHeader>알림</ModalHeader>
             <ModalBody>
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>상품명</Th>
-                    <Th>수량</Th>
-                    <Th>가격</Th>
-                    <Th>합계</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {selectPaymentCancelResult.map((resultItem, itemIndex) => (
-                    <Tr key={itemIndex}>
-                      <Td>{resultItem.cancelName}</Td>
-                      <Td>{resultItem.cancelQuantity}</Td>
-                      <Td>{resultItem.cancelPrice}원</Td>
-                      <Td>{resultItem.cancelTotalPrice}원</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+              {selectPaymentCancelResult.map((resultItem, itemIndex) => (
+                <Box
+                  key={itemIndex}
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  p={4}
+                  mb={4}
+                  _dark={{ bgColor: "#1F3032" }}
+                >
+                  <Text as="h5" size="md" mb={2}>
+                    {resultItem.cancelName}
+                  </Text>
+                  <SimpleGrid columns={3} spacing={2}>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        수량
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelQuantity}</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        가격
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelPrice}원</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        합계
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelTotalPrice}원</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        취소사유
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelReason}</Text>
+                    </Box>
+                  </SimpleGrid>
+                </Box>
+              ))}
             </ModalBody>
             <ModalFooter>
-              <Button onClick={onPaymentCancelResultClose}>확인</Button>
+              <ColorButton onClick={onPaymentCancelResultClose}>
+                확인
+              </ColorButton>
             </ModalFooter>
           </ModalContent>
         </Modal>

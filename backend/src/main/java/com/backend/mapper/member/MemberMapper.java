@@ -96,7 +96,8 @@ public interface MemberMapper {
             select distinct (po.name)      as cancelName,
                             po.quantity    as cancelQuantity,
                             po.price       as cancelPrice,
-                            po.total_price as cancelTotalPrice
+                            po.total_price as cancelTotalPrice,
+                            pc.cancel_reason as cancelReason
             from payment_cancel pc
                      join payment p
                           on pc.order_number = p.order_number
