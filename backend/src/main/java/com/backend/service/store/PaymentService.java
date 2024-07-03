@@ -1,8 +1,22 @@
 package com.backend.service.store;
 
+import com.backend.domain.book.BookData;
+import com.backend.domain.book.BookPlaceTime;
+import com.backend.domain.book.ticket.BookTicket;
+import com.backend.domain.member.Member;
+import com.backend.domain.movie.Movie;
 import com.backend.domain.store.Payment;
 import com.backend.domain.store.PaymentCancel;
+import com.backend.domain.theater.Theater;
+import com.backend.domain.theater.box.TheaterBox;
+import com.backend.mapper.book.BookMapper;
+import com.backend.mapper.book.seat.BookSeatMapper;
+import com.backend.mapper.book.ticket.BookTicketMapper;
+import com.backend.mapper.member.MemberMapper;
+import com.backend.mapper.movie.MovieMapper;
 import com.backend.mapper.store.*;
+import com.backend.mapper.theater.TheaterMapper;
+import com.backend.mapper.theater.box.TheaterBoxMapper;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,13 +31,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
 @Service
 public class PaymentService {
 
-    private final PaymentMapper mapper;
     private final CartMapper cartMapper;
     private final ProductOrderMapper orderMapper;
     private final ProductMapper productMapper;
@@ -31,6 +45,14 @@ public class PaymentService {
     private final QrService qrService;
     private final PaymentMapper paymentMapper;
     private final PaymentCancelMapper paymentCancelMapper;
+
+    private final BookTicketMapper bookTicketMapper;
+    private final MovieMapper movieMapper;
+    private final BookMapper bookMapper;
+    private final MemberMapper memberMapper;
+    private final BookSeatMapper bookSeatMapper;
+    private final TheaterBoxMapper theaterBoxMapper;
+    private final TheaterMapper theaterMapper;
 
     @Value("${payment.key}")
     private String apiKey;
@@ -40,13 +62,13 @@ public class PaymentService {
 
     public int add(Payment payment) throws Exception {
 
-        Object qrCode = qrService.create(payment);
-
-        payment.setQrCode(qrCode);
-
-        mapper.add(payment);
-
         if (payment.getBookData() == null) {
+
+            Object qrCode = qrService.create(payment);
+
+            payment.setQrCode(qrCode);
+
+            paymentMapper.add(payment);
 
             if (payment.getCheckCartId() != null && !payment.getCheckCartId().isEmpty()) {
 
@@ -73,7 +95,29 @@ public class PaymentService {
                 productMapper.updateStock(payment.getProductId(), payment.getQuantity());
             }
         } else {
+            paymentMapper.add(payment);
 
+            BookData bookData = payment.getBookData();
+            BookTicket bookTicket = new BookTicket();
+
+            bookTicket.setBookTicketPaymentId(payment.getId());
+            bookTicket.setBookTicketMovieId(bookData.getMovie().getId());
+            bookTicket.setBookTicketBookPlaceTimeId(bookData.getBookSeatBookPlaceTimeId());
+            bookTicket.setBookTicketMemberNumber(payment.getMemberNumber());
+
+            List<String> bookTicketRowColList = bookData.getSeatSelected();
+            StringBuilder bookTicketRowCols = new StringBuilder();
+
+            for (int i = 0; i < bookTicketRowColList.size(); i++) {
+                bookTicketRowCols.append(bookTicketRowColList.get(i));
+                if (i < bookTicketRowColList.size() - 1) {
+                    bookTicketRowCols.append(", ");
+                }
+            }
+            bookTicket.setBookTicketRowCols(bookTicketRowCols.toString());
+            bookTicket.setBookTicketPrice(bookData.getTotalAmount());
+
+            bookTicketMapper.addBookTicket(bookTicket);
         }
 
         return payment.getId();
@@ -81,7 +125,29 @@ public class PaymentService {
 
     public List<Payment> getData(Integer memberNumber, Integer paymentId) {
 
-        return mapper.getData(memberNumber, paymentId);
+        return paymentMapper.getData(memberNumber, paymentId);
+    }
+
+    public Map<String, Object> getBookData(Integer memberNumber, Integer paymentId) {
+        BookTicket bookTicket = bookTicketMapper.getBookTicket(memberNumber, paymentId);
+        Payment payment = paymentMapper.getPayment(paymentId);
+        Movie movie = movieMapper.selectByMovieId(bookTicket.getBookTicketMovieId());
+        Member member = memberMapper.selectByMemberNumber(bookTicket.getBookTicketMemberNumber());
+        BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookTicket.getBookTicketBookPlaceTimeId());
+
+        TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(bookPlaceTime.getTheaterBoxMovieId());
+        Theater theater = theaterMapper.selectTheaterByTheaterNumber(theaterBox.getTheaterNumber());
+
+
+        return Map.of(
+                "bookTicket", bookTicket,
+                "payment", payment,
+                "movie", movie,
+                "member", member,
+                "bookPlaceTime", bookPlaceTime,
+                "theaterBox", theaterBox,
+                "theater", theater
+        );
     }
 
     public String getToken() throws Exception {

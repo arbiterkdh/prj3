@@ -40,6 +40,7 @@ import { PromoResultAdd } from "./page/promotion/add/PromoResultAdd.jsx";
 import { PromoResultModify } from "./page/promotion/modify/PromoResultModify.jsx";
 import { CartProvider } from "./component/CartProvider.jsx";
 import { BookMoviePayment } from "./page/book/payment/BookMoviePayment.jsx";
+import { BookPaymentSuccess } from "./page/book/payment/BookPaymentSuccess.jsx";
 
 const exceptionHost = [
   "http://www.kobis.or.kr",
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
           { index: true, element: <Book /> },
           { path: "theaterseat", element: <TheaterSeatList /> },
           { path: "payment", element: <BookMoviePayment /> },
+          {
+            path: "payment/payment-success",
+            element: <BookPaymentSuccess />,
+          },
         ],
       },
 

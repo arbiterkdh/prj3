@@ -98,8 +98,10 @@ export function TheaterSeatList() {
         if (prevSelectedList.length > 0) {
           setSeatSelected(
             prevSelectedList.sort((a, b) => {
-              if (a.slice(0, 1) !== b.slice(0, 1)) {
-                return a - b;
+              let alphabetA = a.charCodeAt(0);
+              let alphabetB = b.charCodeAt(0);
+              if (alphabetA !== alphabetB) {
+                return alphabetA - alphabetB;
               } else {
                 return Number(a.slice(2, 4)) - Number(b.slice(2, 4));
               }
@@ -201,8 +203,10 @@ export function TheaterSeatList() {
             let newSeatSelected = [...prev];
             newSeatSelected.push(rowCol);
             return newSeatSelected.sort((a, b) => {
-              if (a.slice(0, 1) !== b.slice(0, 1)) {
-                return a - b;
+              let alphabetA = a.charCodeAt(0);
+              let alphabetB = b.charCodeAt(0);
+              if (alphabetA !== alphabetB) {
+                return alphabetA - alphabetB;
               } else {
                 return Number(a.slice(2, 4)) - Number(b.slice(2, 4));
               }

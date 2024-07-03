@@ -88,7 +88,7 @@ public interface BookSeatMapper {
 
     @Select("""
             SELECT COUNT(*)
-            FROM book_seat 
+            FROM book_seat
             WHERE book_seat_member_number = #{bookSeatMemberNumber}
             AND book_seat_book_place_time_id = #{bookPlaceTimeId}
             AND is_paying = FALSE

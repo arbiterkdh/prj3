@@ -3,7 +3,6 @@ package com.backend.domain.book;
 import com.backend.domain.movie.Movie;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -16,6 +15,4 @@ public class BookData {
     private String city;
     private String location;
     private Integer boxNumber;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
 }

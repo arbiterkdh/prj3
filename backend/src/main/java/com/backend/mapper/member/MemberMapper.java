@@ -105,4 +105,11 @@ public interface MemberMapper {
             WHERE p.order_number = #{orderNumber}
             """)
     List<PaymentCancel> paymentCancelItem(String orderNumber);
+
+    @Select("""
+            SELECT *
+            FROM member
+            WHERE number = #{memberNumber}
+            """)
+    Member selectByMemberNumber(Integer memberNumber);
 }
