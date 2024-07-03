@@ -4,18 +4,19 @@ import {
   CloseButton,
   Flex,
   Image,
+  Input,
   Spinner,
   Stack,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import axios from "axios";
 import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 import { RiKakaoTalkFill } from "react-icons/ri";
-import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
+import { faCreditCard, faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactPlayer from "react-player";
 
@@ -26,11 +27,31 @@ export function BookMoviePayment() {
   const navigate = useNavigate();
   const toast = useToast();
 
+  const timerRef = useRef(null);
+
+  const [timer, setTimer] = useState(10 * 60);
+
   const [bookData, setBookData] = useState(location.state);
   const [paymentId, setPaymentId] = useState(0);
 
   const KMDbKey = import.meta.env.VITE_KMDb_APP_KEY;
   const KMDbMovieInfoURL = `http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y`;
+
+  const today = new Date();
+  const beforeSixtyDaysDate = new Date(today.setDate(today.getDate() - 60));
+  const afterSixtyDaysDate = new Date(today.setDate(today.getDate() + 60));
+
+  const dtsYear = beforeSixtyDaysDate.getFullYear();
+  const dtsMonth = ("0" + (beforeSixtyDaysDate.getMonth() + 1)).slice(-2);
+  const dtsDay = ("0" + beforeSixtyDaysDate.getDate()).slice(-2);
+
+  const dteYear = afterSixtyDaysDate.getFullYear();
+  const dteMonth = ("0" + (afterSixtyDaysDate.getMonth() + 1)).slice(-2);
+  const dteDay = ("0" + afterSixtyDaysDate.getDate()).slice(-2);
+
+  const releaseDtsKeyword = `${dtsYear + dtsMonth + dtsDay}`;
+  const releaseDteKeyword = `${dteYear + dteMonth + dteDay}`;
+
   const [vodUrl, setVodUrl] = useState("");
 
   useEffect(() => {
@@ -72,7 +93,7 @@ export function BookMoviePayment() {
         .then((res) => {});
       axios
         .get(
-          `${KMDbMovieInfoURL}&title=${bookData.movie.title}&ServiceKey=${KMDbKey}`,
+          `${KMDbMovieInfoURL}&releaseDts=${releaseDtsKeyword}&releaseDte=${releaseDteKeyword}&title=${bookData.movie.title}&ServiceKey=${KMDbKey}`,
         )
         .then((res) => {
           let vodFileName =
@@ -83,6 +104,42 @@ export function BookMoviePayment() {
     console.log(bookData);
     setBookProgress(3);
   }, [bookData]);
+
+  useEffect(() => {
+    startTimer();
+    if (timer === 0) {
+      resetPage();
+    }
+  }, [timer]);
+
+  function timeFormat(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  }
+
+  function startTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setTimer((prev) => prev - 1);
+    }, 1000);
+  }
+
+  function resetTimer() {
+    if (timerRef.current) clearInterval(timerRef.current);
+    setTimer(10 * 60);
+  }
+
+  function resetPage() {
+    resetTimer();
+    toast({
+      status: "info",
+      description: "예매 유효 시간이 초과되어, 홈으로 이동됩니다.",
+      position: "bottom-right",
+    });
+    handleClickRemoveBookSeatData(account.id, bookData.bookSeatBookPlaceTimeId);
+    return navigate("/");
+  }
 
   function handleClickRemoveBookSeatData(
     bookSeatMemberNumber,
@@ -287,7 +344,7 @@ export function BookMoviePayment() {
                   borderRadius={"10px"}
                   w={"480px"}
                   h={"320px"}
-                  bgColor={"darkslategray"}
+                  bgColor={"blackAlpha.900"}
                   align={"center"}
                   alignContent={"center"}
                 >
@@ -330,13 +387,39 @@ export function BookMoviePayment() {
               h={"125px"}
               borderRadius={"10px"}
             >
-              <Box fontWeight={"600"} fontSize={"lg"} mr={1}>
-                총 결제 금액:{" "}
-                {bookData.totalAmount.toString().slice(-6, -3) +
-                  "," +
-                  bookData.totalAmount.toString().slice(-3)}
-                원
-              </Box>
+              <Flex
+                h={"40px"}
+                w={"830px"}
+                align={"center"}
+                justifyContent={"space-between"}
+              >
+                <Flex align={"center"}>
+                  <Input
+                    size={"lg"}
+                    value={"예매 유효 시간:  " + timeFormat(timer)}
+                    w={"215px"}
+                    h={"40px"}
+                    fontWeight={"700"}
+                    bgColor={"whiteAlpha.50"}
+                    _dark={{ bgColor: "blackAlpha.50" }}
+                    border={""}
+                    borderRadius={"6px"}
+                    readOnly
+                  />
+                  <Box ml={-4}>
+                    <FontAwesomeIcon icon={faStopwatch} size={"lg"} shake />
+                  </Box>
+                </Flex>
+
+                <Box fontWeight={"600"} fontSize={"lg"} mr={1}>
+                  총 결제 금액:{" "}
+                  {bookData.totalAmount.toString().slice(-6, -3) +
+                    "," +
+                    bookData.totalAmount.toString().slice(-3)}
+                  원
+                </Box>
+              </Flex>
+
               <Flex>
                 <Button
                   bgColor={"yellow"}

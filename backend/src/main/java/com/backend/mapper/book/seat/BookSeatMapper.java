@@ -74,6 +74,7 @@ public interface BookSeatMapper {
     @Delete("""
             DELETE FROM book_seat
             WHERE is_paying = FALSE
+            AND is_paid = FALSE
             AND DATE_ADD(selected_time, INTERVAL 10 MINUTE ) < NOW()
             """)
     int deleteBookSeatByCompareSelectedTimeWithCurrentTime();

@@ -118,6 +118,7 @@ public class PaymentService {
             bookTicket.setBookTicketPrice(bookData.getTotalAmount());
 
             bookTicketMapper.addBookTicket(bookTicket);
+//            bookSeatMapper.updateBookSeatIsPaidByBookSeat()
         }
 
         return payment.getId();
