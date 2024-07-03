@@ -45,6 +45,7 @@ public class BookPaymentController {
     @PostMapping("cancel")
     public void paymentCancel(@RequestBody PaymentCancel paymentCancel) throws Exception {
 
-        paymentService.cancelPayment(paymentCancel);
+        Boolean isBookPaymentCancel = true;
+        paymentService.cancelPayment(paymentCancel, isBookPaymentCancel);
     }
 }

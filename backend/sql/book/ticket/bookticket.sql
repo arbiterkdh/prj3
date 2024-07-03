@@ -14,6 +14,9 @@ CREATE TABLE book_ticket
 
 DROP TABLE book_ticket;
 
+ALTER TABLE book_ticket
+    ADD COLUMN is_valid BOOLEAN DEFAULT TRUE;
+
 SELECT *
 FROM payment;
 
@@ -23,3 +26,6 @@ SELECT *
 FROM book_ticket;
 
 DESC book_ticket;
+
+SELECT *
+FROM book_seat;

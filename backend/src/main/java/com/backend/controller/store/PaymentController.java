@@ -46,7 +46,7 @@ public class PaymentController {
     @PostMapping("/cancel")
     public void paymentCancel(@RequestBody PaymentCancel paymentCancel) throws Exception {
 
-        service.cancelPayment(paymentCancel);
+        service.cancelPayment(paymentCancel, false);
     }
 
 

@@ -7,6 +7,7 @@ import {
   Card,
   CardBody,
   Center,
+  Flex,
   Heading,
   Input,
   Link,
@@ -140,7 +141,7 @@ export function MemberMyPage() {
         setTicketList(res.data);
       });
     }
-  }, [account]);
+  }, [account, ticket]);
 
   useEffect(() => {
     if (nickName) {
@@ -329,6 +330,7 @@ export function MemberMyPage() {
           position: "bottom-right",
         });
         onTicketClose();
+        setTicket([]);
       })
       .catch((err) => {
         console.error("취소 오류:" + err);
@@ -551,6 +553,7 @@ export function MemberMyPage() {
                             ",000 원"}
                         </Td>
                         <Td>
+                          {/* 결제완료, 결제취소, 기한만료 상태마다 다른 로직 작성하기 */}
                           <ColorButton
                             size={"sm"}
                             onClick={() => handleClickBookTicketView(ticket)}
@@ -925,31 +928,68 @@ export function MemberMyPage() {
         </Modal>
 
         {/* 예매 내역 모달 */}
-        <Modal isOpen={isTicketOpen} onClose={onTicketClose} isCentered>
-          <ModalOverlay />
-          <ModalContent
-            _dark={{ bgColor: "#1F3032" }}
-            minW={"920px"}
-            minH={"300px"}
+        {ticket.bookTicket && (
+          <Modal
+            isOpen={isTicketOpen}
+            onClose={() => {
+              onTicketClose();
+              setTicket([]);
+            }}
+            isCentered
           >
-            <ModalHeader>예매 티켓 확인</ModalHeader>
-            <ModalCloseButton size={"lg"} />
-            <ModalBody>
-              <BookTicketView bookTicketData={ticket} isMyPage={true} />
-            </ModalBody>
-            <ModalFooter justifyContent={"space-between"} mb={4}>
-              <ColorButton
-                isLoading={isLoading}
-                onClick={() => handleBookPaymentCancel(ticket)}
-              >
-                예매취소 및 환불
-              </ColorButton>
-              <ColorButton w={"80px"} onClick={() => onTicketClose()}>
-                확인
-              </ColorButton>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+            <ModalOverlay />
+            <ModalContent
+              _dark={{ bgColor: "#1F3032" }}
+              minW={"920px"}
+              minH={"300px"}
+            >
+              <ModalHeader>
+                {ticket.bookTicket.isValid
+                  ? "예매 티켓 확인 (예매 취소는 상영시작 1시간 전까지만 가능합니다.)"
+                  : "취소/만료된 예매 티켓"}
+              </ModalHeader>
+              <ModalCloseButton size={"lg"} />
+              <ModalBody>
+                {!ticket.bookTicket.isValid && (
+                  <Box
+                    w={"877px"}
+                    h={"450px"}
+                    position={"absolute"}
+                    bg={"gray.900"}
+                    opacity={"0.5"}
+                    color={"red"}
+                    fontSize={"110px"}
+                    fontWeight={"600"}
+                    zIndex={5}
+                    align={"center"}
+                    alignContent={"center"}
+                  >
+                    만료
+                  </Box>
+                )}
+                <BookTicketView bookTicketData={ticket} isMyPage={true} />
+              </ModalBody>
+              <ModalFooter justifyContent={"space-between"} mb={4}>
+                {ticket.bookTicket.isValid ? (
+                  <Flex align={"center"}>
+                    <ColorButton
+                      isLoading={isLoading}
+                      onClick={() => handleBookPaymentCancel(ticket)}
+                    >
+                      예매취소 및 환불
+                    </ColorButton>
+                    <Text ml={2}>(클릭시 취소 불가능)</Text>
+                  </Flex>
+                ) : (
+                  <Box />
+                )}
+                <ColorButton w={"80px"} onClick={() => onTicketClose()}>
+                  확인
+                </ColorButton>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        )}
       </CenterBox>
     </Center>
   );

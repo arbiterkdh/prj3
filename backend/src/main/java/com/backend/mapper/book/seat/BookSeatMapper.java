@@ -52,7 +52,7 @@ public interface BookSeatMapper {
 
     @Delete("""
             DELETE FROM book_seat
-            WHERE book_seat_book_place_time_id = #{bookPlaceTimeId}
+            WHERE book_seat_book_place_time_id = #{bookSeatBookPlaceTimeId}
             AND row_col = #{rowCol}
             """)
     int deleteBookSeat(BookSeat bookSeat);

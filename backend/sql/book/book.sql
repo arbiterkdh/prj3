@@ -74,3 +74,14 @@ FROM movie m
          JOIN theater_box tb ON tbm.theater_box_id = tb.id
 WHERE m.start_date <= CURDATE() + INTERVAL 3 WEEK
   AND m.start_date >= CURDATE() - INTERVAL 3 WEEK;
+
+SELECT *
+FROM payment;
+
+SELECT *
+FROM payment_cancel;
+
+DESC payment_cancel;
+
+SELECT *
+FROM book_ticket;

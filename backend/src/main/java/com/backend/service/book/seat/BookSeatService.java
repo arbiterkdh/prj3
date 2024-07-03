@@ -67,6 +67,7 @@ public class BookSeatService {
         boolean bookedSeat = bookSeatMapper.selectBookSeat(bookSeat) != null;
 
         Integer bookPlaceTimeId = bookSeat.getBookPlaceTimeId();
+        bookSeat.setBookSeatBookPlaceTimeId(bookPlaceTimeId);
 
         if (bookedSeatBySameMember) {
             bookSeatMapper.deleteBookSeat(bookSeat);

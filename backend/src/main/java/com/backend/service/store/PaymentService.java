@@ -2,6 +2,7 @@ package com.backend.service.store;
 
 import com.backend.domain.book.BookData;
 import com.backend.domain.book.BookPlaceTime;
+import com.backend.domain.book.seat.BookSeat;
 import com.backend.domain.book.ticket.BookTicket;
 import com.backend.domain.member.Member;
 import com.backend.domain.movie.Movie;
@@ -157,6 +158,7 @@ public class PaymentService {
 
     public List<Map<String, Object>> getAllBookData(Integer memberNumber) {
         List<Map<String, Object>> ticketList = new ArrayList<>();
+        bookTicketMapper.updateBookTicketIsValidFalseByCurrentDate();
         List<BookTicket> bookTicketList = bookTicketMapper.getAllBookTicket(memberNumber);
 
 
@@ -220,7 +222,7 @@ public class PaymentService {
         return token;
     }
 
-    public void cancelPayment(PaymentCancel paymentCancel) throws Exception {
+    public void cancelPayment(PaymentCancel paymentCancel, Boolean isBookPaymentCancel) throws Exception {
         String token = getToken();
 
         URL url = new URL("https://api.iamport.kr/payments/cancel");
@@ -258,12 +260,20 @@ public class PaymentService {
         Long code = (Long) jsonResponse.get("code");
         if (code != null && code == 0) {
             System.out.println("결제 취소 성공");
+            List<Payment> payments = new ArrayList<>();
 
-            List<Payment> payments = paymentMapper.paymentData(paymentCancel.getOrderNumber());
+            if (!isBookPaymentCancel) {
+                payments = paymentMapper.paymentData(paymentCancel.getOrderNumber());
+            } else {
+                payments.add(paymentMapper.paymentInfo(paymentCancel.getPaymentId()));
+            }
+
             if (payments.size() == 1) {
 
-                Payment payment = payments.get(0);
+                Payment payment = payments.getFirst();
+
                 payment.setStatus("cancelled");
+
                 paymentMapper.updatePaymentStatus(payment);
 
                 JSONObject responseObj = (JSONObject) jsonResponse.get("response");
@@ -276,7 +286,24 @@ public class PaymentService {
 
                 paymentCancelMapper.insert(paymentCancel);
 
-                productMapper.updateRefundStock(paymentCancel.getProductId(), payment.getQuantity());
+                if (!isBookPaymentCancel) {
+                    productMapper.updateRefundStock(paymentCancel.getProductId(), payment.getQuantity());
+
+                } else {
+                    bookTicketMapper.updateBookTicketIsValidFalse(payment.getId());
+                    BookTicket bookTicket = bookTicketMapper.selectBookTicketByPaymentId(payment.getId());
+                    BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookTicket.getBookTicketBookPlaceTimeId());
+                    List<String> rowColList = List.of(bookTicket.getBookTicketRowCols().split(", "));
+                    int length = rowColList.size();
+
+                    for (String rowCol : rowColList) {
+                        BookSeat bookSeat = new BookSeat();
+                        bookSeat.setBookSeatBookPlaceTimeId(bookPlaceTime.getBookPlaceTimeId());
+                        bookSeat.setRowCol(rowCol);
+                        bookSeatMapper.deleteBookSeat(bookSeat);
+                    }
+                    bookSeatMapper.updateBookPlaceTimeVacancy(bookPlaceTime.getBookPlaceTimeId(), length);
+                }
 
 //                productOrderMapper.deleteOrder(payment.getId());
             } else {

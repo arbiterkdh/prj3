@@ -12,6 +12,7 @@ public class BookTicket {
     private Integer bookTicketMemberNumber;
     private String bookTicketRowCols;
     private Integer bookTicketPrice;
+    private Boolean isValid;
 
     private List<String> bookTicketRowColList;
 }
