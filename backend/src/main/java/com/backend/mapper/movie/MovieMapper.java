@@ -244,5 +244,13 @@ public interface MovieMapper {
             WHERE book_seat_book_place_time_id = #{id}
             """)
     int deleteBookSeat(Integer id);
+
+
+    @Select("""
+            SELECT id
+            FROM movie
+            WHERE title = #{title}
+            """)
+    Integer selectMovieIdByTitle(String title);
 }
 

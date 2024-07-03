@@ -2,7 +2,7 @@ import { Box, Center, Heading, Image, Spinner, Stack } from "@chakra-ui/react";
 import CenterBox from "../../css/theme/component/box/CenterBox.jsx";
 import BookBox from "../../css/theme/component/box/BookBox.jsx";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
-import { useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -35,6 +35,8 @@ export function MovieHome() {
 
   const [PosterUrlList, setPosterUrlList] = useState([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchMoviePosters = async () => {
       const requests = dailyBoxOffice
@@ -64,6 +66,12 @@ export function MovieHome() {
       fetchMoviePosters();
     }
   }, [dailyBoxOffice]);
+
+  function handleImageClick(movieNm) {
+    axios.get(`/api/movie/search?movieNm=${movieNm}`).then((res) => {
+      navigate(`/movie/view/${res.data}`);
+    });
+  }
 
   return (
     <Box align={"center"} overflow={"hidden"}>
@@ -104,6 +112,10 @@ export function MovieHome() {
                       h={"350px"}
                       src={url}
                       _dark={{ opacity: "0.8" }}
+                      cursor={"pointer"}
+                      onClick={() => {
+                        handleImageClick(dailyBoxOffice[index].movieNm);
+                      }}
                     />
                     <Box
                       h={"25px"}

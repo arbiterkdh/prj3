@@ -70,4 +70,13 @@ public class MovieController {
         return movieService.like(req, authentication);
     }
 
+    @GetMapping("search")
+    public ResponseEntity search(String movieNm) {
+        // 영화 id 검색
+        Integer id = movieService.search(movieNm);
+        if (id != null) {
+            return ResponseEntity.ok(id);
+        } else return ResponseEntity.notFound().build();
+    }
+
 }

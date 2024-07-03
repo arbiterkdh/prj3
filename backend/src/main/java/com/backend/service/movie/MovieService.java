@@ -289,4 +289,8 @@ public class MovieService {
         return result;
 
     }
+
+    public Integer search(String movieNm) {
+        return movieMapper.selectMovieIdByTitle(movieNm);
+    }
 }
