@@ -22,7 +22,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import {
   faCartShopping,
   faCreditCard,
@@ -112,6 +111,7 @@ function ProductItemList({
           overflow: "hidden",
           flexBasis: "25%",
           maxWidth: "24%",
+          position: "relative",
         }}
       >
         <Card
@@ -119,18 +119,20 @@ function ProductItemList({
           key={product.id}
           borderRadius={0}
           _dark={{ bgColor: "darkslategray", opacity: "0.9" }}
+          bg={product.stock === 0 ? "gray.300" : "white"}
+          opacity={product.stock === 0 ? 0.5 : 1}
         >
-          <CardBody>
-            {rank && (
-              <Box
-                fontSize="2xl"
-                fontWeight="bold"
-                color={"#ed3124"}
-                _dark={{ color: "blue.200" }}
-              >
-                {rank}위
-              </Box>
-            )}
+          {rank && (
+            <Box
+              fontSize="2xl"
+              fontWeight="bold"
+              color={"#ed3124"}
+              _dark={{ color: "blue.200" }}
+            >
+              {rank}위
+            </Box>
+          )}
+          <Box position="relative">
             <Image
               style={{
                 width: "100%",
@@ -139,7 +141,25 @@ function ProductItemList({
               src={product.image.src}
               borderRadius="2xl"
               onClick={() => handleProductView(product.id)}
+              filter={product.stock === 0 ? "blur(2px)" : "none"}
             />
+            {product.stock === 0 && (
+              <Center
+                position="absolute"
+                top="0"
+                left="0"
+                right="0"
+                bottom="0"
+                bg="rgba(0, 0, 0, 0.6)"
+                color="white"
+                fontSize="xl"
+                fontWeight="bold"
+              >
+                구매 불가
+              </Center>
+            )}
+          </Box>
+          <CardBody>
             <Stack mt="3" spacing="0">
               <Center>
                 <Box w={"100%"}>
@@ -181,7 +201,37 @@ function ProductItemList({
           <Divider />
           <CardFooter>
             {product.stock === 0 ? (
-              <Text color="red.500">구매 불가</Text>
+              <Flex w={"100%"} justifyContent={"center"}>
+                <Button
+                  // p={0}
+                  // m={"1px"}
+                  color={"red"}
+                  size={"md"}
+                  onClick={() => {
+                    handleModifyModal(
+                      product.id,
+                      product.fileName,
+                      product.name,
+                      product.price,
+                      product.stock,
+                      product.image.src,
+                    );
+                  }}
+                >
+                  <FontAwesomeIcon icon={faWrench} cursor={"pointer"} />
+                </Button>
+                <Button
+                  // p={0}
+                  // m={"1px"}
+                  size={"md"}
+                  onClick={() => {
+                    onDelOpen();
+                    setProductId(product.id);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faX} />
+                </Button>
+              </Flex>
             ) : (
               <Flex
                 style={{
