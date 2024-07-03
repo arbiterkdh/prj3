@@ -153,6 +153,13 @@ export function MemberMyPage() {
       .finally(() => {});
   }, [nickName, page, paymentResult, setPaymentResult]);
 
+  useEffect(() => {
+    if (selected === "custom" || selected === "") {
+      setDomain("");
+    } else {
+      setDomain(selected);
+    }
+  }, [selected]);
   function handleClick() {
     axios
       .post("/api/mail/useCheck", { address: address + "@" + domain })
