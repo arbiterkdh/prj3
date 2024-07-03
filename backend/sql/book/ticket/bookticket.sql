@@ -1,6 +1,5 @@
 USE prj3;
 
-
 # 티켓에 들어갈 정보.
 CREATE TABLE book_ticket
 (
