@@ -96,6 +96,7 @@ public class PaymentService {
             }
         } else {
             paymentMapper.add(payment);
+            // 결제 내역 추가
 
             BookData bookData = payment.getBookData();
             BookTicket bookTicket = new BookTicket();
