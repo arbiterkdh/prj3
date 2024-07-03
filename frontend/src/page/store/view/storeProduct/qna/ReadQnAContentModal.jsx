@@ -10,15 +10,15 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
   Td,
   Textarea,
   useToast,
 } from "@chakra-ui/react";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../../../../component/LoginProvider.jsx";
 import axios from "axios";
 import { QnAComment } from "./QnAComment.jsx";
+import ColorButton from "../../../../../css/theme/component/button/ColorButton.jsx";
 
 function ReadQnAContentModal({
   onQnAContentClose,
@@ -32,7 +32,12 @@ function ReadQnAContentModal({
   const [answerComment, setAnswerComment] = useState("");
   const [isAdmin, setIsAdmin] = useState(null);
   const [refreshQnAComment, setRefreshQnAComment] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(true);
   const toast = useToast();
+
+  useEffect(() => {
+    setIsDisabled(answerComment.trim() === "");
+  }, [answerComment]);
 
   function handleAddAnswerComment(isAdmin) {
     axios
@@ -58,15 +63,13 @@ function ReadQnAContentModal({
   return (
     <Td>
       <Modal isOpen={isQnAContentOpen} onClose={onQnAContentClose}>
-        <ModalOverlay />
-        <ModalContent borderRadius="lg" boxShadow="lg">
-          <ModalHeader
-            bg="blue.500"
-            color="white"
-            borderTopRadius="lg"
-            py={4}
-            px={6}
-          >
+        {/*<ModalOverlay />*/}
+        <ModalContent
+          borderRadius="lg"
+          boxShadow="lg"
+          _dark={{ bgColor: "#1F3032" }}
+        >
+          <ModalHeader borderTopRadius="lg" py={4} px={6}>
             {titleQnA}
           </ModalHeader>
           <hr />
@@ -74,12 +77,12 @@ function ReadQnAContentModal({
             <FormControl mb={4}>
               <FormLabel>내용</FormLabel>
               <Textarea
+                _dark={{ bgColor: "#1F3032" }}
                 readOnly
                 resize="none"
                 bg="gray.100"
                 borderRadius="md"
                 p={4}
-                _dark={{ bg: "gray.700" }}
                 defaultValue={contentQnA}
               />
             </FormControl>
@@ -91,7 +94,7 @@ function ReadQnAContentModal({
                 p={2}
                 bg="gray.50"
                 borderRadius="md"
-                _dark={{ bg: "gray.800" }}
+                _dark={{ bgColor: "#1F3032" }}
               >
                 <QnAComment
                   idQnA={idQnA}
@@ -99,37 +102,38 @@ function ReadQnAContentModal({
                 />
               </Box>
 
-              {Login.nickName === `${writerQnA}` && (
-                <>
-                  <FormLabel>추가 문의글 작성</FormLabel>
-                  <Flex mb={4} align="center">
-                    <Textarea
-                      placeholder={"추가 문의글을 작성하세요"}
-                      resize={"none"}
-                      value={answerComment}
-                      onChange={(e) => {
-                        setAnswerComment(e.target.value);
-                        setIsAdmin(false);
-                      }}
-                      mr={2}
-                      bg="white"
-                      borderRadius="md"
-                      p={4}
-                      _dark={{ bg: "gray.700" }}
-                    />
-                    <Button
-                      colorScheme="blue"
-                      onClick={() => {
-                        handleAddAnswerComment(isAdmin);
-                      }}
-                      borderRadius="md"
-                      boxShadow="md"
-                    >
-                      확인
-                    </Button>
-                  </Flex>
-                </>
-              )}
+              {Login.nickName === `${writerQnA}` ||
+                (Login.nickName !== "생존코딩" && (
+                  <>
+                    <FormLabel>추가 문의글 작성</FormLabel>
+                    <Flex mb={4} align="center">
+                      <Textarea
+                        placeholder={"추가 문의글을 작성하세요"}
+                        resize={"none"}
+                        value={answerComment}
+                        onChange={(e) => {
+                          setAnswerComment(e.target.value);
+                          setIsAdmin(false);
+                        }}
+                        mr={2}
+                        bg="white"
+                        borderRadius="md"
+                        p={4}
+                        _dark={{ bgColor: "#1F3032" }}
+                      />
+                      <ColorButton
+                        onClick={() => {
+                          handleAddAnswerComment(isAdmin);
+                        }}
+                        borderRadius="md"
+                        boxShadow="md"
+                        isDisabled={isDisabled}
+                      >
+                        확인
+                      </ColorButton>
+                    </Flex>
+                  </>
+                ))}
               {Login.nickName === "생존코딩" && (
                 <>
                   <FormLabel>답글 작성</FormLabel>
@@ -146,32 +150,33 @@ function ReadQnAContentModal({
                       bg="white"
                       borderRadius="md"
                       p={4}
-                      _dark={{ bg: "gray.700" }}
+                      _dark={{ bgColor: "#1F3032" }}
                     />
-                    <Button
+                    <ColorButton
                       onClick={() => {
                         handleAddAnswerComment(isAdmin);
                       }}
+                      isDisabled={isDisabled}
                     >
                       확인
-                    </Button>
+                    </ColorButton>
                   </Flex>
                 </>
               )}
             </FormControl>
           </ModalBody>
-          <ModalFooter
-            bg="gray.100"
-            borderBottomRadius="lg"
-            _dark={{ bg: "gray.700" }}
-          >
+          <ModalFooter borderBottomRadius="lg" _dark={{ bgColor: "#1F3032" }}>
             <Flex>
               <Button
-                colorScheme="gray"
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
                 onClick={onQnAContentClose}
                 borderRadius={"md"}
               >
-                확인
+                닫기
               </Button>
             </Flex>
           </ModalFooter>

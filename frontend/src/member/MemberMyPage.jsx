@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Center,
   Heading,
   Input,
@@ -18,6 +17,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  SimpleGrid,
   Stack,
   StackDivider,
   Tab,
@@ -36,7 +36,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faAngleLeft,
@@ -66,8 +66,6 @@ export function MemberMyPage() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [page, setPage] = useState(1);
-  const [promoResults, setPromoResults] = useState([]);
-  const navigate = useNavigate();
 
   const [paymentCancelResult, setPaymentCancelResult] = useState([]);
   const [cancelReason, setCancelReason] = useState("");
@@ -82,6 +80,9 @@ export function MemberMyPage() {
   const [selectPaymentCancelResult, setSelectPaymentCancelResult] = useState(
     [],
   );
+
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     isOpen: isCancelOpen,
@@ -103,6 +104,10 @@ export function MemberMyPage() {
 
   const location = useLocation();
   const { nickName } = location.state;
+
+  useEffect(() => {
+    setIsDisabled(cancelReason.trim() === "");
+  }, [cancelReason]);
 
   useEffect(() => {
     if (nickName) {
@@ -147,17 +152,6 @@ export function MemberMyPage() {
       .catch(() => {})
       .finally(() => {});
   }, [nickName, page, paymentCancelResult]);
-
-  useEffect(() => {
-    // 당첨자 결과 데이터 가져오기
-    axios
-      .get(`/api/promotion/eventResult?search=${member.email}`)
-      .then((res) => {
-        setPromoResults(res.data.results);
-      })
-      .catch(() => {})
-      .finally(() => {});
-  }, [member.email]);
 
   function handleClick() {
     axios
@@ -305,17 +299,91 @@ export function MemberMyPage() {
       <CenterBox>
         <Heading size="md">마이페이지</Heading>
         <Tabs isFitted variant="enclosed">
-          <TabList mb="1em">
-            <Tab>회원정보</Tab>
-            <Tab>비밀번호 변경</Tab>
-            <Tab>예매내역</Tab>
-            <Tab>결제내역({pageInfoPaymentResult.totalCount})</Tab>
-            <Tab>취소내역({pageInfoPaymentCancelResult.totalCount})</Tab>
+          <TabList mb="1em" borderBottom={"none"}>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              회원정보
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              비밀번호 변경
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              예매내역
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              결제내역({pageInfoPaymentResult.totalCount})
+            </Tab>
+            <Tab
+              borderBottom={"1px solid lightgray"}
+              _selected={{
+                border: "1px solid lightgray",
+                borderBottom: "1px solid #FEFEFE",
+              }}
+              _dark={{
+                _selected: {
+                  color: "white",
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #1F3032",
+                },
+              }}
+            >
+              취소내역({pageInfoPaymentCancelResult.totalCount})
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Card>
-                <CardHeader></CardHeader>
+              <Card _dark={{ bgColor: "#1F3032" }}>
                 <CardBody>
                   <Stack divider={<StackDivider />} spacing="4">
                     <Box>
@@ -424,6 +492,7 @@ export function MemberMyPage() {
                       <Td>
                         {resultItem.status === "paid" ? (
                           <ColorButton
+                            isLoading={isLoading}
                             onClick={() => {
                               onCancelOpen();
                               setOrderNumber(resultItem.orderNumber);
@@ -432,6 +501,7 @@ export function MemberMyPage() {
                               setAmount(resultItem.amount);
                               setQuantity(resultItem.quantity);
                               setProductId(resultItem.productId);
+                              setIsLoading(true);
                             }}
                           >
                             취소
@@ -630,17 +700,38 @@ export function MemberMyPage() {
         </Tabs>
         <Modal isOpen={isCancelOpen} onClose={onCancelClose}>
           <ModalOverlay />
-          <ModalContent>
+          <ModalContent _dark={{ bgColor: "#1F3032" }}>
             <ModalBody>
               <ModalHeader>취소사유 입력</ModalHeader>
               <Textarea
                 placeholder={"취소사유를 작성해주세요"}
                 onChange={(e) => setCancelReason(e.target.value)}
+                resize={"none"}
               />
             </ModalBody>
             <ModalFooter>
-              <Button onClick={() => handlePaymentCancel()}>확인</Button>
-              <Button onClick={() => onCancelClose()}>취소</Button>
+              <ColorButton
+                isDisabled={isDisabled}
+                onClick={() => {
+                  handlePaymentCancel();
+                  setIsLoading(false);
+                }}
+              >
+                확인
+              </ColorButton>
+              <Button
+                bgColor={"dimgray"}
+                color={"white"}
+                _hover={{
+                  bgColor: "gray",
+                }}
+                onClick={() => {
+                  onCancelClose();
+                  setIsLoading(false);
+                }}
+              >
+                취소
+              </Button>
             </ModalFooter>
           </ModalContent>
         </Modal>
@@ -684,29 +775,52 @@ export function MemberMyPage() {
           <ModalContent>
             <ModalHeader>알림</ModalHeader>
             <ModalBody>
-              <Table>
-                <Thead>
-                  <Tr>
-                    <Th>상품명</Th>
-                    <Th>수량</Th>
-                    <Th>가격</Th>
-                    <Th>합계</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {selectPaymentCancelResult.map((resultItem, itemIndex) => (
-                    <Tr key={itemIndex}>
-                      <Td>{resultItem.cancelName}</Td>
-                      <Td>{resultItem.cancelQuantity}</Td>
-                      <Td>{resultItem.cancelPrice}원</Td>
-                      <Td>{resultItem.cancelTotalPrice}원</Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
+              {selectPaymentCancelResult.map((resultItem, itemIndex) => (
+                <Box
+                  key={itemIndex}
+                  borderWidth="1px"
+                  borderRadius="lg"
+                  overflow="hidden"
+                  p={4}
+                  mb={4}
+                  _dark={{ bgColor: "#1F3032" }}
+                >
+                  <Text as="h5" size="md" mb={2}>
+                    {resultItem.cancelName}
+                  </Text>
+                  <SimpleGrid columns={3} spacing={2}>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        수량
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelQuantity}</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        가격
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelPrice}원</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        합계
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelTotalPrice}원</Text>
+                    </Box>
+                    <Box>
+                      <Text fontSize="sm" color="gray.500">
+                        취소사유
+                      </Text>
+                      <Text fontSize="lg">{resultItem.cancelReason}</Text>
+                    </Box>
+                  </SimpleGrid>
+                </Box>
+              ))}
             </ModalBody>
             <ModalFooter>
-              <Button onClick={onPaymentCancelResultClose}>확인</Button>
+              <ColorButton onClick={onPaymentCancelResultClose}>
+                확인
+              </ColorButton>
             </ModalFooter>
           </ModalContent>
         </Modal>

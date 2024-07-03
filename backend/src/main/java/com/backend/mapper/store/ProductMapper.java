@@ -36,7 +36,7 @@ public interface ProductMapper {
             <script>
             <choose>
                 <when test="menuTypeSelect == 'best'">
-                    SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, SUM(po.quantity) as totalQuantity,
+                    SELECT p.id, p.name, p.price, p.stock, pi.name as fileName, p.quantity, SUM(po.quantity) as totalQuantity,
                            RANK() OVER (ORDER BY SUM(po.quantity) DESC) as rank,
                            'best' as menuType
                     FROM product p

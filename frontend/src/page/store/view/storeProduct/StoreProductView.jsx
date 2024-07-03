@@ -17,6 +17,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -24,6 +25,7 @@ import { LoginContext } from "../../../../component/LoginProvider.jsx";
 import QnA from "./qna/QnA.jsx";
 import Comment from "./comment/Comment.jsx";
 import CenterBox from "../../../../css/theme/component/box/CenterBox.jsx";
+import AddQnAModal from "./qna/AddQnAModal.jsx";
 
 export function StoreProductView() {
   const { productId } = useParams();
@@ -31,6 +33,14 @@ export function StoreProductView() {
   const [commentList, setCommentList] = useState([]);
   const [listQnA, setListQnA] = useState([]);
   const Login = useContext(LoginContext);
+
+  const [pageInfo, setPageInfo] = useState({});
+  const [page, setPage] = useState(1);
+  const {
+    isOpen: isQnAOpen,
+    onOpen: onQnAOpen,
+    onClose: onQnAClose,
+  } = useDisclosure();
 
   useEffect(() => {
     axios
@@ -43,6 +53,20 @@ export function StoreProductView() {
       })
       .finally(() => {});
   }, []);
+
+  const listQnARefresh = () => {
+    axios
+      .get(`/api/store/product/qna/list/${productId}`, {
+        params: { page },
+      })
+      .then((res) => {
+        setListQnA(res.data.listQnA);
+        setPageInfo(res.data.pageInfo);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   return (
     <Center>
@@ -78,10 +102,55 @@ export function StoreProductView() {
 
         <Box>
           <Tabs isFitted variant="enclosed">
-            <TabList mb="1em">
-              <Tab>상세내용</Tab>
-              <Tab>코멘트</Tab>
-              <Tab>문의</Tab>
+            <TabList mb="1em" borderBottom={"none"}>
+              <Tab
+                borderBottom={"1px solid lightgray"}
+                _selected={{
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #FEFEFE",
+                }}
+                _dark={{
+                  _selected: {
+                    color: "white",
+                    border: "1px solid lightgray",
+                    borderBottom: "1px solid #1F3032",
+                  },
+                }}
+              >
+                상세내용
+              </Tab>
+              <Tab
+                borderBottom={"1px solid lightgray"}
+                _selected={{
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #FEFEFE",
+                }}
+                _dark={{
+                  _selected: {
+                    color: "white",
+                    border: "1px solid lightgray",
+                    borderBottom: "1px solid #1F3032",
+                  },
+                }}
+              >
+                코멘트
+              </Tab>
+              <Tab
+                borderBottom={"1px solid lightgray"}
+                _selected={{
+                  border: "1px solid lightgray",
+                  borderBottom: "1px solid #FEFEFE",
+                }}
+                _dark={{
+                  _selected: {
+                    color: "white",
+                    border: "1px solid lightgray",
+                    borderBottom: "1px solid #1F3032",
+                  },
+                }}
+              >
+                문의
+              </Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -115,10 +184,23 @@ export function StoreProductView() {
                         Login={Login}
                         listQnA={listQnA}
                         setListQnA={setListQnA}
+                        listQnARefresh={listQnARefresh}
+                        onQnAOpen={onQnAOpen}
+                        page={page}
+                        setPage={setPage}
+                        pageInfo={pageInfo}
+                        setPageInfo={setPageInfo}
                       />
                     </Tbody>
                   </Table>
                 </TableContainer>
+                <AddQnAModal
+                  isQnAOpen={isQnAOpen}
+                  onQnAClose={onQnAClose}
+                  productId={productId}
+                  Login={Login}
+                  listQnARefresh={listQnARefresh}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>

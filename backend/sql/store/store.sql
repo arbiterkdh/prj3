@@ -336,3 +336,6 @@ order by id desc;
 select *
 from payment
 order by id desc;
+
+select * from product
+where

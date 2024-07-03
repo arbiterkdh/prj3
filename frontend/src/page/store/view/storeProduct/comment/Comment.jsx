@@ -3,9 +3,11 @@ import {
   Badge,
   Box,
   Button,
+  Divider,
   Flex,
   FormControl,
   Input,
+  Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -31,7 +33,6 @@ function Comment({ Login, productId, commentList, setCommentList }) {
   const [commentId, setCommentId] = useState(0);
 
   const [isBuyer, setIsBuyer] = useState(false);
-
   const [isDisabled, setIsDisabled] = useState(true);
 
   const {
@@ -55,8 +56,8 @@ function Comment({ Login, productId, commentList, setCommentList }) {
   useEffect(() => {
     commentListRefresh();
   }, [page]);
+
   const commentListRefresh = () => {
-    console.log("page:" + page);
     axios
       .get(`/api/store/product/comment/list/${productId}`, {
         params: {
@@ -78,13 +79,16 @@ function Comment({ Login, productId, commentList, setCommentList }) {
         .then((res) => {
           if (res.data) {
             setIsBuyer(res.data);
-            setIsDisabled(false);
           }
         })
         .catch(() => {})
         .finally(() => {});
     }
   }, [Login.id, productId]);
+
+  useEffect(() => {
+    setIsDisabled(commentContent.trim() === "");
+  }, [commentContent]);
 
   const clicked = {
     variant: "solid",
@@ -111,9 +115,11 @@ function Comment({ Login, productId, commentList, setCommentList }) {
       <Box>
         {commentList.length > 0 ? (
           <>
-            {commentList.map((commentItem) => (
-              <CommentItem key={commentItem.id} commentItem={commentItem} />
-            ))}
+            <Stack spacing={2} maxH="500px" overflowY="auto">
+              {commentList.map((commentItem) => (
+                <CommentItem key={commentItem.id} commentItem={commentItem} />
+              ))}
+            </Stack>
 
             <Flex justifyContent={"center"} my={4}>
               {pageInfo.prevPageNumber && (
@@ -162,66 +168,84 @@ function Comment({ Login, productId, commentList, setCommentList }) {
 
   const CommentItem = ({ commentItem }) => {
     return (
-      <Box>
-        <Flex w={"100%"} textAlign={"center"}>
-          <Box w={"60%"}>{commentItem.content}</Box>
-          <Box w={"20%"}>
-            {commentItem.writer}
+      <Flex
+        direction="row"
+        rounded="md"
+        mb={1}
+        shadow="md"
+        borderWidth="1px"
+        alignItems="center"
+        justifyContent="space-between"
+        bgColor={"white"}
+        _dark={{ bgColor: "#1F3032" }}
+      >
+        <Box flex="2" mx={4}>
+          <Text noOfLines={1} overflow="hidden">
+            {commentItem.content}
+          </Text>
+        </Box>
+        <Box flex="1" textAlign="right">
+          <Text>{commentItem.writer}</Text>
+          <Text fontSize="sm" color="gray.500">
+            {commentItem.regDate}
+          </Text>
+        </Box>
 
-            {commentItem.writer === Login.nickName && (
-              <>
-                <Badge
-                  onClick={() => {
-                    setCommentId(commentItem.id);
-                    onDeleteOpen();
-                  }}
-                  cursor={"pointer"}
-                  variant="solid"
-                  color={"white"}
-                  bgColor={"red.500"}
-                  _hover={{
-                    bgColor: "red.600",
-                  }}
-                  _dark={{
-                    bgColor: "red.700",
-                    _hover: {
-                      color: "whiteAlpha.900",
-                      bgColor: "red.600",
-                    },
-                  }}
-                >
-                  <FontAwesomeIcon icon={faX} />
-                </Badge>
-                <Badge
-                  onClick={() => {
-                    onModifyOpen();
-                    setCommentContent(commentItem.content);
-                    setCommentId(commentItem.id);
-                  }}
-                  cursor={"pointer"}
-                  bgColor={"dimgray"}
-                  color={"white"}
-                  _hover={{
-                    bgColor: "gray",
-                  }}
-                >
-                  <FontAwesomeIcon icon={faWrench} />
-                </Badge>
-              </>
-            )}
-          </Box>
-          <Box w={"20%"}>{commentItem.regDate}</Box>
-        </Flex>
-      </Box>
+        {commentItem.writer === Login.nickName && (
+          <Flex>
+            <Badge
+              onClick={() => {
+                setCommentId(commentItem.id);
+                onDeleteOpen();
+              }}
+              cursor={"pointer"}
+              variant="solid"
+              color={"white"}
+              bgColor={"red.500"}
+              _hover={{
+                bgColor: "red.600",
+              }}
+              _dark={{
+                bgColor: "red.700",
+                _hover: {
+                  color: "whiteAlpha.900",
+                  bgColor: "red.600",
+                },
+              }}
+              mx={1}
+            >
+              <FontAwesomeIcon icon={faX} />
+            </Badge>
+            <Badge
+              onClick={() => {
+                onModifyOpen();
+                setCommentContent(commentItem.content);
+                setCommentId(commentItem.id);
+              }}
+              cursor={"pointer"}
+              bgColor={"dimgray"}
+              color={"white"}
+              _hover={{
+                bgColor: "gray",
+              }}
+              mx={1}
+            >
+              <FontAwesomeIcon icon={faWrench} />
+            </Badge>
+          </Flex>
+        )}
+      </Flex>
     );
   };
 
   return (
     <>
       <ProductCommentList commentList={commentList} />
-      <hr />
-      <Text fontSize={"lg"}>한줄평</Text>
-      <Flex w={"100%"}>
+      <Divider my={4} />
+      <Text fontSize={"lg"} mb={2}>
+        한줄평
+      </Text>
+      <Flex w={"100%"} mb={4}>
         <Box w={"70%"}>
           {isBuyer ? (
             <Box w={"100%"}>
@@ -251,24 +275,19 @@ function Comment({ Login, productId, commentList, setCommentList }) {
         </Box>
         <Box
           w={"30%"}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
         >
-          <Box>
-            <ColorButton
-              isDisabled={isDisabled}
-              onClick={() => {
-                setCommentContent(commentContent);
-                onAddOpen();
-              }}
-            >
-              확인
-            </ColorButton>
-          </Box>
+          <ColorButton
+            isDisabled={isDisabled}
+            onClick={() => {
+              setCommentContent(commentContent);
+              onAddOpen();
+            }}
+          >
+            확인
+          </ColorButton>
         </Box>
       </Flex>
 
@@ -291,6 +310,7 @@ function Comment({ Login, productId, commentList, setCommentList }) {
         onModifyClose={onModifyClose}
         commentListRefresh={commentListRefresh}
         commentId={commentId}
+        commentContent={commentContent}
       />
     </>
   );
