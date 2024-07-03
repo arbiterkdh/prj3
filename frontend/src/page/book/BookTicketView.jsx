@@ -1,8 +1,14 @@
-import { Box, Heading, Image, Spinner, Stack } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Spinner, Stack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import ColorButton from "../../css/theme/component/button/ColorButton.jsx";
+import { useNavigate } from "react-router-dom";
 
 export function BookTicketView({ bookTicketData }) {
-  const [ticketDate, setTicketDate] = useState();
+  const [ticketDate, setTicketDate] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (bookTicketData.bookPlaceTime) {
@@ -19,7 +25,8 @@ export function BookTicketView({ bookTicketData }) {
       let endHourNumber = Number(
         bookTicketData.bookPlaceTime.endTime.slice(11, 13),
       );
-      let endHour = 13 < 12 ? endHourNumber : "오후 " + endHourNumber;
+      let endHour =
+        endHourNumber < 12 ? endHourNumber : "오후 " + endHourNumber;
       let endMinute = bookTicketData.bookPlaceTime.endTime.slice(14, 16);
       setTicketDate([
         year,
@@ -38,7 +45,8 @@ export function BookTicketView({ bookTicketData }) {
       bookTicketData.theaterBox &&
       bookTicketData.bookTicket &&
       bookTicketData.bookPlaceTime &&
-      bookTicketData.payment ? (
+      bookTicketData.payment &&
+      ticketDate.length > 0 ? (
         <Box
           w={"877px"}
           h={"450px"}
@@ -75,14 +83,38 @@ export function BookTicketView({ bookTicketData }) {
                   bookTicketData.theaterBox.boxNumber +
                   "관"}
               </Box>
-              <Box mt={24}>
-                <Box>
-                  {bookTicketData.bookTicket.bookTicketRowCols +
-                    " (" +
+              <Box mt={20}>
+                <Flex
+                  gap={1}
+                  fontSize={"14px"}
+                  mb={
                     bookTicketData.bookTicket.bookTicketRowCols.split(",")
-                      .length +
-                    "명)"}
-                </Box>
+                      .length < 10
+                      ? 4
+                      : 0
+                  }
+                >
+                  <Stack gap={1}>
+                    <Box w={"40px"}>{"좌석: "}</Box>
+                    <Box w={"40px"} ml={"-2px"}>
+                      {" (" +
+                        bookTicketData.bookTicket.bookTicketRowCols.split(",")
+                          .length +
+                        "명)"}
+                    </Box>
+                  </Stack>
+                  <Flex w={"120px"} wrap={"wrap"}>
+                    {bookTicketData.bookTicket.bookTicketRowCols
+                      .split(" ")
+                      .map((seat, index) => {
+                        return (
+                          <Box key={index} mr={1}>
+                            {seat}
+                          </Box>
+                        );
+                      })}
+                  </Flex>
+                </Flex>
                 <Box>
                   {ticketDate[0] +
                     "년 " +
@@ -113,6 +145,41 @@ export function BookTicketView({ bookTicketData }) {
         </Box>
       ) : (
         <Spinner />
+      )}
+      {bookTicketData.member && (
+        <Box h={"200px"} align={"center"} alignContent={"center"}>
+          <Image
+            position={"absolute"}
+            w={"877px"}
+            h={"200px"}
+            minW={"877px"}
+            minH={"200px"}
+            top={"635px"}
+            src={
+              "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/pngwing.com.png"
+            }
+          />
+          <Heading>
+            예매해주셔서 감사합니다, {bookTicketData.member.nickName} 님!
+          </Heading>
+          <Box>
+            <ColorButton onClick={() => navigate("/promotion")}>
+              예매권 확인
+            </ColorButton>
+            <ColorButton onClick={() => navigate("/movie")}>
+              영화 구경하기
+            </ColorButton>
+            <ColorButton onClick={() => navigate("/book")}>
+              다른 영화 예매
+            </ColorButton>
+            <ColorButton onClick={() => navigate("/store")}>
+              음식 구매
+            </ColorButton>
+            <ColorButton onClick={() => navigate("/promotion")}>
+              이벤트 참여
+            </ColorButton>
+          </Box>
+        </Box>
       )}
     </Box>
   );

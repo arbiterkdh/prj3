@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../../component/LoginProvider.jsx";
 import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import axios from "axios";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import { BookTicketView } from "../BookTicketView.jsx";
 
 export function BookPaymentSuccess() {
@@ -12,6 +12,7 @@ export function BookPaymentSuccess() {
   const location = useLocation();
   const { paymentId } = location.state || {};
   const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     setBookProgress(4);
@@ -19,7 +20,11 @@ export function BookPaymentSuccess() {
       .get(`/api/book/payment/orderDataList/${account.id}/${paymentId}`)
       .then((res) => {
         setBookTicketData(res.data);
-        console.log(res.data);
+        toast({
+          status: "success",
+          description: "예매되었습니다!",
+          position: "bottom-right",
+        });
       })
       .catch(() => {})
       .finally(() => {});
