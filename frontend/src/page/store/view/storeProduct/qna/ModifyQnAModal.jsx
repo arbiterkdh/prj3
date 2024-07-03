@@ -97,6 +97,7 @@ function ModifyQnAModal({
             </PopoverBody>
             <PopoverFooter>
               <Badge
+                p={1}
                 color={"white"}
                 bgColor={"red.500"}
                 _hover={{
