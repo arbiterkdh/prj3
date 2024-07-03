@@ -137,6 +137,9 @@ function QnA({
           style={{ cursor: "pointer" }}
         >
           {itemQnA.title}
+        </Td>
+        <Td w={"20%"}>
+          {itemQnA.writer}
           {itemQnA.writer === Login.nickName && (
             <>
               <ModifyQnAModal
@@ -155,8 +158,9 @@ function QnA({
             </>
           )}
         </Td>
-        <Td w={"20%"}>{itemQnA.writer}</Td>
+
         <Td w={"10%"}>{itemQnA.regDate}</Td>
+
         <ReadQnAContentModal
           isQnAContentOpen={isQnAContentOpen}
           onQnAContentClose={onQnAContentClose}
