@@ -3,20 +3,23 @@ import { LoginContext } from "../../../component/LoginProvider.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
-  Button,
+  Box,
   Center,
+  Divider,
+  Heading,
   Table,
   TableContainer,
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr,
+  VStack,
 } from "@chakra-ui/react";
 import CenterBox from "../../../css/theme/component/box/CenterBox.jsx";
 import { CartContext } from "../../../component/CartProvider.jsx";
+import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 
 function PaymentSuccess() {
   const [paymentData, setPaymentData] = useState([]);
@@ -44,61 +47,68 @@ function PaymentSuccess() {
       })
       .catch(() => {})
       .finally(() => {});
-  }, []);
+  }, [Login.id, paymentId, setCartCount]);
 
   return (
     <Center>
       <CenterBox>
-        <Text mb={3}>결제 완료되었습니다</Text>
-        {paymentData.length > 0 && (
-          <>
-            <Text mb={5}>결제주문 번호:{paymentData[0].orderNumber}</Text>
-            <Text mb={5}>결제 내역</Text>
-            <hr />
-            <TableContainer>
-              <Table size="sm">
-                <Thead>
-                  <Tr>
-                    <Th>상품명</Th>
-                    <Th>수량</Th>
-                    <Th>가격</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {paymentData.map((data, index) => (
-                    <Tr key={index}>
-                      <Td>{data.name}</Td>
-                      <Td>{data.quantity}</Td>
-                      <Td>{data.totalPrice}</Td>
-                      <Td>
-                        <img
-                          src={`data:image/png;base64,${data.qrCode}`}
-                          alt="QR Code"
-                          width={"200px"}
-                          height={"200px"}
-                        />
-                      </Td>
+        <VStack spacing={4} align="stretch" w="100%">
+          <Heading size="lg" textAlign="center">
+            결제 완료
+          </Heading>
+          <Text textAlign="center" fontSize="lg" mb={4}>
+            결제가 성공적으로 완료되었습니다.
+          </Text>
+          {paymentData.length > 0 && (
+            <>
+              <Text textAlign="center" fontSize="md">
+                결제주문 번호: {paymentData[0].orderNumber}
+              </Text>
+              <Divider />
+              <TableContainer>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>상품명</Th>
+                      <Th>수량</Th>
+                      <Th>가격</Th>
                     </Tr>
-                  ))}
-                </Tbody>
-                <Tfoot>
-                  <Tr mb={3}>
-                    <Td>
-                      <Text mb={5}>구매자:{paymentData[0].buyerName}</Text>
-                      <Text mb={5}>구매일 : {paymentData[0].buyerDate}</Text>
-                      <Text mb={5}>
-                        총 결제 금액 : {paymentData[0].amount}원
-                      </Text>
-                      <Button onClick={() => navigate("/store")}>
-                        스토어 이동
-                      </Button>
-                    </Td>
-                  </Tr>
-                </Tfoot>
-              </Table>
-            </TableContainer>
-          </>
-        )}
+                  </Thead>
+                  <Tbody>
+                    {paymentData.map((data, index) => (
+                      <Tr key={index}>
+                        <Td>{data.name}</Td>
+                        <Td>{data.quantity}</Td>
+                        <Td>{data.totalPrice}원</Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+              <Box
+                mt={4}
+                p={4}
+                borderWidth={1}
+                borderRadius="md"
+                bg="gray.50"
+                _dark={{ bgColor: "#1F3032" }}
+              >
+                <Text fontSize="md">구매자: {paymentData[0].buyerName}</Text>
+                <Text fontSize="md">구매일: {paymentData[0].buyerDate}</Text>
+                <Text fontSize="md" fontWeight="bold">
+                  총 결제 금액: {paymentData[0].amount}원
+                </Text>
+              </Box>
+              <ColorButton
+                mt={4}
+                colorScheme="blue"
+                onClick={() => navigate("/store")}
+              >
+                스토어 이동
+              </ColorButton>
+            </>
+          )}
+        </VStack>
       </CenterBox>
     </Center>
   );
