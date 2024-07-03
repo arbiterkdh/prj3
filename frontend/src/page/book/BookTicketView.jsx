@@ -54,6 +54,7 @@ export function BookTicketView({ bookTicketData }) {
           align={"center"}
           alignContent={"center"}
           position={"relative"}
+          _dark={{ opacity: "0.9" }}
         >
           <Box position={"absolute"} w={"100%"} h={"100%"} p={8} px={36}>
             <Heading
@@ -64,6 +65,7 @@ export function BookTicketView({ bookTicketData }) {
               h={"70px"}
               p={2}
               align={"left"}
+              color={"black"}
             >
               {bookTicketData.movie.title}
             </Heading>
@@ -75,7 +77,7 @@ export function BookTicketView({ bookTicketData }) {
               p={3}
               textAlign={"left"}
             >
-              <Box h={"70px"} mt={4}>
+              <Box h={"70px"} mt={4} color={"black"}>
                 {bookTicketData.theater.city +
                   " " +
                   bookTicketData.theater.location +
@@ -94,16 +96,16 @@ export function BookTicketView({ bookTicketData }) {
                       : 0
                   }
                 >
-                  <Stack gap={1}>
+                  <Stack gap={1} color={"black"}>
                     <Box w={"40px"}>{"좌석: "}</Box>
-                    <Box w={"40px"} ml={"-2px"}>
+                    <Box w={"40px"} ml={"-2px"} color={"black"}>
                       {" (" +
                         bookTicketData.bookTicket.bookTicketRowCols.split(",")
                           .length +
                         "명)"}
                     </Box>
                   </Stack>
-                  <Flex w={"120px"} wrap={"wrap"}>
+                  <Flex w={"120px"} wrap={"wrap"} color={"black"}>
                     {bookTicketData.bookTicket.bookTicketRowCols
                       .split(" ")
                       .map((seat, index) => {
@@ -115,7 +117,7 @@ export function BookTicketView({ bookTicketData }) {
                       })}
                   </Flex>
                 </Flex>
-                <Box>
+                <Box color={"black"}>
                   {ticketDate[0] +
                     "년 " +
                     ticketDate[1] +
@@ -123,7 +125,7 @@ export function BookTicketView({ bookTicketData }) {
                     ticketDate[2] +
                     "일"}
                 </Box>
-                <Box>{ticketDate[3] + "~" + ticketDate[4]}</Box>
+                <Box color={"black"}>{ticketDate[3] + "~" + ticketDate[4]}</Box>
               </Box>
             </Stack>
           </Box>
@@ -132,6 +134,7 @@ export function BookTicketView({ bookTicketData }) {
             top={"350px"}
             left={"570px"}
             fontSize={"16px"}
+            color={"black"}
             bgColor={"white"}
           >
             {bookTicketData.payment.orderNumber}

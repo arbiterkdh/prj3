@@ -468,7 +468,7 @@ export function TheaterSeatList() {
         size={"sm"}
         value={"남은시간: " + timeFormat(timer) + " (좌석 독점 방지)"}
         position={"absolute"}
-        w={"225px"}
+        w={"227px"}
         zIndex={3}
         fontWeight={"600"}
         bgColor={"white"}
