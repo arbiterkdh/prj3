@@ -42,7 +42,7 @@ export function BookPaymentSuccess() {
       >
         결제 완료 / 티켓 확인
       </Box>
-      <BookTicketView bookTicketData={bookTicketData} />
+      <BookTicketView bookTicketData={bookTicketData} isMyPage={false} />
     </Box>
   );
 }

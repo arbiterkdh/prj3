@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 @Mapper
 public interface BookTicketMapper {
 
@@ -22,4 +24,11 @@ public interface BookTicketMapper {
             AND book_ticket_member_number = #{memberNumber}
             """)
     BookTicket getBookTicket(Integer memberNumber, Integer paymentId);
+
+    @Select("""
+            SELECT *
+            FROM book_ticket
+            WHERE book_ticket_member_number = #{memberNumber}
+            """)
+    List<BookTicket> getAllBookTicket(Integer memberNumber);
 }

@@ -14,17 +14,8 @@ public interface BookSeatMapper {
             SELECT row_col
             FROM book_seat
             WHERE book_seat_book_place_time_id = #{bookPlaceTimeId}
-            AND is_paid = FALSE
             """)
     List<String> selectAllRowColByBookPlaceTimeId(Integer bookPlaceTimeId);
-
-    @Select("""
-            SELECT row_col
-            FROM book_seat
-            WHERE book_seat_book_place_time_id = #{bookPlaceTimeId}
-            AND is_paid = TRUE
-            """)
-    List<String> selectAllPaidRowColByBookPlaceTimeId(Integer bookPlaceTimeId);
 
     @Select("""
             SELECT row_col

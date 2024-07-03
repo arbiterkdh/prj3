@@ -95,7 +95,6 @@ export function TheaterSeatList() {
         setBookPlaceTime(res.data.bookPlaceTime);
         let prevSelectedList = res.data.selectedList;
         let rowColList = res.data.rowColList;
-        let isPaidRowColList = res.data.isPaidRowColList;
 
         if (prevSelectedList.length > 0) {
           setSeatSelected(

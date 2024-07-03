@@ -6,6 +6,7 @@ import com.backend.service.store.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,6 +25,12 @@ public class BookPaymentController {
     public Map<String, Object> orderDataList(@PathVariable Integer memberNumber, @PathVariable Integer paymentId) {
 
         return paymentService.getBookData(memberNumber, paymentId);
+    }
+
+    @GetMapping("orderDataList/{memberNumber}")
+    public List<Map<String, Object>> orderDataList(@PathVariable Integer memberNumber) {
+
+        return paymentService.getAllBookData(memberNumber);
     }
 
     @GetMapping("getToken")

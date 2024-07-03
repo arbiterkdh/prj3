@@ -101,7 +101,6 @@ export function BookMoviePayment() {
           setVodUrl(`https://www.kmdb.or.kr/trailer/play/${vodFileName}`);
         });
     }
-    console.log(bookData);
     setBookProgress(3);
   }, [bookData]);
 

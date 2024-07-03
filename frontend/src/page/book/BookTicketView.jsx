@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ColorButton from "../../css/theme/component/button/ColorButton.jsx";
 import { useNavigate } from "react-router-dom";
 
-export function BookTicketView({ bookTicketData }) {
+export function BookTicketView({ bookTicketData, isMyPage }) {
   const [ticketDate, setTicketDate] = useState([]);
 
   const navigate = useNavigate();
@@ -149,7 +149,7 @@ export function BookTicketView({ bookTicketData }) {
       ) : (
         <Spinner />
       )}
-      {bookTicketData.member && (
+      {!isMyPage && bookTicketData.member && (
         <Box h={"200px"} align={"center"} alignContent={"center"}>
           <Image
             position={"absolute"}
@@ -166,7 +166,7 @@ export function BookTicketView({ bookTicketData }) {
             예매해주셔서 감사합니다, {bookTicketData.member.nickName} 님!
           </Heading>
           <Box>
-            <ColorButton onClick={() => navigate("/promotion")}>
+            <ColorButton onClick={() => navigate("/mypage")}>
               예매권 확인
             </ColorButton>
             <ColorButton onClick={() => navigate("/movie")}>
