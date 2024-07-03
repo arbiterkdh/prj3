@@ -337,3 +337,11 @@ select *
 from payment
 order by id desc;
 
+select *
+from product_qna
+where product_id = 11;
+
+select *
+FROM product_qna_comment
+WHERE product_qna_id = 4;
+

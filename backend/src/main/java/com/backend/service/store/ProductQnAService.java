@@ -2,18 +2,23 @@ package com.backend.service.store;
 
 
 import com.backend.domain.store.ProductQnA;
+import com.backend.mapper.store.ProductQnACommentMapper;
 import com.backend.mapper.store.ProductQnAMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class ProductQnAService {
 
     private final ProductQnAMapper mapper;
+
+    private final ProductQnACommentMapper qnACommentMapper;
 
     public void addQnA(ProductQnA productQnA) {
 
@@ -56,6 +61,8 @@ public class ProductQnAService {
     }
 
     public void deleteQnA(Integer id) {
+
+        qnACommentMapper.deleteQnAComment(id);
 
         mapper.deleteQnA(id);
     }

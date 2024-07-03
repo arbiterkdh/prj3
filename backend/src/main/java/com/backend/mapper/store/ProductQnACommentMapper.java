@@ -2,6 +2,7 @@ package com.backend.mapper.store;
 
 
 import com.backend.domain.store.ProductQnAComment;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -24,4 +25,11 @@ public interface ProductQnACommentMapper {
             WHERE product_qna_id = #{idQnA}
             """)
     List<ProductQnAComment> readQnAComment(Integer idQnA);
+
+    @Delete("""
+            DELETE FROM
+            product_qna_comment
+            WHERE product_qna_id = #{productQnAId}
+            """)
+    int deleteQnAComment(Integer productQnAId);
 }
