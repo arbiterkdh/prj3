@@ -22,6 +22,7 @@ import {
 import BorderSelect from "../../../css/theme/component/select/BorderSelect.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function BookTheaterBoxTimeTableManagementComponent({
   isOpen,
@@ -40,6 +41,7 @@ export function BookTheaterBoxTimeTableManagementComponent({
   const [dateList, setDateList] = useState([]);
 
   const toast = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     let dateArray = [];

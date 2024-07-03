@@ -36,8 +36,6 @@ public class QrService {
 
         String newPayment = gson.toJson(payment);
 
-        System.out.println("newPayment = " + newPayment);
-
         BitMatrix bitMatrix = new MultiFormatWriter().encode(newPayment, BarcodeFormat.QR_CODE, width, height);
 
         BufferedImage qrImage = MatrixToImageWriter.toBufferedImage(bitMatrix);

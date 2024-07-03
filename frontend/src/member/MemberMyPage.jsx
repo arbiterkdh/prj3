@@ -12,6 +12,7 @@ import {
   Link,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -48,9 +49,15 @@ import CenterBox from "../css/theme/component/box/CenterBox.jsx";
 import GapFlex from "../css/theme/component/flex/GapFlex.jsx";
 import { VerifyNumberToUpdate } from "./mail/VerifyNumberToUpdate.jsx";
 import ColorButton from "../css/theme/component/button/ColorButton.jsx";
+import { BookTicketView } from "../page/book/BookTicketView.jsx";
 
 export function MemberMyPage() {
   const account = useContext(LoginContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const location = useLocation();
+  const nickName = account.nickName;
+
   const [member, setMember] = useState({});
   const [address, setAddress] = useState("");
   const [selected, setSelected] = useState("");
@@ -63,8 +70,7 @@ export function MemberMyPage() {
   const [pageInfoPaymentResult, setPageInfoPaymentResult] = useState({});
   const [pageInfoPaymentCancelResult, setPageInfoPaymentCancelResult] =
     useState({});
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
+
   const [page, setPage] = useState(1);
 
   const [paymentCancelResult, setPaymentCancelResult] = useState([]);
@@ -76,6 +82,9 @@ export function MemberMyPage() {
   const [quantity, setQuantity] = useState(0);
   const [productId, setProductId] = useState(0);
 
+  const [ticketList, setTicketList] = useState([]);
+  const [ticket, setTicket] = useState([]);
+
   const [selectPaymentResult, setSelectPaymentResult] = useState([]);
   const [selectPaymentCancelResult, setSelectPaymentCancelResult] = useState(
     [],
@@ -83,6 +92,12 @@ export function MemberMyPage() {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    isOpen: isTicketOpen,
+    onOpen: onTicketOpen,
+    onClose: onTicketClose,
+  } = useDisclosure();
 
   const {
     isOpen: isCancelOpen,
@@ -102,9 +117,6 @@ export function MemberMyPage() {
     onClose: onPaymentCancelResultClose,
   } = useDisclosure();
 
-  const location = useLocation();
-  const { nickName } = location.state;
-
   useEffect(() => {
     setIsDisabled(cancelReason.trim() === "");
   }, [cancelReason]);
@@ -120,6 +132,15 @@ export function MemberMyPage() {
         .finally(() => {});
     }
   }, [nickName, page]);
+
+  /** 예매 내역 **/
+  useEffect(() => {
+    if (account.id) {
+      axios.get(`/api/book/payment/orderDataList/${account.id}`).then((res) => {
+        setTicketList(res.data);
+      });
+    }
+  }, [account]);
 
   useEffect(() => {
     if (nickName) {
@@ -160,6 +181,7 @@ export function MemberMyPage() {
       setDomain(selected);
     }
   }, [selected]);
+
   function handleClick() {
     axios
       .post("/api/mail/useCheck", { address: address + "@" + domain })
@@ -286,6 +308,41 @@ export function MemberMyPage() {
       .finally(() => {});
   }
 
+  function handleBookPaymentCancel(bookTicketData) {
+    setIsLoading(true);
+
+    axios
+      .post("/api/book/payment/cancel", {
+        orderNumber: bookTicketData.payment.orderNumber,
+        paymentId: bookTicketData.payment.id,
+        requestor: bookTicketData.payment.buyerName,
+        // cancelReason,
+        amount: bookTicketData.payment.amount,
+        // quantity,
+        // productId,
+      })
+      .then((res) => {
+        console.log("취소:" + res.data);
+        toast({
+          description: "결제가 성공적으로 취소되었습니다.",
+          status: "success",
+          position: "bottom-right",
+        });
+        onTicketClose();
+      })
+      .catch((err) => {
+        console.error("취소 오류:" + err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function handleClickBookTicketView(bookTicketData) {
+    onTicketOpen();
+    setTicket(bookTicketData);
+  }
+
   const clicked = {
     variant: "solid",
     color: "white",
@@ -353,7 +410,7 @@ export function MemberMyPage() {
                 },
               }}
             >
-              예매내역
+              예매내역({ticketList.length})
             </Tab>
             <Tab
               borderBottom={"1px solid lightgray"}
@@ -432,6 +489,7 @@ export function MemberMyPage() {
                 <Box fontSize={"2xl"}>@</Box>
                 <Select
                   border={"1px solid"}
+                  borderRadius={"none"}
                   onChange={(e) => {
                     setSelected(e.target.value);
                   }}
@@ -470,7 +528,41 @@ export function MemberMyPage() {
                 setVerifiedAddress={setVerifiedEmail}
               />
             </TabPanel>
-            <TabPanel>예매내역</TabPanel>
+            <TabPanel>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th w={"12%"}>예매번호</Th>
+                    <Th w={"30%"}>영화명</Th>
+                    <Th>예매(결제) 일시</Th>
+                    <Th>결제금액</Th>
+                    <Th>티켓 확인/취소 및 환불</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {ticketList.length > 0 &&
+                    ticketList.map((ticket, index) => (
+                      <Tr key={index}>
+                        <Td>{ticket.payment.orderNumber.split("_")[1]}</Td>
+                        <Td>{ticket.movie.title}</Td>
+                        <Td>{ticket.payment.buyerDate}</Td>
+                        <Td>
+                          {ticket.payment.amount.toString().slice(0, -3) +
+                            ",000 원"}
+                        </Td>
+                        <Td>
+                          <ColorButton
+                            size={"sm"}
+                            onClick={() => handleClickBookTicketView(ticket)}
+                          >
+                            티켓 보기
+                          </ColorButton>
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </TabPanel>
             <TabPanel>
               결제내역
               <Table>
@@ -826,6 +918,33 @@ export function MemberMyPage() {
             </ModalBody>
             <ModalFooter>
               <ColorButton onClick={onPaymentCancelResultClose}>
+                확인
+              </ColorButton>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+
+        {/* 예매 내역 모달 */}
+        <Modal isOpen={isTicketOpen} onClose={onTicketClose} isCentered>
+          <ModalOverlay />
+          <ModalContent
+            _dark={{ bgColor: "#1F3032" }}
+            minW={"920px"}
+            minH={"300px"}
+          >
+            <ModalHeader>예매 티켓 확인</ModalHeader>
+            <ModalCloseButton size={"lg"} />
+            <ModalBody>
+              <BookTicketView bookTicketData={ticket} isMyPage={true} />
+            </ModalBody>
+            <ModalFooter justifyContent={"space-between"} mb={4}>
+              <ColorButton
+                isLoading={isLoading}
+                onClick={() => handleBookPaymentCancel(ticket)}
+              >
+                예매취소 및 환불
+              </ColorButton>
+              <ColorButton w={"80px"} onClick={() => onTicketClose()}>
                 확인
               </ColorButton>
             </ModalFooter>

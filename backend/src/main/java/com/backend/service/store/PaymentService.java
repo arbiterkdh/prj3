@@ -30,6 +30,7 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -119,7 +120,9 @@ public class PaymentService {
             bookTicket.setBookTicketPrice(bookData.getTotalAmount());
 
             bookTicketMapper.addBookTicket(bookTicket);
-//            bookSeatMapper.updateBookSeatIsPaidByBookSeat()
+            for (String rowCol : bookTicketRowColList) {
+                bookSeatMapper.updateBookSeatIsPaidByBookPlaceTimeIdAndRowCol(bookTicket.getBookTicketBookPlaceTimeId(), rowCol);
+            }
         }
 
         return payment.getId();
@@ -150,6 +153,35 @@ public class PaymentService {
                 "theaterBox", theaterBox,
                 "theater", theater
         );
+    }
+
+    public List<Map<String, Object>> getAllBookData(Integer memberNumber) {
+        List<Map<String, Object>> ticketList = new ArrayList<>();
+        List<BookTicket> bookTicketList = bookTicketMapper.getAllBookTicket(memberNumber);
+
+
+        for (BookTicket bookTicket : bookTicketList) {
+
+            Payment payment = paymentMapper.getPayment(bookTicket.getBookTicketPaymentId());
+            Movie movie = movieMapper.selectByMovieId(bookTicket.getBookTicketMovieId());
+            Member member = memberMapper.selectByMemberNumber(bookTicket.getBookTicketMemberNumber());
+            BookPlaceTime bookPlaceTime = bookMapper.selectBookPlaceTime(bookTicket.getBookTicketBookPlaceTimeId());
+            TheaterBox theaterBox = theaterBoxMapper.selectTheaterBoxByTheaterBoxMovieId(bookPlaceTime.getTheaterBoxMovieId());
+            Theater theater = theaterMapper.selectTheaterByTheaterNumber(theaterBox.getTheaterNumber());
+
+            Map<String, Object> ticket = Map.of(
+                    "bookTicket", bookTicket,
+                    "payment", payment,
+                    "movie", movie,
+                    "member", member,
+                    "bookPlaceTime", bookPlaceTime,
+                    "theaterBox", theaterBox,
+                    "theater", theater
+            );
+            ticketList.add(ticket);
+        }
+
+        return ticketList;
     }
 
     public String getToken() throws Exception {
@@ -285,4 +317,6 @@ public class PaymentService {
             System.err.println("결제 취소 실패: " + errorMessage);
         }
     }
+
+
 }

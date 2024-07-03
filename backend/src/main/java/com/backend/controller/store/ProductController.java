@@ -26,8 +26,6 @@ public class ProductController {
     @GetMapping("/list/{menuTypeSelect}")
     public Map<String, Object> list(@PathVariable(required = false) String menuTypeSelect, @RequestParam(value = "page", defaultValue = "1") Integer page) {
 
-        System.out.println("page = " + page);
-
         return service.productList(menuTypeSelect, page);
     }
 
@@ -52,8 +50,6 @@ public class ProductController {
 
     @GetMapping("/view/{productId}")
     public Product view(@PathVariable Integer productId) {
-
-        System.out.println("productId = " + productId);
 
         return service.info(productId);
 

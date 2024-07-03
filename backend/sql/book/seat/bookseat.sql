@@ -35,5 +35,8 @@ VALUES (85, 'A-5');
 SELECT *
 FROM book_seat;
 
+SELECT *
+FROM book_ticket;
+
 UPDATE book_place_time
 SET vacancy = 186;

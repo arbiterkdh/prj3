@@ -62,6 +62,7 @@ export function TheaterSeatList() {
   const [seatFocused, setSeatFocused] = useState("");
   const [seatSelected, setSeatSelected] = useState([]);
   const [seatBooked, setSeatBooked] = useState([]);
+  const [seatPaid, setSeatPaid] = useState([]);
 
   const [updatingSeat, setUpdatingSeat] = useState("");
   const [isSelecting, setIsSelecting] = useState(false);
