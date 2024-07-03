@@ -345,3 +345,11 @@ select *
 FROM product_qna_comment
 WHERE product_qna_id = 4;
 
+select *
+from product
+where id = 20;
+update product
+set stock = 0
+where id = 20;
+
+
