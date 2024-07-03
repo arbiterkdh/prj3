@@ -102,38 +102,38 @@ function ReadQnAContentModal({
                 />
               </Box>
 
-              {Login.nickName === `${writerQnA}` ||
-                (Login.nickName !== "생존코딩" && (
-                  <>
-                    <FormLabel>추가 문의글 작성</FormLabel>
-                    <Flex mb={4} align="center">
-                      <Textarea
-                        placeholder={"추가 문의글을 작성하세요"}
-                        resize={"none"}
-                        value={answerComment}
-                        onChange={(e) => {
-                          setAnswerComment(e.target.value);
-                          setIsAdmin(false);
-                        }}
-                        mr={2}
-                        bg="white"
-                        borderRadius="md"
-                        p={4}
-                        _dark={{ bgColor: "#1F3032" }}
-                      />
-                      <ColorButton
-                        onClick={() => {
-                          handleAddAnswerComment(isAdmin);
-                        }}
-                        borderRadius="md"
-                        boxShadow="md"
-                        isDisabled={isDisabled}
-                      >
-                        확인
-                      </ColorButton>
-                    </Flex>
-                  </>
-                ))}
+              {Login.nickName === writerQnA && (
+                <>
+                  <FormLabel>추가 문의글 작성</FormLabel>
+                  <Flex mb={4} align="center">
+                    <Textarea
+                      placeholder={"추가 문의글을 작성하세요"}
+                      resize={"none"}
+                      value={answerComment}
+                      onChange={(e) => {
+                        setAnswerComment(e.target.value);
+                        setIsAdmin(false);
+                      }}
+                      mr={2}
+                      bg="white"
+                      borderRadius="md"
+                      p={4}
+                      _dark={{ bgColor: "#1F3032" }}
+                    />
+                    <ColorButton
+                      onClick={() => {
+                        handleAddAnswerComment(isAdmin);
+                      }}
+                      borderRadius="md"
+                      boxShadow="md"
+                      isDisabled={isDisabled}
+                    >
+                      확인
+                    </ColorButton>
+                  </Flex>
+                </>
+              )}
+
               {Login.nickName === "생존코딩" && (
                 <>
                   <FormLabel>답글 작성</FormLabel>

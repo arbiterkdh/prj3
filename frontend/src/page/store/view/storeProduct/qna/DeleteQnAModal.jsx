@@ -72,6 +72,7 @@ function DeleteQnAModal({ itemQnAId, listQnARefresh }) {
                   },
                 }}
                 onClick={() => handleQnADelete(itemQnAId)}
+                cursor={"pointer"}
               >
                 확인
               </Badge>
