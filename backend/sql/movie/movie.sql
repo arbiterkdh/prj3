@@ -147,3 +147,6 @@ ORDER BY id DESC;
 DELETE
 FROM movie
 WHERE id < 784;
+
+SELECT *
+FROM member;

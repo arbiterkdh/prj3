@@ -64,9 +64,9 @@ public class PaymentService {
 
         if (payment.getBookData() == null) {
 
-            Object qrCode = qrService.create(payment);
-
-            payment.setQrCode(qrCode);
+//            Object qrCode = qrService.create(payment);
+//
+//            payment.setQrCode(qrCode);
 
             paymentMapper.add(payment);
 
