@@ -140,6 +140,10 @@ function MemberUpdate() {
                 <Text fontSize={"xs"} color={"red.600"}>
                   비밀번호가 다릅니다.
                 </Text>
+              ) : passwordCheck.length > 0 && passwordCheck === password ? (
+                <Text fontSize={"xs"} color={"blue.600"}>
+                  비밀번호가 일치합니다.
+                </Text>
               ) : (
                 <Text h={"18px"}></Text>
               )}
