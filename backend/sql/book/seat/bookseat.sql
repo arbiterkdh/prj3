@@ -6,6 +6,7 @@ CREATE TABLE book_seat
     row_col                      VARCHAR(10) NOT NULL,
     book_seat_member_number      INT REFERENCES member (number),
     is_paying                    BOOLEAN              DEFAULT FALSE,
+    is_paid                      BOOLEAN              DEFAULT FALSE,
     selected_time                DATETIME    NOT NULL DEFAULT NOW(),
     PRIMARY KEY (book_seat_book_place_time_id, row_col)
 );

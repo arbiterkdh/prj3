@@ -4,6 +4,7 @@ import {
   CloseButton,
   Flex,
   Image,
+  Spinner,
   Stack,
   Text,
   useToast,
@@ -16,6 +17,7 @@ import ColorButton from "../../../css/theme/component/button/ColorButton.jsx";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { faCreditCard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ReactPlayer from "react-player";
 
 export function BookMoviePayment() {
   const { setBookProgress } = useOutletContext();
@@ -26,6 +28,10 @@ export function BookMoviePayment() {
 
   const [bookData, setBookData] = useState(location.state);
   const [paymentId, setPaymentId] = useState(0);
+
+  const KMDbKey = import.meta.env.VITE_KMDb_APP_KEY;
+  const KMDbMovieInfoURL = `http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y`;
+  const [vodUrl, setVodUrl] = useState("");
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -64,10 +70,19 @@ export function BookMoviePayment() {
           isPaying: true,
         })
         .then((res) => {});
+      axios
+        .get(
+          `${KMDbMovieInfoURL}&title=${bookData.movie.title}&ServiceKey=${KMDbKey}`,
+        )
+        .then((res) => {
+          let vodFileName =
+            res.data.Data[0].Result[0].vods.vod[0].vodUrl.split("=")[1];
+          setVodUrl(`https://www.kmdb.or.kr/trailer/play/${vodFileName}`);
+        });
     }
     console.log(bookData);
     setBookProgress(3);
-  }, []);
+  }, [bookData]);
 
   function handleClickRemoveBookSeatData(
     bookSeatMemberNumber,
@@ -231,10 +246,14 @@ export function BookMoviePayment() {
           </Flex>
         </Box>
 
-        <Box w={"100%"} h={"200px"} borderBottom={"1px"} p={2}>
-          <Flex justifyContent={"space-between"}>
-            <Flex w={"50%"} gap={2}>
-              <Image maxH={"180px"} src={bookData.movie.movieImageFile} />
+        <Box w={"100%"} h={"652px"} borderBottom={"1px"} p={3}>
+          <Stack>
+            <Flex w={"50%"} gap={5}>
+              <Image
+                maxH={"495px"}
+                src={bookData.movie.movieImageFile}
+                boxShadow={"0 0 4px rgba(0, 0, 0, 1)"}
+              />
               <Stack w={"100%"} p={1} rowGap={1}>
                 <Box fontSize={"lg"} fontWeight={"600"}>
                   {bookData.movie.title}
@@ -264,12 +283,55 @@ export function BookMoviePayment() {
                     })}
                   </Flex>
                 </Flex>
+                <Box
+                  borderRadius={"10px"}
+                  w={"480px"}
+                  h={"320px"}
+                  bgColor={"darkslategray"}
+                  align={"center"}
+                  alignContent={"center"}
+                >
+                  <Box color={"whiteAlpha.800"} h={"20px"} mb={1}>
+                    메인 예고편
+                  </Box>
+                  {vodUrl ===
+                  "https://www.kmdb.or.kr/trailer/play/undefined" ? (
+                    <Box
+                      color={"whiteAlpha.800"}
+                      w={"480px"}
+                      h={"270px"}
+                      bg={"black"}
+                      alignContent={"center"}
+                      fontSize={"24px"}
+                    >
+                      현재 광고중인 예고편이 없습니다.
+                    </Box>
+                  ) : vodUrl.length > 0 ? (
+                    <ReactPlayer
+                      url={vodUrl}
+                      playing
+                      muted
+                      loop
+                      width="480px"
+                      height="270px"
+                    />
+                  ) : (
+                    <Spinner />
+                  )}
+                  <Box h={"20px"}></Box>
+                </Box>
               </Stack>
             </Flex>
 
-            <Stack w={"50%"}>
-              <Box fontWeight={"600"} fontSize={"lg"}>
-                금액:{" "}
+            <Stack
+              align={"end"}
+              p={4}
+              bg={"blackAlpha.200"}
+              h={"125px"}
+              borderRadius={"10px"}
+            >
+              <Box fontWeight={"600"} fontSize={"lg"} mr={1}>
+                총 결제 금액:{" "}
                 {bookData.totalAmount.toString().slice(-6, -3) +
                   "," +
                   bookData.totalAmount.toString().slice(-3)}
@@ -293,15 +355,15 @@ export function BookMoviePayment() {
                     onClickKakaopay();
                   }}
                 >
-                  <Text>페이</Text>
+                  <Text>카카오 페이</Text>
                 </Button>
                 <ColorButton onClick={() => onClickInicsis()}>
                   <FontAwesomeIcon icon={faCreditCard} />
-                  <Box ml={2}>결제</Box>
+                  <Box ml={2}>카드 결제</Box>
                 </ColorButton>
               </Flex>
             </Stack>
-          </Flex>
+          </Stack>
         </Box>
       </Stack>
     </Box>
