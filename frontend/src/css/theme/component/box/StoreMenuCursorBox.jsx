@@ -6,6 +6,7 @@ const StoreMenuCursorBox = (props) => {
     <Box
       variant="solid"
       color={"black"}
+      borderRadius={"10px"}
       _hover={{
         color: "whiteAlpha.900",
         fontWeight: "600",
