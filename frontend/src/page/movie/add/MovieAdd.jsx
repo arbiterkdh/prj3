@@ -55,14 +55,13 @@ export function MovieAdd() {
   const [number, setNumber] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [movieList, setMovieList] = useState([]);
-  const [startCount, setStartCount] = useState(0);
+  const [pageInfo, setPageInfo] = useState([]);
+  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const kmdbKey = import.meta.env.VITE_KMDb_APP_KEY;
-
-  const [pageInfo, setPageInfo] = useState([]);
 
   function handleMovieSave() {
     axios
@@ -90,15 +89,17 @@ export function MovieAdd() {
   function handleSearchClick() {
     axios
       .get(
-        `${kmdbUrl}&listCount=500&startCount=${startCount}&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
+        `${kmdbUrl}&listCount=10&startCount=0&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
       )
       .then((res) => {
         if (res.data.TotalCount > 0) {
           setMovieList(res.data.Data[0].Result);
+          setPageInfo([]);
+          setPage(1);
 
           let lastpage = (res.data.TotalCount - 1) / 10 + 1;
           for (let i = 1; i <= lastpage; i++) {
-            setPageInfo([...pageInfo, i]);
+            setPageInfo((prevList) => [...prevList, i]);
           }
         }
       });
@@ -201,6 +202,36 @@ export function MovieAdd() {
     }
     return actorsName;
   }
+
+  function handlePageClick(number) {
+    setPage(number);
+    const start = (number - 1) * 10;
+
+    axios
+      .get(
+        `${kmdbUrl}&listCount=10&startCount=${start}&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
+      )
+      .then((res) => {
+        if (res.data.TotalCount > 0) {
+          setMovieList(res.data.Data[0].Result);
+        }
+      });
+  }
+
+  const clicked = {
+    variant: "solid",
+    color: "white",
+    bgColor: "#ff4357",
+    _hover: {
+      bgColor: "#ff7889",
+    },
+    _dark: {
+      bgColor: "#ad303a",
+      _hover: {
+        bgColor: "#a86669",
+      },
+    },
+  };
 
   return (
     <Center>
@@ -421,7 +452,7 @@ export function MovieAdd() {
               </InputRightElement>
             </InputGroup>
             {movieList.length !== 0 && (
-              <Table>
+              <Table mb={5}>
                 <Thead>
                   <Tr>
                     <Th>No.</Th>
@@ -457,11 +488,18 @@ export function MovieAdd() {
                 </Tbody>
               </Table>
             )}
-            {pageInfo.map((number) => (
-              <Button size={"sm"} key={number}>
-                {number}
-              </Button>
-            ))}
+            <Center>
+              {pageInfo.map((number) => (
+                <Button
+                  size={"sm"}
+                  key={number}
+                  onClick={() => handlePageClick(number)}
+                  sx={number === page ? clicked : {}}
+                >
+                  {number}
+                </Button>
+              ))}
+            </Center>
           </ModalBody>
           <ModalFooter>
             <Button
