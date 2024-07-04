@@ -58,6 +58,12 @@ export function MovieModify() {
   }
 
   function handleModifyClick() {
+    let date;
+    if (!(movie.startDate instanceof Date)) {
+      date = new Date(movie.startDate);
+    } else {
+      date = movie.startDate;
+    }
     axios
       .putForm("/api/movie/edit", {
         id: movie.id,
@@ -66,7 +72,7 @@ export function MovieModify() {
         genre: movie.genre,
         runningTime: movie.runningTime,
         rating: movie.rating,
-        startDate: movie.startDate.toISOString().split("T")[0],
+        startDate: date.toISOString().split("T")[0],
         director: movie.director,
         actors: movie.actors,
         type: movieTypes,
