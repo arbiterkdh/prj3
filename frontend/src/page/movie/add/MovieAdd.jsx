@@ -87,7 +87,7 @@ export function MovieAdd() {
   function handleSearchClick() {
     axios
       .get(
-        `${kmdbUrl}&listCount=100&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
+        `${kmdbUrl}&listCount=500&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
       )
       .then((res) => {
         if (res.data.TotalCount > 0) {
