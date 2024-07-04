@@ -128,14 +128,15 @@ function ProductItemList({
               fontWeight="bold"
               color={"#ed3124"}
               _dark={{ color: "blue.200" }}
+              textIndent={"10px"}
             >
               {rank}위
             </Box>
           )}
-          <Box position="relative">
+          <Box position="relative" align={"center"}>
             <Image
               style={{
-                width: "100%",
+                width: "90%",
                 height: "200px",
               }}
               src={product.image.src}

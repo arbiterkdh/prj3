@@ -136,7 +136,7 @@ export function StoreList() {
           style={{
             textAlign: "center",
           }}
-          p={7}
+          p={2}
         >
           <StoreMenuCursorBox>
             <StoreMenuText onClick={() => setMenuTypeSelect("all")}>
