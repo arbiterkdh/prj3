@@ -105,7 +105,16 @@ export function MovieHome() {
           {dailyBoxOffice.length > 0 ? (
             <GapFlex>
               {PosterUrlList.map((url, index) => (
-                <BookBox key={index} w={"280px"} h={"400px"} border={"0px"}>
+                <BookBox
+                  key={index}
+                  w={"280px"}
+                  h={"400px"}
+                  border={"0px"}
+                  transition="transform 0.3s ease"
+                  _hover={{
+                    transform: "scale(1.1)",
+                  }}
+                >
                   <Stack align={"center"}>
                     <Image
                       objectFit={"cover"}
