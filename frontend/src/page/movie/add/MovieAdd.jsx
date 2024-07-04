@@ -86,7 +86,9 @@ export function MovieAdd() {
   // kmdb에서 영화 검색...
   function handleSearchClick() {
     axios
-      .get(`${kmdbUrl}&title=${searchKeyword}&ServiceKey=${kmdbKey}`)
+      .get(
+        `${kmdbUrl}&listCount=100&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
+      )
       .then((res) => {
         if (res.data.TotalCount > 0) {
           setMovieList(res.data.Data[0].Result);
