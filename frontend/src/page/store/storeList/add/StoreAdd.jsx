@@ -7,6 +7,8 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalContent,
@@ -107,7 +109,9 @@ export function StoreAdd() {
             <FormControl>
               <FormLabel>이미지</FormLabel>
             </FormControl>
-            <input
+            <Input
+              w={"300px"}
+              border={"none"}
               type={"file"}
               accept="image/*"
               placeholder={"이미지를 등록하세요"}
@@ -139,14 +143,28 @@ export function StoreAdd() {
             <FormControl>
               <FormLabel>재고수량</FormLabel>
             </FormControl>
-            <Input type={"number"} onChange={(e) => setStock(e.target.value)} />
+            <InputGroup w={"300px"}>
+              <Input
+                min={0}
+                type={"number"}
+                onChange={(e) => setStock(e.target.value)}
+              />
+              <InputRightElement>개</InputRightElement>
+            </InputGroup>
           </Box>
 
           <Box>
             <FormControl>
               <FormLabel>가격</FormLabel>
             </FormControl>
-            <Input type={"number"} onChange={(e) => setPrice(e.target.value)} />
+            <InputGroup w={"300px"}>
+              <Input
+                min={0}
+                type={"number"}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+              <InputRightElement>원</InputRightElement>
+            </InputGroup>
           </Box>
           <Box>
             <FormControl>
