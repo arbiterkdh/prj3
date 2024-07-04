@@ -77,6 +77,7 @@ export function Theater() {
               align={"center"}
             >
               <Box
+                overflow={"hidden"}
                 border={"4px solid"}
                 color={"red.300"}
                 _dark={{
@@ -89,6 +90,10 @@ export function Theater() {
               >
                 <Image
                   cursor={"pointer"}
+                  transition="transform 0.3s ease"
+                  _hover={{
+                    transform: "scale(1.1)",
+                  }}
                   borderRadius={"30px"}
                   src={
                     recommendedPromos[0].fileList[
@@ -98,6 +103,7 @@ export function Theater() {
                 />
               </Box>
               <Box
+                overflow={"hidden"}
                 border={"4px solid"}
                 color={"red.300"}
                 _dark={{
@@ -110,6 +116,10 @@ export function Theater() {
               >
                 <Image
                   cursor={"pointer"}
+                  transition="transform 0.3s ease"
+                  _hover={{
+                    transform: "scale(1.1)",
+                  }}
                   borderRadius={"30px"}
                   src={
                     recommendedPromos[1].fileList[
