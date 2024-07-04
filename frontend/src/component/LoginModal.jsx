@@ -28,7 +28,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import CursorBox from "../css/theme/component/box/CursorBox.jsx";
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { LoginContext } from "./LoginProvider.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import ColorButton from "../css/theme/component/button/ColorButton.jsx";
@@ -47,6 +47,9 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
   const [email, setEmail] = useState("");
   const [eye, setEye] = useState(false);
 
+  const [timer, setTimer] = useState(0);
+
+  const timerRef = useRef(null);
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -77,6 +80,29 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
       );
     }
   }, [isNeedLogin, movieImages]);
+
+  useEffect(() => {
+    if (timer % 5 === 4) {
+      setTimer(0);
+      if (movieImages.length > 0) {
+        const randomImage =
+          movieImages[Math.floor(Math.random() * movieImages.length)];
+        setAdImage(
+          randomImage.slice(-4) !== "null"
+            ? randomImage
+            : "https://myawsbucket-arbiterkdh.s3.ap-northeast-2.amazonaws.com/prj3/main/default-ad-image.jpg",
+        );
+      }
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   function handleLogin() {
     axios
@@ -218,8 +244,19 @@ export function LoginModal({ isNeedLogin, setIsNeedLogin, isBookComponent }) {
               </a>
             </ModalFooter>
           </MarginBox>
-          <MarginBox border={"1px solid"} w={"50%"} h={"444px"}>
-            <Image src={adImage} w={"100%"} h={"100%"} />
+          <MarginBox
+            border={"1px solid"}
+            w={"50%"}
+            h={"444px"}
+            align={"center"}
+            bgColor={"blackAlpha.900"}
+          >
+            <Image
+              src={adImage}
+              maxW={"372px"}
+              maxH={"444px"}
+              objectFit={"cover"}
+            />
           </MarginBox>
         </Flex>
       </ModalContent>

@@ -50,10 +50,14 @@ public interface BookTicketMapper {
     @Update("""
             UPDATE book_ticket
             SET is_valid = FALSE
-            WHERE book_ticket_book_place_time_id =
-               (SELECT bpt.book_place_time_id
-                FROM  book_place_time bpt
-                WHERE DATE_SUB(bpt.start_time, INTERVAL 1 HOUR ) < NOW())
+            WHERE book_ticket_book_place_time_id = #{bookPlaceTimeId}
             """)
-    int updateBookTicketIsValidFalseByCurrentDate();
+    int updateBookTicketIsValidFalseByCurrentDate(Integer bookPlaceTimeId);
+
+    @Select("""
+                SELECT bpt.book_place_time_id
+                FROM  book_place_time bpt
+                WHERE DATE_SUB(bpt.start_time, INTERVAL 1 HOUR ) < NOW()
+            """)
+    List<Integer> selectBookPlaceTimeIdByCurrentDate();
 }

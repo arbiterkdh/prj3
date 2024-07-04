@@ -158,7 +158,13 @@ public class PaymentService {
 
     public List<Map<String, Object>> getAllBookData(Integer memberNumber) {
         List<Map<String, Object>> ticketList = new ArrayList<>();
-        bookTicketMapper.updateBookTicketIsValidFalseByCurrentDate();
+
+        List<Integer> bookPlaceTimeIdList = bookTicketMapper.selectBookPlaceTimeIdByCurrentDate();
+
+        for (Integer bookPlaceTimeId : bookPlaceTimeIdList) {
+            bookTicketMapper.updateBookTicketIsValidFalseByCurrentDate(bookPlaceTimeId);
+        }
+
         List<BookTicket> bookTicketList = bookTicketMapper.getAllBookTicket(memberNumber);
 
 
