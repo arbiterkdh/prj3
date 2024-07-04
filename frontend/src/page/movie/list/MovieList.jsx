@@ -214,7 +214,7 @@ export function MovieList() {
               <SimpleGrid spacing={4} templateColumns="repeat(4, 1fr)">
                 {movieList.map((movie) => (
                   <Card
-                    borderRadius={"0px"}
+                    borderRadius={"10px"}
                     _dark={{ bgColor: "#2d4c4c" }}
                     key={movie.id}
                     maxW="sm"

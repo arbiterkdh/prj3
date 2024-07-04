@@ -116,8 +116,9 @@ function ProductItemList({
       >
         <Card
           maxW="sm"
+          p={2}
           key={product.id}
-          borderRadius={0}
+          borderRadius={"10px"}
           _dark={{ bgColor: "darkslategray", opacity: "0.9" }}
           bg={product.stock === 0 ? "gray.300" : "white"}
           opacity={product.stock === 0 ? 0.5 : 1}
@@ -129,6 +130,7 @@ function ProductItemList({
               color={"#ed3124"}
               _dark={{ color: "blue.200" }}
               textIndent={"10px"}
+              mb={1}
             >
               {rank}위
             </Box>
@@ -136,7 +138,7 @@ function ProductItemList({
           <Box position="relative" align={"center"}>
             <Image
               style={{
-                width: "90%",
+                width: "100%",
                 height: "200px",
               }}
               src={product.image.src}
@@ -199,8 +201,8 @@ function ProductItemList({
               </Center>
             </Stack>
           </CardBody>
-          <Divider />
-          <CardFooter>
+          <Divider mt={-2} mb={-2} />
+          <CardFooter mb={-4}>
             {product.stock === 0 ? (
               <Flex w={"100%"} justifyContent={"center"}>
                 <Button
