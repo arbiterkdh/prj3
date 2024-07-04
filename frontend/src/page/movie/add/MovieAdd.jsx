@@ -55,11 +55,14 @@ export function MovieAdd() {
   const [number, setNumber] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [movieList, setMovieList] = useState([]);
+  const [startCount, setStartCount] = useState(0);
 
   const navigate = useNavigate();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const kmdbKey = import.meta.env.VITE_KMDb_APP_KEY;
+
+  const [pageInfo, setPageInfo] = useState([]);
 
   function handleMovieSave() {
     axios
@@ -87,11 +90,16 @@ export function MovieAdd() {
   function handleSearchClick() {
     axios
       .get(
-        `${kmdbUrl}&listCount=500&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
+        `${kmdbUrl}&listCount=500&startCount=${startCount}&title=${searchKeyword}&ServiceKey=${kmdbKey}`,
       )
       .then((res) => {
         if (res.data.TotalCount > 0) {
           setMovieList(res.data.Data[0].Result);
+
+          let lastpage = (res.data.TotalCount - 1) / 10 + 1;
+          for (let i = 1; i <= lastpage; i++) {
+            setPageInfo([...pageInfo, i]);
+          }
         }
       });
   }
@@ -449,6 +457,11 @@ export function MovieAdd() {
                 </Tbody>
               </Table>
             )}
+            {pageInfo.map((number) => (
+              <Button size={"sm"} key={number}>
+                {number}
+              </Button>
+            ))}
           </ModalBody>
           <ModalFooter>
             <Button
