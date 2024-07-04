@@ -36,7 +36,6 @@ function DeleteQnAModal({ itemQnAId, listQnARefresh }) {
       <Popover>
         <PopoverTrigger>
           <Badge
-            color={"white"}
             bgColor={"red.500"}
             _hover={{
               bgColor: "red.600",
