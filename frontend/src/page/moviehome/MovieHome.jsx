@@ -99,7 +99,7 @@ export function MovieHome() {
           _dark={{ color: "whiteAlpha.800" }}
         >
           <Heading mt={-6} fontSize={"2rem"}>
-            BOX OFFICE 순위
+            박스 오피스 순위
           </Heading>
           <Box>(오늘 {month + "월 " + day + "일 "}기준)</Box>
           {dailyBoxOffice.length > 0 ? (
