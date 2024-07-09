@@ -1,22 +1,3 @@
-# react project build
-cd ../frontend
-yarn build
-
-# index.html, main.js 복사(이동) : dist -> static
-cd ../backend
-rm -rf src/main/resources/static
-mv ../frontend/dist src/main/resources/static
-
-# spring project build
-./gradlew bootJar
-
-# build image
-docker build -t arbiterkdh1/saengjoncoding .
-
-# push image
-docker push arbiterkdh1/saengjoncoding
-
-# remote 에서
 
 # 컨테이너 멈추고
 ssh -i src/main/resources/secret/key05.pem ubuntu@3.34.98.7 'docker stop saengjoncoding'

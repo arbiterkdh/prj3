@@ -15,7 +15,7 @@ export function LoginProvider({ children }) {
   // 카카오 기능들 모음 //
   const kakaoKey = import.meta.env.VITE_KAKAO_APP_KEY;
   const kakaoUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-  const kakaoLogoutUri = "http://localhost:5173/oauth/kakao/logout";
+  const kakaoLogoutUri = "http://3.34.98.7:8080/oauth/kakao/logout";
   const [isKakaoLoggedIn, setIsKakaoLoggedIn] = useState(false);
 
   function kakaoInfo(id_token) {
@@ -37,6 +37,9 @@ export function LoginProvider({ children }) {
   // 카카오 기능들 모음 //
 
   useEffect(() => {
+    if (!isLoggedIn()) {
+      logout();
+    }
     const token = localStorage.getItem("token");
     if (token) {
       login(token);

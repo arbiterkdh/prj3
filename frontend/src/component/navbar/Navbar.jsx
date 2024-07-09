@@ -7,7 +7,7 @@ import {
   Image,
   useToast,
 } from "@chakra-ui/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import GapFlex from "../../css/theme/component/flex/GapFlex.jsx";
 import { MemberLogin } from "../../member/MemberLogin.jsx";
 import CursorBox from "../../css/theme/component/box/CursorBox.jsx";
@@ -24,6 +24,8 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { CartContext } from "../CartProvider.jsx";
 
 export function Navbar() {
+  const location = useLocation();
+
   const account = useContext(LoginContext);
   const { cartCount, setCartCount } = useContext(CartContext);
   const navigate = useNavigate();
@@ -39,6 +41,12 @@ export function Navbar() {
       position: "bottom-right",
     });
   }
+
+  useEffect(() => {
+    if (!account.isLoggedIn()) {
+      account.logout();
+    }
+  }, [location]);
 
   useEffect(() => {
     if (account.id) {

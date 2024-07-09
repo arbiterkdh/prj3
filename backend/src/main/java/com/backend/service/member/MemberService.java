@@ -51,7 +51,7 @@ public class MemberService {
                 JwtClaimsSet claims = JwtClaimsSet.builder()
                         .issuer("self")
                         .issuedAt(now)
-                        .expiresAt(now.plusSeconds(60 * 60 * 24))
+                        .expiresAt(now.plusSeconds(10))
                         .subject(db.getNumber().toString())
                         .claim("nickName", db.getNickName())
                         .claim("email", db.getEmail())
